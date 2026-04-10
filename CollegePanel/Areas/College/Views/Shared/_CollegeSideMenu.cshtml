@@ -19,45 +19,45 @@
                     else
                     {
 
-                    <a class="has-arrow" href="#">
+                        <a class="has-arrow" href="#">
 
-                        <i class="fa @item.class1" aria-hidden="true"></i>
-                        <span class="mini-click-non">@item.MenuName</span>
-                    </a>
-                    
-                    <ul class="submenu-angle" aria-expanded="true">
-                        @foreach (var firstItem in (menuitem.Where(s => s.ParentID == item.MenuID).OrderBy(obj => obj.orderposition).ToList()))
-                        {
-                            var check = menuitem.Where(s => s.ParentID == firstItem.MenuID).OrderBy(obj => obj.orderposition).ToList();
-                            if (check.Count == 0)
-                            {
-                                <li>
-                                    <a title="@firstItem.MenuName" href="~/College/@firstItem.controllername/@firstItem.viewnamename">
-                                    <i class="fa @firstItem.class1" aria-hidden="true"><span class="mini-sub-pro">&nbsp;@firstItem.MenuName</span></i>
-                                    </a>
-                                </li>
-                            }
-                            else
-                            {
-                                <li class="inner-drop">
-                                    <a title="Analytics" href="#" class="has-arrow"><span class="mini-click-non"><i class="fa @firstItem.class1" aria-hidden="true">&nbsp;@firstItem.MenuName</i></span></a>
+                            <i class="fa @item.class1" aria-hidden="true"></i>
+                            <span class="mini-click-non">@item.MenuName</span>
+                        </a>
 
-                                    <ul class="inner-drop list-unstyled ">
-                                        @foreach (var secondItem in (menuitem.Where(s => s.ParentID == firstItem.MenuID).OrderBy(obj => obj.orderposition).ToList()))
+                        <ul class="submenu-angle" aria-expanded="true">
+                            @foreach (var firstItem in (menuitem.Where(s => s.ParentID == item.MenuID).OrderBy(obj => obj.orderposition).ToList()))
+                            {
+                                var check = menuitem.Where(s => s.ParentID == firstItem.MenuID).OrderBy(obj => obj.orderposition).ToList();
+                                if (check.Count == 0)
+                                {
+                                    <li>
+                                        <a title="@firstItem.MenuName" class="white-space" href="~/College/@firstItem.controllername/@firstItem.viewnamename">
+                                            <i class="fa @firstItem.class1" aria-hidden="true"></i> <span class="mini-sub-pro">&nbsp;@firstItem.MenuName</span>
+                                        </a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="inner-drop">
+                                        <a title="Analytics" href="#" class="has-arrow"><span class="mini-click-non"><i class="fa @firstItem.class1" aria-hidden="true"></i> &nbsp;@firstItem.MenuName</span></a>
+
+                                        <ul class="inner-drop list-unstyled ">
+                                            @foreach (var secondItem in (menuitem.Where(s => s.ParentID == firstItem.MenuID).OrderBy(obj => obj.orderposition).ToList()))
                                             {
-                                    <li><a title="@secondItem.MenuName" href="~/College/@secondItem.controllername/@secondItem.viewnamename"><i class="fa @secondItem.class1" aria-hidden="true"><span>&nbsp;@secondItem.MenuName</span></i></a></li>
+                                                <li><a title="@secondItem.MenuName" href="~/College/@secondItem.controllername/@secondItem.viewnamename"><i class="fa @secondItem.class1" aria-hidden="true"></i> <span>&nbsp;@secondItem.MenuName</span></a></li>
                                             }
-                                    </ul>
+                                        </ul>
 
-                                </li>
+                                    </li>
+                                }
                             }
-                        }
-                    </ul>
+                        </ul>
                     }
                 </li>
 
             }
-            <li>
+            @*<li>
                 <a class="has-arrow" href="#">
 
                     <i class="fa fa-inbox" aria-hidden="true"></i>
@@ -71,7 +71,7 @@
                         <a title="Leave Status" href="~/College/Home/CheckLeaveStatus" class="has-arrow"><span class="mini-click-non"><i class="fa fa-angle-double-right" aria-hidden="true">&nbsp;Leave Status</i></span></a>
                     </li>
                 </ul>
-            </li>
+            </li>*@
             @*<li>
                     <a class="has-arrow" href="#">
                         <i class="fa fa-hand-o-right" aria-hidden="true"></i>

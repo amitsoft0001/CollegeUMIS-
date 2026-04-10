@@ -19,7 +19,7 @@ namespace Website
 
             string module = ConfigurationManager.AppSettings["Module"];
             string env = AppEnvironment.GetEnvironment();
-            RouteCache.AllowedRoutes = new Commn_master().GetAllowedRoutes(module, env);
+           // RouteCache.AllowedRoutes = new Commn_master().GetAllowedRoutes(module, env);
             AreaRegistration.RegisterAllAreas();
 
             GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
