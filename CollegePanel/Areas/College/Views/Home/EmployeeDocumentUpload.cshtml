@@ -1,0 +1,364 @@
+﻿@model DataLayer.Employee_DocumentUpload
+@{
+    ViewBag.Title = "EmployeeDocumentUpload";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+
+}
+<style>
+    .textdesign {
+        width: 200px;
+    }
+
+    .textd {
+        padding-bottom: 20px;
+    }
+
+    .spacewidth {
+        width: 30px;
+    }
+
+    .rightalign {
+        float: right;
+    }
+</style>
+<script>
+    var Id= '@ViewBag.ID';
+    var Year='@ViewBag.year';
+</script>
+<script type="text/javascript">
+    function show(input) {
+        if (input.files && input.files[0]) {
+            var filerdr = new FileReader();
+            filerdr.onload = function (e) {
+                $('#userImage').attr('src', e.target.result);
+            }
+            filerdr.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+<script src="~/scripts/Customjs/EmployeeDocumentUpload.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="sparkline12-list">
+                <div class="main-sparkline12-hd">
+                    <h3 class="text-center" style="padding-bottom:20px;">Employee Document Upload </h3>
+                </div>
+                <div class="sparkline12-graph">
+                    <div class="basic-login-form-ad">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12  ">
+                                <div class="all-form-element-inner">
+                                    @using (Html.BeginForm())
+                                    {
+                                        <div class="item form-group">
+                                            <div class="row ">
+                                                <div class="col-md-6 col-sm-6 col-xs-12 col-lg-offset-3 text-center">
+                                                    <label for="from">Employee Name:</label>
+                                                    <input type="hidden" id="EID" value="@ViewBag.EID" />
+
+                                                    @if (ViewBag.dropdown == true)
+                                                    {
+                                                        if (ViewBag.Fullname != null)
+                                                        {
+                                                            <label><strong>@ViewBag.Fullname</strong></label>
+                                                        }
+                                                        <div class="input select" style="display:none">
+                                                            @Html.DropDownListFor(model => model.EID, new SelectList(ViewBag.UserList, "ID", "FullName", ViewBag.EID), "--Select Employee--", new
+                                                       {
+                                                           @class = "form-control",
+                                                           @id = "UserList",
+                                                           @required = "required"@*, onchange = "document.forms[0].submit();"*@ ,
+                                                           @disabled = "disabled",
+                                                           @style = "border:0px;background-color: white;"
+                                                       })
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        if (ViewBag.Fullname != null)
+                                                        {
+                                                            <label><strong>@ViewBag.Fullname</strong></label>
+                                                        }
+                                                        <div class="input select" style="display:none">
+                                                            @Html.DropDownListFor(model => model.EID, new SelectList(ViewBag.UserList, "ID", "FullName", ViewBag.EID), "--Select Employee--", new
+                                                       {
+                                                           @class = "form-control",
+                                                           @id = "UserList",
+                                                           @required = "required"@*, onchange = "document.forms[0].submit();"*@ ,
+                                                           @disabled = "disabled",
+                                                           @style = "border:0px;background-color: white;"
+                                                       })
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        if (Model == null)
+                                        {
+                                            <div id="insert">
+                                                <div class="sparkline12-graph sparkline8-list">
+                                                    <div class="basic-login-form-ad">
+                                                        <div class="row">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <div class="text-right ">
+                                                                    <div class="col-lg-12 textd"><a class="btn btn-primary waves-effect waves-light" href="@Url.Action("DocumentListEmployee","Home",new {id=@ViewBag.ID })">Document List</a></div>
+                                                                </div>
+                                                                <div class="all-form-element-inner">
+                                                                    <div class="text-center">
+                                                                        <h3>
+                                                                            Personal Document
+                                                                        </h3>
+                                                                    </div>
+                                                                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer document-table">
+                                                                        <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed dataTable " id="Documenttable">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th class="spacewidth">
+                                                                                        Document Type
+                                                                                    </th>
+                                                                                    <th class="spacewidth">
+                                                                                        Document No
+                                                                                    </th>
+                                                                                    <th class="spacewidth">
+                                                                                        Document
+                                                                                    </th>
+                                                                                    <th class="spacewidth">
+                                                                                        Action
+                                                                                    </th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td class="spacewidth">
+                                                                                        @Html.DropDownList("Document", new SelectList(ViewBag.DocumentType1, "DocID", "DocTitle"), "--Select Document--", new { @class = "form-control custom-select-value Document", @id = "Document", @required = "required" })
+                                                                                    </td>
+                                                                                    <td class="spacewidth">
+                                                                                        @Html.TextBoxFor(model => model.Narration, new { @class = "form-control", @id = "Narration", @name = "Narration", @Placeholder = "Narration" })
+                                                                                    </td>
+                                                                                    <td class="spacewidth">
+                                                                                        <input type="file" id="file" onchange="check(this); " name="photo" class="file">
+                                                                                    </td>
+                                                                                    <td></td>
+                                                                                </tr>
+                                                                        </table>
+                                                                        <div class="form-group-inner">
+                                                                            <div class="login-btn-inner">
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-10">
+                                                                                        <div class="text-center">
+                                                                                            <a class="btn btn-primary waves-effect waves-light" id="savedoc">Save</a>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-lg-2 pull-right sa-right rightalign">
+                                                                                        <input type="button" class="btn btn-primary waves-effect waves-light rightalign" id="addRow" name="addRow" value="Add New Document" />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="text-center">
+                                                                            <h3>
+                                                                                Professional Document
+                                                                            </h3>
+                                                                        </div>
+                                                                        <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed dataTable " id="Documenttabletype2">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th class="spacewidth">
+                                                                                        Document Type
+                                                                                    </th>
+                                                                                    <th class="spacewidth">
+                                                                                        Document No
+                                                                                    </th>
+                                                                                    <th class="spacewidth">
+                                                                                        Passing Year
+                                                                                    </th>
+                                                                                    <th class="spacewidth">
+                                                                                        Division/Grade in which passed
+                                                                                    </th>
+                                                                                    <th class="spacewidth">
+                                                                                        Document
+                                                                                    </th>
+                                                                                    <th class="spacewidth">
+                                                                                        Action
+                                                                                    </th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td class="spacewidth">
+                                                                                        @Html.DropDownList("Documenttype", new SelectList(ViewBag.DocumentType2, "DocID", "DocTitle"), "--Select Document--", new { @class = "form-control custom-select-value Documenttype ", @id = "Documenttype", @required = "required" })
+                                                                                    </td>
+                                                                                    <td class="spacewidth">
+                                                                                        @Html.TextBox("Narrationtype", null, new { @class = "form-control ", @id = "Narrationtype", @name = "Narrationtype", @Placeholder = "Narration" })
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @Html.DropDownList("Year", new SelectList(ViewBag.Year, "ID", "year"), "--Select Passing Year--", new { @class = "form-control custom-select-value Year ", @id = "Year", @name = "Year", @required = "required" })
+                                                                                    </td>
+                                                                                    <td class="spacewidth">
+                                                                                        @Html.TextBox("Grade", null, new { @class = "form-control ", @id = "Grade", @name = "Grade", @Placeholder = "Grade" })
+                                                                                    </td>
+                                                                                    <td class="spacewidth">
+                                                                                        <input type="file" id="filetype" onchange="check(this);" name="filetype" class="file">
+                                                                                    </td>
+                                                                                    <td></td>
+                                                                                </tr>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="form-group-inner">
+                                                                        <div class="login-btn-inner">
+                                                                            <div class="row">
+                                                                                <div class="col-lg-10">
+                                                                                    <div class="text-center">
+                                                                                        <a class="btn btn-primary waves-effect waves-light" id="savedoctype2">Save</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-lg-2 pull-right sa-right rightalign">
+                                                                                    <input type="button" class="btn btn-primary waves-effect waves-light rightalign" id="addRowType2" name="addRowType2" value="Add New Document" />
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div id="from">
+                                                <div class="sparkline12-graph sparkline8-list">
+                                                    <div class="basic-login-form-ad">
+                                                        <div class="row">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <div class="text-right ">
+                                                                    <div class="col-lg-12 textd"><a class="btn btn-primary waves-effect waves-light" href="@Url.Action("DocumentListEmployee","Home" ,new {id=@ViewBag.ID })">Document List</a></div>
+                                                                </div>
+                                                                <div class="all-form-element-inner">
+                                                                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer document-table">
+                                                                        @Html.HiddenFor(model => model.hid, new { @id = "hid" })
+                                                                        <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed dataTable " id="Edittable">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th class="spacewidth">
+                                                                                        Document Type
+                                                                                    </th>
+                                                                                    <th class="spacewidth">
+                                                                                        Document No
+                                                                                    </th>
+                                                                                    @if (Model.DocTypeID == 2)
+                                                                                    {
+                                                                                        <th class="spacewidth">
+                                                                                            Passing Year
+                                                                                        </th>
+                                                                                        <th class="spacewidth">
+                                                                                            Division/Grade in which passed
+                                                                                        </th>
+                                                                                    }
+                                                                                    <th class="spacewidth">
+                                                                                        Document
+                                                                                    </th>
+                                                                                    <th class="spacewidth">
+                                                                                        Preview
+                                                                                    </th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td class="spacewidth">
+                                                                                        @Html.DropDownListFor(model => model.DocType, new SelectList(ViewBag.DocumentType, "DocID", "DocTitle"), "--Select Document--", new
+                                                                                   {
+                                                                                       @class = "form-control custom-select-value",
+                                                                                       @id = "DocType",
+                                                                                       @required = "required",
+                                                                                       @disabled = "disabled",
+                                                                                       @style = "border:0px;background-color: white;"
+                                                                                   })
+                                                                                    </td>
+                                                                                    <td class="spacewidth">
+                                                                                        @Html.TextBoxFor(model => model.Narration, new { @class = "form-control", @id = "Narration", @name = "Narration", @Placeholder = "Narration" })
+                                                                                    </td>
+                                                                                    @if (Model.DocTypeID == 2)
+                                                                                    {
+                                                                                        <td class="spacewidth">
+                                                                                            @Html.DropDownList("Year", new SelectList(ViewBag.Year, "ID", "year"), "--Select Passing Year--", new { @class = "form-control custom-select-value Year", @id = "Year", @name = "Year", @required = "required" })
+                                                                                        </td>
+                                                                                        <td class="spacewidth">
+                                                                                            @Html.TextBox("Grade", null, new { @class = "form-control", @id = "Grade", @name = "Grade", @Placeholder = "Grade" })
+                                                                                        </td>
+                                                                                    }
+                                                                                    <td class="spacewidth">
+                                                                                        <input type="file" id="newfile" onchange="check(this);show(this);" name="editphoto" class="file">
+                                                                                        @if (Model != null)
+                                                                                        {
+                                                                                            <input type="hidden" id="hfile" name="hfile" value="@Model.DocumentURl">
+                                                                                        }
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <img id="userImage" height="100px" width="100px" style="border:solid;width:100px !important;height:100px !important" src='@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/College/@Model.DocumentURl' />
+                                                                                    </td>
+                                                                                </tr>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group-inner">
+                                                    <div class="login-btn-inner">
+                                                        <div class="row">
+                                                            <div class="col-md-6 col-xs-offset-3">
+                                                                <div class="col-lg-3"></div>
+                                                                <div class="col-lg-9">
+                                                                    <div class="login-horizental cancel-wp pull-left form-bc-ele">
+                                                                        <div class="document-btn">
+                                                                            <a class="btn btn-primary waves-effect waves-light" id="Edit">Update</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function ()
+    {
+        $("#UserList option").each(function ()
+        {
+            // debugger;
+            if ($(this).val() ==((@ViewBag.EID)))
+            {
+                $(this).attr('selected', 'selected');
+            }
+        });
+    });
+    $(function ()
+    {
+        $("#Year option").each(function ()
+        {
+            // debugger;
+            if ($(this).val() ==((@ViewBag.yearnameID)))
+            {
+                $(this).attr('selected', 'selected');
+            }
+        });
+    });
+
+</script>
+
+

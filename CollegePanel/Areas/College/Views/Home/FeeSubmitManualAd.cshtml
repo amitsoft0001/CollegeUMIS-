@@ -1,0 +1,1277 @@
+﻿
+@using DataLayer
+@model Tuple<DataLayer.FeesSubmit, DataLayer.BL_PrintAllRecord, DataLayer.AdmissionFeesSubmit>
+
+@{
+    ViewBag.Title = "FeeSubmitManualAd";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+<script src="~/scripts/Customjs/Feessubmit.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<style>
+    .error-msg {
+        color: #ff0000;
+        font-weight: bold;
+    }
+
+    .textalign {
+        text-align: right;
+    }
+
+    .starvalid {
+        color: red;
+    }
+
+    .spacebottom {
+        margin-bottom: 30px;
+    }
+
+    .minheight {
+        min-height :450px;
+    }
+</style>
+<script>
+      var logo1 = "@Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["siteUrl"] + "/images/mu-logo-white.png")";
+    $(function () {
+
+        encodeImage3(logo1);
+    });
+    var logo = "@Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["siteUrl"] + "/images/mu-logo-white.png")";
+    $(function () {
+
+        encodeImage3(logo1);
+    });
+
+</script>
+<script type="text/javascript">
+
+    function encodeImage3(src, callback) {
+        var canvas = document.createElement('canvas'),
+            ctx = canvas.getContext('2d'),
+            img = document.getElementById("logo2");
+        img.onload = function () {
+            canvas.width = 140;
+            canvas.height = 100;
+            ctx.drawImage(img, 0, 0, 140, 100);
+            callback(canvas.toDataURL());
+        }
+        img.src = src;
+    }
+</script>
+<script src="~/JS/Commonjs.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+@*<script src="~/scripts/Customjs/CreateUser.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>*@
+<link href="~/Content/Recruitmentpreocess.css" rel="stylesheet" />
+<div class="container-fluid minheight">
+
+    <div class="report-part">
+        <ul>
+            <li><a href="~/College/Home/BasicDetailManualAd/?id=@ViewBag.oneID&eid=@ViewBag.ID"> Basic Detail </a></li>
+            <li><a href="~/College/Home/PreviousYearQualificationManualAd/@ViewBag.ID"> Previous Year Qualification </a></li>         
+            <li><a href="~/College/Home/ChosseSubjectsmanualad/@ViewBag.ID"> Choose Subject  </a></li>
+            <li class="active"><a href="#"> Admission Fee </a></li>
+        </ul>
+    </div>
+
+    @{
+
+        if (TempData["Message"] == null) { }
+        else
+        {
+            <div class="alert-wrap1 shadow-inner wrap-alert-b">
+
+                <div class="alert alert-success " role="alert" style="text-align:center !important">
+                    <div>@TempData["Message"]</div>
+
+                </div>
+            </div>
+        }
+    }
+    @if (ViewBag.show == true)
+    {
+
+        <div class="row">
+            <div class="col-lg-8 col-sm-12 col-xs-12 col-lg-offset-2 ">
+                <div class="sparkline12-hd">
+                    <div class="main-sparkline12-hd">
+                        <h3 class="text-center" style="padding-bottom:20px;">Admission Fee</h3>
+                    </div>
+                    <div class="row spacebottom text-center">
+                        Name:
+                        @if (ViewBag.Name != null)
+                        {
+                            @ViewBag.Name
+                        }
+                    </div>
+
+                    <div class="sparkline12-graph sparkline-list">
+                        <div class="basic-login-form-ad">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="all-form-element-inner">
+
+                                        <div class="text-danger text-center" style="padding-bottom:20px;">
+                                            @if (TempData["msgfees"] != null)
+                                            {
+                                                @TempData["msgfees"];
+                                            }
+                                        </div>
+                                        @using (Html.BeginForm("FeeSubmitManualAd", "Home", FormMethod.Post, new { id = "myform" }))
+                                        {
+                                            if (ViewBag.Status != false)
+                                            {
+                                                if (Model.Item3.FeeStatus1 == null)
+                                                {
+                                                   
+                                                        <div class="form-group-inner" style="display:none">
+                                                            <div class="row">
+                                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                                    <label class="login2 pull-right pull-right-pro"><span class="starvalid">*</span>Registration Payment Type:</label>
+                                                                </div>
+                                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                    <div class="form-select-list">
+                                                                        @Html.DropDownListFor(model => model.Item1.paymode, new SelectList(ViewBag.paymode, "Value", "Text"), "--Select Payment Mode--", new { @class = "form-control custom-select-value", @id = "paymode", @name = "paymode" })
+                                                                        @*@Html.ValidationMessageFor(model => model.Item1.paymode, "", new { @class = "validation" })*@
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="col-md-3 text-danger">
+                                                                    <span id="Uerr"></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group-inner" style="display:none">
+                                                            <div class="row">
+                                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                                    <label class="login2 pull-right pull-right-pro"><span class="starvalid">*</span>Registration Bank Reference No:</label>
+                                                                </div>
+                                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                    @Html.TextBoxFor(model => model.Item1.banktrxid, new { @class = "form-control", @id = "banktrxid" })
+                                                                    @*@Html.ValidationMessageFor(model => model.Item1.banktrxid, "", new { @class = "validation" })*@
+                                                                </div>
+
+
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group-inner" style="display:none">
+                                                            <div class="row">
+                                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                                    <label class="login2 pull-right pull-right-pro">Registrationn Fee:</label>
+                                                                </div>
+                                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                    <label class="login2  textalign"><strong>0.00</strong></label>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group-inner">
+                                                            <div class="row">
+                                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                                    <label class="login2 pull-right pull-right-pro"><span class="starvalid">*</span>Payment Type:</label>
+                                                                </div>
+                                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                    <div class="form-select-list">
+                                                                        @Html.DropDownListFor(model => model.Item1.Admissionpaymode, new SelectList(ViewBag.paymode, "Value", "Text"), "--Select Payment Mode--", new { @class = "form-control custom-select-value", @id = "Admissionpaymode", @name = "Admissionpaymode", @required = "required" })
+                                                                        @Html.ValidationMessageFor(model => model.Item1.Admissionpaymode, "", new { @class = "validation" })
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="col-md-3 text-danger">
+                                                                    <span id="Uerr"></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group-inner">
+                                                            <div class="row">
+                                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                                    <label class="login2 pull-right pull-right-pro"><span class="starvalid">*</span>Bank Reference No:</label>
+                                                                </div>
+                                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                    @Html.TextBoxFor(model => model.Item1.Admissionbanktrxid, new { @class = "form-control", @id = "Admissionbanktrxid" })
+                                                                    @Html.ValidationMessageFor(model => model.Item1.Admissionbanktrxid, "", new { @class = "validation" })
+                                                                </div>
+
+                                                                @Html.HiddenFor(model => model.Item1.Id, new { @id = "id", @Value = ViewBag.ID })
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group-inner">
+                                                            <div class="row">
+                                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                                    <label class="login2 pull-right pull-right-pro"><span class="starvalid">*</span>Reservation Category:</label>
+                                                                </div>
+                                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                    <div class="form-select-list">
+                                                                        @Html.DropDownListFor(model => model.Item1.CastCategory, new SelectList(ViewBag.CasteCategory, "CommonId", "title"), "--Select Reservation Type--", new { @class = "form-control custom-select-value", @id = "CastCategory", @name = "CastCategory", @required = "required" })
+                                                                        @Html.ValidationMessageFor(model => model.Item1.CastCategory, "", new { @class = "validation" })
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 " id="remainseatdiv" style="display:none">
+                                                                    <span class="col-lg-3 col-md-3 col-sm-12 col-xs-12 error-msg">Remaining Seats:<span id="remainseat" name="remainseat"></span></span>
+
+                                                                </div>
+
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group-inner">
+                                                            <div class="row">
+                                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                                    <label class="login2 pull-right pull-right-pro"><span class="starvalid">*</span>Admission Fee:</label>
+                                                                </div>
+                                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                    @Html.TextBoxFor(model => model.Item1.AdmissionFees, new { @class = "form-control", @id = "AdmissionFees", @required = "required", @oninput = "Onlynumericvalue(this);", @maxlength = "7", @Value = ViewBag.Feeamount })
+                                                                    @Html.ValidationMessageFor(model => model.Item1.AdmissionFees, "", new { @class = "validation" })
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group-inner" style="margin-bottom:30px;">
+                                                            <div class="login-btn-inner">
+                                                                <div class="row">
+                                                                    <div class="col-lg-3"></div>
+                                                                    <div class="col-lg-9">
+                                                                        <div class="login-horizental cancel-wp pull-left form-bc-ele">
+                                                                            <button class="btn btn-sm btn-primary login-submit-cs" type="Submit">Submit</button>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    }
+                                                
+
+
+                                                else
+                                                {
+                                                    <div class="form-group-inner">
+                                                        <div class="row">
+                                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                <label class="login2 pull-right pull-right-pro">Fee Status:</label>
+
+                                                            </div>
+                                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                <label class="login2  textalign">
+                                                                    <strong>
+                                                                       @Model.Item3.FeeStatus
+                                                                </strong>
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group-inner">
+                                                    <div class="row">
+
+                                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                            <label class="login2 pull-right pull-right-pro">Payment Type:</label>
+
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                            <label class="login2  textalign">
+                                                                <strong>@Model.Item3.PaymentType</strong>
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group-inner">
+                                                    <div class="row">
+                                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                            <label class="login2 pull-right pull-right-pro">Reference NO:</label>
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                            <label class="login2  textalign">
+                                                                <strong>@Model.Item3.banktrxid</strong>
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group-inner">
+                                                    <div class="row">
+                                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                            <label class="login2 pull-right pull-right-pro">Fee:</label>
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                            <label class="login2  textalign">
+                                                                <strong>@Model.Item3.Fees</strong>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group-inner" style="margin-bottom:30px;">
+                                                    <div class="login-btn-inner">
+                                                        <div class="row">
+
+                                                            <div class="col-lg-10 col-lg-offset-1">
+                                                                <div class="login-horizental cancel-wp  form-bc-ele">
+
+                                                                    <center>
+                                                                        @if (Model.Item3.FeeStatus1 != null)
+                                                                        {
+                                                                            if (Model.Item3.FeeStatus1 == "Paid")
+                                                                            {
+                                                                                @*<button class="btn btn-danger" style="color: #fff;" type="button" id="PrintRecipt"><i class="fa fa-print"></i>&nbsp;&nbsp;Registration Fee Receipt</button>*@
+                                                                                <button class="btn btn-danger" style="color: #fff;" type="button" id="PrintReciptadmission"><i class="fa fa-print"></i>&nbsp;&nbsp;Admission Fee Receipt</button>
+                                                                                <button class="btn btn-danger" style="color: #fff;" type="button" id="btnPrint"><i class="fa fa-print"></i>&nbsp;&nbsp;Download Application</button>
+                                                                            }
+                                                                        }
+                                                                    </center>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                }
+                                            }
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
+
+@if (Model != null)
+{
+    <div class="container-fluid" style="display:none">
+        <div class="sparkline8-list DocumentUpload">
+            <div style="display:none">
+                <div id="divtoPrint">
+                    <div style="border-bottom:5px solid #05046c; margin-bottom:25px; text-align:center; padding:15px 0;">
+                        <img id="logo" width="400">
+                    </div>
+                    <div style="width:100%; margin:auto; padding:0; font-family:Arial, Helvetica, sans-serif;">
+                        <h1 style="text-align:center; padding:15px 0; font-size:22px;">Application Form</h1>
+                        <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0" style="padding:0 15px; border:1px solid #666;">
+                            <tr>
+                                <td colspan="3">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+                                        <tr>
+                                            <td colspan="3" style="padding:15px 15px 0;">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                        <td width="40%" alight="left">
+                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                <tr>
+                                                                    <td width="40%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Application No.</label></td>
+                                                                    <td width="60%" style="border:1px solid #666; padding:10px;"><span style="color:#666;" id="Applicationpp">@Model.Item2.ObjApplication.ApplicationNo</span></td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                        <td width="20%" alight="left">&nbsp;</td>
+                                                        <td width="40%" alighn="right">
+                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                <tr>
+                                                                    <td width="40%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Applied Course</label></td>
+                                                                    <td width="60%" style="border:1px solid #666; padding:10px;"><span style="color:#666;" id="AppliedCoursepp">@Model.Item2.ObjApplication.CourseCategory</span></td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"><h2 style="color:#06056c; font-size:16px; padding:20px 15px 0;">Name of the Board from which you have passed the Intermediate exam.</h2></td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="2" width="100%" style="padding:15px;" valign="top">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td width="43%"><label style="font-weight:bold;"><span style="color:#e51515;">*</span>Name of the Examination Board <br> प्रवेश श्रेणी</label></td>
+                                            <td width="24%"><label style="font-weight:bold;"><span style="color:#e51515;">*</span>Year of Passing <br> उत्तीर्ण होने का वर्ष</label></td>
+                                            <td width="33%"><label style="font-weight:bold;"><span style="color:#e51515;">*</span>Date of Birth  <br> जन्म की तारीख</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="43%" style="border:1px solid #666; border-right:0; padding:10px;"><span style="color:#666;">@Model.Item2.ObjApplication.board_universityName </span></td>
+                                            <td width="24%" style="border:1px solid #666; border-right:0; padding:10px;"><span style="color:#666;">@Model.Item2.ObjApplication.passingyear</span></td>
+                                            <td width="33%" style="border:1px solid #666; padding:10px;"><span style="color:#666;">@Model.Item2.ObjApplication.DOB</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                        <td width="30%"><label style="font-weight:bold;"><span style="color:#e51515;">*</span>Applicant Name<br> आवेदक का नाम</label></td>
+                                                        <td style="border:1px solid #666; padding:10px; width:70%;"><label><span style="color:#666;">@Model.Item2.ObjApplication.Name</span></label></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                        <td width="30%"><label style="font-weight:bold;"><span style="color:#e51515;">*</span>Father Name<br> आवेदक के पिता का नाम</label></td>
+                                                        <td style="border:1px solid #666; padding:10px; width:70%;"><label><span style="color:#666;">@Model.Item2.ObjApplication.FatherName</span></label></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                        <td width="30%"><label style="font-weight:bold;"><span style="color:#e51515;">*</span>Mother Name <br> आवेदक के माता का नाम</label></td>
+                                                        <td style="border:1px solid #666; padding:10px; width:70%;"><label><span style="color:#666;">@Model.Item2.ObjApplication.MotherName</span></label></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+
+
+                                    </table>
+                                </td>
+                                <td width="100" valign="top" style="padding-top:51px">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td colspan="3">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="center" style="border:1px solid #666;"><img id="userImage" width="160" style="max-height:130px"></td>
+                                        </tr>
+                                        <tr>
+                                            <td align="center" style="border:1px solid #666; padding:5px;"><img id="userSign" width="160" style="max-height:50px"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td colspan="3"><h2 style="color:#06056c; font-size:16px; padding:0 15px;">Details of Mark Secured in Intermediate Examination / इंटरमीडिएट बोर्ड  </h2></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" width="90%" style="padding:15px 0 0 0;" valign="top">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+                                                    <tr>
+                                                        <td width="40%"><label style="font-weight:bold;">Stream / संकाय चुने</label></td>
+                                                        <td width="60%" style="border:1px solid #666; padding:10px;"><span style="color:#666;">@Model.Item2.ObjApplication.intermediatstream</span></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td colspan="2">&nbsp;</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border:1px solid #666; text-align:left;">
+                                                                <tr>
+                                                                    <th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee; width:50px;"><span style="color:#666;">Sr.No</span></th>
+
+                                                                    <th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee; width:50px;"><span style="color:#666;">Subject Name</span></th>
+
+                                                                    <th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee; width:50px;"><span style="color:#666;">Total Marks</span></th>
+
+                                                                    <th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee; width:50px;"><span style="color:#666;">Marks Obtained</span></th>
+
+                                                                    <th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee; width:50px;"><span style="color:#666;">Percentage</span></th>
+                                                                </tr>
+                                                                @{ int i = 1;}
+                                                                @foreach (var item in Model.Item2.ObjIntermidataeSubjects)
+                                                                {
+                                                                    <tr>
+                                                                        <td style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px;"><span style="color:#666;">@i</span></td>
+                                                                        <td style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px;"><span style="color:#666;">@item.SubjectName</span> </td>
+                                                                        <td style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px;"><span style="color:#666;">@item.TotalMarks</span></td>
+                                                                        <td style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px;"><span style="color:#666;">@item.MarksObtain</span></td>
+                                                                        <td style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px;"><span style="color:#666;">@item.SubjectPercentage</span></td>
+                                                                    </tr>
+                                                                    i = i + 1;
+                                                                }
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td colspan="2">&nbsp;</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td width="90%"><label style="font-weight:bold;">Educational Qualification / शैक्षिक योग्यता</label></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <div id="Qualification">
+                                                                <table width='100%' border='0' cellspacing='0' cellpadding='0' style='border: 1px solid #ccc;'>
+                                                                    <tr>
+                                                                        <th width="8%" align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">S. No.</th>
+
+                                                                        <th align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee; padding:10px 15px;">Qualification</th>
+
+                                                                        <th align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">Board</th>
+
+                                                                        <th align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">Roll No</th>
+
+                                                                        <th align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">Percentage</th>
+
+                                                                        <th align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">Passing Year</th>
+
+                                                                    </tr>
+
+                                                                    @{ int k = 1;}
+                                                                    @foreach (var item in Model.Item2.ObjQualification)
+                                                                    {
+                                                                        <tr>
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">@k</td>
+
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;"> @item.Qualication </td>
+
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;"> @item.Board </td>
+
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">@item.RollNo </td>
+
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">@item.Percentage </td>
+
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">@item.PassingYear</td>
+
+                                                                        </tr>
+                                                                        k = k + 1;
+                                                                    }
+                                                                </table>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+
+                            <tr height="100">
+                                <td colspan="3" height="100">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+                                        <tr>
+                                            <td width="90%"><label style="font-weight:bold;">Document List / दस्तावेज़ सूची</label></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border:1px solid #666; text-align:left;">
+                                                    <tr>
+                                                        <th width="20%" align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee; padding:10px 15px; width:40px;">S. No.</th>
+
+                                                        <th width="40%" align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee; padding:10px 15px;">Document</th>
+
+                                                        <th width="40%" align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">Status</th>
+
+                                                    </tr>
+                                                    @{ int j = 1;}
+                                                    @foreach (var item in Model.Item2.ObjDocument)
+                                                    {
+                                                        <tr>
+                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">@j</td>
+
+                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;"> @item.DocumentType </td>
+
+
+                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">
+                                                                @item.DocStatus
+
+                                                            </td>
+                                                        </tr>
+                                                        j = j + 1;
+                                                    }
+                                                </table>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding:0 15px">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td colspan="5"><h2 style="color:#06056c; font-size:16px;">Personal Details / व्यक्तिगत विवरण</h2></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="20%"><label style="font-weight:bold;"><span style="color:#e51515;">*</span>Gender / लिंग</label></td>
+
+                                            <td width="20%"><label style="font-weight:bold;"><span style="color:#e51515;">*</span>Nationality / राष्ट्रीयता :</label></td>
+                                            <td width="20%"><label style="font-weight:bold;"><span style="color:#e51515;">*</span>Religion / धर्म :</label></td>
+                                            <td width="20%"><label style="font-weight:bold;"><span style="color:#e51515;">*</span>Blood Group / रक्त समूह :</label></td>
+                                            <td width="20%"><label style="font-weight:bold;"><span style="color:#e51515;">*</span>Category/ जाति की श्रेणी:</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="20%" style="border:1px solid #666; border-right:0; padding:10px;"><span style="color:#666;" id="Gender">@Model.Item2.ObjApplication.Gender</span></td>
+                                            <td width="20%" style="border:1px solid #666; border-right:0; padding:10px;"><span style="color:#666;" id="Nationality">@Model.Item2.ObjApplication.NewNationality</span></td>
+                                            <td width="20%" style="border:1px solid #666; border-right:0; padding:10px;"><span style="color:#666;" id="Religion">@Model.Item2.ObjApplication.NewReligion</span></td>
+                                            <td width="20%" style="border:1px solid #666; padding:10px;"><span style="color:#666;" id="BloodGroup">@Model.Item2.ObjApplication.BloodGroup</span></td>
+                                            <td width="20%" style="border:1px solid #666; padding:10px;"><span style="color:#666;">@Model.Item2.ObjApplication.CastCategory</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td colspan="3"><h2 style="color:#06056c; font-size:16px; padding:0 15px;">Correspondence Address / पत्राचार का पता </h2></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="padding:15px 15px 0;">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+                                                    <tr>
+                                                        <td width="10%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>State / राज्य</label></td>
+                                                        <td width="20%" style="border:1px solid #666; padding:10px;"><span style="color:#666;" id="CAstate">@Model.Item2.ObjApplication.CA_State</span></td>
+                                                        <td width="15px">&nbsp;</td>
+                                                        <td width="13%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>District / जिला</label></td>
+                                                        <td width="15%" style="border:1px solid #666; padding:10px;"><span style="color:#666;" id="CAdistrict">@Model.Item2.ObjApplication.CA_City</span></td>
+                                                        <td width="15px">&nbsp;</td>
+                                                        <td width="15%"><label style="font-weight:bold;"><span style="color:#e51515;"></span> Address / पता</label></td>
+                                                        <td style="border:1px solid #666; padding:10px;"><span style="color:#666;" id="CAaddress">@Model.Item2.ObjApplication.CurrentAddress</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="7">&nbsp;</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td width="10%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>PIN Code / पिन कोड</label></td>
+                                                        <td width="20%" style="border:1px solid #666; padding:10px;"><span style="color:#666;" id="CApincode">@Model.Item2.ObjApplication.CA_PinCode</span></td>
+                                                        <td width="15px">&nbsp;</td>
+                                                        <td width="13%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Mobile No. / मोबाइल नंबर</label></td>
+                                                        <td width="15%" style="border:1px solid #666; padding:10px;"><span style="color:#666;" id="Mobile"></span>@Model.Item2.ObjApplication.MobileNo</td>
+                                                        <td width="15px">&nbsp;</td>
+
+                                                        <td width="15%">
+                                                            <label style="font-weight:bold;">
+                                                                <span style="color:#e51515;">*</span>Email ID / ईमेल आईडी
+                                                            </label>
+                                                        </td>
+                                                        <td style="border:1px solid #666; padding:10px;"><span style="color:#666;">@Model.Item2.ObjApplication.Email</span></td>
+                                                    </tr>
+
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding:0 15px">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td colspan="5"><h2 style="color:#06056c; font-size:16px;">Weightage Details</h2></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="20%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Physical Disabled </label></td>
+                                            <td width="20%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>NCC </label></td>
+                                            <td width="20%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>SPORTS QUOTA</label></td>
+                                            <td width="20%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>EX-SERVICEMEN </label></td>
+
+                                            <td width="20%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>WARD</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="20%" style="border:1px solid #666; border-right:0; padding:10px;text-align:center;"><span style="color:#666;" id="lbldisabled"></span>@(Model.Item2.ObjApplication.ishandicapped == true ? "Yes" : "No")</td>
+                                            <td width="20%" style="border:1px solid #666; border-right:0; padding:10px;text-align:center;"><span style="color:#666;" id="lblNCC">@(Model.Item2.ObjApplication.is_ncc_candidate == true ? "Yes" : "No")</span></td>
+                                            <td width="20%" style="border:1px solid #666; border-right:0; padding:10px;text-align:center;"><span style="color:#666;" id="lblsports">@(Model.Item2.ObjApplication.IsSports == true ? "Yes" : "No")</span></td>
+                                            <td width="20%" style="border:1px solid #666; border-right:0; padding:10px;text-align:center;"><span style="color:#666;" id="lblExServiceman">@(Model.Item2.ObjApplication.isex_service_man == true ? "Yes" : "No")</span></td>
+
+                                            <td width="20%" style="border:1px solid #666; padding:10px;text-align:center;"><span style="color:#666;" id="lblward">@(Model.Item2.ObjApplication.IsStaff == true ? "Yes" : "No")</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3" style="padding:0 15px">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td><h2 style="color:#06056c; font-size:16px;">Details of the Subjects for Admission</h2></td>
+                                        </tr>
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-bottom:0; text-align:left;">
+                                                    <tr>
+                                                        <th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee; width:50px;"><span style="color:#666;">Sr.No</span></th>
+                                                        <th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee;">College Code (College Name)</th>
+                                                        <th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee;">Honors Subjects</th>
+                                                        <th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee;">Subsidiary Subject 1</th>
+                                                        <th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee;">Subsidiary Subject 2</th>
+                                                        <th style="border-bottom:1px solid #666; padding:10px; background-color:#eee;">Composition Subject 1</th>
+                                                        <th style="border-bottom:1px solid #666; padding:10px; background-color:#eee;">Composition Subject 2</th>
+                                                    </tr>
+                                                    @{ int l = 1;}
+                                                    @foreach (var item in Model.Item2.objChoices)
+                                                    {
+                                                        <tr>
+                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">@l</td>
+
+                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;"> @item.CollegeName </td>
+
+                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;"> @item.hounors_subject </td>
+
+                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">@item.Subsidiary1_subject </td>
+
+                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">@item.Subsidiary2_subject </td>
+
+                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">@item.Compulsory1_subject</td>
+                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">@item.Compulsory2_subject</td>
+
+                                                        </tr>
+                                                        l = l + 1;
+                                                    }
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3" style="padding:0 15px">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td><h2 style="color:#06056c; font-size:16px;">Transaction Details</h2></td>
+                                        </tr>
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @if (Model.Item2.objPrintRecipt != null)
+                                                {
+                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border:1px solid #666; text-align:left;">
+                                                        <tr>
+                                                            <th width="12%" style="border-right:1px solid #666; padding:10px; background-color:#eee;">Transaction Id</th>
+                                                            <td width="12%" style="border-right:1px solid #666; padding:10px;"><span>@(Model.Item2.objPrintRecipt.TransactionId==null?"":Model.Item2.objPrintRecipt.TransactionId)</span></td>
+                                                            <th width="12%" style="border-right:1px solid #666; padding:10px; background-color:#eee;">Bank Reference Number</th>
+                                                            <td width="12%" style="border-right:1px solid #666; padding:10px;"><span>@Model.Item2.objPrintRecipt.banktrxid</span></td>
+                                                            <th width="12%" style="border-right:1px solid #666; padding:10px; background-color:#eee;">Amount</th>
+                                                            <td width="12%" style="border-right:1px solid #666; padding:10px;">Rs.@Model.Item2.objfeesubmit.Fees</td>
+                                                            <th width="12%" style="border-right:1px solid #666; padding:10px; background-color:#eee;">Status</th>
+                                                            <td width="12%" style="padding:10px;"><span>@Model.Item2.objPrintRecipt.status</span></td>
+                                                        </tr>
+                                                    </table>
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding:0 15px; font-size:20px;">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td><span style="color:#06056c; ">   Date:- @System.DateTime.Now.ToString("dd MMM yyyy")</span></td>
+                                            <td align="right"><span style="color:#06056c;text-align:right">Place:- @Model.Item2.ObjApplication.CA_City</span></td>
+                                        </tr>
+
+
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding:0 15px; font-size:20px;"></td>
+                            </tr>
+
+                        </table>
+                    </div>
+
+
+                    <div style="height:70px; background-color:#05046c; color:#FFF; line-height:70px; text-align:center; font-family:Arial, Helvetica, sans-serif;">Copyright © 2019 Munger University. All rights reserved.</div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+        <div class="container-fluid" style="display:none">
+            <div class="sparkline8-list DocumentUpload">
+                <div style="display:none">
+                    <div id="dvPrintRecipt">
+                        <div style="border-bottom:5px solid #05046c; margin-bottom:25px; text-align:center; padding:15px 0;"><img id="logo2" width="300px"></div>
+                        <div style="width:100%; margin:auto; padding:0; font-family:Arial, Helvetica, sans-serif; font-size:12px !important;">
+                            <h1 style="text-align:center; padding:15px 0; font-size:22px;">Fees Receipt</h1>
+                            <table width="600px" border="0" cellspacing="0" cellpadding="0" style="padding:0 15px; margin:auto;">
+                                <tr>
+                                    <td colspan="2">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td colspan="3">
+                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border:1px solid #ccc;">
+                                                        <tr>
+                                                            <th colspan="2" align="left" valign="middle" style="border-bottom:1px solid #ccc;  background-color:#44438e; color:#FFF;  padding:5px 10px;">Fees Submit</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; padding:5px 10px;">Application No</td>
+                                                            <td align="left" valign="middle" style="padding:5px 10px;; border-bottom:1px solid #ccc;"><span id="">@Model.Item2.objfeesubmit.ApplicationNo </span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee; padding:5px 10px;">Session</td>
+                                                            <td align="left" valign="middle" style="padding:5px 10px;; border-bottom:1px solid #ccc; background-color:#eee;"><span id="FeeSession">@Model.Item2.objfeesubmit.Session</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc;  padding:5px 10px;">Programme</td>
+                                                            <td align="left" valign="middle" style="padding:5px 10px;; border-bottom:1px solid #ccc;"><span id="FeeTitle"></span>@Model.Item2.objfeesubmit.Title</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:5px 10px;">Fees</td>
+                                                            <td align="left" valign="middle" style="padding:5px 10px;; border-bottom:1px solid #ccc; background-color:#eee; "><span id="FeesPrice">@Model.Item2.objfeesubmit.Fees</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; padding:5px 10px;">Course</td>
+                                                            <td align="left" valign="middle" style="padding:5px 10px;; border-bottom:1px solid #ccc;"><span id="FeeSubjectcate">@Model.Item2.objfeesubmit.Course</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; padding:5px 10px; background-color:#eee; ">Caste Category</td>
+                                                            <td align="left" valign="middle" style="padding:5px 10px;; border-bottom:1px solid #ccc; background-color:#eee; "><span id="FeeCastCategory">@Model.Item2.objfeesubmit.CastCategort</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="middle" style=" border-right:1px solid #ccc; padding:5px 10px;">Fee Status</td>
+                                                            <td align="left" valign="middle" style="padding:5px 10px;"><span id="FeeIsStatus">@Model.Item2.objfeesubmit.FeeStatus</span></td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+
+                                <!-- / Subject -->
+
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+
+                                <tr>
+                                    <td width="100%">
+                                        @if (Model.Item2.objPrintRecipt != null)
+                                        {
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border:1px solid #ccc;">
+                                                <tr>
+                                                    <th colspan="2" align="left" valign="middle" style="border-bottom:1px solid #ccc;  background-color:#44438e; color:#FFF; padding:5px 10px;">Payment Details</th>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:5px 10px; border-bottom:1px solid #ccc; border-right:1px solid #ccc;">Transaction Status</td>
+                                                    <td style="padding:5px 10px; border-bottom:1px solid #ccc;"><span id="bankName">@Model.Item2.objPrintRecipt.status</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:5px 10px; border-bottom:1px solid #ccc; background-color:#eee; border-right:1px solid #ccc;">Bank Reference Number</td>
+                                                    <td style="padding:5px 10px; border-bottom:1px solid #ccc; background-color:#eee;"><span id="PayName">@Model.Item2.objPrintRecipt.banktrxid</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:5px 10px; border-bottom:1px solid #ccc; border-right:1px solid #ccc;">Transaction ID</td>
+                                                    <td style="padding:5px 10px; border-bottom:1px solid #ccc;"><span id="cardNum">@Model.Item2.objPrintRecipt.TransactionId</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:5px 10px; border-bottom:1px solid #ccc; background-color:#eee; border-right:1px solid #ccc;">Transaction Date</td>
+                                                    <td style="padding:5px 10px; border-bottom:1px solid #ccc; background-color:#eee;"><span id="Expires">@Model.Item2.objPrintRecipt.trxdate</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:5px 10px; border-bottom:1px solid #ccc; border-right:1px solid #ccc;">Payment Mode</td>
+                                                    <td style="padding:5px 10px; border-bottom:1px solid #ccc;"><span id="Expires">@Model.Item2.objPrintRecipt.PaymentType</span></td>
+                                                </tr>
+                                            </table>
+                                        }
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid" style="display:none">
+            <div class="sparkline8-list DocumentUpload">
+                <div style="display:none">
+                    <div id="dvPrintReciptadmission">
+                        <div style="border-bottom:5px solid #05046c; margin-bottom:25px; text-align:center; padding:15px 0;"><img id="logo2" width="300px"></div>
+                        <div style="width:100%; margin:auto; padding:0; font-family:Arial, Helvetica, sans-serif; font-size:12px !important;">
+                            <h1 style="text-align:center; padding:15px 0; font-size:22px;">Admission Fees Receipt</h1>
+                            <table width="600px" border="0" cellspacing="0" cellpadding="0" style="padding:0 15px; margin:auto;">
+                                <tr>
+                                    <td colspan="2">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td colspan="3">
+                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border:1px solid #ccc;">
+                                                        <tr>
+                                                            <th colspan="2" align="left" valign="middle" style="border-bottom:1px solid #ccc;  background-color:#44438e; color:#FFF;  padding:5px 10px;">Fees Submit</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; padding:5px 10px;">Application No</td>
+                                                            <td align="left" valign="middle" style="padding:5px 10px;; border-bottom:1px solid #ccc;"><span id="">@Model.Item3.ApplicationNo </span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee; padding:5px 10px;">Session</td>
+                                                            <td align="left" valign="middle" style="padding:5px 10px;; border-bottom:1px solid #ccc; background-color:#eee;"><span id="FeeSession">@Model.Item3.Session</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc;  padding:5px 10px;">Programme</td>
+                                                            <td align="left" valign="middle" style="padding:5px 10px;; border-bottom:1px solid #ccc;"><span id="FeeTitle"></span>@Model.Item3.Title</td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; padding:5px 10px; background-color:#eee; ">Course</td>
+                                                            <td align="left" valign="middle" style="padding:5px 10px;; border-bottom:1px solid #ccc;background-color:#eee; "><span id="FeeSubjectcate">@Model.Item3.Course</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; padding:5px 10px;">Subject</td>
+                                                            <td align="left" valign="middle" style="padding:5px 10px;; border-bottom:1px solid #ccc;  "><span id="FeeCastCategory">@Model.Item3.Stream</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; padding:5px 10px; background-color:#eee; ">Caste Category</td>
+                                                            <td align="left" valign="middle" style="padding:5px 10px;; border-bottom:1px solid #ccc; background-color:#eee; "><span id="FeeCastCategory">@Model.Item3.CastCategort</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; padding:5px 10px;">Fee Status</td>
+                                                            <td align="left" valign="middle" style="padding:5px 10px;"><span id="FeeIsStatus">@Model.Item3.FeeStatus</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; padding:5px 10px;background-color:#eee;">Fees Amount</td>
+                                                            <td align="left" valign="middle" style="padding:5px 10px;background-color:#eee;"><span id="FeeIsStatus">@Model.Item3.Fees</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; padding:5px 10px;">Processingfees (including GST) </td>
+                                                            <td align="left" valign="middle" style="padding:5px 10px;"><span id="FeeIsStatus">@Model.Item3.surcharge</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; padding:5px 10px;background-color:#eee;">Total Amount</td>
+                                                            <td align="left" valign="middle" style="padding:5px 10px;background-color:#eee;"><span id="FeeIsStatus">@(Convert.ToDecimal(Model.Item3.surcharge) + Convert.ToDecimal(Model.Item1.Fees))</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="middle" style=" border-right:1px solid #ccc; padding:5px 10px;">College Name</td>
+                                                            <td align="left" valign="middle" style="padding:5px 10px; "><span id="FeeIsStatus">@Model.Item3.CollegeName</span></td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+
+                                <!-- / Subject -->
+
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        &nbsp;
+                                       
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td width="100%">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border:1px solid #ccc;">
+                                            <tr>
+                                                <th colspan="2" align="left" valign="middle" style="border-bottom:1px solid #ccc;  background-color:#44438e; color:#FFF; padding:5px 10px;">Payment Details</th>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:5px 10px; border-bottom:1px solid #ccc; border-right:1px solid #ccc;">Transaction Status</td>
+                                                <td style="padding:5px 10px; border-bottom:1px solid #ccc;"><span id="bankName">@Model.Item3.FeeStatus</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:5px 10px; border-bottom:1px solid #ccc; background-color:#eee; border-right:1px solid #ccc;">Bank Reference Number</td>
+                                                <td style="padding:5px 10px; border-bottom:1px solid #ccc; background-color:#eee;"><span id="PayName">@Model.Item3.banktrxid</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:5px 10px; border-bottom:1px solid #ccc; border-right:1px solid #ccc;"> Transaction ID</td>
+                                                <td style="padding:5px 10px; border-bottom:1px solid #ccc;"><span id="cardNum">@Model.Item3.clienttrxid</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:5px 10px; border-bottom:1px solid #ccc; background-color:#eee; border-right:1px solid #ccc;">Transaction Date</td>
+                                                <td style="padding:5px 10px; border-bottom:1px solid #ccc; background-color:#eee;"><span id="Expires">@Model.Item3.banktxndate</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:5px 10px; border-bottom:1px solid #ccc; border-right:1px solid #ccc;">Payment Mode</td>
+                                                <td style="padding:5px 10px; border-bottom:1px solid #ccc;"><span id="Expires">@Model.Item3.PaymentType</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                                                        }
+
+<script>
+    $("#myform").submit(function (e) {
+
+        showloader();
+    });
+    $('#paymode').change(function () {
+        //debugger;
+        var res = $('#paymode').val();
+        if (res == "")
+            res = 0;
+
+        if (res == "Cash")
+        {
+            $('#banktrxid').val("NA");
+            $('#banktrxid').attr('readonly', true);
+        }
+        else
+        {
+            $('#banktrxid').val("");
+            $('#banktrxid').attr('readonly', false);
+        }
+
+    });
+    $('#Admissionpaymode').change(function () {
+        //debugger;
+        var res = $('#Admissionpaymode').val();
+        if (res == "")
+            res = 0;
+
+        if (res == "Cash" || res == "cash") {
+            $('#Admissionbanktrxid').val("NA");
+            $('#Admissionbanktrxid').attr('readonly', true);
+        }
+        else {
+            $('#Admissionbanktrxid').val("");
+            $('#Admissionbanktrxid').attr('readonly', false);
+        }
+
+    });
+    $("#CastCategory").change(function (event) {
+        // debugger;
+        var CastCategory = $(this).val();
+        if (CastCategory == "") {
+            CastCategory = 0;
+            $('#remainseatdiv').removeAttr("style");
+            $('#remainseatdiv').attr("style", "display:none");
+            $('#remainseat').html('');
+            return;
+        }      
+        var sid = $("#id").val();
+        showloader();
+        $.ajax({
+            url: "/College/Home/CollegeRemainingSeat/",
+
+            data: { sid: sid, CastCategory: CastCategory },
+            cache: false,
+            type: "GET",
+            dataType: "json",
+          
+            success: function (data) {
+                //  console.log(data);
+                hideloader();
+                $('#remainseatdiv').removeAttr("style");
+                $('#remainseatdiv').attr("style", "display:block");
+                $('#remainseat').html(data.countseat);
+                // alert(data.countseat);
+
+            },
+            error: function (data) {
+                hideloader();
+                $('#remainseatdiv').removeAttr("style");
+                $('#remainseatdiv').attr("style", "display:none");
+                $('#remainseat').html('');
+            }
+        });
+    });
+</script>

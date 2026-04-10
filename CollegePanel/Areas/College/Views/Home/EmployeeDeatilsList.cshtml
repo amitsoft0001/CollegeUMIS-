@@ -1,0 +1,413 @@
+﻿
+@{
+    ViewBag.Title = "EmployeeDeatilsList";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+<style>
+    .right {
+        text-align: right;
+        margin-right: 20px;
+    }
+
+    .left {
+        text-align: left;
+        margin-left: 20px;
+    }
+</style>
+<script>
+    var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+
+</script>
+<script src="~/scripts/Customjs/EmployeedetailsList.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<link href="~/sweetalert/sweetalert.css" rel="stylesheet" />
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,300' rel='stylesheet' type='text/css'>
+<style>
+    .dataTables_filter {
+        width: 50%;
+        display: inline-block;
+        text-align: right;
+    }
+
+    .dataTables_length {
+        width: 50%;
+        display: inline-block;
+    }
+
+    #DataTables_Table_0_wrapper {
+        margin: 10px 5px;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > td, .table > tfoot > tr > td {
+        padding: 5px 4px !important;
+        font-size: 15px;
+    }
+
+    .ui-checkbox, .ui-radio {
+        margin-top: 8px;
+    }
+
+    .fa-green {
+        color: green;
+        font-size: 18px;
+    }
+
+    .fa-red {
+        color: red;
+        font-size: 18px;
+    }
+
+    .recordStatus {
+        cursor: pointer;
+    }
+
+    .divMessage {
+        position: absolute;
+        text-align: center;
+        top: 0;
+    }
+
+    .lobibox-notify-icon i {
+        font-size: 35px;
+    }
+
+    .spacedesign {
+        padding-bottom: 20px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row ">
+        <div class="col-lg-12">
+            <div>
+                <h3 class="text-center" style="padding-bottom:20px;">Payscale of Staff /Employee  </h3>
+            </div>
+            <div class="row spacedesign">
+                @if (ViewBag.Usertype == DataLayer.CommonSetting.UserType.Admin)
+                {
+                   
+                }
+            </div>
+            <div class="sparkline8-list">
+                <div class="row">
+                    <div ng-app="collegeemplistApp" ng-controller="collegeemplistCtrl">
+@using (Html.BeginForm())
+{
+                        <div class="row spacedesign">
+                            
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                <span><label>Employee Type:</label></span>
+                                @Html.DropDownList("facultyType", new SelectList(ViewBag.FacultyType, "URole", "URole", ""), "Select Faculty Type ..", new { @class = "form-control", @id = "facultyType", @ng_Model = "FacultyType.search" })
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                <span><label>Employee Name:</label></span>
+                                <input type="text" ng-model="Name.search" class="form-control" placeholder="Employee Name " name="Name" />
+                            </div>
+                        </div>
+
+                        <div class="row ">
+                            <div class="col-md-8 left" style="text-align:left">
+                                <b>
+                                    <button type="submit" value="excel" id="btnexport" name="Excel" class="btn btn-primary waves-effect waves-light">Export to Excel</button>
+Total Record(s) : | &nbsp;&nbsp;<spam style="border: 1px solid #bfc5cb;  padding: 7px; border-radius: 50%;">{{totalCount}}</spam>&nbsp;&nbsp;
+                                </b>
+                                <span class="form-group  page-size form-inline">
+                                    <select id="ddlPageSize" class="form-control control-color"
+                                            ng-model="pageSizeSelected"
+                                            ng-change="changePageSize()">
+                                        <option value="1">1</option>
+                                        <option value="10">10</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                        <option value="200">200</option>
+                                        <option value="500">500</option>
+                                    </select>
+                                </span>
+                                <a class="btn btn-primary">Page: {{pageIndex}} / {{numPages}}</a>
+                            </div>
+                            <div class="col-md-3 right">
+                                <button ng-click="GetFilterUsers(ClubData)" class="btn btn-primary waves-effect waves-light" type="button">Search</button>
+                            </div>
+                        </div>
+}
+                        <div class="panel-body">
+                            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer table-responsive">
+                                <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed dataTable ">
+                                    <thead>
+                                        <tr role="row">
+                                            <th width="50px">S. No.</th>
+                                             <th> Collegename</th>
+                                            <th> Employeetype 															 </th>
+                                            <th> Grade 																 </th>
+                                            <th> Post subject 															 </th>
+                                            <th> No. of Sanc. Posts as per HRD Letter No.-1733 Dated - 24.8.2012 & 2264 dt. 06.11.201 													 </th>
+                                            <th> Existing Sanctioned Post Since 16.8.76												 </th>
+                                            <th> Name of the teacher 														 </th>
+                                            <th> PresentDesignation 													 </th>
+                                            <th> Designation 															 </th>
+                                            <th> Bank A/C No 																 </th>
+                                            <th> IFSC Code 																 </th>
+                                            <th> Bank Name 																 </th>
+                                            <th> Apptt. on Recommend. of the Commiss. or by the Absorption 						 </th>
+                                            <th> Date of Birth 															 </th>
+                                            <th> Effective date of  appointment 											 </th>
+                                            <th> Date of Joining 														 </th>
+                                            <th> Date of Promotion Sr. Lect. 												 </th>
+                                            <th> Date of Promotion Lect. Sel.Gr./ Reader 										 </th>
+                                            <th> Date of Promotion Professor 												 </th>
+                                            <th> Date of Promotion 1st ACP 												 </th>
+                                            <th> Date of Promotion 2nd ACP 												 </th>
+                                            <th> Date of Promotion MACP 													 </th>
+                                            <th> Univ. Service Comm. Concurrence in promotion 								 </th>
+                                            <th> Designation at the time of first appointment 								 </th>
+                                            <th> Pay Scale at the time of first appointment 									 </th>
+                                            <th> Pay Slip Receipt No. 														 </th>
+                                            <th> Continue... 																	 </th>
+                                            <th> Sl.No. 1 																 </th>
+                                            <th> Old Basic Pay as on 01.01.2016 												 </th>
+                                            <th> Whether living in quarter 												 </th>
+                                            <th> Pay in pay Matrix as on 01.01.2016 											 </th>
+                                            <th> Applicable Pay Matrix as on 01.03.2019 										 </th>
+                                            <th> Date of next increment 													 </th>
+                                            <th> Basic Pay as on 01.03.2020 													 </th>
+                                            <th> D.A. (25%) 																	 </th>
+                                            <th> H.R.A  (8%) 																	 </th>
+                                            <th> CTA @@25% 																 </th>
+                                            <th> MA 																	 </th>
+                                            <th> Other Allow 															 </th>
+                                            <th> Total per Month  on March'.2020 (Sum of 35 to 40) 							 </th>
+                                            <th> No of Months 															 </th>
+                                            <th> Total Salary W.E.F. March'20 To June'20 										 </th>
+                                            <th> Basic Pay as on 01.07.20 													 </th>
+                                            <th> D.A. (25%) 																 </th>
+                                            <th> H.R.A  (8%) 																 </th>
+                                            <th> CTA @@ 25% 																 </th>
+                                            <th> MA1 																	 </th>
+                                            <th> Other Allow1 															 </th>
+                                            <th> Total per Month  on July'.2020 (Sum of 40 to 49) 								 </th>
+                                            <th> No of Months1 															 </th>
+                                            <th> Total Salary W.E.F. July'20 To Dec.'20 											 </th>
+                                            <th> Basic Pay as on 01.01.2021 													 </th>
+                                            <th> D.A. (25%) 																 </th>
+                                            <th> H.R.A  (8%) 																 </th>
+                                            <th> CTA @@25% 																 </th>
+                                            <th> MA2 																	 </th>
+                                            <th> Other Allow2 															 </th>
+                                            <th> Total per Month  on Jan.2021 (Sum of 53 to 58 ) 								 </th>
+                                            <th> No of Months2 															 </th>
+                                            <th> Total Salary W.E.F. Jan'21 To Feb.'21 											 </th>
+                                            <th> Total Per Year ( Col 43+52+61) 												 </th>
+
+                                        </tr>
+                                        <tr>
+                                            <th>1 </th>
+                                            <th>2 </th>
+                                            <th>3 </th>
+                                            <th>4 </th>
+                                            <th>5 </th>
+                                            <th>6 </th>
+                                            <th>7 </th>
+                                            <th>8 </th>
+                                            <th>9 </th>
+                                            <th>10</th>
+                                            <th>11</th>
+                                            <th>12</th>
+                                            <th>13</th>
+                                            <th>14</th>
+                                            <th>15</th>
+                                            <th>16</th>
+                                            <th>17</th>
+                                            <th>18</th>
+                                            <th>19</th>
+                                            <th>20</th>
+                                            <th>21</th>
+                                            <th>22</th>
+                                            <th>23</th>
+                                            <th>24</th>
+                                            <th>25</th>
+                                            <th>26</th>
+                                            <th>27</th>
+                                            <th>28</th>
+                                            <th>29</th>
+                                            <th>30</th>
+                                            <th>31</th>
+                                            <th>32</th>
+                                            <th>33</th>
+                                            <th>34</th>
+                                            <th>35</th>
+                                            <th>36</th>
+                                            <th>37</th>
+                                            <th>38</th>
+                                            <th>39</th>
+                                            <th>40</th>
+                                            <th>41</th>
+                                            <th>42</th>
+                                            <th>43</th>
+                                            <th>44</th>
+                                            <th>45</th>
+                                            <th>46</th>
+                                            <th>47</th>
+                                            <th>48</th>
+                                            <th>49</th>
+                                            <th>50</th>
+                                            <th>51</th>
+                                            <th>52</th>
+                                            <th>53</th>
+                                            <th>54</th>
+                                            <th>55</th>
+                                            <th>56</th>
+                                            <th>57</th>
+                                            <th>58</th>
+                                            <th>59</th>
+                                            <th>60</th>
+                                            <th>61</th>
+                                            <th>62</th>
+                                           
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="qualidetail in qlist | filter:search  | orderBy:propertyName:reverse">
+                                            <td>{{ ((pageIndex-1)*pageSizeSelected)+$index+1 }}</td>
+                                             <td>{{qualidetail.collegename 														   }}</td>
+                                            <td>{{qualidetail.employeetype 													   }}</td>
+                                            <td>{{qualidetail.grade 															   }}</td>
+                                            <td>{{qualidetail.post_subject 													   }}</td>
+                                            <td>{{qualidetail.noofsanctionPosts 												   }}</td>
+                                            <td>{{qualidetail.existingSanctionedPost 											   }}</td>
+                                            <td>{{qualidetail.nameoftheteacher 												   }}</td>
+                                            <td>{{qualidetail.presentDesignation 												   }}</td>
+                                            <td>{{qualidetail.designation 														   }}</td>
+                                            <td>{{qualidetail.bankACNo 														   }}</td>
+                                            <td>{{qualidetail.ifscCode 														   }}</td>
+                                            <td>{{qualidetail.bankName 														   }}</td>
+                                            <td>{{qualidetail.appttonRecommendoftheCommissorbytheAbsorption 					   }}</td>
+                                            <td>{{qualidetail.dateofBirth 														   }}</td>
+                                            <td>{{qualidetail.effectivedateofappointment 										   }}</td>
+                                            <td>{{qualidetail.dateofJoining 													   }}</td>
+                                            <td>{{qualidetail.dateofPromotionSrLect 											   }}</td>
+                                            <td>{{qualidetail.dateofPromotionLectSelGrReader 									   }}</td>
+                                            <td>{{qualidetail.dateofPromotionProfessor 										   }}</td>
+                                            <td>{{qualidetail.dateofPromotion1stACP 											   }}</td>
+                                            <td>{{qualidetail.dateofPromotion2stACP 											   }}</td>
+                                            <td>{{qualidetail.dateofPromotionMACP 												   }}</td>
+                                            <td>{{qualidetail.univServiceCommConcurrenceinpromotion 							   }}</td>
+                                            <td>{{qualidetail.designationatthetimeoffirstappointment 							   }}</td>
+                                            <td>{{qualidetail.payScaleatthetimeoffirstappointment 								   }}</td>
+                                            <td>{{qualidetail.paySlipReceiptNo 												   }}</td>
+                                            <td>{{qualidetail.type 															   }}</td>
+                                            <td>{{qualidetail.salSlNo1 														   }}</td>
+                                            <td>{{qualidetail.oldBasicPayason01012016 											   }}</td>
+                                            <td>{{qualidetail.whetherlivinginquarter 											   }}</td>
+                                            <td>{{qualidetail.payinpayMatrixason01012016 										   }}</td>
+                                            <td>{{qualidetail.applicablePayMatrixason0103019 									   }}</td>
+                                            <td>{{qualidetail.dateofnextincrement 												   }}</td>
+                                            <td>{{qualidetail.basicPayason01032020 											   }}</td>
+                                            <td>{{qualidetail.dA25 															   }}</td>
+                                            <td>{{qualidetail.hrA8 															   }}</td>
+                                            <td>{{qualidetail.ctA25 															   }}</td>
+                                            <td>{{qualidetail.ma 																   }}</td>
+                                            <td>{{qualidetail.otherAllow 														   }}</td>
+                                            <td>{{qualidetail.totalperMonthonMarch2020SumofCol22toCol27 						   }}</td>
+                                            <td>{{qualidetail.noofMonths 														   }}</td>
+                                            <td>{{qualidetail.totalSalaryWEFMarch20ToJune20 									   }}</td>
+                                            <td>{{qualidetail.basicPayason010720 												   }}</td>
+                                            <td>{{qualidetail.dA25_2 															   }}</td>
+                                            <td>{{qualidetail.hrA8_2 															   }}</td>
+                                            <td>{{qualidetail.ctA25_2 															   }}</td>
+                                            <td>{{qualidetail.mA1 																   }}</td>
+                                            <td>{{qualidetail.otherAllow1 														   }}</td>
+                                            <td>{{qualidetail.totalperMonthonJuly2020SumofCol31toCol36 						   }}</td>
+                                            <td>{{qualidetail.noofMonths1 														   }}</td>
+                                            <td>{{qualidetail.totalSalaryWEFJuly20ToDec20 										   }}</td>
+                                            <td>{{qualidetail.basicPayason01012021 											   }}</td>
+                                            <td>{{qualidetail.dA25_3 															   }}</td>
+                                            <td>{{qualidetail.hrA8_3 															   }}</td>
+                                            <td>{{qualidetail.ctA25_3 															   }}</td>
+                                            <td>{{qualidetail.mA2 																   }}</td>
+                                            <td>{{qualidetail.otherAllow2 														   }}</td>
+                                            <td>{{qualidetail.totalperMonthonJan2021SumofCol40toCol45 							   }}</td>
+                                            <td>{{qualidetail.noofMonths2 														   }}</td>
+                                            <td>{{qualidetail.totalSalaryWEFJan21ToFeb21 										   }}</td>
+                                            <td>{{qualidetail.totalPerYearCol303948 											   }}</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr ng-show="(qlist |filter:search).length == 0">
+                                            <td colspan="6" style="text-align:center">
+                                                <h4 style="color:red;"> </h4>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="center" colspan="70">
+                                                <div class="pull-left" ng-show="(qlist |filter:search).length > 0">
+                                                    <div ng-show="numPages > 1">
+                                                        <pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected"
+                                                                    direction-links="true" ng-model="pageIndex"
+                                                                    max-size="maxSize" class="pagination" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var u = window.location.protocol + "//" + window.location.host + "/";
+    function changeStatus(recType, val, ctrl) {
+        // debugger;
+        $.ajax({
+            type: 'POST',
+            url: u + "College/Home/ActiveDeactiveRecord", // we are calling json method
+            dataType: 'json',
+            async: false,
+            data: { id: val, type: recType },
+            success: function (result) {
+                if (result) {
+                    ctrl.html("<i class='fa fa-check fa-green' title='Active'></i>");
+                    setTimeout(function () { swal("Success!", "Status changed successfully.", "success"); }, 200);
+                    //window.location.reload();
+                }
+                else {
+
+                    ctrl.html("<i class='fa fa-close fa-red' title='De-Active'></i>");
+                    setTimeout(function () { swal("Success!", "Status changed successfully.", "success"); }, 200);
+                    //window.location.reload();
+                }
+
+                ctrl.data('status', result);
+                window.location.reload();
+            },
+            error: function (ex) {
+                setTimeout(function () { swal("Error!", "Something went wrong.", "error"); }, 200);
+            }
+        });
+    }
+    $('.dataTablesGrid tbody').on('click', '.deleteRecored', function () {
+
+        var trr = $(this);
+        swal({
+            title: "Are you sure?",
+            text: "You will not be able to recover this record!",
+            type: "warning",
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true,
+        },
+
+            function () {
+                var i = deleteRecord(trr.data('type'), trr.data('val'), t, trr);
+            });
+    });
+  </script>
+

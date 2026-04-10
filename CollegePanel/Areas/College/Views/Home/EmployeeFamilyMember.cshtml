@@ -1,0 +1,256 @@
+﻿@model DataLayer.Employee_FamilyDetail
+@{
+    ViewBag.Title = "EmployeeFamilyMember";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+    var rowCount = Convert.ToInt32(@ViewBag.totalCount);
+}
+@{
+    WebGrid grid = new WebGrid(canPage: true, canSort: false, rowsPerPage: 10);
+    grid.Bind(source: Model.qlist, rowCount: rowCount, autoSortAndPage: false);
+}
+
+<style>
+    body {
+        padding: 0;
+    }
+
+    .event-form input[type="text"] {
+        width: 100%;
+        border: 1px solid #ccc;
+        line-height: 40px;
+        padding: 0 10px;
+    }
+
+    .event-form select {
+        width: 100%;
+        border: 1px solid #ccc;
+        line-height: 40px;
+        height: 40px;
+        padding: 0 10px;
+    }
+
+    .event-form textarea {
+        width: 100%;
+        border: 1px solid #ccc;
+        line-height: 40px;
+        padding: 0 10px;
+    }
+
+    button.Submit-btn {
+        font-size: 17px;
+        background-color: #1a6fe8;
+        border: 0;
+        color: #FFF;
+        padding: 8px 15px;
+        font-weight: 600;
+        border-radius: 4px;
+    }
+
+    .spacedesign {
+        padding-bottom: 20px;
+    }
+
+    .spaceleft {
+        padding-left: 10px;
+    }
+
+    .textareadesign {
+        border: 1px solid #ccc;
+    }
+
+    .mnheight {
+        min-height: 450px;
+    }
+</style>
+<script src="~/JS/Commonjs.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<div class="container-fluid mnheight">
+    <div class="collegeTransferForm">
+        <div class="col-lg-6 col-lg-offset-3">
+            <h2 class="text-center">Add Family Member</h2>
+            <div class="event-form">
+                
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label><span class="starvalid">*</span>Member Name:</label>
+                            @Html.TextBoxFor(model => model.MemberName, new { @class = "form-control", @id = "MemberName", @name = "MemberName", @placeholder = "Family MemberName" })
+                            @if(Model!=null)
+                            {
+                                @Html.HiddenFor(model=>model.hid)
+                            }
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label><span class="starvalid">*</span>Relation:</label>
+                            @Html.DropDownListFor(model => model.RelationTypeID, new SelectList(ViewBag.Relation, "ID", "Name"), "--Select Relation--", new
+                       {
+                           @class = "form-control",
+                           @id = "RelationTypeID",
+                           @name = "RelationTypeID"
+                       })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label><span class="starvalid">*</span>Age:</label>
+                            @Html.TextBoxFor(model => model.Age, new { @class = "form-control textareadesign", @id = "Age", @name = "Age", @placeholder = "Age", @maxlength = "4", @oninput = "OnlyIntvalue(this);" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label><span class="starvalid">*</span>Mobile No:</label>
+                            @Html.TextBoxFor(model => model.MobileNo, new { @class = "form-control textareadesign", @id = "MobileNo", @name = "MobileNo", @placeholder = "MobileNo", @maxlength = "10", @oninput = "OnlyIntvalue(this);" })
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-group-inner spacedesign">
+                <div class="login-btn-inner">
+                    <div class="row">
+                        <div class="col-lg-3"></div>
+                        <div class="col-lg-9">
+                            <div class="login-horizental cancel-wp pull-left form-bc-ele">
+                                <button class="btn btn-sm btn-primary login-submit-cs" type="button" onclick="resetapplication()">Reset</button>
+                                <button class="btn btn-sm btn-primary login-submit-cs" type="button" onclick="submitapplication()">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.qlist.Count > 0)
+            {
+                <div class="document-table ">
+                    <div class="main-sparkline12-hd">
+                        <h4 class="text-center textd">Family Member List </h4>
+                    </div>
+                    <div class="grid  ExamNumberSheet tablewidth">
+                        @if (Model.qlist.Count > 0)
+                        {
+                            
+                            <div id="DataTables_Table_0_wrapper tablewidth">
+                                @{
+                                    var gridColumns = new List<WebGridColumn>();
+                                    // gridColumns.Add(grid.Column("Sr.No.", format: item => rowVal = rowVal + 1));
+                                    gridColumns.Add(grid.Column(columnName: "SNO", header: "Sr.No."));
+                                    gridColumns.Add(grid.Column(columnName: "MemberName", header: "Member Name"));
+                                    gridColumns.Add(grid.Column(columnName: "Relation", header: "Relation"));
+                                    gridColumns.Add(grid.Column(columnName: "Age", header: "Age"));
+                                    gridColumns.Add(grid.Column(columnName: "MobileNo", header: "Mobile No"));
+                                    gridColumns.Add(grid.Column(columnName: "", header: "Action", format: (item) => @Html.Raw("<a class='btn btn-success btn-sm fa fa-edit myBtn btndesign ' title='Edit' href='/College/Home/EmployeeFamilyMember/" + item.EncriptedID + "'></a>")));
+                                }
+                                <div id="grid" class="tablewidth">
+                                    @grid.Table(
+                                    tableStyle: "table  table-bordered dataTable ExamNumberSheet ",
+                                    headerStyle: "table  table-bordered dataTable ExamNumberSheet ",
+
+                                    columns: grid.Columns(
+                                     gridColumns.ToArray())
+                                     )
+                                    <div class="row">
+                                        <div>
+                                            @grid.PagerList(mode: WebGridPagerModes.All, paginationStyle: "pagination pagination-small pagination-right")
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                    }
+                    </div>
+                </div>
+                                    }
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function resetapplication() {
+        $("#MemberName").val("");
+        $("#Relation").val("");
+        $("#MobileNo").val("");
+        $("#Age").val(""); 
+
+    }
+    function submitapplication() {
+        //  debugger;
+        var ID = $("#hid").val();
+        var MemberName = $("#MemberName").val();
+        var RelationTypeID = $("#RelationTypeID").val();
+        var MobileNo = $("#MobileNo").val();
+        var Age = $("#Age").val();          
+        if (MemberName == "") {
+            alert('Please Enter Family Member Name !!');
+            $("#MemberName").focus();
+            return;
+        }
+        if (RelationTypeID == "") {
+            alert('Please Select Family Member Relation !!');
+            $("#Relation").focus();
+            return;
+        }
+        if (Age == ""||Age=="0") {
+            alert('Please Enter Family Membe Age !!');
+            $("#Age").focus();
+            return;
+        }
+        if (MobileNo == "") {
+            alert('Please Enter Family Membe MobileNo !!');
+            $("#MobileNo").focus();
+            return;
+        }
+        var obj = {
+            ID: ID,
+            RelationTypeID: RelationTypeID,
+            MobileNo: MobileNo,
+            MemberName: MemberName,
+            Age: Age
+
+        };
+        showloader();
+        $.ajax({
+            url: "/College/Home/AddFamilyMember",
+            data: JSON.stringify(obj),
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                //console.log(result);
+                hideloader();
+                if (result.Status) {
+                    showloader();
+                    alert(result.Msg);
+                    location.replace('/College/Home/EmployeeFamilyMember');
+                }
+                else {
+                    hideloader();
+                    alert(result.Msg);
+                }
+
+            },
+            error: function (errormessage) {
+
+                hideloader();
+                alert(errormessage.responseText);
+            }
+
+
+        });
+    }
+</script>
+<script>
+    $(function ()
+    {
+        $("#RelationTypeID option").each(function ()
+        {
+            if ($(this).val() == ((@ViewBag.RelationID)))
+            {
+                $(this).attr('selected', 'selected');
+            }
+        });
+    });
+
+</script>

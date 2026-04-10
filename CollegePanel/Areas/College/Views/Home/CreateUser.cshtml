@@ -1,0 +1,158 @@
+﻿@model DataLayer.UserLogin
+@{
+    ViewBag.Title = "CreateUser";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+<style>
+    .error-msg {
+        color: #ff0000;
+        font-weight: bold;
+    }
+
+    .starvalid {
+        color: red;
+    }
+</style>
+<script src="~/JS/Commonjs.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<script src="~/scripts/Customjs/CreateUser.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-8 col-sm-12 col-xs-12 col-lg-offset-2 ">
+            <div class="sparkline12-hd">
+                <div class="main-sparkline12-hd">
+                    @if (Model.ID > 0)
+                    {
+                        <h3 class="text-center" style="padding-bottom:20px;">Update Employee Profile </h3>
+                    }
+                    else
+                    {
+                        <h3 class="text-center" style="padding-bottom:20px;">Create Employee Profile </h3>
+                    }
+                  
+                </div>
+
+
+                <div class="sparkline12-graph sparkline-list">
+                    <div class="basic-login-form-ad">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="all-form-element-inner">
+                                    @*<form action="#">*@
+                                    <div class="text-danger text-center" style="padding-bottom:20px;">
+                                        @if (TempData["Msg"] != null)
+                                        {
+                                            @TempData["Msg"];
+                                        }
+                                    </div>
+                                    @using (Html.BeginForm())
+                                    {                                                                             
+                                        
+                                        <div class="form-group-inner">
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                    <label class="login2 pull-right pull-right-pro"><span class="starvalid">*</span>User Name</label>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                    @Html.TextBoxFor(model => model.Fullname, new { @class = "form-control", @id = "Fullname" })
+                                                </div>
+                                                @if (Model != null)
+                                                {
+                                                    @Html.HiddenFor(model => model.ID, new { @id = "hid" })
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="form-group-inner">
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                    <label class="login2 pull-right pull-right-pro"><span class="starvalid">*</span>User ID</label>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                    @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", @id = "UserName" })
+                                                </div>
+                                                <div class="col-md-3 text-danger">
+                                                    <span id="Uerr"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group-inner">
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                    <label class="login2 pull-right pull-right-pro"><span class="starvalid">*</span>Mobile</label>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                    @Html.TextBoxFor(model => model.Mobile, new { @class = "form-control", @id = "Mobile", @maxlength = "10", @oninput = "Onlynumericvalue(this);" })
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group-inner">
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                    <label class="login2 pull-right pull-right-pro"><span class="starvalid">*</span>Email</label>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @id = "Email" })
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group-inner">
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                    <label class="login2 pull-right pull-right-pro"><span class="starvalid">*</span>Password</label>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                    @Html.TextBoxFor(model => model.Password, new { @class = "form-control", @type = "password", @maxlength = "10", @minlength = "6", @required = "required", @id = "newpassword" })
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <input type="checkbox" value="" id="showpassword" name="showpassword" />Show Password
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group-inner">
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                    <label class="login2 pull-right pull-right-pro"><span class="starvalid">*</span>Confirm Password</label>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                    @Html.TextBoxFor(model => model.confpassword, "", new { @class = "form-control", @type = "password", @maxlength = "10", @minlength = "6", @required = "required", @id = "confpassword", @Value = (@Model != null ? @Model.Password : "") })
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <input type="checkbox" value="" id="showconpassword" name="showconpassword" />Show Password
+                                                </div>
+                                            </div>
+                                        </div>
+                                        if (ViewBag.Usertype==1) {
+                                        <div class="form-group-inner" style="margin-bottom:30px;">
+                                            <div class="login-btn-inner">
+                                                <div class="row">
+                                                    <div class="col-lg-3"></div>
+                                                    <div class="col-lg-9">
+                                                        <div class="login-horizental cancel-wp pull-left form-bc-ele">
+                                                            <button class="btn btn-sm btn-primary login-submit-cs" type="button" onclick="resetapplication()">Reset</button>
+                                                            <button class="btn btn-sm btn-primary login-submit-cs" type="button" onclick="submitapplication()">Submit</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        }
+
+                                    }
+                                    @*</form>*@
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+

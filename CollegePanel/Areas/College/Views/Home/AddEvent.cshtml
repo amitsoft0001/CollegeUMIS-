@@ -1,0 +1,607 @@
+﻿@model DataLayer.EventManagment
+@{
+    ViewBag.Title = "AddEvent";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+<!-- Premium Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+<style>
+    :root {
+        --brand-primary: #4361ee;
+        --brand-secondary: #3f37c9;
+        --brand-accent: #7209b7;
+        --brand-gradient: linear-gradient(145deg, #4361ee 0%, #7209b7 100%);
+        --brand-gradient-soft: linear-gradient(145deg, rgba(67,97,238,0.08) 0%, rgba(114,9,183,0.08) 100%);
+        --brand-success: #10b981;
+        --brand-warning: #f59e0b;
+        --brand-danger: #ef4444;
+        --surface-white: #ffffff;
+        --surface-gray: #f8fafc;
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --text-muted: #64748b;
+        --border-light: rgba(203,213,225,0.4);
+        --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
+        --shadow-md: 0 10px 30px -12px rgba(0,0,0,0.1);
+        --shadow-lg: 0 20px 40px -15px rgba(67,97,238,0.15);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%); min-height: 100vh; }
+
+    /* Hero Section */
+    .hero-section {
+        background: var(--brand-gradient);
+        border-radius: 0 0 48px 48px;
+        padding: 35px 40px;
+        margin-bottom: 40px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+    }
+    .hero-section::before { content: ''; position: absolute; top: -40%; right: -15%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%); border-radius: 50%; }
+    .hero-section::after { content: ''; position: absolute; bottom: -30%; left: -10%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%); border-radius: 50%; }
+
+    .main-container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+
+    /* Form Card */
+    .form-card {
+        background: var(--surface-white);
+        border-radius: 32px;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-light);
+        overflow: hidden;
+        margin-bottom: 40px;
+        transition: all 0.3s;
+    }
+    .form-card:hover { box-shadow: var(--shadow-lg); }
+
+    .form-header {
+        background: var(--brand-gradient-soft);
+        padding: 24px 32px;
+        border-bottom: 2px dashed rgba(67,97,238,0.2);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+    .form-header-icon {
+        width: 56px;
+        height: 56px;
+        background: var(--brand-gradient);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 20px rgba(67,97,238,0.25);
+    }
+    .form-header-icon i { font-size: 28px; color: white; }
+    .form-header-title { font-size: 24px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.5px; }
+    .form-header-subtitle { font-size: 14px; color: var(--text-secondary); margin-top: 4px; }
+
+    .form-body { padding: 32px; }
+
+    /* Form Controls */
+    .form-group-modern { margin-bottom: 24px; }
+    .form-label-modern {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .form-label-modern i { color: var(--brand-primary); font-size: 16px; }
+    .required-star { color: var(--brand-danger); font-size: 14px; }
+
+    .form-control-modern {
+        width: 100%;
+        padding: 14px 18px;
+        font-size: 14px;
+        font-weight: 500;
+        border: 2px solid #e2e8f0;
+        border-radius: 20px;
+        background: white;
+        transition: all 0.25s;
+        font-family: 'Inter', sans-serif;
+    }
+    .form-control-modern:focus {
+        border-color: var(--brand-primary);
+        box-shadow: 0 0 0 4px rgba(67,97,238,0.12);
+        outline: none;
+    }
+
+    textarea.form-control-modern {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    /* Radio Button Group */
+    .radio-group-modern {
+        display: flex;
+        gap: 24px;
+        align-items: center;
+        padding: 10px 0;
+    }
+    .radio-group-modern label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        color: var(--text-primary);
+    }
+    .radio-group-modern input[type="radio"] {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--brand-primary);
+        cursor: pointer;
+    }
+
+    /* File Upload */
+    .file-upload-modern {
+        position: relative;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .file-button-modern {
+        background: var(--brand-gradient-soft);
+        border: 2px solid var(--brand-primary);
+        padding: 12px 24px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 13px;
+        color: var(--brand-primary);
+        cursor: pointer;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .file-button-modern:hover {
+        background: var(--brand-primary);
+        color: white;
+    }
+    .file-button-modern input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+    }
+    .file-input-text {
+        flex: 1;
+        border: 2px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 12px 18px;
+        font-size: 13px;
+        background: var(--surface-gray);
+        min-width: 200px;
+    }
+    .file-hint {
+        font-size: 11px;
+        color: var(--text-muted);
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    /* Date Picker */
+    .date-input-group {
+        display: flex;
+        align-items: center;
+        border: 2px solid #e2e8f0;
+        border-radius: 20px;
+        transition: all 0.25s;
+        background: white;
+    }
+    .date-input-group:focus-within {
+        border-color: var(--brand-primary);
+        box-shadow: 0 0 0 4px rgba(67,97,238,0.12);
+    }
+    .date-input-group .input-group-addon {
+        padding: 14px 16px;
+        background: transparent;
+        border: none;
+        color: var(--brand-primary);
+    }
+    .date-input-group .form-control-modern {
+        border: none;
+        box-shadow: none;
+        padding: 14px 0 14px 8px;
+    }
+    .date-input-group .form-control-modern:focus {
+        box-shadow: none;
+    }
+
+    /* Buttons */
+    .btn-group-modern { display: flex; gap: 16px; justify-content: center; margin-top: 32px; padding-top: 24px; border-top: 2px solid var(--border-light); }
+    .btn-modern-primary {
+        background: var(--brand-gradient);
+        border: none;
+        padding: 14px 36px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 14px;
+        color: white;
+        transition: all 0.3s;
+        box-shadow: 0 6px 16px rgba(67,97,238,0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .btn-modern-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(67,97,238,0.4); color: white; }
+    .btn-modern-secondary {
+        background: white;
+        border: 2px solid #e2e8f0;
+        padding: 12px 32px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--text-secondary);
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .btn-modern-secondary:hover { border-color: var(--brand-primary); color: var(--brand-primary); transform: translateY(-2px); }
+
+    /* Animations */
+    @@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .animate { animation: fadeInUp 0.5s ease-out; }
+
+    @@media (max-width: 768px) {
+        .main-container { padding: 0 20px; }
+        .hero-section { padding: 25px 24px; }
+        .form-header-title { font-size: 20px; }
+        .form-body { padding: 24px; }
+        .btn-group-modern { flex-direction: column; }
+        .btn-modern-primary, .btn-modern-secondary { justify-content: center; }
+        .file-upload-modern { flex-direction: column; align-items: stretch; }
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+<script src="~/JS/Commonjs.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<script src="~/scripts/Customjs/AddEvent.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+
+<div class="hero-section">
+    <div class="main-container">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <div class="rounded-circle bg-white bg-opacity-20 p-3">
+                        <i class="fas fa-calendar-alt fs-3 text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-white mb-1 fw-bold" style="font-size: 32px; letter-spacing: -0.5px;">Event Management</h1>
+                        <p class="text-white-50 mb-0"><i class="fas fa-plus-circle me-2"></i>Create and manage college events</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white bg-opacity-20 rounded-pill px-4 py-2">
+                <i class="fas fa-calendar-plus me-2"></i>New Event
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="main-container animate">
+    <div class="form-card">
+        <div class="form-header">
+            <div class="form-header-icon">
+                <i class="fas fa-calendar-plus"></i>
+            </div>
+            <div>
+                <div class="form-header-title">@(Model != null && Model.hid > 0 ? "Edit Event" : "Add New Event")</div>
+                <div class="form-header-subtitle"><i class="fas fa-info-circle me-1"></i>Fill in the event details below</div>
+            </div>
+        </div>
+        <div class="form-body">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    <div class="form-group-modern">
+                        <div class="form-label-modern">
+                            <i class="fas fa-tag"></i>
+                            <span>Event Name</span>
+                            <span class="required-star">*</span>
+                        </div>
+                        @Html.TextBoxFor(model => model.EventName, new { @class = "form-control-modern", @id = "EventName", @name = "EventName", @placeholder = "Enter event name (e.g., Annual Sports Day, Tech Fest)" })
+                        @if (Model != null)
+                        {
+                            @Html.HiddenFor(model => model.hid)
+                        }
+                    </div>
+
+                    <div class="form-group-modern">
+                        <div class="form-label-modern">
+                            <i class="fas fa-location-dot"></i>
+                            <span>Event Venue</span>
+                            <span class="required-star">*</span>
+                        </div>
+                        @Html.TextBoxFor(model => model.Venue, new { @class = "form-control-modern", @id = "Venue", @name = "Venue", @placeholder = "Enter event venue (e.g., Main Auditorium, Sports Ground)" })
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="form-group-modern">
+                                <div class="form-label-modern">
+                                    <i class="fas fa-calendar-day"></i>
+                                    <span>From Date</span>
+                                    <span class="required-star">*</span>
+                                </div>
+                                <div class="date-input-group">
+                                    <span class="input-group-addon"><i class="fas fa-calendar"></i></span>
+                                    @Html.TextBoxFor(model => model.FromDate, new
+                                    {
+                                        @class = "form-control-modern",
+                                        @id = "FromDate",
+                                        @maxlength = "10",
+                                        @autocomplete = "off",
+                                        @placeholder = "DD/MM/YYYY",
+                                        @readonly = "readonly"
+                                    })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group-modern">
+                                <div class="form-label-modern">
+                                    <i class="fas fa-calendar-day"></i>
+                                    <span>To Date</span>
+                                    <span class="required-star">*</span>
+                                </div>
+                                <div class="date-input-group">
+                                    <span class="input-group-addon"><i class="fas fa-calendar"></i></span>
+                                    @Html.TextBoxFor(model => model.ToDate, new
+                                    {
+                                        @class = "form-control-modern",
+                                        @id = "ToDate",
+                                        @maxlength = "10",
+                                        @autocomplete = "off",
+                                        @placeholder = "DD/MM/YYYY",
+                                        @readonly = "readonly"
+                                    })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="form-group-modern">
+                                <div class="form-label-modern">
+                                    <i class="fas fa-layer-group"></i>
+                                    <span>Event Category</span>
+                                    <span class="required-star">*</span>
+                                </div>
+                                @Html.DropDownListFor(model => model.EventTypeID, new SelectList(ViewBag.EventTypeID, "ID", "EventName"), "-- Select Event Type --", new { @class = "form-control-modern", @id = "EventTypeID", @name = "EventTypeID" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group-modern">
+                                <div class="form-label-modern">
+                                    <i class="fas fa-users"></i>
+                                    <span>Organiser</span>
+                                    <span class="required-star">*</span>
+                                </div>
+                                @Html.DropDownListFor(model => model.EventOrganiserID, new SelectList(ViewBag.EventOrganiserID, "ID", "OrganiserName"), "-- Select Organiser --", new { @class = "form-control-modern", @id = "EventOrganiserID", @name = "EventOrganiserID" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group-modern">
+                        <div class="form-label-modern">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Event Paid?</span>
+                            <span class="required-star">*</span>
+                        </div>
+                        <div class="radio-group-modern">
+                            <label>
+                                @Html.RadioButtonFor(model => model.IsPaid, "True", new { @id = "IsPaidYes", @name = "IsPaid", @class = "paid-radio" })
+                                <i class="fas fa-check-circle" style="color: var(--brand-success);"></i> Yes (Paid Event)
+                            </label>
+                            <label>
+                                @Html.RadioButtonFor(model => model.IsPaid, "False", new { @id = "IsPaidNo", @name = "IsPaid", @class = "paid-radio" })
+                                <i class="fas fa-gratipay" style="color: var(--brand-warning);"></i> No (Free Event)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group-modern" id="isamt" style="display: none;">
+                        <div class="form-label-modern">
+                            <i class="fas fa-rupee-sign"></i>
+                            <span>Registration Amount</span>
+                            <span class="required-star">*</span>
+                        </div>
+                        @Html.TextBoxFor(model => model.Amount, new { @class = "form-control-modern", @id = "Amount", @name = "Amount", @placeholder = "Enter registration amount", @maxlength = "6", @oninput = "OnlyIntvalue(this);" })
+                    </div>
+
+                    <div class="form-group-modern">
+                        <div class="form-label-modern">
+                            <i class="fas fa-align-left"></i>
+                            <span>Description</span>
+                            <span class="required-star">*</span>
+                        </div>
+                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control-modern", @id = "Description", @name = "Description", @placeholder = "Describe the event details, schedule, and important information...", rows = 4 })
+                    </div>
+
+                    <div class="form-group-modern">
+                        <div class="form-label-modern">
+                            <i class="fas fa-paperclip"></i>
+                            <span>Upload Document / Image</span>
+                        </div>
+                        <div class="file-upload-modern">
+                            <div class="file-button-modern">
+                                <i class="fas fa-upload"></i> Browse File
+                                <input type="file" onchange="document.getElementById('append-big-btn').value = this.value; check();" id="file" name="file">
+                            </div>
+                            <input type="text" id="append-big-btn" class="file-input-text" placeholder="No file selected" readonly value="@Model.FileUrl">
+                        </div>
+                        <div class="file-hint">
+                            <i class="fas fa-info-circle"></i>
+                            Allowed extensions: .jpg, .jpeg, .png, .pdf | Max size: 500KB
+                        </div>
+                        @if (Model != null)
+                        {
+                            <input type="hidden" id="hfile" name="hfile" value="@Model.FileUrl">
+                        }
+                    </div>
+
+                    <div class="btn-group-modern">
+                        <button type="button" class="btn-modern-secondary" onclick="resetapplication()">
+                            <i class="fas fa-undo-alt"></i> Reset Form
+                        </button>
+                        <button type="button" class="btn-modern-primary" onclick="submitapplication()">
+                            <i class="fas fa-save"></i> @(Model != null && Model.hid > 0 ? "Update Event" : "Publish Event")
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // Date pickers
+        $("#FromDate").datepicker({
+            dateFormat: 'dd/mm/yy',
+            changeMonth: true,
+            changeYear: true,
+            onSelect: function(selectedDate) {
+                $("#ToDate").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#ToDate").datepicker({
+            dateFormat: 'dd/mm/yy',
+            changeMonth: true,
+            changeYear: true,
+            onSelect: function(selectedDate) {
+                $("#FromDate").datepicker("option", "maxDate", selectedDate);
+            }
+        });
+
+        // Show/hide amount field based on paid radio button
+        $(".paid-radio").change(function() {
+            if ($("#IsPaidYes").is(":checked")) {
+                $("#isamt").slideDown(300);
+                $("#Amount").prop('required', true);
+            } else {
+                $("#isamt").slideUp(300);
+                $("#Amount").prop('required', false);
+                $("#Amount").val('');
+            }
+        });
+
+        // Check if paid is already selected
+        if ($("#IsPaidYes").is(":checked")) {
+            $("#isamt").show();
+        }
+
+        // Preselect dropdown values from ViewBag
+        $("#EventOrganiserID option").each(function() {
+            if ($(this).val() == ('@ViewBag.EventOrganiser')) {
+                $(this).attr('selected', 'selected');
+            }
+        });
+
+        $("#EventTypeID option").each(function() {
+            if ($(this).val() == ('@ViewBag.EventType')) {
+                $(this).attr('selected', 'selected');
+            }
+        });
+    });
+
+    function OnlyIntvalue(elem) {
+        var value = elem.value;
+        elem.value = value.replace(/[^0-9]/g, '');
+    }
+
+    function resetapplication() {
+        if (confirm('Are you sure you want to reset the form? All unsaved data will be lost.')) {
+            document.getElementById('EventName').value = '';
+            document.getElementById('Venue').value = '';
+            document.getElementById('FromDate').value = '';
+            document.getElementById('ToDate').value = '';
+            document.getElementById('Description').value = '';
+            document.getElementById('Amount').value = '';
+            document.getElementById('append-big-btn').value = '';
+            $("#EventTypeID").val('');
+            $("#EventOrganiserID").val('');
+            $("#IsPaidNo").prop('checked', true);
+            $("#isamt").hide();
+            document.getElementById('EventName').focus();
+        }
+    }
+
+    function submitapplication() {
+        var eventName = document.getElementById('EventName').value.trim();
+        var venue = document.getElementById('Venue').value.trim();
+        var fromDate = document.getElementById('FromDate').value.trim();
+        var toDate = document.getElementById('ToDate').value.trim();
+        var eventType = document.getElementById('EventTypeID').value;
+        var organiser = document.getElementById('EventOrganiserID').value;
+        var description = document.getElementById('Description').value.trim();
+        var isPaid = document.getElementById('IsPaidYes').checked;
+        var amount = document.getElementById('Amount').value.trim();
+
+        if (eventName === '') {
+            alert('Please enter Event Name');
+            document.getElementById('EventName').focus();
+            return false;
+        }
+        if (venue === '') {
+            alert('Please enter Event Venue');
+            document.getElementById('Venue').focus();
+            return false;
+        }
+        if (fromDate === '') {
+            alert('Please select From Date');
+            document.getElementById('FromDate').focus();
+            return false;
+        }
+        if (toDate === '') {
+            alert('Please select To Date');
+            document.getElementById('ToDate').focus();
+            return false;
+        }
+        if (eventType === '') {
+            alert('Please select Event Category');
+            document.getElementById('EventTypeID').focus();
+            return false;
+        }
+        if (organiser === '') {
+            alert('Please select Organiser');
+            document.getElementById('EventOrganiserID').focus();
+            return false;
+        }
+        if (description === '') {
+            alert('Please enter Description');
+            document.getElementById('Description').focus();
+            return false;
+        }
+        if (isPaid && amount === '') {
+            alert('Please enter Registration Amount');
+            document.getElementById('Amount').focus();
+            return false;
+        }
+
+        document.forms[0].submit();
+        return true;
+    }
+</script>

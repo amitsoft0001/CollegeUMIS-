@@ -1,0 +1,534 @@
+﻿@model DataLayer.StudentAttendanceAdd
+@{
+    ViewBag.Title = "StudentAttendanceReport";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#Table1 > tbody > tr').each(function (index) {
+            if ($(this).children('td:nth-child(1)').text() == "P") {
+                $(this).children('td:nth-child(1)').css("background-color", "#33CC99");
+            } else {
+                $(this).children('td:nth-child(1)').css("background-color", "#FFCC99");
+            }
+
+        });
+    });
+
+
+
+    //$(function () {
+
+    //    $("#Attrpt").submit(function (e) {
+    //        showloader();
+    //    });
+
+    //});
+</script>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-sm-12 col-xs-12">
+            @if (TempData["StMessage"] != null)
+            {
+                <div class="text-center" style="">
+                    <div class="alert-wrap1 shadow-inner wrap-alert-b">
+                        <div class="alert alert-success " role="alert" style="text-align:center !important">
+                            <div>@TempData["StMessage"]</div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (TempData["StError"] != null)
+            {
+                <div class="text-center" style="">
+                    <div class="alert-wrap1 shadow-inner wrap-alert-b">
+                        <div class="alert alert-warning " role="alert" style="text-align:center !important">
+                            <div class="text-danger">@TempData["StError"]</div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-sm-12 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading"> <i class="fa fa-search fa-fw"></i>Search</div>
+                <div class="panel-body">
+                    <div class="form-group-inner">
+                        @using (Html.BeginForm("StudentAttendanceReport", "Home", FormMethod.Post, new { @class = "form-horizontal" , @id="Attrpt" }))
+                        {
+                            <div class="row">
+                                @Html.HiddenFor(model => model.SessionID)
+                                @Html.HiddenFor(model => model.CollegeID)
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                    <label class="fontnew "><strong>Education Type</strong></label>
+                                    @Html.DropDownListFor(model => model.EduTypeID, new System.Web.Mvc.SelectList(Model.EduTypeList, "Value", "Text", @ViewBag.EduTypeID), new { @class = "form-control" })
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                    <label class="fontnew "><strong>Course Category Type</strong></label>
+                                    @Html.DropDownListFor(model => model.CourseCategoryID, new System.Web.Mvc.SelectList(Model.CourseCategoryList, "Value", "Text", @ViewBag.course), new { @class = "form-control" })
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                    <label class="fontnew "><strong>Subject</strong></label>
+                                    @Html.DropDownListFor(model => model.SubjectID, new System.Web.Mvc.SelectList(Model.SubjectList, "Value", "Text"), new { @class = "form-control" })
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                    <label class="fontnew "><strong>Year</strong></label>
+                                    @Html.DropDownListFor(model => model.Year, new System.Web.Mvc.SelectList(ViewBag.Session, "ID", "Session"), "--Select Session--", new { @class = "form-control" })
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                    <label class="fontnew "><strong>Student</strong></label>
+                                    @Html.DropDownListFor(model => model.StudentID, new System.Web.Mvc.SelectList(Model.StudentList, "Value", "Text"), new { @class = "form-control" })
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                    <div class="login-btn-inner">
+                                        <div class="login-horizental cancel-wp pull-left form-bc-ele">
+                                            <br />
+                                            <input type="submit" id="submit" value="Submit" class="btn btn-sm btn-primary login-submit-cs" />
+                                            <button class="btn btn-primary" type="button" onclick="resetapplication()">Reset</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-sm-12 col-xs-12">
+
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <i class="fa fa-list fa-fw"></i>
+                    Student Attendance Report
+
+                    <div style="display:inline-block; float:right">
+                        <span>
+                            <label style="background:#cd64de;padding: 5px;"></label>
+                            <label style="padding: 10px;">Sunday[S]</label>
+                        </span>
+                        <span>
+                            <label style="background:#828282;padding: 5px;"></label>
+                            <label style="padding:10px;">Holiday [H]</label>
+                        </span>
+                        <span>
+                            <label style="background:#44b581;padding: 5px;"></label>
+                            <label style="padding:10px;">Present [P]</label>
+                        </span>
+                        <span>
+                            <label style="background:#ff6c6c;padding: 5px;"></label>
+                            <label style="padding:10px;">Absent [A]</label>
+                        </span>
+                    </div>
+                </div>
+                @if (Model.AttendanceReport.Count > 0)
+                {
+                <div class="panel-body"  id = "hide">
+                    <div id="grid">
+                        <div class="grid">
+                            <table id="divtbl" width="100%" cellspacing="0" cellpadding="0" align="center" style="background:#f9f9f9;margin:0 auto;padding:0; font-family:Arial;font-size:12px;" >
+                                <tbody>
+                                    <tr style="border:0 none">
+                                        <td style="border:0 none">
+                                            <table style="width:100%;background:#fff" class="m_2359723360084852473tblclass m_2359723360084852473303headerdefault">
+                                                <tbody>
+                                                    <tr style="border:0 none">
+                                                        <td style="border:0 none">
+                                                            <table align="center" style="background-color:#fff;width:100%;border-collapse:collapse;font-family:Arial;font-size:12px">
+                                                                <tbody style="vertical-align:top">
+                                                                    <tr style="border:0 none">
+                                                                        <td style="width:90%;border:0 none">
+                                                                            <table align="center" style="width:90%;border-collapse:collapse">
+                                                                                <tbody>
+                                                                                    <tr style="border:0 none">
+                                                                                        <td colspan="3" style="height:20px;border:0 none"></td>
+                                                                                    </tr>
+                                                                                    <tr style="border:0 none">
+                                                                                        <td style="width:100%;border:0 none; text-align: center;">
+                                                                                            <table style="width:100%;border-collapse:collapse;letter-spacing:0.5px">
+                                                                                                <tbody>
+                                                                                                    <tr style="border:0 none">
+                                                                                                        <td style="color:#000;font-family:Arial;font-size:14px;text-align:center;border:0 none; font-weight:bold; padding-bottom:5px;" colspan="2"><h2 style="margin:0px; text-transform:uppercase;">@DataLayer.ClsLanguage.GetCookies("NBCollegeName")-(@ViewBag.SessionName)</h2> </td>
+                                                                                                    </tr>
+
+                                                                                                    <tr style="border:0 none">
+                                                                                                        <td style="color:#000;font-family:Arial;font-size:12px;text-align:center;border:0 none; font-weight:bold; padding-bottom:5px;" colspan="2"><h4 style="margin:0px; text-transform:uppercase;">@ViewBag.StudentName - (@ViewBag.RollNo)</h4> </td>
+                                                                                                    </tr>
+                                                                                                    <tr style="border:0 none">
+                                                                                                        <td style="color:#000;font-family:Arial;font-size:12px;text-align:center;border:0 none; font-weight:bold; padding-bottom:5px;" colspan="2"><h4 style="margin:0px; text-transform:uppercase;">Subject - @ViewBag.streamCategory</h4> </td>
+                                                                                                    </tr>
+                                                                                                </tbody>
+                                                                                            </table>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                            <table align="center" style="width:90%; border-collapse:collapse;font-size:11px;text-transform:uppercase;letter-spacing:0.5px; ">
+                                                                                <tbody>
+                                                                                    <tr style="border:0 none">
+                                                                                        <td style="height:20px;border:0 none"></td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+                          
+                                <table class='table table - responsive' style="width:100%; font-size: 13px;">
+                                    <tr style="background-color:#e8e8e8;color:#333;"> <th>Month</th> <th>1</th> <th>2</th> <th>3</th> <th>4</th> <th>5</th> <th>6</th> <th>7</th> <th>8</th> <th>9</th> <th>10</th> <th>11</th> <th>12</th>  <th>13</th> <th>14</th> <th>15</th> <th>16</th> <th>17</th> <th>18</th> <th>19</th><th>20</th> <th>21</th> <th>22</th> <th>23</th> <th>24</th> <th>25</th> <th>26</th> <th>27</th> <th>28</th> <th>29</th> <th>30</th> <th>31</th> </tr>
+                                    @foreach (var item in Model.AttendanceReport)
+                                    {
+
+                                        <tr style="color:#fff; text-align:left;">
+                                            <td style="background-color:#e8e8e8;color:#333;"> @item.Month.ToString()</td>
+                                            <td style="background-color:@(item._1.ToLower() == "p" ? "#44b581" : item._1.ToLower() == "a" ? "#ff6c6c" : item._1.ToLower() == "s" ? "#cd64de" : item._1.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._1.ToString()
+                                            </td>
+
+                                            <td style="background-color:@(item._2.ToLower() == "p" ? "#44b581" : item._2.ToLower() == "a" ? "#ff6c6c" : item._2.ToLower() == "s" ? "#cd64de" : item._2.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._2.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._3.ToLower() == "p" ? "#44b581" : item._3.ToLower() == "a" ? "#ff6c6c" : item._3.ToLower() == "s" ? "#cd64de" : item._3.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._3.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._4.ToLower() == "p" ? "#44b581" : item._4.ToLower() == "a" ? "#ff6c6c" : item._4.ToLower() == "s" ? "#cd64de" : item._4.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._4.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._5.ToLower() == "p" ? "#44b581" : item._5.ToLower() == "a" ? "#ff6c6c" : item._5.ToLower() == "s" ? "#cd64de" : item._5.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._5.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._6.ToLower() == "p" ? "#44b581" : item._6.ToLower() == "a" ? "#ff6c6c" : item._6.ToLower() == "s" ? "#cd64de" : item._6.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._6.ToString()
+                                            </td>
+
+                                            <td style="background-color:@(item._7.ToLower() == "p" ? "#44b581" : item._7.ToLower() == "a" ? "#ff6c6c" : item._7.ToLower() == "s" ? "#cd64de" : item._7.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._7.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._8.ToLower() == "p" ? "#44b581" : item._8.ToLower() == "a" ? "#ff6c6c" : item._8.ToLower() == "s" ? "#cd64de" : item._8.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._8.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._9.ToLower() == "p" ? "#44b581" : item._9.ToLower() == "a" ? "#ff6c6c" : item._9.ToLower() == "s" ? "#cd64de" : item._9.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._9.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._10.ToLower() == "p" ? "#44b581" : item._10.ToLower() == "a" ? "#ff6c6c" : item._10.ToLower() == "s" ? "#cd64de" : item._10.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._10.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._11.ToLower() == "p" ? "#44b581" : item._11.ToLower() == "a" ? "#ff6c6c" : item._11.ToLower() == "s" ? "#cd64de" : item._11.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._11.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._12.ToLower() == "p" ? "#44b581" : item._12.ToLower() == "a" ? "#ff6c6c" : item._12.ToLower() == "s" ? "#cd64de" : item._12.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._12.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._13.ToLower() == "p" ? "#44b581" : item._13.ToLower() == "a" ? "#ff6c6c" : item._13.ToLower() == "s" ? "#cd64de" : item._13.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._13.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._14.ToLower() == "p" ? "#44b581" : item._14.ToLower() == "a" ? "#ff6c6c" : item._14.ToLower() == "s" ? "#cd64de" : item._14.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._14.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._15.ToLower() == "p" ? "#44b581" : item._15.ToLower() == "a" ? "#ff6c6c" : item._15.ToLower() == "s" ? "#cd64de" : item._15.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._15.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._16.ToLower() == "p" ? "#44b581" : item._16.ToLower() == "a" ? "#ff6c6c" : item._16.ToLower() == "s" ? "#cd64de" : item._16.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._16.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._17.ToLower() == "p" ? "#44b581" : item._17.ToLower() == "a" ? "#ff6c6c" : item._17.ToLower() == "s" ? "#cd64de" : item._17.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._17.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._18.ToLower() == "p" ? "#44b581" : item._18.ToLower() == "a" ? "#ff6c6c" : item._18.ToLower() == "s" ? "#cd64de" : item._18.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._18.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._19.ToLower() == "p" ? "#44b581" : item._19.ToLower() == "a" ? "#ff6c6c" : item._19.ToLower() == "s" ? "#cd64de" : item._19.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._19.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._20.ToLower() == "p" ? "#44b581" : item._20.ToLower() == "a" ? "#ff6c6c" : item._20.ToLower() == "s" ? "#cd64de" : item._20.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._20.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._21.ToLower() == "p" ? "#44b581" : item._21.ToLower() == "a" ? "#ff6c6c" : item._21.ToLower() == "s" ? "#cd64de" : item._21.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._21.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._22.ToLower() == "p" ? "#44b581" : item._22.ToLower() == "a" ? "#ff6c6c" : item._22.ToLower() == "s" ? "#cd64de" : item._22.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._22.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._23.ToLower() == "p" ? "#44b581" : item._23.ToLower() == "a" ? "#ff6c6c" : item._23.ToLower() == "s" ? "#cd64de" : item._23.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._23.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._24.ToLower() == "p" ? "#44b581" : item._24.ToLower() == "a" ? "#ff6c6c" : item._24.ToLower() == "s" ? "#cd64de" : item._24.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._24.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._25.ToLower() == "p" ? "#44b581" : item._25.ToLower() == "a" ? "#ff6c6c" : item._25.ToLower() == "s" ? "#cd64de" : item._25.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._25.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._26.ToLower() == "p" ? "#44b581" : item._26.ToLower() == "a" ? "#ff6c6c" : item._26.ToLower() == "s" ? "#cd64de" : item._26.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._26.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._27.ToLower() == "p" ? "#44b581" : item._27.ToLower() == "a" ? "#ff6c6c" : item._27.ToLower() == "s" ? "#cd64de" : item._27.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._27.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._28.ToLower() == "p" ? "#44b581" : item._28.ToLower() == "a" ? "#ff6c6c" : item._28.ToLower() == "s" ? "#cd64de" : item._28.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._28.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._29.ToLower() == "p" ? "#44b581" : item._29.ToLower() == "a" ? "#ff6c6c" : item._29.ToLower() == "s" ? "#cd64de" : item._29.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._29.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._30.ToLower() == "p" ? "#44b581" : item._30.ToLower() == "a" ? "#ff6c6c" : item._30.ToLower() == "s" ? "#cd64de" : item._30.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._30.ToString()
+                                            </td>
+                                            <td style="background-color:@(item._31.ToLower() == "p" ? "#44b581" : item._31.ToLower() == "a" ? "#ff6c6c" : item._31.ToLower() == "s" ? "#cd64de" : item._31.ToLower() == "h" ? "#828282" : "#ecae52")">
+                                                @item._31.ToString()
+                                            </td>
+                                        </tr>
+
+                                    }
+                                    <tr style="background-color:#e8e8e8;color:#333;">
+                                        <td>Total</td>
+                                        <td colspan="31">@ViewBag.Total</td>
+                                    </tr>
+                                </table>  
+                                
+                           
+                        </div>
+                    </div>
+
+
+                    <input type='button' id='btnPrint' class="btn btn-sm btn-primary login-submit-cs" value='Print'>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function resetapplication() {
+        $("#EduTypeID").val("");
+        $("#CourseCategoryID").val("");
+        $("#SubjectID").val("");
+        $("#Year").val("");
+        $("#StudentID").val(""); 
+        $("#hide").hide("fast");
+       
+    }
+    $(function () {
+        $("#btnPrint").click(function () {
+            var contents = $("#grid").html();
+            console.log(contents);
+            var frame1 = $('<iframe />');
+            frame1[0].name = "frame1";
+            frame1.css({ "position": "absolute", "top": "-1000000px" });
+            $("body").append(frame1);
+            var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+            frameDoc.document.open();
+            //Create a new HTML document.
+            frameDoc.document.write('<html><head><title>.</title>');
+
+            frameDoc.document.write('</head><body>');
+            //Append the external CSS file.
+            frameDoc.document.write('<link href="style.css" rel="stylesheet" type="text/css" />');
+            //Append the DIV contents.
+            frameDoc.document.write(contents);
+            frameDoc.document.write('</body></html>');
+            frameDoc.document.close();
+            setTimeout(function () {
+                window.frames["frame1"].focus();
+                window.frames["frame1"].print();
+                frame1.remove();
+            }, 500);
+        });
+    });
+</script>
+<script>
+   
+
+
+    function TableRow() {
+        $("#Table1 tbody tr td").each(function (i, row) {
+            debugger;
+            var $actualRow = $(row);
+            if ($actualRow.find('input[name=holiday]').val() == 'N/A') {
+                $actualRow.css('background-color', '#00FF00');
+            }
+            if ($actualRow.find('input[name=day]').val() == 'Sunday') {
+                $actualRow.css('background-color', '#FFFF00');
+            }
+        });
+    }
+    $(document).ready(function () {
+        TableRow();
+    });
+</script>
+<script>
+    $(document).on('click', '#submit', function () {
+
+        if ($("#EduTypeID").val() == '') {
+            alert('Education Type is requried');
+            return;
+        }
+        if ($("#CourseCategoryID").val() == '') {
+            alert('Course is requried');
+            return;
+        }
+        if ($("#SubjectID").val() == '') {
+            alert('Subject is requried');
+            return;
+        }
+        if ($("#Year").val() == '') {
+            alert('Year is requried');
+            return;
+        }
+        if ($("#StudentID").val() == '') {
+            alert('Student is requried');
+            return;
+        }
+        showloader();
+       
+        $("#hide").show("fast");
+    });
+
+    $(document).on('click', '#btnSubmit', function () {
+        var month = $("#Month").val();
+        var year = $("#Year").val();
+        var subid = $("#SubjectID").val();
+        var stuid = $("#StudentID").val();
+        var EmpId = $("#EmployeeID").val();
+    });
+    $("#Month").change(function () {
+        var month = $("#Month").val();
+        var year = $("#Year").val();
+        var subid = $("#SubjectID").val();
+        var stuid = $("#StudentID").val();
+        var EmpId = $("#EmployeeID").val();
+    });
+    $("#StudentID").change(function () {
+        var month = $("#Month").val();
+        var year = $("#Year").val();
+        var subid = $("#SubjectID").val();
+        var stuid = $("#StudentID").val();
+        var EmpId = $("#EmployeeID").val();
+    });
+    $("#EmployeeID").change(function () {
+        var month = $("#Month").val();
+        var year = $("#Year").val();
+        var subid = $("#SubjectID").val();
+        var stuid = $("#StudentID").val();
+        var EmpId = $("#EmployeeID").val();
+      
+    });
+    function RecallGrid(month, year, SubId, StuId, EmpId) {
+        $('#AjaxLoader').show();
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("StudentAttendanceReport", "Home")',
+            contentType: "application/json; charset=utf-8",
+
+            data: {  Year: year, SubjectID: SubId, StudentID: StuId},
+            success: function (data) {
+                debugger;
+                $('#grid').html($(data).find("#grid"));
+                TableRow();
+                $('#AjaxLoader').hide();
+            },
+            error: function () {
+                $('#AjaxLoader').hide();
+                toastr.error('Ooops! Something Went Wrong! Try Again');
+            }
+        });
+        return false;
+    };
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#EduTypeID").change(function () {
+            $('#AjaxLoader').show();
+            $("#CourseCategoryID").empty();
+            $("#SubjectID").empty();
+            $("#SubjectID").append('<option value="' + "" + '">' + "-- Select --" + '</option>');
+            $("#StudentID").empty();
+            $("#StudentID").append('<option value="' + "" + '">' + "-- Select --" + '</option>');
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("PopulateCourseCategoryDropdown", "Home")',
+                dataType: 'json',
+                data: { EduTypeID: $("#EduTypeID").val(), CollegeID: $("#CollegeID").val(), EmployeeID: $("#EmployeeID").val() },
+                success: function (states) {
+                    $.each(states, function (i, state) {
+                        $("#CourseCategoryID").append('<option value="' + state.Value + '">' +
+                            state.Text + '</option>');
+                    });
+                    $('#AjaxLoader').hide();
+                }, error: function (ex) { $("#CourseCategoryID").append('<option value="' + "" + '">' + "-- Select --" + '</option>'); }
+            });
+            $('#AjaxLoader').hide();
+            return false;
+        });
+        $("#CourseCategoryID").change(function () {
+            $('#AjaxLoader').show();
+            $("#SubjectID").empty();
+            $("#StudentID").empty();
+            $("#StudentID").append('<option value="' + "" + '">' + "-- Select --" + '</option>');
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("PopulateSubjectDetailPageDropdown", "Home")',
+                dataType: 'json',
+                data: { CourseCategoryID: $("#CourseCategoryID").val(), CollegeID: $("#CollegeID").val(), EmployeeID: $("#EmployeeID").val() },
+                success: function (states) {
+                    $.each(states, function (i, state) {
+                        $("#SubjectID").append('<option value="' + state.Value + '">' +
+                            state.Text + '</option>');
+                    });
+                }, error: function (ex) { $("#SubjectID").append('<option value="' + "" + '">' + "-- Select --" + '</option>'); }
+            });
+            $('#AjaxLoader').hide();
+            return false;
+        });
+        $("#SubjectID").change(function () {
+            $('#AjaxLoader').show();
+            $("#StudentID").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("PopulateStudentDropdown", "Home")',
+                dataType: 'json',
+                data: { CollegeID: $("#CollegeID").val(), SessionID: $("#SessionID").val(), CourseCategoryID: $("#CourseCategoryID").val(), SubjectID: $("#SubjectID").val() },
+                success: function (states) {
+                    $.each(states, function (i, state) {
+                        $("#StudentID").append('<option value="' + state.Value + '">' +
+                            state.Text + '</option>');
+                    });
+                }, error: function (ex) { $("#StudentID").append('<option value="' + "" + '">' + "-- Select --" + '</option>'); }
+            });
+            var usertype = @Model.UserType;
+            if(usertype == 1)
+            {
+                $("#EmployeeID").empty();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("PopulateEmployeeDropdown", "Home")',
+                    dataType: 'json',
+                    data: { CollegeID: $("#CollegeID").val(), SubjectID: $("#SubjectID").val() },
+                    success: function (states) {
+                        $.each(states, function (i, state) {
+                            $("#EmployeeID").append('<option value="' + state.Value + '">' +
+                                state.Text + '</option>');
+                        });
+                    }, error: function (ex) { $("#EmployeeID").append('<option value="' + "" + '">' + "-- Select --" + '</option>'); }
+                });
+            }
+            $('#AjaxLoader').hide();
+            return false;
+        });
+    });
+</script>
+<script src="~/scripts/jquery-1.10.2.js"></script>
+<script src="~/scripts/jquery.validate.js"></script>
+<script src="~/scripts/jquery.validate.unobtrusive.js"></script>

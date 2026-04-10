@@ -1,0 +1,653 @@
+﻿
+@{
+    ViewBag.Title = "CounsellingSeatReporCollegeWise";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+<script>
+    var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+    var CuSession = '@ViewBag.CuSession';
+   var Cucollegename= '@DataLayer.ClsLanguage.GetCookies("NBCollegeName")';
+
+</script>
+<style>
+    .right {
+        text-align: right;
+    }
+
+    .left {
+        text-align: left;
+    }
+    .textdesign
+    {
+  padding-bottom:20px;
+  padding-left:30px;
+  padding-right:30px;
+    }
+  
+</style>
+<script>
+    $(document).ready(function () {
+        $("#EducationType").change(function (event) {
+            $('#Coursetype').find("option").remove();
+            $("#Coursetype").append($("<option></option>").val("").html("--Select Course--"));
+            var res = $(this).val();
+            // debugger;
+            if (res == "")
+                res = 0;
+            $.ajax({
+                url: "/College/Home/getcourse/",
+                data: { id: res },
+                cache: false,
+                type: "POST",
+                dataType: "json",
+                headers: { 'Authorization': 'Basic ' + btoa(username + ':' + password) },
+                success: function (data) {
+                    // debugger;
+                    //console.log(data);
+                    $('#Coursetype').find("option").remove();
+                    $("#Coursetype").append($("<option></option>").val("").html("--Select Course--"));
+                    $.each(data.data, function (key, value) {
+                        $("#Coursetype").append($("<option></option>").val(value.CourseCategoryID).html(value.CourseCategory));
+                    });
+                }
+            });
+        });
+        $("#Coursetype").change(function (event) {
+            //debugger;
+            //alert('HIi');
+            $('#Subject').find("option").remove();
+            $("#Subject").append($("<option></option>").val("").html("--Select Subject--"));
+            var res = $(this).val();
+            if (res == "")
+                res = 0;
+            $.ajax({
+
+                url: "/College/Home/getsubjtectbycousrescollege/",
+                data: { id: res },
+
+                cache: false,
+                type: "POST",
+                dataType: "json",
+                headers: { 'Authorization': 'Basic ' + btoa(username + ':' + password) },
+                success: function (data) {
+                    // console.log(data);
+                    $('#Subject').find("option").remove();
+                    $("#Subject").append($("<option></option>").val("").html("--Select Subject--"));
+                    $.each(data.data, function (key, value) {
+                        $("#Subject").append($("<option></option>").val(value.StreamCategoryID).html(value.streamCategory));
+                    });
+                }
+            });
+        });
+    });
+
+</script>
+<div class="container-fluid">
+    <div style="min-height:600px;">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="sparkline12-list">
+                    <div class="sparkline12-graph">
+                        <div class="basic-login-form-ad">
+
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <h3 style="text-align:center">  Remaining College Seat Report After First Counselling </h3>
+                                    <hr />
+                                    <div class="all-form-element-inner">
+                                        <form id="frm">
+                                            <div class="form-group-inner">
+                                                <div class="row textdesign">
+                                                    <div class="col-lg-4 col-md-4 col-sm-2 col-xs-12">
+                                                        <label class="login2 pull-left pull-right-pro">Year</label>
+                                                        @Html.DropDownList("session", new SelectList(ViewBag.Session, "ID", "Session", ViewBag.CuSession), "--Select Session--", new { @class = "form-control custom-select-value", @id = "ddlsession", @name = "sessiontext", @ng_model = "session.search" })
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-4 col-sm-3 col-xs-12">
+                                                        <label class="login2 pull-left pull-right-pro">Education Type</label>
+                                                        @Html.DropDownList("EducationType", new SelectList(ViewBag.EducationType, "CommonId", "title"), "--Select Programme--", new { @class = "form-control custom-select-value", @id = "EducationType", @name = "EducationType" })
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-4 col-sm-2 col-xs-12">
+                                                        <label class="login2 pull-left pull-right-pro">Course</label>
+                                                        <select data-placeholder="Choose a Course..." class="form-control " tabindex="-1" title="Select Course" id="Coursetype" name="Coursetype" ng-model="ClubData.Coursetype">
+                                                            <option value="">Select Course</option>
+                                                        </select>
+                                                    </div>
+                                                    @*<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                        <label class="login2 pull-left pull-right-pro">College</label>
+                                                        @Html.DropDownList("CollegeID", new SelectList(ViewBag.College, "ID", "CollegeName"), "--Select College--", new { @class = "form-control custom-select-value", @id = "CollegeName", @name = "CollegeName" })
+                                                    </div>
+                                                   *@
+                                                </div>
+                                                <div class="row textdesign">
+                                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 left">
+                                                       &nbsp;
+                                                    </div>
+                                                    <div class="col-md-6  right">
+                                                        <div>                                                            
+                                                            <button class="btn btn-primary waves-effect waves-light" id="submit" type="button">Search</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="container-fluid" id="printreport">
+                <style>
+                    .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+                        padding: 2px 0;
+                        line-height: 1.42857143;
+                        vertical-align: top;
+                        border: 1px solid #666;
+                        font-size: 12px;
+                    }
+                </style>
+
+                <div id="DivPrintList"></div>
+
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align:center; padding-bottom:20px;">
+                <a href="#" id="btnPrint" onclick="return printdiv();" class="btn btn-primary waves-effect waves-light">
+                    <i class="fa fa-print" aria-hidden="true"></i>
+                    Print
+                </a>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align:Left; padding-bottom:20px;">
+                <div><b>Note:</b> TOTAL(H) :- Handicapped Seat </div>
+                <div><b>Note:</b> TOTAL(N) :- Normal Seat </div>
+                <div><b>Note:</b> Remaining (H) :- Remaining Handicapped Seat(After 1 Counselling) </div>
+                <div><b>Note:</b> Remaining (N) :- Remaining Normal Seat(After 1 Counselling) </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(document).ready(function () {
+         $(function ()
+         {
+             $('#btnPrint').hide();
+             $("#ddlsession option").each(function ()
+                 {
+           //  debugger;
+             if ($(this).val() ==((@ViewBag.CuSession)))
+              {
+                $(this).attr('selected', 'selected');
+              }
+         });
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        $("#btnPrint").click(function () {
+            var contents = $("#printreport").html();
+            //console.log(contents);
+            var frame1 = $('<iframe />');
+            frame1[0].name = "frame1";
+            frame1.css({ "position": "absolute", "top": "-1000000px" });
+            $("body").append(frame1);
+            var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+            frameDoc.document.open();
+            //Create a new HTML document.
+            frameDoc.document.write('<html><head><title>.</title>');
+
+            frameDoc.document.write('</head><body>');
+            //Append the external CSS file.
+            frameDoc.document.write('<link href="style.css" rel="stylesheet" type="text/css" />');
+            //Append the DIV contents.
+            frameDoc.document.write(contents);
+            frameDoc.document.write('</body></html>');
+            frameDoc.document.close();
+            setTimeout(function () {
+                window.frames["frame1"].focus();
+                window.frames["frame1"].print();
+                frame1.remove();
+            }, 500);
+        });
+    });
+</script>
+<script type="text/javascript">
+
+    $("[id*=submit]").bind("click", function () {
+        //debugger;
+        var currentsession = $("#ddlsession :selected").text();
+        var semester = $("#Coursetype :selected").text();
+        var Education = $("#CollegeName :selected").text();
+        var id = $(this).data("id");
+        var EducationType = $("#EducationType").val();
+        var Coursetype = $("#Coursetype").val();
+        var CollegeID = $("#CollegeName").val();
+        var ddlsession = $("#ddlsession").val();
+
+        if (ddlsession == "") {
+            alert("Please Select Session!!!");
+            $("#ddlsession").focus();
+            return;
+        }
+        if (EducationType == "") {
+            alert("Please Select Education Type!!!");
+            $("#EducationType").focus();
+            return;
+        }
+
+
+
+        if (Coursetype == "") {
+            alert("Please Select Course!!!");
+            $("#Coursetype").focus();
+            return;
+        }
+        if (CollegeID == "") {
+            alert("Please Select College !!");
+            $("#CollegeName").focus();
+            return;
+        }
+
+       // debugger;
+        $.ajax({
+            url: "/College/Home/After1COUNSELLINGREMSEAT",
+            data: {
+                EducationType: EducationType,
+                Coursetype: Coursetype,
+                CollegeID: CollegeID,
+                ddlsession: ddlsession
+            },
+            cache: false,
+            type: "POST",
+            dataType: "json",
+
+            success: function (data) {
+
+                debugger;
+                var a='aa\'';
+
+                //console.log("data" + data);
+                // debugger;
+
+                var result = "";
+                $("#DivPrintList").html('');
+                result = result + '<div style="border-bottom:5px solid #05046c; margin-bottom:25px; text-align:center; padding:15px 0; font-size:12px; font-family:Arial, Helvetica, sans-serif;">';
+                result = result + '<img src="@Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["siteUrl"] + "/images/mu-logo-white.png")" width="450px">';
+                result = result + ' <h1>After 1 COUNSELLING Remaining College Seat -REPORT</h1>';
+                result = result + ' <p> (' + Education + '),Course - ' + semester + ', Academic Session - ' + currentsession + '</p>';
+                result = result + '</div>';
+                result = result + ' <div class="table-responsive">';
+                result = result + '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table">';
+                result = result + '<tr>';
+                result = result + ' <td rowspan="3" align="center" valign="middle" bgcolor="#F9F9F9">Subject</td>';
+                result = result + '<td colspan="4" align="center" valign="middle" bgcolor="#FFBBBB">GEN</td>';
+                result = result + '<td colspan="4" align="center" valign="middle" bgcolor="#D0F7CE">SC</td>';
+                result = result + '<td colspan="4" align="center" valign="middle" bgcolor="#CEEFFF">ST</td>';
+                result = result + '<td colspan="4" align="center" valign="middle" bgcolor="#FCF2BE">EBC</td>';
+                result = result + '<td colspan="4" align="center" valign="middle" bgcolor="#F0E1FF">BC</td>';
+                result = result + '<td colspan="4" align="center" valign="middle" bgcolor="#FFE1DD">WBC</td>';
+                result = result + '<td colspan="4" align="center" valign="middle" bgcolor="#C7F3F2">NCC</td>';
+                result = result + '<td colspan="4" align="center" valign="middle" bgcolor="#FADEF1">SPORTS</td>';
+                result = result + '<td colspan="4" align="center" valign="middle" bgcolor="#D2D2FF">EX-SERVICEMEN</td>';
+                result = result + '<td colspan="4" align="center" valign="middle" bgcolor="#E4F1E7">STAFF/Ward</td>';
+                result = result + '<td colspan="4" align="center" valign="middle" bgcolor="#FFE1DD">GEW</td>';
+                result = result + '</tr>';
+                result = result + ' <td colspan="2" align="center" valign="middle" bgcolor="#FFBBBB">TOTAL</td>';
+                result = result + ' <td colspan="2" align="center" valign="middle" bgcolor="#FFBBBB">Remaining</td>';
+                result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#D0F7CE">TOTAL</td>';
+                result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#D0F7CE">Remaining</td>';
+                result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#CEEFFF">TOTAL</td>';
+                result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#CEEFFF">Remaining</td>';
+                result = result + ' <td colspan="2" align="center" valign="middle" bgcolor="#FCF2BE">TOTAL</td>';
+                result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#FCF2BE">Remaining</td>';
+                result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#F0E1FF">TOTAL</td>';
+                result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#F0E1FF">Remaining</td>';
+                result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#FFE1DD">TOTAL</td>';
+                result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#FFE1DD">Remaining</td>';
+                result = result + ' <td colspan="2" align="center" valign="middle" bgcolor="#C7F3F2">TOTAL</td>';
+                result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#C7F3F2">Remaining</td>';
+                result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#FADEF1">TOTAL</td>';
+                result = result + ' <td colspan="2" align="center" valign="middle" bgcolor="#FADEF1">Remaining</td>';
+                result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#D2D2FF">TOTAL</td>';
+                result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#D2D2FF">Remaining</td>';
+                result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#E4F1E7">TOTAL</td>';
+                result = result + '    <td colspan="2" align="center" valign="middle" bgcolor="#E4F1E7">Remaining </td>';
+                result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#FFE1DD">TOTAL</td>';
+                result = result + '    <td colspan="2" align="center" valign="middle" bgcolor="#FFE1DD">Remaining </td>';
+                result = result + '</tr>';
+                result = result + '<tr>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FFBBBB">N</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FFBBBB">H</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FFBBBB">REM(H)</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FFBBBB">REM(N)</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE">N</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE">H</td>';
+
+                result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE">REM(H)</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE">REM(N)</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF">N</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF">H</td>';
+
+                result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF">REM(H)</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF">REM(N)</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE">N</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE">H</td>';
+
+                result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE">REM(H)</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE">REM(N)</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF">N</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF">H</td>';
+
+                result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF">REM(H)</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF">REM(N)</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">N</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">H</td>';
+
+                result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">REM(H)</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">REM(N)</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2">N</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2">H</td>';
+
+                result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2">REM(H)</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2">REM(N)</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FADEF1">N</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FADEF1">H</td>';
+
+                result = result + '<td align="center" valign="middle" bgcolor="#FADEF1">REM(H)</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FADEF1">REM(N)</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF">N</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF">H</td>';
+
+                result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF">REM(H)</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF">REM(N)</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">N</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">H</td>';
+
+                result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">REM(H)</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">REM(N)</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">N</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">H</td>';
+
+                result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">REM(H)</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">REM(N)</td>';
+                result = result + '</tr>';
+                var i = 1;
+                var TotasheetGEN1=0;
+                var TotalHandiGEN1=0;
+                var consumeseatHinGEN1=0;
+                var consumeseatGEN1=0;
+                var RemainingGEN1=0;
+                var RemainingGENhandi=0
+
+                var TotaSCsheet1=0;
+                var TotalHandiCS1=0;
+                var consumeseatHinCS1=0;
+                var consumeseatSC1=0;
+                var RemainingSC1=0;
+                var RemainingSChandi=0
+                var TotasheetTS1=0;
+                var TotalHandiST1=0;
+                var consumeseatHinST1=0;
+                var consumeseatST1=0;
+                var RemainingST1=0;
+                var RemainingSTHandi=0;
+                var TotasheetBC11=0;
+                var TotalHandiBC11=0;
+                var consumeseatHinBC11=0;
+                var consumeseatBC11=0;
+                var RemainingBC11=0;
+                var RemainingBC1Handi=0;
+                var TotasheetBC21=0;
+                var TotalHandiBC21=0;
+                var consumeseatHinBC21=0;
+                var consumeseatBC21=0;
+                var RemainingBC21=0;
+                var RemainingBC2Handi=0;
+                var TotasheetWBC1=0;
+                var TotalHandiWBC1=0;
+                var consumeseatHinWBC1=0;
+                var consumeseatWBC1=0;
+                var RemainingWBC1=0;
+                var RemainingWBChandi=0;
+
+                var TotasheetNCC1=0;
+                var TotalHandiNCC1=0;
+                var consumeseatHinNCC1=0;
+                var consumeseatNCC1=0;
+                var RemainingNCC1=0;
+                var RemainingNCCHandi=0;
+
+                var TotasheetSPORTS1=0;
+                var TotalHandiSPORTS1=0;
+                var consumeseatHinSPORTS1=0;
+                var consumeseatSPORTS1=0;
+                var RemainingSports1=0;
+                var RemainingSportshandi=0;
+
+                var TotasheetEXSERVICEMEN1=0;
+                var TotalHandiEXSERVICEMEN1=0;
+                var consumeseatHinEXSERVICEMEN1=0;
+                var consumeseatEXSERVICEMEN1=0;
+                var RemainingExserviceman1=0;
+                var RemainingExservicemanHandi=0;
+
+                var TotasheetUSTAFF1=0;
+                var TotalHandiUSTAFF1=0;
+                var consumeseatHinUSTAFF1=0;
+                var consumeseatUSTAFF1=0;
+                var RemainingUniversityStaff1=0;
+                var RemainingUniversityStaffhandi=0;
+
+                var TotasheetGEW=0;
+                var TotalHandiGEW=0;
+                var consumeseatHinGEW=0;
+                var consumeseatGEW=0;
+                var RemainingGEW=0;
+                var RemainingGEWfhandi=0;
+
+                $.each(data, function (index, value) {
+                   debugger;
+                    //console.log(value);
+                    result = result + '<tr>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#F9F9F9">' + value.streamCategory + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFBBBB">' + value.TotasheetGEN + '</td>';
+                    result = result + ' <td align="center" valign="middle" bgcolor="#FFBBBB">' + value.TotalHandiGEN + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFBBBB">' + value.RemainingGENHandi + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFBBBB">' + value.RemainingGEN + '</td>';
+
+
+                    result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE">' + value.TotaSCsheet + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE">' + value.TotalHandiCS + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE">' + value.RemainingSChandi + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE">' + value.RemainingSC + '</td>';
+
+                    result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF">' + value.TotasheetTS + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF">' + value.TotalHandiST + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF">' + value.RemainingSTHandi + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF">' + value.RemainingST + '</td>';
+
+                    result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE">' + value.TotasheetBC1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE">' + value.TotalHandiBC1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE">' + value.RemainingBC1Handi + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE">' + value.RemainingBC1 + '</td>';
+
+                    result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF">' + value.TotasheetBC2 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF">' + value.TotalHandiBC2 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF">' + value.RemainingBC2Handi + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF">' + value.RemainingBC2 + '</td>';
+
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">' + value.TotasheetWBC + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">' + value.TotalHandiWBC + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">' + value.RemainingWBChandi + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">' + value.RemainingWBC + '</td>';
+
+                    result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2">' + value.TotasheetNCC + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2">' + value.TotalHandiNCC + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2">' + value.RemainingNCCHandi + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2">' + value.RemainingNCC + '</td>';
+
+                    result = result + '<td align="center" valign="middle" bgcolor="#FADEF1">' + value.TotasheetSPORTS + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FADEF1">' + value.TotalHandiSPORTS + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FADEF1">' + value.RemainingSportshandi + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FADEF1">' + value.RemainingSports + '</td>';
+
+                    result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF">' + value.TotasheetEXSERVICEMEN + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF">' + value.TotalHandiEXSERVICEMEN + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF">' + value.RemainingExservicemanHandi + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF">' + value.RemainingExserviceman + '</td>';
+
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">' + value.TotasheetUSTAFF + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">' + value.TotalHandiUSTAFF + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">' + value.RemainingUniversityStaffhandi + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">' + value.RemainingUniversityStaff + '</td>';
+
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">' + value.TotasheetGEW + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">' + value.TotalHandGEW + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">' + value.RemainingGEWHandi + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">' + value.RemainingGEW + '</td>';
+                    result = result + '</tr>';
+                    TotasheetGEN1=TotasheetGEN1+ parseInt(value.TotasheetGEN);
+                    TotalHandiGEN1=TotalHandiGEN1+parseInt(value.TotalHandiGEN);
+
+                    RemainingGEN1=RemainingGEN1+parseInt(value.RemainingGEN);
+                    RemainingGENhandi=RemainingGENhandi+parseInt(value.RemainingGENHandi);
+
+                    TotaSCsheet1=TotaSCsheet1+parseInt(value.TotaSCsheet);
+                    TotalHandiCS1=TotalHandiCS1+parseInt((value.TotalHandiCS));
+                    RemainingSChandi=RemainingSC1+parseInt(value.RemainingSChandi);
+
+                    RemainingSC1=RemainingSC1+parseInt(value.RemainingSC);
+
+                    TotasheetTS1=TotasheetTS1+parseInt(value.TotasheetTS);
+                    TotalHandiST1=TotalHandiST1+parseInt((value.TotalHandiST));
+                    RemainingSTHandi=RemainingSTHandi+parseInt(value.RemainingSTHandi);
+                    RemainingST1=RemainingST1+parseInt(value.RemainingST);
+
+
+                    TotasheetBC11=TotasheetBC11+parseInt(value.TotasheetBC1);
+                    TotalHandiBC11=TotalHandiBC11+parseInt((value.TotalHandiBC1));
+                    RemainingBC1Handi=RemainingBC1Handi+parseInt((value.RemainingBC1Handi));
+                    RemainingBC11=RemainingBC11+parseInt(value.RemainingBC1);
+
+                    TotasheetBC21=TotasheetBC21+parseInt(value.TotasheetBC2);
+                    TotalHandiBC21=TotalHandiBC21+parseInt((value.TotalHandiBC2));
+                    RemainingBC2Handi=RemainingBC2Handi+parseInt((value.RemainingBC2Handi));
+                    RemainingBC21=RemainingBC21+parseInt(value.RemainingBC2);
+
+                    TotasheetWBC1=TotasheetWBC1+parseInt(value.TotasheetWBC);
+                    TotalHandiWBC1=TotalHandiWBC1+parseInt((value.TotalHandiWBC));
+                    RemainingWBChandi=RemainingWBChandi+parseInt((value.RemainingWBChandi));
+                    RemainingWBC1=RemainingWBC1+parseInt(value.RemainingWBC);
+
+                    TotasheetNCC1=TotasheetNCC1+parseInt(value.TotasheetNCC);
+                    TotalHandiNCC1=TotalHandiNCC1+parseInt((value.TotalHandiNCC));
+                    RemainingNCCHandi=RemainingNCCHandi+parseInt((value.RemainingNCCHandi));
+                    RemainingNCC1=RemainingNCC1+parseInt(value.RemainingNCC);
+
+                    TotasheetSPORTS1=TotasheetSPORTS1+parseInt(value.TotasheetSPORTS);
+                    TotalHandiSPORTS1=TotalHandiSPORTS1+parseInt((value.TotalHandiSPORTS));
+                    RemainingSportshandi=RemainingSportshandi+parseInt((value.RemainingSportshandi));
+                    RemainingSports1=RemainingSports1+parseInt(value.RemainingSports);
+
+                    TotasheetEXSERVICEMEN1=TotasheetEXSERVICEMEN1+parseInt(value.TotasheetEXSERVICEMEN);
+                    TotalHandiEXSERVICEMEN1=TotalHandiEXSERVICEMEN1+parseInt((value.TotalHandiEXSERVICEMEN));
+                    RemainingExservicemanHandi=RemainingExservicemanHandi+parseInt((value.RemainingExservicemanHandi));
+                    RemainingExserviceman1=RemainingExserviceman1+parseInt(value.RemainingExserviceman);
+
+                    TotasheetUSTAFF1=TotasheetUSTAFF1+parseInt(value.TotasheetUSTAFF);
+                    TotalHandiUSTAFF1=TotalHandiUSTAFF1+parseInt((value.TotalHandiUSTAFF));
+                    RemainingUniversityStaff1=RemainingUniversityStaff1+parseInt(value.RemainingUniversityStaff);
+                    RemainingUniversityStaffhandi==RemainingUniversityStaffhandi+parseInt(value.RemainingUniversityStaffhandi);
+
+
+                    TotasheetGEW=TotasheetGEW+parseInt(value.TotasheetGEW);
+                    TotalHandiGEW=TotalHandiGEW+parseInt((value.TotalHandGEW));
+                    RemainingGEW=RemainingGEW+parseInt(value.RemainingGEW);
+                    RemainingGEWfhandi==RemainingGEWfhandi+parseInt(value.RemainingGEWHandi);
+
+
+                    i = i + 1;
+                });
+                result = result + '<tr>';
+                result = result + '<td align="center" valign="middle" bgcolor="#F9F9F9" style="font-weight:bold">Total:</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FFBBBB" style="font-weight:bold">' + TotasheetGEN1 + '</td>';
+                result = result + ' <td align="center" valign="middle" bgcolor="#FFBBBB" style="font-weight:bold">' + TotalHandiGEN1 + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FFBBBB" style="font-weight:bold">' + RemainingGENhandi + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FFBBBB" style="font-weight:bold">' + RemainingGEN1 + '</td>';
+
+                result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE" style="font-weight:bold">' + TotaSCsheet1 + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE" style="font-weight:bold">' + TotalHandiCS1 + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE" style="font-weight:bold" >' + RemainingSChandi + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE" style="font-weight:bold" >' + RemainingSC1 + '</td>';
+
+
+                result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF" style="font-weight:bold">' + TotasheetTS1 + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF" style="font-weight:bold">' + TotalHandiST1 + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF" style="font-weight:bold">' + RemainingSTHandi + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF" style="font-weight:bold">' + RemainingST1+ '</td>';
+
+                result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE" style="font-weight:bold">' + TotasheetBC11 + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE" style="font-weight:bold">' + TotalHandiBC11 + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE" style="font-weight:bold">' + RemainingBC1Handi + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE" style="font-weight:bold">' + RemainingBC11 + '</td>';
+
+                result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF" style="font-weight:bold">' + TotasheetBC21 + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF" style="font-weight:bold">' + TotalHandiBC21 + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF" style="font-weight:bold">' + RemainingBC2Handi + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF" style="font-weight:bold">' + RemainingBC21 + '</td>';
+
+                result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD" style="font-weight:bold">' + TotasheetWBC1 + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD" style="font-weight:bold">' + TotalHandiWBC1 + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD" style="font-weight:bold">' + RemainingWBChandi + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD" style="font-weight:bold">' + RemainingWBC1 + '</td>';
+
+                result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2" style="font-weight:bold">' + TotasheetNCC1 + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2" style="font-weight:bold">' + TotalHandiNCC1 + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2" style="font-weight:bold">' + RemainingNCCHandi + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2" style="font-weight:bold">' + RemainingNCC1 + '</td>';
+
+                result = result + '<td align="center" valign="middle" bgcolor="#FADEF1" style="font-weight:bold">' + TotasheetSPORTS1 + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FADEF1" style="font-weight:bold">' + TotalHandiSPORTS1 + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FADEF1" style="font-weight:bold">' + RemainingSportshandi + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FADEF1" style="font-weight:bold">' + RemainingSports1 + '</td>';
+
+                result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF" style="font-weight:bold">' + TotasheetEXSERVICEMEN1 + '</td>';
+                //result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF" style="font-weight:bold">' + TotasheetEXSERVICEMEN1 + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF" style="font-weight:bold">' + TotalHandiEXSERVICEMEN1 + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF" style="font-weight:bold">' + RemainingExservicemanHandi   + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF" style="font-weight:bold">' + RemainingExserviceman1   + '</td>';
+
+                result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7" style="font-weight:bold">' + TotasheetUSTAFF1 + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7" style="font-weight:bold">' + TotalHandiUSTAFF1 + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7" style="font-weight:bold">' + RemainingUniversityStaffhandi + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7" style="font-weight:bold">' + RemainingUniversityStaff1 + '</td>';
+
+                result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD" style="font-weight:bold">' + TotasheetGEW + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD" style="font-weight:bold">' + TotalHandiGEW + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD" style="font-weight:bold">' + RemainingGEWfhandi + '</td>';
+                result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD" style="font-weight:bold">' + RemainingGEW + '</td>';
+
+                result = result + '</tr>';
+                result = result + "</table>";
+                result = result + '</div>';
+                $('#btnPrint').show();
+                $("#DivPrintList").html(result);
+            },
+            error: function (data) {
+                alert('Error');
+            }
+        });
+    });
+</script>

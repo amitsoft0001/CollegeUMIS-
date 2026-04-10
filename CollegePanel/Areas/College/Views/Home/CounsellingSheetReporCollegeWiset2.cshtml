@@ -1,0 +1,127 @@
+﻿
+@{
+    ViewBag.Title = "CounsellingSheetReporCollegeWiset2";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+<script>
+    var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+    var CuSession = '@ViewBag.CuSession';
+   var Cucollegename= '@DataLayer.ClsLanguage.GetCookies("NBCollegeName")';
+
+</script>
+<style>
+    .right {
+        text-align: right;
+    }
+
+    .left {
+        text-align: left;
+    }
+</style>
+
+<script src="~/scripts/Customjs/CounsellingSheetReport2.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+
+<div style="min-height:600px;" class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="sparkline12-list">
+                <div class="sparkline12-graph">
+                    <div class="basic-login-form-ad">
+
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <h3 style="text-align:center">COUNSELLING SUBJECTS WISE-REPORT AFTER FIRST COUNSELLING </h3>
+                                <hr />
+                                <div class="all-form-element-inner">
+                                    @*@using (Html.BeginForm())
+                                        {
+                                        }*@
+                                    <form id="frm">
+                                        <div class="form-group-inner">
+
+                                            <div class="row" style="padding-bottom:20px;padding-left:30px;padding-right:30px;">
+                                                <div class="col-md-2">
+                                                    <label>Year:</label>
+                                                </div>
+                                                <div class="col-md-2 ">
+                                                    @Html.DropDownList("session", new SelectList(ViewBag.Session, "ID", "Session", ViewBag.CuSession), "--Select Session--", new { @class = "form-control custom-select-value", @id = "ddlsession", @name = "sessiontext", @ng_model = "session.search" })
+                                                </div>
+                                                <div class="col-md-2 ">
+                                                    <label>Programme Name:</label>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    @Html.DropDownList("EducationType", new SelectList(ViewBag.EducationType, "CommonId", "title"), "--Select Programme--", new { @class = "form-control custom-select-value", @id = "EducationType", @name = "EducationType" })
+                                                </div>
+                                                <div class="col-md-2 ">
+                                                    <label>Course Name:</label>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <select data-placeholder="Choose a Course..." class="form-control " tabindex="-1" title="Select Course" id="Coursetype" name="Coursetype" ng-model="ClubData.Coursetype">
+                                                        <option value="">Select Course</option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                            <div class="row" style="padding-bottom:20px;padding-left:30px;padding-right:30px;">
+                                                <div class="col-md-2 ">
+                                                    <label>Subject:</label>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <select data-placeholder="Choose a Subject" class="form-control " tabindex="-1" title="Select Course" id="Subject" name="Subject" ng-model="ClubData.Subject">
+                                                        <option value="">Select Subject</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6  right">
+                                                    <button class="btn btn-primary waves-effect waves-light" id="submit" type="button">Search</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="" id="printreport">
+            <style>
+                .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+                    padding: 2px 0;
+                    line-height: 1.42857143;
+                    vertical-align: top;
+                    border: 1px solid #666;
+                    font-size: 12px;
+                }
+            </style>
+            <div class="sparkline12-list">
+
+                <div id="DivPrintList"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="text-align:center; padding-bottom:20px;">
+            <a href="#" id="btnPrint" onclick="return printdiv();" class="btn btn-primary waves-effect waves-light">
+                <i class="fa fa-print" aria-hidden="true"></i>
+                Print
+            </a>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align:Left; padding-bottom:20px;">
+            <div><b>Note:</b> TOTAL(H) :- Handicapped Seat </div>
+            <div><b>Note:</b> TOTAL(N) :- Normal Seat </div>
+            <div><b>Note:</b> OCCUPIED(H) :- Consume Handicapped Seat(After Scrutiny) </div>
+            <div><b>Note:</b> OCCUPIED(N) :- Consume Normal Seat(After Scrutiny) </div>
+            <div><b>Note:</b> OCCUPIED(R) :-Remaining Seat(After Scrutiny) </div>
+        </div>
+    </div>
+
+</div>
+

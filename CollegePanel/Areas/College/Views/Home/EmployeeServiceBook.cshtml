@@ -1,0 +1,433 @@
+﻿@model DataLayer.EmployeeBioData
+@{
+    ViewBag.Title = "EmployeeServiceBook";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+<style>
+    .right {
+        text-align: right;
+    }
+
+    .left {
+        text-align: left;
+    }
+
+    .heading-part {
+        text-align: center;
+    }
+
+    .spacebottom {
+        padding-bottom: 20px;
+    }
+
+    .btnprintdesign {
+        text-align: center;
+        padding-bottom: 20px;
+    }
+    .minheight{
+        min-height:450px;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row minheight">
+        <div class="col-lg-12">
+            <div class="sparkline10-list">               
+                    @if (Model != null)
+            {
+                        <div class="row right">
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 col-lg-offset-2">
+                                <a href="#" id="btnPrint"  class="btn btn-primary waves-effect waves-light">
+                                    <i class="fa fa-print" aria-hidden="true"></i>
+                                    Print
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="printreport">
+                                <div style="text-align:center">
+                                    <h2>BIO-DATA</h2>
+                                    <div style="margin-bottom:25px; text-align:center; padding:15px 0; font-size:12px; font-family:Arial, Helvetica, sans-serif;">
+                                      <img src="/../../images/mu-logo-white.png" width="200px">
+                                    </div>
+                                </div>
+
+                                <div style="">
+                                    <div style="width:950px; margin:auto; padding:0; font-family:Arial, Helvetica, sans-serif; font-size:13px; page-break-after: always;">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-size:14px; border:1px solid #333;">
+                                            <tr>
+                                                <td align="left" valign="top">
+                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                        <tr>
+                                                            <td align="left" valign="top" width="81%">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td align="left" valign="top">
+                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-bottom:1px solid #333;">
+                                                                                <tr>
+                                                                                    <td width="10%" align="left" valign="top" style="padding:6px;">1. Name :</td>
+                                                                                    <td width="90%" align="left" valign="top" style="padding:6px;">@Model.empregistration.FirstName</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td align="left" valign="top" style="font-size:14px; padding:6px;">नाम</td>
+                                                                                    <td align="left" valign="top" style="padding:6px;">@Model.empregistration.FirstNameInHindi</td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="left" valign="top">
+                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-bottom:1px solid #333;">
+                                                                                <tr>
+                                                                                    <td width="15%" align="left" valign="top" style="padding:6px;">2. Nationality :</td>
+                                                                                    <td width="85%" align="left" valign="top" style="padding:6px;">@Model.empregistration.NationalityName</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td align="left" valign="top" style="font-size:14px; padding:6px;">राष्ट्रीयता :</td>
+                                                                                    <td align="left" valign="top" style="padding:6px;">&nbsp;</td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="left" valign="top">
+                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-bottom:1px solid #333;">
+                                                                                <tr>
+                                                                                    <td width="28%" align="left" valign="top" style="padding:6px;">
+                                                                                        3. Residential Address (Permanent) <br>
+                                                                                        <span style="font-size:14px;">
+                                                                                            घर का पता
+                                                                                            :
+                                                                                        </span>
+                                                                                    </td>
+                                                                                    <td width="72%" align="left" valign="top" style="padding:6px;">@Model.empregistration.PA_Address</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td align="left" valign="top" style="padding:6px;">Local <span style="font-size:14px;">स्थानीय</span> :</td>
+                                                                                    <td align="left" valign="top" style="padding:6px;">@Model.empregistration.CurrentAddress</td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="left" valign="top">
+                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-bottom:1px solid #333;">
+                                                                                <tr>
+                                                                                    <td width="28%" align="left" valign="top" style="padding:6px;">4. Father's Name and Residence</td>
+                                                                                    <td width="72%" align="left" valign="top" style="padding:6px;">@Model.empregistration.FatherName,@Model.empregistration.PA_Address</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td align="left" valign="top" style="font-size:14px; padding:6px;">पिता का नाम और निवास</td>
+                                                                                    <td align="left" valign="top" style="padding:6px;">&nbsp;</td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+
+                                                            </td>
+                                                            <td width="19%" rowspan="5" align="left" valign="top" style="border-left:1px solid #333; border-bottom:1px solid #333; padding:5px;">
+                                                                @*<img src="user.png" width="100%">*@
+                                                                <img src="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/College/@Model.empregistration.stphoto" alt="" onerror="this.src = '../../../images/noimage.png';" width="100%">
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" valign="top">
+                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-bottom:1px solid #333;">
+                                                        <tr>
+                                                            <td width="28%" align="left" valign="top" style="padding:5px;">Date of birth by christain era as nearly as can be ascortained :</td>
+                                                            <td width="72%" align="left" valign="top" style="padding:5px;">@Model.empregistration.DOB</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="top" style="font-size:14px; padding:5px;">जन्म की तारीख :</td>
+                                                            <td align="left" valign="top" style="padding:5px;">@Model.empregistration.DOB</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" valign="top">
+                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-bottom:1px solid #333;">
+                                                        <tr>
+                                                            <td width="28%" align="left" valign="top" style="padding:5px;">Educational Qualification :</td>
+                                                            <td width="72%" align="left" valign="top" style="padding:5px;">&nbsp;</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="top" style="font-size:16px; padding:5px;">शैक्षणिक योग्यता :</td>
+                                                            <td align="left" valign="top" style="padding:5px;">&nbsp;</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            @if (Model.odjDocument.Count > 0)
+                                    {
+
+                                                <tr>
+                                                    <td align="left" valign="top">
+                                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                            <tr>
+                                                                <td align="center" valign="middle" width="25%" style="padding:5px; border-bottom:1px solid #333; border-right:1px solid #333;">Examinations passed beginning from high school/ Higher Secondary<br><span style="font-size:14px;">सेकंडरी से शुरू हुई परीक्षा</span></td>
+                                                                <td align="center" valign="middle" width="25%" style="padding:5px; border-bottom:1px solid #333; border-right:1px solid #333;">Year of passing<br><span style="font-size:14px;">उत्तीर्ण होने का वर्ष</span> </td>
+                                                                <td align="center" valign="middle" width="25%" style="padding:5px; border-bottom:1px solid #333; border-right:1px solid #333;">Division/Grade in which passed<br><span style="font-size:14px;">श्रेणी</span></td>
+                                                                <td align="center" valign="middle" width="25%" style="padding:5px; border-bottom:1px solid #333;">Remarks<br><span style="font-size:14px;">अभ्युति</span></td>
+                                                            </tr>
+                                                            @{ int i = 1;}
+                                                            @foreach (var item in Model.odjDocument)
+                                            {
+                                                                <tr>
+                                                                    <td align="left" valign="top" style="padding:10px 5px; border-bottom:1px dotted #333; border-right:1px solid #333;">@i.&nbsp; @item.DocName</td>
+                                                                    <td align="left" valign="top" style="padding:10px 5px; border-bottom:1px dotted #333; border-right:1px solid #333;">@item.PassingYear</td>
+                                                                    <td align="left" valign="top" style="padding:10px 5px; border-bottom:1px dotted #333; border-right:1px solid #333;">@item.Grade</td>
+                                                                    <td align="left" valign="top" style="padding:10px 5px; border-bottom:1px dotted #333;">@item.Narration</td>
+                                                                </tr>
+
+                                                i = i + 1;
+                                            }
+                                                        </table>
+
+                                                    </td>
+                                                </tr>
+
+
+                                                }
+                                            <tr>
+                                                <td align="left" valign="top" style="border-bottom:1px solid #333; padding:5px;">
+                                                    Pertuculars of experience prior to joining<br>
+                                                    Bhagalpur University <span style="font-size:14px;">जुड़ने से पहले के अनुभव के पर्टुकुलर</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" valign="top" style="border-bottom:1px solid #333; padding:5px;">
+                                                    Details of academic attainments distinctions<br>
+                                                    as teacher, if any after joining service of <br>
+                                                    University of Bhagalpur which the member of staff<br>
+                                                    make like to have entered in the service book
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" valign="top" style="border-bottom:1px solid #333; padding:5px;">7. Exact Height by measurement - <span style="font-size:14px;">माप द्वारा सटीक ऊँचाई : <strong>@if (Model.empregistration.EmployeeHeight == 0) {<span>N.A.</span> } else { <span>@Model.empregistration.EmployeeHeight</span>}</strong></span></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" valign="top" style="border-bottom:1px solid #333; padding:5px;">
+                                                    8. Personal mark of identifications - <span style="font-size:14px;">व्यक्तिगत पहचान का चिह्न : <strong>@Model.empregistration.IdentificationsMarks</strong></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" valign="top" style="border-bottom:1px solid #333; padding:5px;">9. signature - <span style="font-size:14px;">हस्ताक्षर</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" valign="top" style="border-bottom:1px solid #333; padding:5px;">
+                                                    10. Medical Report-
+                                                    <span style="font-size:14px;">चिकत्सा रिपोर्ट : <strong>@Model.empregistration.MedicalReport</strong></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" valign="top" style="border-bottom:1px solid #333; padding:5px;">Note: The entries in this page should be renewed or re-attestecd at least every five years, and the signatures in the line 9 and 12 should be dated.</td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" valign="top" style="padding:5px;">
+                                                    Attested Officer with date-<br>
+                                                    <span style="font-size:14px;">तिथि के साथ उपस्थित अधिकारी</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div style="padding:20px;">
+                                        &nbsp;
+                                    </div>
+                                    <div style="width:950px; margin:auto; padding:0; font-family:Arial, Helvetica, sans-serif; font-size:13px;">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-size:14px; border:1px solid #333;">
+                                            <tr>
+                                                <td align="center" valign="top" style="font-size:22px; font-weight:600; border-bottom:1px solid #333; padding:15px;">
+                                                    CERTIFICATE AND ATTESTATION
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" valign="top">
+                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                        <tr>
+                                                            <td align="center" valign="middle" style="border-bottom:1px solid #333; padding:10px 5px;">S No.</td>
+                                                            <td align="center" valign="middle" style="border-bottom:1px solid #333; padding:10px 5px;">SUBJECT</td>
+                                                            <td align="center" valign="middle" style="border-bottom:1px solid #333; padding:10px 5px;">CERTIFICATE</td>
+                                                            <td align="center" valign="middle" style="border-bottom:1px solid #333; padding:10px 5px;">Signature and designation of the certifying officer </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="center" valign="middle" style="border-bottom:1px solid #333; padding:10px 5px;">1</td>
+                                                            <td align="center" valign="middle" style="border-bottom:1px solid #333; padding:10px 5px;">2</td>
+                                                            <td align="center" valign="middle" style="border-bottom:1px solid #333; padding:10px 5px;">3</td>
+                                                            <td align="center" valign="middle" style="border-bottom:1px solid #333; padding:10px 5px;">4</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="5%" align="left" valign="middle" style="border-bottom:1px solid #333; padding:10px 5px;">1.</td>
+                                                            <td width="20%" align="left" valign="middle" style="border-bottom:1px solid #333; padding:10px 5px;">Medical Examination</td>
+                                                            <td width="45%" align="left" valign="middle" style="border-bottom:1px solid #333; padding:10px 5px;">कर्मचारी को चिकित्सकीय रूप से पर और फव्वारा फिट द्वारा जांच की गई थी। मेडिकल सर्टिफिकेट को सर्विस बुक के वॉल्यूम II के सुरक्षित कस्टडी में रखा गया है।<br><br>The employee was medically examined by on  and fount fit. The medical certificate has been kept in safe custody vide S.No of volume II of the service book.</td>
+                                                            <td width="30%" align="center" valign="middle" style="border-bottom:1px solid #333; padding:10px 5px;">@(Model.empregistration.IsVerify != 0 ? (Model.empregistration.IsVerify == 1 ? "Verified" : "Rejected") : "Pending")</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="middle" style="border-bottom:1px solid #333; padding:10px 5px;">2.</td>
+                                                            <td align="left" valign="middle" style="border-bottom:1px solid #333; padding:10px 5px;">Character &amp; Antecedent</td>
+                                                            <td align="left" valign="middle" style="border-bottom:1px solid #333; padding:10px 5px;">His/her character and antocedent have been verified and the verification report kept in safe custody vide S.no of volume II of the Service Book.</td>
+                                                            <td align="center" valign="middle" style="border-bottom:1px solid #333; padding:10px 5px;">@(Model.empregistration.IsVerify != 0 ? (Model.empregistration.IsVerify == 1 ? "Verified" : "Rejected") : "Pending")</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="top" style="border-bottom:1px solid #333; padding:10px 5px;">3.</td>
+                                                            <td align="left" valign="top" style="border-bottom:1px solid #333; padding:10px 5px;">Allegiance to the Constitution</td>
+                                                            <td align="left" valign="top" style="border-bottom:1px solid #333; padding:10px 5px;">He/She has read the official secrets act and Central Service (conduct) rules and has also taken the oath of secrecy vide S.No of Volume II of service Book.</td>
+                                                            <td align="center" valign="top" style="border-bottom:1px solid #333; padding:10px 5px;">@(Model.empregistration.IsConstitution == true ? "Yes" : "No")</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="top" style="border-bottom:1px solid #333; padding:10px 5px;">4.</td>
+                                                            <td align="left" valign="top" style="border-bottom:1px solid #333; padding:10px 5px;">Oth of Secrecy</td>
+                                                            <td align="left" valign="top" style="border-bottom:1px solid #333; padding:10px 5px;">He/She has furnished Declaration regarding his/her not havinf contracted bigamous marraige. The revelant declaration has been filled at S.no of volume II of the service Book.</td>
+                                                            <td align="center" valign="top" style="border-bottom:1px solid #333; padding:10px 5px;">@(Model.empregistration.IsSecrecy == true ? "Yes" : "No")</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="top" style="border-bottom:1px solid #333; padding:10px 5px;">5.</td>
+                                                            <td align="left" valign="top" style="border-bottom:1px solid #333; padding:10px 5px;">Marital Status</td>
+                                                            <td align="left" valign="top" style="border-bottom:1px solid #333; padding:10px 5px;">The correctness of the entries against S.No 5-8 of the part -1 Bio-data has been verified from the original certificates considered as the valid documentary evidence for the respective purpose. Attested copies of these certificates have been field at S.no of volume II of the Service Book.</td>
+                                                            <td align="center" valign="top" style="border-bottom:1px solid #333; padding:10px 5px;">@(Model.empregistration.IsInfo == 2 ? "N.A" : (Model.empregistration.IsMarried == true ? "Married" : "UnMarried"))</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="top" style="border-bottom:1px solid #333; padding:10px 5px;">6.</td>
+                                                            <td align="left" valign="top" style="border-bottom:1px solid #333; padding:10px 5px;">Verification of entries in part 1</td>
+                                                            <td align="left" valign="top" style="border-bottom:1px solid #333; padding:10px 5px;">.</td>
+                                                            <td align="center" valign="top" style="border-bottom:1px solid #333; padding:10px 5px;">&nbsp;</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="top" style="border-bottom:1px solid #333; padding:10px 5px;">7.</td>
+                                                            <td align="left" valign="top" style="border-bottom:1px solid #333;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td align="left" valign="top" style="padding:10px 5px;">(a) G.P.F. No.</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="left" valign="top" style="padding:10px 5px;">(a) Nomination for G.P.F.</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="left" valign="top" style="padding:10px 5px;">&nbsp;</td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td align="left" valign="top" style="border-bottom:1px solid #333;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td align="left" valign="top" style="padding:10px 5px;">@Model.empregistration.GPFNo</td>
+                                                                    </tr>
+
+                                                                    @{ int j = 1;}
+                                                                    @if (Model.empregistration.NominneeList!=null)
+                                                            {
+                                                                    <tr>
+                                                                        <td align="left" valign="top" style="padding:10px 5px;">S.NO.</td>
+                                                                        <td align="left" valign="top" style="padding:10px 5px;">Nominnee name.</td>
+                                                                        <td align="left" valign="top" style="padding:10px 5px;">Percentage.</td>
+                                                                    </tr>
+                                                                for (var i = 0; i < Model.empregistration.NominneeList.Count; i++)
+                                                                {
+                                                                            <tr>
+                                                                                <td align="left" valign="top" style="padding:10px 5px;">@j.</td>
+                                                                                <td align="left" valign="top" style="padding:10px 5px;">
+                                                                                    @Model.empregistration.NominneeList[i].MemberName
+                                                                                </td>
+                                                                                <td align="left" valign="top" style="padding:10px 5px;">
+                                                                                    @Model.empregistration.NominneeList[i].NominneePercentage
+                                                                                </td>
+                                                                            </tr>
+                                                                    j = j + 1;
+
+                                                                }
+                                                            }
+
+                                                                </table>
+                                                            </td>
+                                                            <td align="left" valign="top" style="border-bottom:1px solid #333; padding:10px 5px;">&nbsp;</td>
+                                                        </tr>
+                                                        @*<tr>
+                                                            <td align="left" valign="top" style="border-bottom:1px solid #333; padding:10px 5px;">8.</td>
+                                                            <td align="left" valign="top" style="border-bottom:1px solid #333; padding:10px 5px;">Family Particulars</td>
+                                                            <td align="left" valign="top" style="border-bottom:1px solid #333; padding:10px 5px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
+                                                            <td align="left" valign="top" style="border-bottom:1px solid #333; padding:10px 5px;">&nbsp;</td>
+                                                        </tr>*@
+                                                        <tr>
+                                                            <td align="left" valign="top" style="padding:10px 5px;">9.</td>
+                                                            <td align="left" valign="top" style="padding:10px 5px;">D.C.R. gratuity and familty pension</td>
+                                                            <td align="left" valign="top" style="padding:10px 5px;"></td>
+                                                            <td align="left" valign="top" style="padding:10px 5px;">&nbsp;</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+
+
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                            <div class="advanced-form-area mg-b-15 ">
+                                                                                <div class="container-fluid col-md-10 col-md-offset-1 col-sm-12 " style="display:block" id="">
+                                                                                    <div class="row">
+                                                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                            <div class="sparkline10-list mg-tb-30 responsive-mg-t-0 table-mg-t-pro-n dk-res-t-pro-0 nk-ds-n-pro-t-0" style="text-align: left;">
+                                                                                                <div class="sparkline10-graph">
+                                                                                                    <div class="input-knob-dial-wrap">
+                                                                                                        <div class="form-group-inner">
+                                                                                                            <div class="row login-btn-inner" style="margin:15px !important">
+                                                                                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                                                    <center>
+                                                                                                                        <a style="color:red;font-size:60px"><span class="fa fa-times "></span></a><br /><br />
+                                                                                                                        <h3>Please Upload Your Document First!!!</h3>
+                                                                                                                    </center>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                }
+  
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#btnPrint").click(function () {
+            var contents = $("#printreport").html();
+            //console.log(contents);
+            var frame1 = $('<iframe />');
+            frame1[0].name = "frame1";
+            frame1.css({ "position": "absolute", "top": "-1000000px" });
+            $("body").append(frame1);
+            var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+            frameDoc.document.open();
+            //Create a new HTML document.
+            frameDoc.document.write('<html><head><title>.</title>');
+
+            frameDoc.document.write('</head><body>');
+            //Append the external CSS file.
+            frameDoc.document.write('<link href="style.css" rel="stylesheet" type="text/css" />');
+            //Append the DIV contents.
+            frameDoc.document.write(contents);
+            frameDoc.document.write('</body></html>');
+            frameDoc.document.close();
+            setTimeout(function () {
+                window.frames["frame1"].focus();
+                window.frames["frame1"].print();
+                frame1.remove();
+            }, 500);
+        });
+    });
+</script>

@@ -1,0 +1,234 @@
+﻿@model List<DataLayer.StudentPreviousQualification>
+@{
+    ViewBag.Title = "StudentQualification";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+
+<script>
+    var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+   
+</script>
+<script src="~/Content/js/vendor/jquery-1.12.4.min.js"></script>
+
+<script src="~/scripts/Customjs/StudentQualification.js?id=@System.Configuration.ConfigurationManager.AppSettings["StudentQualification"]"></script>
+<script src="~/scripts/Customjs/QualificationDetails.js?id=@System.Configuration.ConfigurationManager.AppSettings["QualificationDetails"]"></script>
+<link href="~/Content/Recruitmentpreocess.css" rel="stylesheet" />
+<style>
+    .starvalid {
+        color: red;
+    }
+
+    .spacebottom {
+        margin-bottom: 30px;
+    }
+</style>
+<div class="container-fluid">
+    <div class="report-part">
+        <ul>
+            <li><a href="~/College/Home/BasicDetailManualAd/@ViewBag.oneID"> Basic Detail </a></li>
+            <li class="active"><a id="preQuali"> Previous Year Qualification </a></li>
+            <li><a href="~/College/Home/ChosseSubjectsmanualad/@ViewBag.ID"> Choose Subject  </a></li>
+            <li><a href="~/College/Home/FeeSubmitManualAd/@ViewBag.ID"> Admission Fee</a></li>
+        </ul>
+    </div>
+
+    <div class="sparkline8-list DocumentUpload">
+        <div class="text-danger text-center">
+            @if (TempData["Msg"] != null)
+            {
+                @TempData["Msg"];
+            }
+        </div>
+
+        <div class="row ">
+            <div>
+                <h3 class="text-center spacebottom">Student Qualification </h3>
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="row spacebottom text-center">
+                Name:
+                @if(ViewBag.Name!=null)
+                {
+                    @ViewBag.Name
+                }
+            </div>
+            @*<div class="sparkline12-hd">
+                    <div class="main-sparkline12-hd">
+                        <h3 class="text-center">Student Qualification Details</h3>
+                    </div>
+                </div>*@
+            <div class="col-lg-10 col-sm-12 col-xs-12 col-lg-offset-1 ">
+
+
+                <div ng-app="qualificationlistApp" ng-controller="qualificationlistCtrl">
+                    <div class="text-right">
+                        @if (@ViewBag.IsSubmit != 1)
+                        {
+                            <div ng-show="(qlist |filter:search).length != 2">
+                                <a class="btn btn-primary waves-effect waves-light add-quali-btn" href="@Url.Action("PreviousYearQualificationManualAd", "Home",new { id=ViewBag.ID})">Add Qualification</a>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="document-table">
+                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer table-responsive">
+                            <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed dataTable ">
+                                <thead>
+                                    <tr role="row">
+                                        <th width="80px">S. No.</th>
+                                        <th ng-click="sortBy('qualificationTypeName')">
+                                            Qualification
+                                            <span class="sortorder" ng-show="propertyName === 'qualificationTypeName'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('board_UniversityName')">
+                                            University Name
+                                            <span class="sortorder" ng-show="propertyName === 'board_UniversityName'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('rollNo')">
+                                            Roll No
+                                            <span class="sortorder" ng-show="propertyName === 'rollNo'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('RollNo')">
+                                            Percentage
+                                            <span class="sortorder" ng-show="propertyName === 'percentage'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('passingYear')">
+                                            PassingYear
+                                            <span class="sortorder" ng-show="propertyName === 'passingYear'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('')">
+                                            Document
+                                            <span class="sortorder" ng-show="propertyName === ''" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        @if (@ViewBag.IsSubmit != 1)
+                                        {
+                                            <th ng-click="sortBy('')">
+                                                Action
+                                                <span class="sortorder" ng-show="propertyName === ''" ng-class="{reverse: reverse}"></span>
+                                            </th>
+
+                                        }
+
+
+
+
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr ng-repeat="qualidetail in qlist | filter:search  | orderBy:propertyName:reverse">
+                                        <td>{{ ((pageIndex-1)*pageSizeSelected)+$index+1 }}</td>
+                                        <td>{{qualidetail.qualificationTypeName}}</td>
+                                        <td>{{qualidetail.board_UniversityName}}</td>
+                                        <td>{{qualidetail.rollNo}}</td>
+                                        <td>{{qualidetail.percentage}}</td>
+                                        <td>{{qualidetail.passingYear}}</td>
+                                        <td>
+                                            <a title="View" href="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Document/{{qualidetail.fileURl}}" target="_blank" class="btn btn-info btn-sm">View</a>
+                                            @*<img src="~/Student/QualificationDocument/{{qualidetail.fileURl}}"  width="100px" />*@
+                                        </td>
+                                        @if (@ViewBag.IsSubmit != 1)
+                                        {
+                                            <td>
+                                                
+                                                <a title="Edit" href="~/College/Home/PreviousYearQualificationManualAd/?id=@ViewBag.ID&qualiID={{qualidetail.encriptedID}}" class="btn btn-success btn-sm fa fa-edit " onclick="return confirm('Are you Sure, you want to edit your Qualification!!');"></a>
+                                                @*<a title="Edit" href="~/College/Home/PreviousYearQualificationManualAd /{{qualidetail.encriptedID}}" class="btn btn-success btn-sm fa fa-edit " onclick="return confirm('If you have already filled your subject and college choices, it will be deleted ,if you edit your Qualification!!');"></a>*@
+                                                <a title="Delete" href="~/College/Home/StudentQualificationDelete/?id=@ViewBag.ID&qualiID={{qualidetail.encriptedID}}" class="btn btn-danger btn-sm fa fa-trash " onclick="return confirm('Are you Sure, you want to delete your Qualification!!');"></a>
+                                            </td>
+                                        }
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        @if (Model.Count != 0)
+        {
+            <div class="row document-table">
+                <div class="text-center"><h3>Intermediate Subject Detail</h3></div>
+                <div class="table-responsive">
+                    <div class="col-lg-8 col-sm-12 col-xs-12 col-lg-offset-2">
+                        <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed dataTable ">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayName("Subject")
+                                    </th>
+                                    <th>
+                                        @Html.DisplayName("Total Marks")
+                                    </th>
+                                    <th>
+                                        @Html.DisplayName("Marks Obtained")
+                                    </th>
+                                    <th>
+                                        @Html.DisplayName("Percentage")
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    if (item.SubjectName == null || item.SubjectName == "")
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td>
+                                                @*@Html.DropDownListFor(item.SubjectID, new SelectList(ViewBag.Subject, "Value", "Text", ViewBag.que), "--Select Subject--", new { @class = "form-control custom-select-value", @id = "SubjectID", @required = "required" })*@
+                                                @*@Html.DropDownList("SubjectID", new SelectList(ViewBag.Subject, "Value", "Text", item.SubjectID), "--Select Subject--", new { @class = "form-control custom-select-value Subject", @id = "SubjectID", @required = "required" })*@
+                                                @Html.DisplayFor(modelItem => item.SubjectName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.TotalMarks)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.MarksObtain)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.SubjectPercentage)
+                                            </td>
+
+                                            @if (item.ID > 0)
+                                            {
+                                                @Html.Hidden("ID", "", new { @Value = item.ID })
+                                            }
+
+                                        </tr>
+                                    }
+                                }
+
+
+
+                        </table>
+                        @if (@ViewBag.IsSubmit != 1)
+                        {
+                            <div class="text-danger text-warning">Please choose Edit for any Corrections</div>
+                        }
+                    </div>
+                </div>
+
+
+            </div>
+
+        }
+        
+    </div>
+</div>
+

@@ -1,0 +1,98 @@
+﻿@model List<DataLayer.Student_AchievementManagement>
+@{
+    ViewBag.Title = "StudentAchievementDetail";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+<style>
+    .right {
+        text-align: right;
+    }
+    .left {
+        text-align: left;
+    }
+    .spaceDesign {
+        padding-bottom: 20px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }  
+    .textdesign{
+        padding-bottom:20px;
+    }
+    .minheight{
+       min-height:450px;
+   }
+ 
+</style>
+<div class="container-fluid  minheight">
+    <div class="row ">
+        <div class="container-fluid">
+            <h3 class="text-center" style="padding-bottom:20px;">Student Achievement Details</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="container-fluid">
+            <div class="col-lg-10 col-sm-12 col-xs-12 col-lg-offset-1 ">
+                <div class="sparkline-list">
+                    <div class="row spacedesign">
+                        <div class="col-lg-3 pull-right">
+                            <a class="btn btn-primary waves-effect waves-light" href="@Url.Action("StudentAchievement", "Home",new { esid=ViewBag.ID})">Add StudentAchievement</a>
+                        </div>
+                    </div>
+                    @if (Model != null)
+                    {<div>
+                         <div class="text-center textdesign">
+                             @foreach (var item in Model.OrderBy(m => m.SID).Select(x => x.Name).Distinct().ToList())
+                             {
+                                 <h4>Achievement List Of  <strong>@item</strong></h4>
+                             }
+                         </div>
+                        <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed dataTable " id="Edittable">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        S.NO.
+                                    </th>                                   
+                                    <th>
+                                        Achievement Category
+                                    </th>
+                                    <th>
+                                        Description
+                                    </th>
+                                    <th>
+                                        Preview
+                                    </th>
+                                    <th>
+                                        Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ int i = 1;}
+                                @foreach (var item in Model)
+                                  {
+                                <tr>
+                                    <td>@i.</td>                                    
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AchievementName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    <td>
+                                        <a title="View" href="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Document/@item.DocumentURl" target="_blank" class="btn btn-info btn-sm">View</a>
+                                    <td>
+                                        <a class="btn btn-success btn-sm fa fa-edit myBtn " style="padding:1px 4px 1px 6px;color:white" title="Edit" href="~/College/Home/StudentAchievement/@item.EncriptedID"></a>                                        
+                                    </td>
+                                </tr>
+                                    { i = i + 1; }
+                                }
+                            </tbody>
+                        </table>
+                    </div>                                    
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,718 @@
+﻿@{
+    /**/
+
+    ViewBag.Title = "Recruitment";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<style>
+    /* ============================================
+       GLOBAL REDESIGN - Recruitment Scrutiny Page
+       Color Scheme: #4361ee (Primary) + #1e293b (Dark)
+    ============================================ */
+
+    * {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* Custom Scrollbar for dropdowns */
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #4361ee;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #2b4cd6;
+    }
+
+    /* ========== MODERN CARD STYLES ========== */
+    .recruitment-card {
+        background: #ffffff;
+        border-radius: 24px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        margin-bottom: 1.8rem;
+        overflow: hidden;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        border: 1px solid rgba(67, 97, 238, 0.08);
+    }
+
+    .recruitment-card:hover {
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+    }
+
+    .card-header-modern {
+        background: linear-gradient(135deg, #4361ee 0%, #3a56d4 100%);
+        padding: 1.2rem 1.8rem;
+        border-bottom: none;
+    }
+
+    .card-header-modern h2 {
+        margin: 0;
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .card-header-modern h2 i {
+        font-size: 1.6rem;
+    }
+
+    .card-body-modern {
+        padding: 1.8rem;
+    }
+
+    /* ========== PREMIUM DROPDOWN & INPUT STYLES ========== */
+    .form-group-premium {
+        margin-bottom: 1.2rem;
+    }
+
+    .form-label-premium {
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: #5b6e8c;
+        margin-bottom: 8px;
+    }
+
+    .form-label-premium i {
+        margin-right: 6px;
+        color: #4361ee;
+        font-size: 0.75rem;
+    }
+
+    /* Custom Select Dropdown Styling */
+    .custom-select-premium {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #1e293b;
+        background-color: #ffffff;
+        border: 2px solid #e2e8f0;
+        border-radius: 14px;
+        transition: all 0.25s ease;
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%234361ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 14px;
+        cursor: pointer;
+    }
+
+    .custom-select-premium:hover {
+        border-color: #4361ee;
+        background-color: #fafbff;
+    }
+
+    .custom-select-premium:focus {
+        outline: none;
+        border-color: #4361ee;
+        box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.12);
+    }
+
+    /* Custom Input Styling */
+    .custom-input-premium {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #1e293b;
+        background-color: #ffffff;
+        border: 2px solid #e2e8f0;
+        border-radius: 14px;
+        transition: all 0.25s ease;
+    }
+
+    .custom-input-premium:focus {
+        outline: none;
+        border-color: #4361ee;
+        box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.12);
+    }
+
+    .custom-input-premium::placeholder {
+        color: #a0afc3;
+        font-weight: 400;
+    }
+
+    /* ========== MODERN BUTTONS ========== */
+    .btn-premium-primary {
+        background: linear-gradient(135deg, #4361ee 0%, #3a56d4 100%);
+        border: none;
+        padding: 0.7rem 1.8rem;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: white;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(67, 97, 238, 0.2);
+    }
+
+    .btn-premium-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
+        background: linear-gradient(135deg, #3a56d4 0%, #2b4cd6 100%);
+    }
+
+    .btn-premium-secondary {
+        background: #f8fafc;
+        border: 2px solid #e2e8f0;
+        padding: 0.65rem 1.6rem;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: #1e293b;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+    }
+
+    .btn-premium-secondary:hover {
+        background: #ffffff;
+        border-color: #4361ee;
+        color: #4361ee;
+        transform: translateY(-1px);
+    }
+
+    /* ========== STATS BAR ========== */
+    .stats-bar-premium {
+        background: #f8fafc;
+        border-radius: 60px;
+        padding: 0.5rem 1.2rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .stats-number-premium {
+        background: #4361ee;
+        color: white;
+        border-radius: 40px;
+        padding: 4px 12px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        min-width: 50px;
+        text-align: center;
+    }
+
+    /* ========== PREMIUM TABLE ========== */
+    .table-premium {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .table-premium thead th {
+        background: #f1f5f9;
+        padding: 1rem 1rem;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: #475569;
+        border-bottom: 2px solid #e2e8f0;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .table-premium thead th:hover {
+        background: #eef2ff;
+        color: #4361ee;
+    }
+
+    .table-premium thead th i {
+        margin-left: 5px;
+        font-size: 0.7rem;
+        opacity: 0.6;
+    }
+
+    .table-premium tbody tr {
+        transition: all 0.2s;
+        border-bottom: 1px solid #f0f2f5;
+    }
+
+    .table-premium tbody tr:hover {
+        background: #fafbff;
+    }
+
+    .table-premium td {
+        padding: 1rem 1rem;
+        font-size: 0.85rem;
+        color: #334155;
+        vertical-align: middle;
+    }
+
+    /* Badge styles for status */
+    .badge-handicap {
+        background: #fee2e2;
+        color: #dc2626;
+        padding: 4px 12px;
+        border-radius: 40px;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+
+    .badge-normal {
+        background: #e0f2fe;
+        color: #0284c7;
+        padding: 4px 12px;
+        border-radius: 40px;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+
+    /* ========== PAGINATION MODERN ========== */
+    .pagination-wrapper {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    .pagination-modern ul {
+        margin: 0;
+        display: flex;
+        gap: 6px;
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .pagination-modern li {
+        display: inline-block;
+    }
+
+    .pagination-modern a, .pagination-modern span.page-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 38px;
+        height: 38px;
+        padding: 0 12px;
+        border-radius: 12px;
+        background: white;
+        border: 1px solid #e2e8f0;
+        color: #475569;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+    .pagination-modern a:hover {
+        background: #4361ee;
+        color: white;
+        border-color: #4361ee;
+    }
+
+    /* Page size select */
+    .page-size-select {
+        padding: 0.5rem 2rem 0.5rem 1rem;
+        border-radius: 40px;
+        border: 2px solid #e2e8f0;
+        background-color: white;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: #1e293b;
+        cursor: pointer;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="%234361ee" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+        background-repeat: no-repeat;
+        background-position: right 0.8rem center;
+        appearance: none;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @@media (max-width: 768px) {
+        .card-body-modern {
+            padding: 1rem;
+        }
+
+        .table-premium thead {
+            display: none;
+        }
+
+        .table-premium, .table-premium tbody, .table-premium tr, .table-premium td {
+            display: block;
+            width: 100%;
+        }
+
+        .table-premium tr {
+            margin-bottom: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 0.8rem;
+            background: white;
+        }
+
+        .table-premium td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem;
+            border-bottom: 1px dashed #edf2f7;
+        }
+
+        .table-premium td:before {
+            content: attr(data-label);
+            font-weight: 700;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #4361ee;
+            width: 45%;
+        }
+
+        .pagination-wrapper {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+
+    /* Empty state */
+    .empty-state-modern {
+        text-align: center;
+        padding: 3rem;
+        background: #fafcff;
+        border-radius: 20px;
+    }
+
+    .empty-state-modern i {
+        font-size: 3rem;
+        color: #cbd5e1;
+        margin-bottom: 1rem;
+    }
+
+    /* Utility */
+    .right { text-align: right; }
+    .left { text-align: left; }
+</style>
+
+<script>
+    var courseid54 = '';
+</script>
+<script>
+    var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")'
+</script>
+<script>
+    $(function () {
+        $("#EducationTypeID option").each(function () {
+            if ($(this).val() == (('@ViewBag.Education'))) {
+                $(this).attr('selected', 'selected');
+            }
+        });
+        $("#CourseCategoryID option").each(function () {
+            if ($(this).val() == (('@ViewBag.course'))) {
+                $(this).attr('selected', 'selected');
+            }
+        });
+    });
+    courseid54 = '@ViewBag.course';
+</script>
+
+<div class="container-fluid" style="padding: 25px 30px; background: #f5f7fb; min-height: 100vh;">
+    <div class="row">
+        <div class="container-fluid" style="padding: 0;">
+
+            <!-- Angular App Container -->
+            <div ng-app="recruitmentlistApp" ng-controller="recruitmentlistCtrl">
+                @using (Html.BeginForm())
+                {
+                    <!-- Main Card -->
+                    <div class="recruitment-card">
+                        <div class="card-header-modern">
+                            <h2>
+                                <i class="fas fa-clipboard-list"></i>
+                                Scrutiny List | Recruitment Management
+                            </h2>
+                        </div>
+
+                        <div class="card-body-modern">
+                            <!-- Filter Row 1 -->
+                            <div class="row g-4">
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="form-group-premium">
+                                        <label class="form-label-premium"><i class="fas fa-calendar-alt"></i> Admission Year</label>
+                                        @Html.DropDownList("session", new SelectList(ViewBag.Session, "ID", "Session"), "--Select Session--", new { @class = "custom-select-premium", @id = "session", @name = "sessiontext", @ng_model = "session.search" })
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="form-group-premium">
+                                        <label class="form-label-premium"><i class="fas fa-graduation-cap"></i> Programme Name</label>
+                                        @Html.DropDownList("EducationTypeID", (List<SelectListItem>)ViewBag.EducationType, "--select--", new { @class = "custom-select-premium", @id = "EducationTypeID", @ng_model = "EducationTypeID.search" })
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="form-group-premium">
+                                        <label class="form-label-premium"><i class="fas fa-id-badge"></i> Scrutiny No</label>
+                                        @Html.DropDownList("CounsellingNo", new SelectList(ViewBag.CounsellingNo, "CounsellingNo", "CounsellingNo", ""), "--Select Scrutiny--", new { @class = "custom-select-premium", @id = "CounsellingNo", @name = "CounsellingNo", @ng_model = "CounsellingNo.search" })
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6 d-flex align-items-end">
+                                    <button ng-click="GetFilterUsers(ClubData)" class="btn-premium-primary" type="button" style="width: 100%;">
+                                        <i class="fas fa-search"></i> Search Records
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Stats & Actions Bar -->
+                            <div class="row mt-4 pt-2" style="border-top: 1px solid #eef2f8;">
+                                <div class="col-lg-6 col-md-6 col-sm-12 left">
+                                    <div class="stats-bar-premium">
+                                        <i class="fas fa-database"></i> Total Records
+                                        <span class="stats-number-premium">{{totalCount || 0}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 right">
+                                    <div class="d-flex flex-wrap gap-3 justify-content-end align-items-center">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span style="font-size: 0.7rem; font-weight: 600; color: #5b6e8c;">SHOW</span>
+                                            <select id="ddlPageSize" class="page-size-select"
+                                                    ng-model="pageSizeSelected"
+                                                    ng-change="changePageSize()">
+                                                <option value="10">10</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                                <option value="200">200</option>
+                                                <option value="500">500</option>
+                                                <option value="1000">1000</option>
+                                                <option value="5000">5000</option>
+                                                <option value="100000000">All</option>
+                                            </select>
+                                        </div>
+                                        <a href="" class="btn-premium-secondary" id="print1">
+                                            <i class="fas fa-file-pdf"></i> Print PDF
+                                        </a>
+                                        <div class="stats-bar-premium" style="background: #eef2ff;">
+                                            <i class="fas fa-chart-simple"></i> Page: {{pageIndex}} / {{numPages || 1}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Table Card -->
+                    <div class="recruitment-card">
+                        <div class="table-responsive" style="padding: 0;">
+                            <table class="table-premium" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>S. No.</th>
+                                        <th ng-click="sortBy('applicationNo')">App. No <i class="fas fa-sort"></i></th>
+                                        <th ng-click="sortBy('studentName')">Student Name <i class="fas fa-sort"></i></th>
+                                        <th ng-click="sortBy('percentage')">Percentage <i class="fas fa-sort"></i></th>
+                                        <th ng-click="sortBy('collegeName')">College Name <i class="fas fa-sort"></i></th>
+                                        <th ng-click="sortBy('studentCasteCategoryName')">Student Category <i class="fas fa-sort"></i></th>
+                                        <th ng-click="sortBy('casteCategoryName')">Reservation Category <i class="fas fa-sort"></i></th>
+                                        <th ng-click="sortBy('coursecategotyName')">Course <i class="fas fa-sort"></i></th>
+                                        <th ng-click="sortBy('streamCategoryName')">Stream <i class="fas fa-sort"></i></th>
+                                        <th ng-click="sortBy('session')">Session <i class="fas fa-sort"></i></th>
+                                        <th ng-click="sortBy('ishandicapped')">Reservation Type <i class="fas fa-sort"></i></th>
+                                        <th ng-click="sortBy('counsellingno')">Scrutiny No <i class="fas fa-sort"></i></th>
+                                        <th ng-click="sortBy('carryseat')">Carry Seat <i class="fas fa-sort"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="recu in qlist | filter:search | orderBy:propertyName:reverse">
+                                        <td data-label="S.No.">{{ ((pageIndex-1)*pageSizeSelected)+$index+1 }}</td>
+                                        <td data-label="App. No"><strong>{{recu.applicationNo}}</strong></td>
+                                        <td data-label="Student Name">{{recu.studentName}}</td>
+                                        <td data-label="Percentage">
+                                            <span style="font-weight: 700; color: #4361ee;">{{recu.percenatge}}%</span>
+                                        </td>
+                                        <td data-label="College Name">{{recu.collegeName}}</td>
+                                        <td data-label="Student Category">{{recu.studentCasteCategoryName}}</td>
+                                        <td data-label="Reservation Category">{{recu.casteCategoryName}}</td>
+                                        <td data-label="Course">{{recu.coursecategotyName}}</td>
+                                        <td data-label="Stream">{{recu.streamCategoryName}}</td>
+                                        <td data-label="Session">{{recu.session}}</td>
+                                        <td data-label="Reservation Type">
+                                            <span ng-if="recu.ishandicapped==true" class="badge-handicap">
+                                                <i class="fas fa-wheelchair"></i> Handicapped
+                                            </span>
+                                            <span ng-if="recu.ishandicapped==false" class="badge-normal">
+                                                <i class="fas fa-user"></i> Normal
+                                            </span>
+                                        </td>
+                                        <td data-label="Scrutiny No">
+                                            <span style="background: #f1f5f9; padding: 4px 10px; border-radius: 30px; font-family: monospace;">
+                                                {{recu.counsellingno}}
+                                            </span>
+                                        </td>
+                                        <td data-label="Carry Seat">
+                                            <span ng-if="recu.carryseat == 1" style="color: #dc2626; font-weight: 600;">✓ Carry Seat</span>
+                                            <span ng-if="recu.carryseat != 1">—</span>
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="(qlist | filter:search).length == 0">
+                                        <td colspan="13">
+                                            <div class="empty-state-modern">
+                                                <i class="fas fa-inbox"></i>
+                                                <h5>No records found</h5>
+                                                <p style="color: #94a3b8; font-size: 0.8rem;">Try adjusting your search filters</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr ng-show="(qlist | filter:search).length > 0">
+                                        <td colspan="13">
+                                            <div class="pagination-wrapper">
+                                                <div class="pagination-modern" ng-show="numPages > 1">
+                                                    <pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected"
+                                                                direction-links="true" ng-model="pageIndex"
+                                                                max-size="maxSize" class="pagination" boundary-links="true" rotate="false" num-pages="numPages">
+                                                    </pagination>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden Course Category ID (for dynamic loading) -->
+<select id="CourseCategoryID" style="display: none;"></select>
+<select id="Subject" style="display: none;"></select>
+<select id="Cast" style="display: none;"></select>
+<select id="CollegeID" style="display: none;"></select>
+<select id="SeatType" style="display: none;"></select>
+
+<script src="~/scripts/Customjs/RecruitmentList.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+
+<script>
+    $(document).ready(function () {
+        // Preserve original functionality - Course loading on Programme change
+        $("#EducationTypeID").change(function (event) {
+            $('#CourseCategoryID').find("option").remove();
+            $("#CourseCategoryID").append($("<option></option>").val("").html("--Select Course--"));
+            var res = $(this).val();
+            if (res == "") {
+                res = 0;
+                return;
+            }
+            $.ajax({
+                url: "/College/Home/getcousre/",
+                data: { id: res },
+                cache: false,
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    $('#CourseCategoryID').find("option").remove();
+                    $("#CourseCategoryID").append($("<option></option>").val("").html("--Select Course--"));
+                    $.each(data.data, function (key, value) {
+                        $("#CourseCategoryID").append($("<option></option>").val(value.CourseCategoryID).html(value.CourseCategory));
+                    });
+                }
+            });
+        });
+
+        // Subject loading on Course change
+        $("#CourseCategoryID").change(function (event) {
+            $('#Subject').find("option").remove();
+            $("#Subject").append($("<option></option>").val("").html("--Select Subject--"));
+            var res = $(this).val();
+            if (res == "") {
+                res = 0;
+                return;
+            }
+            $.ajax({
+                url: "/Administrator/Home/selectStreamCategory/",
+                data: { varid: res },
+                cache: false,
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    $('#Subject').find("option").remove();
+                    $("#Subject").append($("<option></option>").val("").html("--Select Subject--"));
+                    $.each(data.data, function (key, value) {
+                        $("#Subject").append($("<option></option>").val(value.StreamCategoryID).html(value.streamCategory));
+                    });
+                }
+            });
+        });
+    });
+
+    // Print PDF functionality - FULLY PRESERVED
+    $("#print1").click(function (event) {
+        var CourseCategoryID = $("#CourseCategoryID").val();
+        var Subject = $("#Subject").val();
+        var session = $("#session").val();
+        var Cast = $("#Cast").val();
+        var collegeID = $("#CollegeID").val();
+        var seatType = $("#SeatType").val();
+        var EducationTypeID = $("#EducationTypeID").val();
+        var CounsellingNo = $("#CounsellingNo").val();
+
+        if (EducationTypeID == "") {
+            alert("Please Select Programme!!!");
+            return;
+        }
+        if (session == "") {
+            alert("Please Select Session!!!");
+            return;
+        }
+        if (collegeID == "") {
+            alert("Please Select College !!!");
+            return;
+        }
+        if (CounsellingNo == "") {
+            alert("Please Select Scrutiny No !!!");
+            return;
+        }
+
+        $.ajax({
+            url: "/College/Home/RecruitmentSearch/",
+            data: { coursetype: CourseCategoryID, subject: Subject, session: session, cast: Cast, collegeID: collegeID, seatType: seatType, EducationTypeID: EducationTypeID, CounsellingNo: CounsellingNo },
+            cache: false,
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                var coursetype = data.coursecategotyName;
+                var subject = data.StreamCategoryName;
+                var session = data.Session;
+                var cast = data.CasteCategoryName;
+                var collegeID = data.CollegeName;
+                var seatType = data.seatType;
+                var EducationTypeID1 = data.educationtype1;
+                var CounsellingNo1 = data.CounsellingNo1;
+                window.open('/College/Home/printpdfCollege/?coursetype=' + coursetype + '&subject=' + subject + '&session=' + session + '&cast=' + cast + '&collegeID=' + collegeID + '&seatType=' + seatType + '&EducationTypeID=' + EducationTypeID1 + "&CounsellingNo=" + CounsellingNo1, '_blank');
+            }
+        });
+    });
+</script>

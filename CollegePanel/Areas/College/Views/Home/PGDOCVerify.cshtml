@@ -1,0 +1,1335 @@
+﻿@model DataLayer.BL_PrintAllRecord
+@{
+    ViewBag.Title = "DocumentVerify";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+<style>
+    label {
+        padding: 10px;
+    }
+
+    .btndesign {
+        margin-top: 20px;
+    }
+
+    .starvalid {
+        color: red;
+    }
+
+    .minheight {
+        min-height: 500px;
+    }
+</style>
+<script type="text/javascript">
+    var now = new Date();
+
+    var startdate = new Date(now.getFullYear() - 5, now.getMonth(), now.getDay());
+    var enddate = new Date(now.getFullYear() + 5, now.getMonth(), now.getDay());
+    //console.log(new Date(now.getFullYear(), now.getMonth(), now.getDay()));
+    //startdate = new Date('2018-01-01');
+    //console.log(new Date(now.getFullYear()));
+    //console.log(new Date(now.getMonth()));
+    //console.log(new Date(now.getDay()));
+</script>
+<script src="~/scripts/Customjs/DocumentVerif.js"></script>
+<div class="container-fluid">
+    <div class="all-content-wrapper sparkline10-list" style="margin-left:0px !important">
+        <!-- Advanced Form Start -->
+        <div class="advanced-form-area mg-b-15 ">
+            @if (ViewBag.IsVerify != true)
+            {
+                //if (ViewBag.addmissionExtenddate == true && ViewBag.addmissionStartdate == true)
+                //{
+
+                <div id="dvContents" name="Grid">
+                    <div style="width:100%; margin:auto; padding:0; font-family:Arial, Helvetica, sans-serif; font-size:13px;">
+                        <h1 style="text-align:center; padding:15px 0; font-size:22px;">Document Details For Application No: @Model.ObjApplication.ApplicationNo</h1>
+                        <input type="hidden" id="hid" value="@Model.ObjApplication.Id" />
+                        <table width="90%" align="center" border="0" cellspacing="0" cellpadding="0" style="padding:0 15px;border:1px solid #666; ">
+                            <tr>
+                                <td colspan="3">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+                                        <tr>
+                                            <td colspan="3" style="padding:15px 15px 0;">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                        <td width="40%" alighn="right">
+                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                <tr>
+                                                                    <td width="40%"><label style="font-weight:bold;text-align:left"><span style="color:#e51515;"></span>Allocated Course</label></td>
+                                                                    <td width="60%" style="color:#666;text-align:left;border:1px solid #666; padding:10px"><span style="color:#666;text-align:left" id="AppliedCoursepp">@Model.ObjApplication.CourseCategory</span></td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                        <td width="20%" alight="left">&nbsp;</td>
+                                                        <td width="40%" alight="left">
+                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                <tr>
+                                                                    <td width="40%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Allocated  College</label></td>
+                                                                    <td width="60%" style="color:#666;text-align:left;border:1px solid #666; padding:10px"><span style="color:#666;" id="Applicationpp">@Model.ObjApplication.CollegeName</span></td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td colspan="3" style="padding:15px 15px 0;">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                        <td width="40%" alighn="right">
+                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                <tr>
+                                                                    <td width="40%"><label style="font-weight:bold;text-align:left"><span style="color:#e51515;"></span>Allocated  Subject</label></td>
+                                                                    <td width="60%" style="color:#666;text-align:left;border:1px solid #666; padding:10px"><span style="color:#666;text-align:left" id="AppliedCoursepp">@Model.ObjApplication.StreamName</span></td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                        <td width="20%" alight="left">&nbsp;</td>
+                                                        <td width="40%" alight="left">
+                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                <tr>
+
+                                                                    <td width=""><label style="font-weight:bold;"><span style="color:#e51515;"></span></label></td>
+                                                                    <td width=""><span style="color:#666;" id=""></span></td>
+
+
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"><h2 style="color:#06056c; font-size:16px; padding:25px 15px 0;">Name of the Board from which you have passed the Intermediate exam.</h2></td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3" width="90%" style="padding:15px;" valign="top">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+                                        <tr>
+                                            <td width="33%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Name of the Examination Board <br> प्रवेश श्रेणी </label></td>
+                                            <td width="34%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Year of Passing <br>  उत्तीर्ण होने का वर्ष</label></td>
+                                            <td width="33%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Date of Birth  <br> जन्म की तारीख</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="33%" style="border:1px solid #666; padding:10px;">@Model.ObjApplication.board_universityName<span style="color:#666;"></span></td>
+                                            <td width="34%" style="padding:10px; border:1px solid #666;" id="Passingyear">@Model.ObjApplication.passingyear<span style="color:#666;"></span></td>
+                                            <td width="33%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="DOB">@Model.ObjApplication.DOB</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5"><h2 style="color:#06056c; font-size:16px; padding:15px 15px 0 0;">Personal Details / व्यक्तिगत विवरण</h2></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                        <td width="50%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Applicant's Name / आवेदक का नाम</label></td>
+                                                        <td style="width:50%; border:1px solid #666;"><label><span style="color:#666;" id="Name">@Model.ObjApplication.Name </span></label></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td colspan="3">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                        <td width="50%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Father's Name /आवेदक के पिता का नाम</label></td>
+                                                        <td style="width:50%; border:1px solid #666;"><label><span style="color:#666;" id="FatherName">@Model.ObjApplication.FatherName</span></label></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <td colspan="3">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                        <td width="50%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Mother's Name / आवेदक के माता का नाम</label></td>
+                                                        <td style="width:50%; border:1px solid #666;"><label><span style="color:#666;" id="MotherName">@Model.ObjApplication.MotherName</span></label></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding:0 15px">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="20%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Gender / लिंग</label></td>
+                                            <td width="20%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Nationality / @*<img src="~/Img/printnational.png" class="hindi-text" />*@(राष्ट्रीयता) :</label></td>
+                                            <td width="20%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Religion / धर्म :</label></td>
+                                            <td width="20%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Blood Group / रक्त समूह :</label></td>
+                                            <td width="15%">
+                                                <label style="font-weight:bold;">
+                                                    <span style="color:#e51515;"></span>Category/
+                                                    जाति की श्रेणी
+                                                </label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="20%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="Gender">@Model.ObjApplication.Gender</span></td>
+                                            <td width="20%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="Nationality">@Model.ObjApplication.NewNationality</span></td>
+                                            <td width="20%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="Religion">@Model.ObjApplication.NewReligion</span></td>
+                                            <td width="20%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="BloodGroup">@Model.ObjApplication.BloodGroup</span></td>
+                                            <td width="20%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="castecategory">@Model.ObjApplication.CastCategory</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td colspan="3"><h2 style="color:#06056c; font-size:16px; padding:15px 15px 0;">Correspondence Address / पत्राचार@*<img src="~/Img/printpatrachar.png" />*@ का पता </h2></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="padding:15px 15px 0;">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+                                                    <tr>
+                                                        <td width="10%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>State / राज्य</label></td>
+                                                        <td width="20%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="CAstate">@Model.ObjApplication.CA_State</span></td>
+                                                        <td width="15px">&nbsp;</td>
+                                                        <td width="13%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>District / जिला</label></td>
+                                                        <td width="15%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="CAdistrict">@Model.ObjApplication.CA_City</span></td>
+                                                        <td width="15px">&nbsp;</td>
+                                                        <td width="15%"><label style="font-weight:bold;"><span style="color:#e51515;"></span> Address / पता</label></td>
+                                                        <td style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="CAaddress">@Model.ObjApplication.CurrentAddress</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="7">&nbsp;</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td width="10%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>PIN Code / पिन कोड</label></td>
+                                                        <td width="20%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="CApincode">@Model.ObjApplication.CA_PinCode</span></td>
+                                                        <td width="15px">&nbsp;</td>
+                                                        <td width="13%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Mobile No. / मोबाइल नंबर</label></td>
+                                                        <td width="15%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="Mobile"></span>@Model.ObjApplication.MobileNo</td>
+                                                        <td width="15px">&nbsp;</td>
+                                                        <td width="13%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Email /ईमेल</label></td>
+                                                        <td width="15%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="Mobile"></span>@Model.ObjApplication.Email</td>
+                                                    </tr>
+
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td colspan="3"><h2 style="color:#06056c; font-size:16px; padding:15px 15px 0;">Details of Mark Secured in Intermediate Examination  </h2></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="padding:15px 15px 0;">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+                                                    <tr>
+                                                        <td width="50%"><label style="font-weight:bold;">Stream / संकाय</label></td>
+                                                        <td width="50%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="lblintermediatestream">@Model.ObjApplication.intermediatstream</span></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td colspan="2">&nbsp;</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <div id="intermidatesubjectys">
+                                                                <table width='100%' border='0' cellspacing='0' cellpadding='0' style='border:1px solid #666; text-align:left;'>
+                                                                    <tr>
+                                                                        <th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee; width:50px;"><span style="color:#666;">Sr.No</span></th>
+
+                                                                        <th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee; width:50px;"><span style="color:#666;">Subject Name</span></th>
+
+                                                                        <th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee; width:50px;"><span style="color:#666;">Total Marks</span></th>
+
+                                                                        <th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee; width:50px;"><span style="color:#666;">Marks Obtained</span></th>
+
+                                                                        <th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee; width:50px;"><span style="color:#666;">Percentage</span></th>
+                                                                    </tr>
+                                                                    @{int i = 1;}
+                                                                    @foreach (var item in Model.ObjIntermidataeSubjects)
+                                                                    {
+                                                                        <tr>
+                                                                            <td style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px;"><span style="color:#666;">@i</span></td>
+                                                                            <td style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px;"><span style="color:#666;">@item.SubjectName</span> </td>
+                                                                            <td style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px;"><span style="color:#666;">@item.TotalMarks</span></td>
+                                                                            <td style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px;"><span style="color:#666;">@item.MarksObtain</span></td>
+                                                                            <td style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px;"><span style="color:#666;">@item.SubjectPercentage</span></td>
+                                                                        </tr>
+                                                                        i = i + 1;
+                                                                    }
+                                                                </table>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td colspan="2">&nbsp;</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="90%"><label style="font-weight:bold;">Document List / दस्तावेज़ सूची</label></td>
+                                                        @*<td width="10%" style="border:1px solid #666; padding:10px;"><span style="color:#666;">Science</span></td>*@
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td colspan="2">&nbsp;</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <div id="document">
+                                                                <table width='100%' border='0' cellspacing='0' cellpadding='0' style='border: 1px solid #ccc;'>
+                                                                    <tr>
+                                                                        <th width="20%" align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee; padding:10px 15px; width:40px;">S. No.</th>
+
+                                                                        <th width="40%" align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee; padding:10px 15px;">Document</th>
+
+                                                                        @*<th width="40%" align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">Status</th>*@
+
+                                                                        <th width="40%" align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">Document Preview</th>
+                                                                    </tr>
+                                                                    @{ int j = 1;}
+                                                                    @foreach (var item in Model.ObjDocument)
+                                                                    {
+                                                                        <tr>
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">@j</td>
+
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;"> @item.DocumentType </td>
+
+                                                                            @*<td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;"> @item.DocStatus</td>*@
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">
+                                                                                <a title="View" href="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Document/@item.FileName" target="_blank" class="btn btn-info btn-sm">View</a>
+
+                                                                            </td>
+                                                                        </tr>
+                                                                        j = j + 1;
+                                                                    }
+                                                                </table>
+
+
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">&nbsp;</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="90%"><label style="font-weight:bold;">Educational Qualification / शैक्षिक योग्यता</label></td>
+                                                        @*<td width="10%" style="border:1px solid #666; padding:10px;"><span style="color:#666;">Science</span></td>*@
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">&nbsp;</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <div id="Qualification">
+                                                                <table width='100%' border='0' cellspacing='0' cellpadding='0' style='border: 1px solid #ccc;'>
+                                                                    <tr>
+                                                                        <th width="8%" align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">S. No.</th>
+
+                                                                        <th align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee; padding:10px 15px;">Qualification</th>
+
+                                                                        <th align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">Board</th>
+
+                                                                        <th align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">Roll No</th>
+
+                                                                        <th align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">Percentage</th>
+
+                                                                        <th align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">Passing Year</th>
+
+                                                                        <th align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">Document</th>
+                                                                    </tr>
+                                                                    @{int k = 1;}
+                                                                    @foreach (var item in Model.ObjQualification)
+                                                                    {
+                                                                        <tr>
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">@k</td>
+
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;"> @item.Qualication </td>
+
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;"> @item.Board </td>
+
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">@item.RollNo </td>
+
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">@item.Percentage </td>
+
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">@item.PassingYear</td>
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">
+                                                                                <a title="View" href="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Document/@item.DocumentURl" target="_blank" class="btn btn-info btn-sm">View</a>
+
+                                                                            </td>
+                                                                        </tr>
+                                                                        k = k + 1;
+                                                                    }
+                                                                </table>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                            </tr>
+
+
+                            <tr>
+                                <td colspan="3" style="padding:0 15px">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td colspan="5"><h2 Blood Grouph2 style="color:#06056c; font-size:16px; padding:15px 15px 0 0;  margin-bottom:10px;">Weightage Details</h2></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td width="20%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>General Economical Weaker  </label></td>
+                                            <td width="20%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>PHYSICAL DISABLED </label></td>
+                                            <td width="20%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>NCC </label></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="20%" style="padding:10px;text-align:center;border:1px solid #666;  padding:10px;"><span style="color:#666;" id="lbldisabled"></span>@(Model.ObjApplication.is_GEW == true ? "Yes" : "No")</td>
+                                            <td width="20%" style="padding:10px;text-align:center;border:1px solid #666;  padding:10px;"><span style="color:#666;" id="lbldisabled"></span>@(Model.ObjApplication.ishandicapped == true ? "Yes" : "No")</td>
+                                            <td width="20%" style="padding:10px;text-align:center;border:1px solid #666;  padding:10px;"><span style="color:#666;" id="lblNCC">@(Model.ObjApplication.is_ncc_candidate == true ? "Yes" : "No")</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3" style="padding:0 15px">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td colspan="5"><h2 Blood Grouph2 style="color:#06056c; font-size:16px; padding:15px 15px 0 0; margin-bottom:10px;">Weightage Details</h2></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td width="20%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>SPORTS QUOTA</label></td>
+                                            <td width="20%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>EX-SERVICEMEN </label></td>
+                                            <td width="20%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>WARD</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="20%" style="padding:10px;text-align:center;border:1px solid #666;  padding:10px;"><span style="color:#666;" id="lblsports">@(Model.ObjApplication.IsSports == true ? "Yes" : "No")</span></td>
+                                            <td width="20%" style="padding:10px;text-align:center;border:1px solid #666;  padding:10px;"><span style="color:#666;" id="lblExServiceman">@(Model.ObjApplication.isex_service_man == true ? "Yes" : "No")</span></td>
+                                            <td width="20%" style="padding:10px;text-align:center;border:1px solid #666;  padding:10px;"><span style="color:#666;" id="lblward">@(Model.ObjApplication.IsStaff == true ? "Yes" : "No")</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3" style="border-bottom:1px solid #ccc;">
+                                    &nbsp;
+                                    <table width="80%" align="center">
+                                        <tr>
+                                            <td width="25%" valign="top" style="">
+                                                Photo
+
+                                            </td>
+                                            @*<img src="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/College/{{qualidetail.stphoto}}" alt="" onerror="this.src = '../../images/noimage.png';" style="max-height:50px">*@
+                                            <td width="25%" valign="top" style=""><img src="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Photoandsign/@Model.ObjApplication.stphoto" alt="" onerror="this.src = '../../../images/noimage.png';" style="max-height:50px"></td>
+                                            <td width="25%" valign="top" style="">Sign</td>
+                                            <td width="25%" valign="top" style=""><img src="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Photoandsign/@Model.ObjApplication.stsign" alt="" onerror="this.src = '../../../images/noimage.png';" style="max-height:50px"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding:0 15px">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td colspan="5"><h2 Blood Grouph2 style="color:#06056c; font-size:16px; padding:15px 15px 0 0;">Document Status</h2></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="10%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Status: </label></td>
+                                            <td width="20%" style="text-align:center;border:1px solid #666;padding:10;">
+                                                <label style="font-weight:bold;">
+                                                    <span style="color:#e51515;"></span>
+                                                    @if (Model.ObjApplication.DocumentStatus == 1)
+                                                    {
+                                                        <div class="check-icon text-success">Verified</div>
+                                                    }
+                                                    @if (Model.ObjApplication.DocumentStatus == 0)
+                                                    {
+                                                        <div class="check-icon text-warning">Pending</div>
+                                                    }
+                                                    @if (Model.ObjApplication.DocumentStatus == 2)
+                                                    {
+                                                        <div class="check-icon text-danger">Rejected</div>
+                                                    }
+
+                                                </label>
+                                            </td>
+                                            @if (Model.ObjApplication.DocumentStatus == 2 || Model.ObjApplication.DocumentStatus == 1)
+                                            {
+                                                <td width="10%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Verification Date: </label></td>
+                                                <td width="20%" style="padding:10px;text-align:center;border:1px solid #666;"><span style="color:#666;" id="lblNCC">@Model.ObjApplication.IsDocVerifyDate</span></td>
+                                            }
+                                            else
+                                            {
+                                                <td width="10%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span></label></td>
+                                                <td width="20%" style="padding:10px;text-align:center;border:1px solid #666;"><span style="color:#666;" id="lblNCC"></span></td>
+                                            }
+                                            @if (Model.ObjApplication.DocumentStatus == 2)
+                                            {
+                                                <td width="10%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Reason: </label></td>
+                                                <td width="20%" style="padding:10px;text-align:center;"><span style="color:#666;border:1px solid #666;" id="lblNCC">@Model.ObjApplication.Reason</span></td>
+                                            }
+                                            else
+                                            {
+                                                <td width="10%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span> </label></td>
+                                                <td width="20%" style="padding:10px;text-align:center;"><span style="color:#666;" id="lblNCC"></span></td>
+                                            }
+
+
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                        <tr></tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+                        </table>
+                    </div>
+                    @if (ViewBag.addmissionExtenddate == true && ViewBag.addmissionStartdate == true)
+                    {
+                        if (ViewBag.IsVerify != true)
+                        {
+                            <div class="row  btndesign">
+                                <div class="col-lg-6">
+                                    <button type="submit" class="btn btn-primary waves-effect waves-light aligncenter" id="submitapp"> Document Verify</button>
+                                </div>
+                                <div class="col-lg-6">
+                                    <button type="submit" class="btn btn-primary waves-effect waves-light aligncenter" id="submitappreject"> Document Reject</button>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+
+                    {
+
+                        <center>
+                            <a style="color:red;font-size:60px"><span class="fa fa-times "></span></a><br /><br />
+
+
+                            <h3>Date Cloesd for Document Verify  is between @ViewBag.addmissionStartdateValue to @ViewBag.addmissionExtenddateValue</h3>
+
+
+
+                        </center>}
+
+                </div>
+                //}
+                //else
+                //{
+                @*<div class="minheight ">
+
+                        <div class="advanced-form-area mg-b-15 ">
+                            <div class="container-fluid col-md-10 col-md-offset-1 col-sm-12 " style="display:block" id="">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="sparkline10-list mg-tb-30 responsive-mg-t-0 table-mg-t-pro-n dk-res-t-pro-0 nk-ds-n-pro-t-0" style="text-align: left;">
+
+                                            <div class="sparkline10-graph">
+                                                <div class="input-knob-dial-wrap">
+                                                    <div>
+                                                        <div class="form-group-inner">
+                                                            <div class="row login-btn-inner" style="margin:15px !important">
+                                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                                    <div class="">
+
+                                                                        <center>
+                                                                            <a style="color:red;font-size:60px"><span class="fa fa-times "></span></a><br /><br />
+
+                                                                            @if (@ViewBag.addmissionStartdateValue != null && @ViewBag.addmissionExtenddateValue != null)
+                                                                            {
+                                                                            <h3>Date for Document Verify  is between @ViewBag.addmissionStartdateValue to @ViewBag.addmissionExtenddateValue</h3>
+
+                                                                            }
+
+                                                                        </center>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+
+
+
+                                                        </div>
+
+                                                    </div>
+
+
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+                //}
+            }
+            else
+            {
+                <div id="dvContents" name="Grid">
+                    <div style="width:100%; margin:auto; padding:0; font-family:Arial, Helvetica, sans-serif; font-size:13px;">
+                        <h1 style="text-align:center; padding:15px 0; font-size:22px;">Document Details For Application No: @Model.ObjApplication.ApplicationNo</h1>
+                        <input type="hidden" id="hid" value="@Model.ObjApplication.Id" />
+                        <table width="90%" align="center" border="0" cellspacing="0" cellpadding="0" style="padding:0 15px;border:1px solid #666; ">
+                            <tr>
+                                <td colspan="3">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+                                        <tr>
+                                            <td colspan="3" style="padding:15px 15px 0;">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                        <td width="40%" alighn="right">
+                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                <tr>
+                                                                    <td width="40%"><label style="font-weight:bold;text-align:left"><span style="color:#e51515;"></span>Allocated Course</label></td>
+                                                                    <td width="60%" style="color:#666;text-align:left;border:1px solid #666; padding:10px"><span style="color:#666;text-align:left" id="AppliedCoursepp">@Model.ObjApplication.CourseCategory</span></td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                        <td width="20%" alight="left">&nbsp;</td>
+                                                        <td width="40%" alight="left">
+                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                <tr>
+                                                                    <td width="40%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Allocated  College</label></td>
+                                                                    <td width="60%" style="color:#666;text-align:left;border:1px solid #666; padding:10px"><span style="color:#666;" id="Applicationpp">@Model.ObjApplication.CollegeName</span></td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td colspan="3" style="padding:15px 15px 0;">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                        <td width="40%" alighn="right">
+                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                <tr>
+                                                                    <td width="40%"><label style="font-weight:bold;text-align:left"><span style="color:#e51515;"></span>Allocated  Subject</label></td>
+                                                                    <td width="60%" style="color:#666;text-align:left;border:1px solid #666; padding:10px"><span style="color:#666;text-align:left" id="AppliedCoursepp">@Model.ObjApplication.StreamName</span></td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                        <td width="20%" alight="left">&nbsp;</td>
+                                                        <td width="40%" alight="left">
+                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                <tr>
+
+                                                                    <td width=""><label style="font-weight:bold;"><span style="color:#e51515;"></span></label></td>
+                                                                    <td width=""><span style="color:#666;" id=""></span></td>
+
+
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"><h2 style="color:#06056c; font-size:16px; padding:25px 15px 0;">Name of the Board from which you have passed the Intermediate exam.</h2></td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3" width="90%" style="padding:15px;" valign="top">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+                                        <tr>
+                                            <td width="33%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Name of the Examination Board <br> प्रवेश श्रेणी </label></td>
+                                            <td width="34%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Year of Passing <br>  उत्तीर्ण होने का वर्ष</label></td>
+                                            <td width="33%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Date of Birth  <br> जन्म की तारीख</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="33%" style="border:1px solid #666; padding:10px;">@Model.ObjApplication.board_universityName<span style="color:#666;"></span></td>
+                                            <td width="34%" style="padding:10px; border:1px solid #666;" id="Passingyear">@Model.ObjApplication.passingyear<span style="color:#666;"></span></td>
+                                            <td width="33%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="DOB">@Model.ObjApplication.DOB</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5"><h2 style="color:#06056c; font-size:16px; padding:15px 15px 0 0;">Personal Details / व्यक्तिगत विवरण</h2></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                        <td width="50%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Applicant's Name / आवेदक का नाम</label></td>
+                                                        <td style="width:50%; border:1px solid #666;"><label><span style="color:#666;" id="Name">@Model.ObjApplication.Name </span></label></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td colspan="3">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                        <td width="50%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Father's Name /आवेदक के पिता का नाम</label></td>
+                                                        <td style="width:50%; border:1px solid #666;"><label><span style="color:#666;" id="FatherName">@Model.ObjApplication.FatherName</span></label></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <td colspan="3">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                        <td width="50%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Mother's Name / आवेदक के माता का नाम</label></td>
+                                                        <td style="width:50%; border:1px solid #666;"><label><span style="color:#666;" id="MotherName">@Model.ObjApplication.MotherName</span></label></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding:0 15px">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="20%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Gender / लिंग</label></td>
+                                            <td width="20%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Nationality / @*<img src="~/Img/printnational.png" class="hindi-text" />*@(राष्ट्रीयता) :</label></td>
+                                            <td width="20%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Religion / धर्म :</label></td>
+                                            <td width="20%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Blood Group / रक्त समूह :</label></td>
+                                            <td width="15%">
+                                                <label style="font-weight:bold;">
+                                                    <span style="color:#e51515;"></span>Category/
+                                                    जाति की श्रेणी
+                                                </label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="20%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="Gender">@Model.ObjApplication.Gender</span></td>
+                                            <td width="20%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="Nationality">@Model.ObjApplication.NewNationality</span></td>
+                                            <td width="20%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="Religion">@Model.ObjApplication.NewReligion</span></td>
+                                            <td width="20%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="BloodGroup">@Model.ObjApplication.BloodGroup</span></td>
+                                            <td width="20%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="castecategory">@Model.ObjApplication.CastCategory</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td colspan="3"><h2 style="color:#06056c; font-size:16px; padding:15px 15px 0;">Correspondence Address / पत्राचार@*<img src="~/Img/printpatrachar.png" />*@ का पता </h2></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="padding:15px 15px 0;">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+                                                    <tr>
+                                                        <td width="10%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>State / राज्य</label></td>
+                                                        <td width="20%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="CAstate">@Model.ObjApplication.CA_State</span></td>
+                                                        <td width="15px">&nbsp;</td>
+                                                        <td width="13%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>District / जिला</label></td>
+                                                        <td width="15%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="CAdistrict">@Model.ObjApplication.CA_City</span></td>
+                                                        <td width="15px">&nbsp;</td>
+                                                        <td width="15%"><label style="font-weight:bold;"><span style="color:#e51515;"></span> Address / पता</label></td>
+                                                        <td style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="CAaddress">@Model.ObjApplication.CurrentAddress</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="7">&nbsp;</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td width="10%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>PIN Code / पिन कोड</label></td>
+                                                        <td width="20%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="CApincode">@Model.ObjApplication.CA_PinCode</span></td>
+                                                        <td width="15px">&nbsp;</td>
+                                                        <td width="13%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Mobile No. / मोबाइल नंबर</label></td>
+                                                        <td width="15%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="Mobile"></span>@Model.ObjApplication.MobileNo</td>
+                                                        <td width="15px">&nbsp;</td>
+                                                        <td width="13%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Email /ईमेल</label></td>
+                                                        <td width="15%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="Mobile"></span>@Model.ObjApplication.Email</td>
+                                                    </tr>
+
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td colspan="3"><h2 style="color:#06056c; font-size:16px; padding:15px 15px 0;">Details of Mark Secured in Intermediate Examination  </h2></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="padding:15px 15px 0;">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+                                                    <tr>
+                                                        <td width="50%"><label style="font-weight:bold;">Stream / संकाय</label></td>
+                                                        <td width="50%" style="padding:10px; border:1px solid #666;"><span style="color:#666;" id="lblintermediatestream">@Model.ObjApplication.intermediatstream</span></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td colspan="2">&nbsp;</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <div id="intermidatesubjectys">
+                                                                <table width='100%' border='0' cellspacing='0' cellpadding='0' style='border:1px solid #666; text-align:left;'>
+                                                                    <tr>
+                                                                        <th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee; width:50px;"><span style="color:#666;">Sr.No</span></th>
+
+                                                                        <th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee; width:50px;"><span style="color:#666;">Subject Name</span></th>
+
+                                                                        <th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee; width:50px;"><span style="color:#666;">Total Marks</span></th>
+
+                                                                        <th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee; width:50px;"><span style="color:#666;">Marks Obtained</span></th>
+
+                                                                        <th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee; width:50px;"><span style="color:#666;">Percentage</span></th>
+                                                                    </tr>
+                                                                    @{int i = 1;}
+                                                                    @foreach (var item in Model.ObjIntermidataeSubjects)
+                                                                    {
+                                                                        <tr>
+                                                                            <td style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px;"><span style="color:#666;">@i</span></td>
+                                                                            <td style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px;"><span style="color:#666;">@item.SubjectName</span> </td>
+                                                                            <td style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px;"><span style="color:#666;">@item.TotalMarks</span></td>
+                                                                            <td style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px;"><span style="color:#666;">@item.MarksObtain</span></td>
+                                                                            <td style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px;"><span style="color:#666;">@item.SubjectPercentage</span></td>
+                                                                        </tr>
+                                                                        i = i + 1;
+                                                                    }
+                                                                </table>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td colspan="2">&nbsp;</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="90%"><label style="font-weight:bold;">Document List / दस्तावेज़ सूची</label></td>
+                                                        @*<td width="10%" style="border:1px solid #666; padding:10px;"><span style="color:#666;">Science</span></td>*@
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td colspan="2">&nbsp;</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <div id="document">
+                                                                <table width='100%' border='0' cellspacing='0' cellpadding='0' style='border: 1px solid #ccc;'>
+                                                                    <tr>
+                                                                        <th width="20%" align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee; padding:10px 15px; width:40px;">S. No.</th>
+
+                                                                        <th width="40%" align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee; padding:10px 15px;">Document</th>
+
+                                                                        @*<th width="40%" align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">Status</th>*@
+
+                                                                        <th width="40%" align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">Document Preview</th>
+                                                                    </tr>
+                                                                    @{ int j = 1;}
+                                                                    @foreach (var item in Model.ObjDocument)
+                                                                    {
+                                                                        <tr>
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">@j</td>
+
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;"> @item.DocumentType </td>
+
+                                                                            @*<td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;"> @item.DocStatus</td>*@
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">
+                                                                                <a title="View" href="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Document/@item.FileName" target="_blank" class="btn btn-info btn-sm">View</a>
+
+                                                                            </td>
+                                                                        </tr>
+                                                                        j = j + 1;
+                                                                    }
+                                                                </table>
+
+
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">&nbsp;</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="90%"><label style="font-weight:bold;">Educational Qualification / शैक्षिक योग्यता</label></td>
+                                                        @*<td width="10%" style="border:1px solid #666; padding:10px;"><span style="color:#666;">Science</span></td>*@
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">&nbsp;</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <div id="Qualification">
+                                                                <table width='100%' border='0' cellspacing='0' cellpadding='0' style='border: 1px solid #ccc;'>
+                                                                    <tr>
+                                                                        <th width="8%" align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">S. No.</th>
+
+                                                                        <th align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee; padding:10px 15px;">Qualification</th>
+
+                                                                        <th align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">Board</th>
+
+                                                                        <th align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">Roll No</th>
+
+                                                                        <th align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">Percentage</th>
+
+                                                                        <th align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">Passing Year</th>
+
+                                                                        <th align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">Document</th>
+                                                                    </tr>
+                                                                    @{int k = 1;}
+                                                                    @foreach (var item in Model.ObjQualification)
+                                                                    {
+                                                                        <tr>
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">@k</td>
+
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;"> @item.Qualication </td>
+
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;"> @item.Board </td>
+
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">@item.RollNo </td>
+
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">@item.Percentage </td>
+
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">@item.PassingYear</td>
+                                                                            <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">
+                                                                                <a title="View" href="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Document/@item.DocumentURl" target="_blank" class="btn btn-info btn-sm">View</a>
+
+                                                                            </td>
+                                                                        </tr>
+                                                                        k = k + 1;
+                                                                    }
+                                                                </table>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                            </tr>
+
+
+                            <tr>
+                                <td colspan="3" style="padding:0 15px">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td colspan="5"><h2 Blood Grouph2 style="color:#06056c; font-size:16px; padding:15px 15px 0 0;  margin-bottom:10px;">Weightage Details</h2></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td width="20%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>General Economical Weaker  </label></td>
+                                            <td width="20%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>PHYSICAL DISABLED </label></td>
+                                            <td width="20%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>NCC </label></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="20%" style="padding:10px;text-align:center;border:1px solid #666;  padding:10px;"><span style="color:#666;" id="lbldisabled"></span>@(Model.ObjApplication.is_GEW == true ? "Yes" : "No")</td>
+                                            <td width="20%" style="padding:10px;text-align:center;border:1px solid #666;  padding:10px;"><span style="color:#666;" id="lbldisabled"></span>@(Model.ObjApplication.ishandicapped == true ? "Yes" : "No")</td>
+                                            <td width="20%" style="padding:10px;text-align:center;border:1px solid #666;  padding:10px;"><span style="color:#666;" id="lblNCC">@(Model.ObjApplication.is_ncc_candidate == true ? "Yes" : "No")</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3" style="padding:0 15px">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td colspan="5"><h2 Blood Grouph2 style="color:#06056c; font-size:16px; padding:15px 15px 0 0; margin-bottom:10px;">Weightage Details</h2></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td width="20%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>SPORTS QUOTA</label></td>
+                                            <td width="20%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>EX-SERVICEMEN </label></td>
+                                            <td width="20%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>WARD</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="20%" style="padding:10px;text-align:center;border:1px solid #666;  padding:10px;"><span style="color:#666;" id="lblsports">@(Model.ObjApplication.IsSports == true ? "Yes" : "No")</span></td>
+                                            <td width="20%" style="padding:10px;text-align:center;border:1px solid #666;  padding:10px;"><span style="color:#666;" id="lblExServiceman">@(Model.ObjApplication.isex_service_man == true ? "Yes" : "No")</span></td>
+                                            <td width="20%" style="padding:10px;text-align:center;border:1px solid #666;  padding:10px;"><span style="color:#666;" id="lblward">@(Model.ObjApplication.IsStaff == true ? "Yes" : "No")</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3" style="border-bottom:1px solid #ccc;">
+                                    &nbsp;
+                                    <table width="80%" align="center">
+                                        <tr>
+                                            <td width="25%" valign="top" style="">
+                                                Photo
+
+                                            </td>
+                                            @*<img src="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/College/{{qualidetail.stphoto}}" alt="" onerror="this.src = '../../images/noimage.png';" style="max-height:50px">*@
+                                            <td width="25%" valign="top" style=""><img src="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Photoandsign/@Model.ObjApplication.stphoto" alt="" onerror="this.src = '../../../images/noimage.png';" style="max-height:50px"></td>
+                                            <td width="25%" valign="top" style="">Sign</td>
+                                            <td width="25%" valign="top" style=""><img src="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Photoandsign/@Model.ObjApplication.stsign" alt="" onerror="this.src = '../../../images/noimage.png';" style="max-height:50px"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding:0 15px">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td colspan="5"><h2 Blood Grouph2 style="color:#06056c; font-size:16px; padding:15px 15px 0 0;">Document Status</h2></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="10%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Status: </label></td>
+                                            <td width="20%" style="text-align:center;border:1px solid #666;padding:10;">
+                                                <label style="font-weight:bold;">
+                                                    <span style="color:#e51515;"></span>
+                                                    @if (Model.ObjApplication.migrationcertificate_iseligible == 1)
+                                                    {
+                                                        <div class="check-icon text-success">Verified</div>
+                                                    }
+                                                    @if (Model.ObjApplication.migrationcertificate_iseligible == 0)
+                                                    {
+                                                        <div class="check-icon text-warning">Pending</div>
+                                                    }
+                                                    @if (Model.ObjApplication.migrationcertificate_iseligible == 2)
+                                                    {
+                                                        <div class="check-icon text-danger">Rejected</div>
+                                                    }
+
+                                                </label>
+                                            </td>
+                                            @if (Model.ObjApplication.migrationcertificate_iseligible == 2 || Model.ObjApplication.migrationcertificate_iseligible == 1)
+                                            {
+                                                <td width="10%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Verification Date: </label></td>
+                                                <td width="20%" style="padding:10px;text-align:center;border:1px solid #666;"><span style="color:#666;" id="lblNCC">@Model.ObjApplication.migrationVerifyByDate</span></td>
+                                            }
+                                            else
+                                            {
+                                                <td width="10%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span></label></td>
+                                                <td width="20%" style="padding:10px;text-align:center;border:1px solid #666;"><span style="color:#666;" id="lblNCC"></span></td>
+                                            }
+                                            @if (Model.ObjApplication.migrationcertificate_iseligible == 2)
+                                            {
+                                                <td width="10%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Reason: </label></td>
+                                                <td width="20%" style="padding:10px;text-align:center;"><span style="color:#666;border:1px solid #666;" id="lblNCC">@Model.ObjApplication.migrationRejectReaseon</span></td>
+                                            }
+                                            else
+                                            {
+                                                <td width="10%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span> </label></td>
+                                                <td width="20%" style="padding:10px;text-align:center;"><span style="color:#666;" id="lblNCC"></span></td>
+                                            }
+
+
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                        <tr></tr>
+                                        <tr>
+                                            <td colspan="5">&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+                        </table>
+                    </div>
+                    @if (Model.ObjApplication.migrationcertificate_iseligible == 0)
+                    {
+                        <div class="row  btndesign">
+                            <div class="col-lg-6">
+                                <button type="submit" class="btn btn-primary waves-effect waves-light aligncenter" id="submitappmig"> Document Verify</button>
+                            </div>
+                            <div class="col-lg-6">
+                                <button type="submit" class="btn btn-primary waves-effect waves-light aligncenter" id="submitapprejectmig"> Document Reject</button>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            }
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+        $("#submitappmig").click(function (event) {
+            debugger;
+            var res = $("#hid").val();
+            ///alert(res);
+            if (res == "")
+                res = 0;
+            showloader();
+            $.ajax({
+                url: "/College/Home/migrationDocumentVerifyForStudent/",
+                data: { id: res },
+                cache: false,
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    debugger;
+                    hideloader();
+                    if (data.Status) {
+                        alert(data.Msg);
+                        location.reload();
+                        //location.replace('/College/Home/DocumentVerifyList');
+                    }
+                    else {
+                        alert(data.Msg);
+                    }
+                    // console.log(data);
+
+                },
+                error: function (err) {
+                    hideloader();
+                    alert('error');
+
+                    return false;
+                }
+            });
+        });
+        $("#submitapprejectmig").click(function (event) {
+            debugger;
+            var res = $("#hid").val();
+            if (res == "")
+                res = 0;
+            var a = confirm('Are you sure to Reject this Student !!');
+            var txt;
+            if (a) {
+                var person = prompt("Please Enter Reason:", "");
+                if (person == null || person == "") {
+                    return false;
+                }
+                else {
+                    showloader();
+                    $.ajax({
+                        url: "/College/Home/migrationDocumentVerifyForStudentrejects/",
+                        data: { id: res, reason: person },
+                        cache: false,
+                        type: "POST",
+                        dataType: "json",
+                        success: function (data) {
+                            debugger;
+                            hideloader();
+                            if (data.Status) {
+                                alert(data.Msg);
+                                location.reload();
+                            }
+                            else {
+                                alert(data.Msg);
+                            }
+                            // console.log(data);
+
+                        },
+                        error: function (err) {
+                            hideloader();
+                            alert('error');
+
+                            return false;
+                        }
+                    });
+
+                }
+            }
+            else {
+                return false;
+            }
+
+
+        });
+
+    });
+</script>

@@ -1,0 +1,202 @@
+﻿@model DataLayer.EventTypeMaster
+@{
+    ViewBag.Title = "EventCategory";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+    var rowCount = Convert.ToInt32(@ViewBag.totalCount);
+}
+
+@{
+    WebGrid grid = new WebGrid(canPage: true, canSort: false, rowsPerPage: 10);
+    grid.Bind(source: Model.EventCategoryList, rowCount: rowCount, autoSortAndPage: false);
+}
+<link rel="stylesheet" href="~/Content/css/datapicker/datepicker3.css">
+<script src="~/scripts/Customjs/EventCategory.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<script src="~/scripts/Customjs/EventList.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<link href="~/sweetalert/sweetalert.css" rel="stylesheet" />
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,300' rel='stylesheet' type='text/css'>
+<style>
+    .dataTables_filter {
+        width: 50%;
+        display: inline-block;
+        text-align: right;
+    }
+
+    .dataTables_length {
+        width: 50%;
+        display: inline-block;
+    }
+
+    #DataTables_Table_0_wrapper {
+        margin: 10px 5px;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > td, .table > tfoot > tr > td {
+        padding: 5px 4px !important;
+        font-size: 15px;
+    }
+
+    .ui-checkbox, .ui-radio {
+        margin-top: 8px;
+    }
+
+    .fa-green {
+        color: green;
+        font-size: 18px;
+    }
+
+    .fa-red {
+        color: red;
+        font-size: 18px;
+    }
+
+    .recordStatus {
+        cursor: pointer;
+    }
+
+    .divMessage {
+        position: absolute;
+        text-align: center;
+        top: 0;
+    }
+
+    .lobibox-notify-icon i {
+        font-size: 35px;
+    }
+
+    .spacedesign {
+        padding-bottom: 20px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+</style>
+<style>
+    .minheight {
+        min-height: 450px;
+    }
+
+    .textd {
+        padding-bottom: 20px;
+    }
+
+    .form-group-inner label {
+        font-size: 18px;
+        color: #303030;
+        padding: 10px 0;
+    }
+
+    .fontnew {
+        font-size: 25px;
+        padding-left: 20px;
+    }
+
+    .marginbottom {
+        margin-bottom: 30px;
+    }
+
+    .tablewidth {
+        width: 100%;
+    }
+     .btndesign {
+        padding: 1px 4px 1px 6px;
+        color: white;
+    }
+</style>
+<div class="container-fluid">
+    <div class="minheight">
+        <div class="col-lg-8 col-sm-12 col-xs-12 col-lg-offset-2 ">
+            <div class="sparkline12-hd">
+                <div class="main-sparkline12-hd">
+                    <h3 class="text-center textd">Add New Event Category </h3>
+                 </div>
+                <div class="sparkline12-graph sparkline-list">
+                    <div class="basic-login-form-ad">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="all-form-element-inner">
+                                    @using (Html.BeginForm())
+                                    {
+                                        <div class="form-group-inner">
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                    <label class="login2 pull-right pull-right-pro"><span class="starvalid">*</span>Event Category:</label>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                    @Html.TextBoxFor(model => model.EventName, new { @class = "form-control", @id = "EventName",@placeholder="Event Category" })
+                                                </div>
+                                                @if(Model!=null)
+                                                {
+                                                    @Html.HiddenFor(model=>model.hid)
+                                                }
+                                                <div class="col-md-3 text-danger">
+                                                    <span id="Uerr"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group-inner marginbottom">
+                                            <div class="login-btn-inner">
+                                                <div class="row">
+                                                    <div class="col-lg-4"></div>
+                                                    <div class="col-lg-8">
+                                                        <div class="login-horizental cancel-wp pull-left form-bc-ele">
+                                                            <button class="btn btn-sm btn-primary login-submit-cs" type="button" onclick="resetapplication()">Reset</button>
+                                                            <button class="btn btn-sm btn-primary login-submit-cs" type="button" onclick="submitapplication()">Submit</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if (Model.EventCategoryList.Count > 0)
+            {
+                <div class="document-table ">
+                    <div class="main-sparkline12-hd">
+                        <h4 class="text-center textd">Event Category List </h4>
+                    </div>
+                    <div class="grid  ExamNumberSheet tablewidth">
+                        
+                          
+                        <div id="DataTables_Table_0_wrapper tablewidth">
+                            @{
+                                int rowVal = 0;
+                                var gridColumns = new List<WebGridColumn>();
+                                gridColumns.Add(grid.Column(columnName: "SNO", header: "S.No", style: ""));
+                                gridColumns.Add(grid.Column(columnName: "EVentName", header: "Event Category"));
+                                gridColumns.Add(grid.Column(columnName: "", header: "Status", format: (item) => @Html.Raw("<span class='recordStatus' data-val="+item.ID+" data-type='activedeactivedatauser' data-status="+item.IsActive+">"+ (item.IsActive ? "<div><i class='fa fa-check fa-green' title='Active'></i></div>" : "<div><i class='fa fa-close fa-red' title='De-Active'></i></div>") + "</span>")));
+                                gridColumns.Add(grid.Column(columnName: "", header: "Action", format: (item) => @Html.Raw("<a class='btn btn-success btn-sm fa fa-edit myBtn btndesign ' title='Edit' href='/College/Home/EventCategory/" + item.EncriptedID + "'></a>")));
+                            }
+                            <div id="grid" style="width:100%">
+                                @grid.Table(
+                tableStyle: "table  table-bordered dataTable ExamNumberSheet ",
+                   headerStyle: "table  table-bordered dataTable ExamNumberSheet ",
+
+                columns: grid.Columns(
+
+                   gridColumns.ToArray())
+                    )
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        @grid.PagerList(mode: WebGridPagerModes.All, paginationStyle: "pagination pagination-small pagination-right")
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                        
+                            </div>
+                    
+                    
+                    </div>
+              }
+                </div>
+                                    
+        </div>
+    </div>
+

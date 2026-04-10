@@ -1,0 +1,610 @@
+﻿
+@using DataLayer
+@model Tuple<DataLayer.PrintExamForm, DataLayer.QualifiationMasterList, List<DataLayer.EaxmFeesSubmit>, List<DataLayer.EaxmFeesSubmit>>
+@{
+    ViewBag.Title = "ExamFormVerifyback";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+<style>
+      .btndesign {
+        margin-top: 20px;
+    }
+       .right {
+        text-align: right;
+    }
+
+    .left {
+        text-align: left;
+    }
+</style>
+<div class="container-fluid">
+    @{
+
+        if (TempData["msgfees"] == null) { }
+        else
+        {
+            <div class="alert-wrap1 shadow-inner wrap-alert-b">
+
+                <div class="alert alert-success " role="alert" style="text-align:center !important">
+                    <div>@TempData["msgfees"]</div>
+
+                </div>
+            </div>
+        }
+    }
+    <div class="sparkline12-list">
+        <div class="row">
+            <div class="col-sm-12 col-xs-12 ">
+             
+                    @if (Model != null)
+                    {
+                        <div >
+                            @using (Html.BeginForm("", "", FormMethod.Post, new { @class = "dropzone dropzone-custom needsclick add-professors", enctype = "multipart/form-data", id = "myform" }))
+                            {
+                                <div style="width:100%; margin:auto; padding:0; font-size:14px; color:#333; font-family:Arial, Helvetica, sans-serif; border:0px solid #333;">
+                                    <div style="width:800px; margin:auto; font-family:Arial, Helvetica, sans-serif; font-size:14px;">
+                                        <input type="hidden" id="sid" value="@Model.Item1.objExamFrom.sid" />
+                                        <input type="hidden" id="courseyearid" value="@Model.Item1.objExamFrom.courseyearid" />
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td align="left" valign="top">&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center" valign="top" style="font-size:18px; padding:5px 0;"><div class="sparkline8-hd">
+                                            <div class="">
+                                                <center>
+                                                    <h3 id="pageheading">
+
+                                                        BackLog  Exam - Form
+
+                                                    </h3>
+                                                    <div>
+                                                        @Model.Item1.objExamFrom.CourseCategory  Course @Model.Item1.objExamFrom.YearName
+                                                        , SESSION-(@Model.Item1.objExamFrom.SessionName) EXAMINATION - @Model.Item1.objExamFrom.currentyear
+                                                    </div>
+                                                </center>
+
+                                            </div>
+                                            <div class="text-danger text-center">
+                                                @if (TempData["Msg"] != null)
+                                                {
+                                                    @TempData["Msg"];
+                                                }
+
+                                            </div>
+
+                                        </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" valign="top">&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" valign="top">
+                                               
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" valign="top">&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" valign="top">&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" valign="top" style="font-size:18px; padding:5px 0;"><strong>PARTICULARS :</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" valign="top">&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" valign="top">
+                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                        <tr>
+                                                            <td width="28%" align="left" valign="top" style="padding:15px 0 0;">1. Registration No </td>
+                                                            <td width="72%" align="left" valign="top" style="padding:0px 0 0; ">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+
+                                                                        <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;" width="180">&nbsp;@Model.Item1.objExamFrom.RegistrationNo</td>
+                                                                        <td align="left" valign="top" style="padding:15px 0 0;" width="200">&nbsp;Year of Registration:</td>
+                                                                        <td align="left" valign="top" style="padding:15px 0 0;  border-bottom:1px dotted #000;" width="218">&nbsp;@Model.Item1.objExamFrom.Registrationyear</td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" align="left" valign="top" style="padding:15px 0 0;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td width="80%" valign="top">
+                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                                <tr>
+                                                                                    <td align="left" width="40%" valign="top" style="padding:15px 0 0;">2. Roll No </td>
+                                                                                    <td align="left" width="60%" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.Item1.objExamFrom.RollNo</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td align="left" width="40%" valign="top" style="padding:15px 0 0;">3. Name in block Letter in English</td>
+                                                                                    <td align="left" width="60%" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.Item1.objExamFrom.StudentName</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0;">4. Name in Devnagari</td>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.Item1.objExamFrom.StudentNameHindi</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0;">5. Name of Examination</td>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.Item1.objExamFrom.CourseCategory  @Html.DisplayFor(model => model.Item1.objExamFrom.YearName)</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0;">6. Date of birth</td>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.Item1.objExamFrom.DOB</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0;">7. Contact No</td>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.Item1.objExamFrom.MobileNo</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0;">8. @(Model.Item1.objExamFrom.ftitle == 20 ? " Father's  Name" : (Model.Item1.objExamFrom.ftitle == 21 ? "  Husband's  Name" : " Father's  Name") )</td>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.Item1.objExamFrom.FatherName</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0;">9. Mother’s Name</td>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.Item1.objExamFrom.MotherName</td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                        <td width="20%" valign="top">
+                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                                <tr>
+                                                                                    <td align="center" valign="middle">
+                                                                                        &nbsp;<div style="width:125px; height:125px; padding:5px;">
+                                                                                            <img src="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Photoandsign/@Model.Item1.objExamFrom.photo" width="100%" style="border:1px solid #333; " alt=" />
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+
+                                                                                <tr>
+                                                                                    <td align="center" valign="middle">&nbsp;<br /></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td align="center" valign="middle">&nbsp;<br /></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td align="center" valign="middle">
+                                                                                        <div style="width:125px; height:80px; padding:5px;">
+                                                                                            <br /><br />
+                                                                                            <img src="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Photoandsign/@Model.Item1.objExamFrom.sign" width="100%" style="border:1px solid #333; " alt=" />
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td align="center" valign="middle">&nbsp;</td>
+                                                                                </tr>
+
+                                                                            </table>
+                                                                        </td>
+
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" align="left" valign="top">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td align="left" valign="top" style="padding:15px 0 0;" width="93">10. Nationality:</td>
+                                                                        <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;" width="130">&nbsp;@Model.Item1.objExamFrom.Nationality</td>
+                                                                        <td align="left" valign="top" style="padding:15px 0 0;" width="66">&nbsp;Religion:</td>
+                                                                        <td align="left" valign="top" style="padding:15px 0 0;  border-bottom:1px dotted #000;" width="182">&nbsp;@Model.Item1.objExamFrom.Religion</td>
+                                                                        <td align="left" valign="top" style="padding:15px 0 0;" width="76">&nbsp;Category:</td>
+                                                                        <td align="left" valign="top" style="padding:15px 0 0;  border-bottom:1px dotted #000;" width="190">&nbsp;@Model.Item1.objExamFrom.castecategoryname</td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" align="left" valign="top" style="padding:15px 0 0;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td width="10%" rowspan="10" align="left" valign="top" style="padding:15px 0 0;">11. Address:</td>
+                                                                        <td width="90%" align="left" valign="top">
+                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                                <tr>
+                                                                                    <td width="20%" align="left" valign="top" style="padding:15px 0 0;">(a) Permanent</td>
+                                                                                    <td width="80%" align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.Item1.objExamFrom.permanentAddress</td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+
+
+
+                                                                    <tr>
+                                                                        <td align="left" valign="top">
+                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                                <tr>
+                                                                                    <td width="20%" align="left" valign="top" style="padding:15px 0 0;">(b) Correspondence </td>
+                                                                                    <td width="80%" align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.Item1.objExamFrom.CurrentAddress</td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="28%" align="left" valign="top" style="padding:15px 0 0;">12. College Name</td>
+                                                            <td width="72%" align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.Item1.objExamFrom.CollegeName</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="top" style="padding:15px 0 0;"> 13. <strong>Subjects of Examination </strong> </td>
+                                                            <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;"><strong> &nbsp;@Model.Item1.objExamFrom.HonoursSubject</strong> </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" align="left" valign="top">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td width="30%" align="left" valign="top" style="padding:15px 0 0;">14.@Html.DisplayFor(model => model.Item1.objExamFrom.CourseCategory) @Html.DisplayFor(model => model.Item1.objExamFrom.YearName) Subject :</td>
+                                                                        <td width="70%" align="left" valign="top" style="padding:15px 0 0; ">
+
+                                                                            <table width="100%" class="table table-bordered ">
+                                                                                <tr>
+                                                                                    <th>Paper</th>
+                                                                                    <th>Name of Subject</th>
+                                                                                </tr>
+                                                                                @if (Model.Item4.Count > 0)
+                                                                                {
+                                                                                    foreach (var item in Model.Item4)
+                                                                                    {
+                                                                                        <tr>
+                                                                                            <td>Core Course</td>
+                                                                                            <td>@item.SubjectCode - @item.SubjectName</td>
+                                                                                        </tr>
+
+                                                                                    }
+                                                                                    if (@Model.Item1.objExamFrom.EducationType == Convert.ToInt16(CommonSetting.Commonid.EducationtypePG))
+                                                                                    {
+                                                                                        @*<tr>
+
+                                                                                            <td><b>Elective Course</b></td>
+                                                                                            <td> @Model.Item1.objExamFrom.electivesubjectname</td>
+
+                                                                                        </tr>*@
+                                                                                    }
+                                                                                }
+                                                                                @Html.HiddenFor(model => model.Item1.objExamFrom.collegeid, new { @id = "collegeid" })
+                                                                                @Html.HiddenFor(model => model.Item1.objExamFrom.StreamCategoryID, new { @id = "StreamCategoryID" })
+
+                                                                            </table>
+
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        
+                                                        <tr>
+                                                            <td colspan="2" align="left" valign="top">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td width="22%" rowspan="7" align="left" valign="top" style="padding:15px 0 0;">Details about Exam :</td>
+                                                                        <td width="78%" align="left" valign="top">
+                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                                <tr>
+                                                                                    <td width="22%" align="left" valign="top" style="padding:15px 0 0;">(a) Passed earlier </td>
+                                                                                    <td width="78%" align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;</td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        @if (Model.Item1.objExamFrom.coursecategoryid == 29)
+                                                        {
+                                                        <tr>
+                                                            <td colspan="2" align="left" valign="top">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td width="30%" align="left" valign="top" style="padding:15px 0 0;"> If appeared earlier / Failed:</td>
+                                                                        <td width="70%" align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">
+                                                                            @if (Model.Item1.objExamFrom.IsApplied == false)
+                                                                            {
+                                                                                <select style="width:100%; border:0; border-bottom:1px dotted #000;" id="isappeared" name="isappeared" class="form-control">
+                                                                                    <option value="">Select</option>
+                                                                                    <option value="1"> Yes</option>
+                                                                                    <option value="0">No</option>
+                                                                                </select>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <div>@(Model.Item1.objExamFrom.isappearedearlierfail == true ? "Yes" : "No" )</div>
+                                                                            }
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+
+                                                        }
+                                                        @if (Model.Item1.objExamFrom.IsApplied == true)
+                                                        {
+                                                            <tr>
+                                                                <td colspan="2" align="left" valign="top">
+                                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                        <tr>
+                                                                            <td width="30%" align="left" valign="top" style="padding:15px 0 0;"> Present Status of Candidate: </td>
+                                                                            <td width="70%" align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">
+                                                                                <span style="border:0; border-bottom:1px dotted #000; width:100%;" /><div>
+                                                                                    <strong>@(Model.Item1.objExamFrom.IsDocVerify == 1 ? "Approved" : (Model.Item1.objExamFrom.IsDocVerify == 2 ? " Rejected ,Due to :- " + Model.Item1.objExamFrom.rejectreason + "" : "Pending.") )</strong>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                        <tr>
+                                                            <td colspan="2" align="left" valign="top">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td width="100%" colspan="2" calign="left" valign="top" style="padding:15px 0 0;">
+                                                                            <label>
+
+                                                                                <span style="vertical-align:middle; display:inline-block;"><strong>Applicationno : </strong>  @Model.Item1.objExamFrom.ApplicationNo</span>
+
+                                                                            </label>
+                                                                        </td>
+
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" align="left" valign="top">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td width="100%" colspan="2" calign="left" valign="top" style="padding:15px 0 0;">
+                                                                            <div class="sparkline12-graph fee-submit">
+                                                                                <div class="static-table-list">
+
+
+                                                                                    @if (Model != null)
+                                                                                    {
+                                                                                        if (Model.Item1.objExamFrom != null)
+                                                                                        {
+
+                                                                                            if (Model.Item1.objExamFrom.IsExamfeesubmit == 0)
+                                                                                            {
+                                                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                                                    <tr>
+                                                                                                        <td colspan="3">
+                                                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border:1px solid #ccc;">
+                                                                                                                <tr>
+                                                                                                                    <th colspan="3" align="left" valign="middle" style="border-bottom:1px solid #ccc;   color:#FFF;  padding:5px 10px;" class="blue-bg"> Exam Fees Structure</th>
+                                                                                                                </tr>
+                                                                                                                @{int i = 0; decimal amt = 0;}
+                                                                                                                @foreach (var item in Model.Item3)
+                                                                                                                {
+                                                                                                                    i = i + 1;
+
+                                                                                                                    <tr>
+                                                                                                                        <td align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; padding:5px 10px;;font-weight:bold">@i</td>
+                                                                                                                        <td align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; padding:5px 10px;;font-weight:bold">@item.headname + LateFee</td>
+                                                                                                                        <td align="left" valign="middle" style="padding:5px 10px;; border-bottom:1px solid #ccc;"><span id="">@item.amount +@item.late_fee </span></td>
+                                                                                                                    </tr>
+                                                                                                                    amt = amt + item.amount + item.late_fee;
+
+                                                                                                                }
+                                                                                                                <tr>
+                                                                                                                    <td align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; padding:5px 10px;font-weight:bold" colspan="2">Total Fees</td>
+                                                                                                                    <td align="left" valign="middle" style="padding:5px 10px; border-bottom:1px solid #ccc;;font-weight:bold"><span id="">@amt</span></td>
+                                                                                                                </tr>
+
+
+                                                                                                            </table>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                </table>
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                    <div class="modal-area-button text-center">
+                                                                                        <div class="document-btn">
+                                                                                            <input type="hidden" name="GridHtml" />
+                                                                                            @if (Model != null)
+                                                                                            {
+                                                                                                if (Model.Item1.objExamFrom != null)
+                                                                                                {
+
+                                                                                                    if (Model.Item1.objExamFrom.IsExamfeesubmit == 0)
+                                                                                                    {
+
+                                                                                                        @*<div>  UG कोर्स  (UG Part - II) Examination Fees जल्द ही खुलने वाला है  (coming soon) </div>*@
+
+                                                                                            if (Model.Item1.objExamFrom.IsDocVerify == 0)
+                                                                                            {
+                                                                                                <div class="row  btndesign">
+                                                                                                    <div class="col-lg-12 center">
+                                                                                                        @if (ViewBag.isdateopen == 1)
+                                                                                                        {
+
+                                                                                                            if (Model.Item1.objExamFrom.IsApplied == true)
+                                                                                                            {
+                                                                                                            }
+                                                                                                                    <div class="row  btndesign">
+                                                                                                                        <div class="col-lg-6 right">
+                                                                                                                            <button type="submit" class="btn btn-primary waves-effect waves-light" id="submitapp"> Document Verify</button>
+                                                                                                                        </div>
+                                                                                                                        @*<div class="col-lg-6 left">
+                                                                                                                            <button type="submit" class="btn btn-primary waves-effect waves-light" id="submitappreject"> Document Reject</button>
+                                                                                                                        </div>*@
+                                                                                                                    </div>
+
+                                                                                                            @*}
+                                                                                                            else
+                                                                                                            {<div> Student not apply from till.</div> }*@
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            <div> Date is Closed.</div>
+                                                                                                        }
+                                                                                                    </div>
+                                                                                                </div>
+
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                <div style="font-weight:bolder;color:darkgreen"> Student Verified </div>
+
+
+                                                                                                }
+
+
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                <div style="font-weight:bolder;color:darkgreen"> Student fees submited </div>
+
+                                                                                                    }
+
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td colspan="2" align="left" valign="middle"></td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td align="left" valign="top">&nbsp;</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            }
+
+                            @*</div>*@
+                        </div>
+                    }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#submitapp").click(function (event) {
+        debugger;
+        var sid = $("#sid").val();
+        var courseyearid = $("#courseyearid").val();
+        
+        ///alert(res);
+        if (sid == "")
+        {
+            return;
+        }
+        var collegeid = $("#collegeid").val();
+        var StreamCategoryID = $("#StreamCategoryID").val();
+        showloader();
+        $.ajax({
+            url: "/College/Home/ExamFormVerifyForStudent_back/",
+            data:
+
+                { sid: sid, courseyearid: courseyearid, collegeid1: collegeid, StreamCategoryID1: StreamCategoryID },
+            cache: false,
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                hideloader();
+                console.log(data)
+                if (data.Status) {
+                    alert(data.Msg);
+                    //location.replace('/College/Home/ExamFormList');
+                    window.location.reload();
+                }
+                else {
+                    alert(data.Msg);
+                }
+                // console.log(data);
+
+            },
+            error: function (err) {
+                hideloader();
+                alert('error');
+
+                return false;
+            }
+        });
+    });
+    //$("#submitappreject").click(function (event) {
+    //    // debugger;
+    //    var sid = $("#sid").val();
+    //    var courseyearid = $("#courseyearid").val();
+    //    ///alert(res);
+    //    if (sid == "") {
+    //        return;
+    //    }
+    //    var a = confirm('Are you sure to Reject this Examination form !!');
+    //    var txt;
+    //    if (a) {
+    //        var person = prompt("Please Enter Reason:", "");
+    //        if (person == null || person == "") {
+    //            return false;
+    //        }
+    //        else {
+    //            showloader();
+    //            $.ajax({
+    //                url: "/College/Home/ExamFormForStudentrejects/",
+    //                data: { sid: sid, courseyearid: courseyearid, reason: person },
+    //                cache: false,
+    //                type: "POST",
+    //                dataType: "json",
+    //                success: function (data) {
+    //                    hideloader();
+    //                    if (data.Status) {
+    //                        alert(data.Msg);
+    //                        location.replace('/College/Home/ExamFormList');
+    //                    }
+    //                    else {
+    //                        alert(data.Msg);
+    //                    }
+    //                    // console.log(data);
+
+    //                },
+    //                error: function (err) {
+    //                    hideloader();
+    //                    alert('error');
+
+    //                    return false;
+    //                }
+    //            });
+
+    //        }
+    //    }
+    //    else {
+    //        return false;
+    //    }
+
+
+    //});
+</script>
+
+
+
+

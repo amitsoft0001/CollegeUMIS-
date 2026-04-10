@@ -1,0 +1,620 @@
+﻿@model DataLayer.EmployeeLeave_Management
+@{
+    ViewBag.Title = "ApplyLeave";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+<link rel="stylesheet" href="~/Content/css/datapicker/datepicker3.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<script src="~/scripts/Customjs/ApplyLeave.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+
+<style>
+    /* ============================================
+       APPLY LEAVE PAGE - PREMIUM REDESIGN
+       Color Scheme: #4361ee (Primary) | #1e293b (Dark)
+    ============================================ */
+
+    * {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #4361ee;
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #2b4cd6;
+    }
+
+    /* Premium Card Container */
+    .premium-card {
+        background: #ffffff;
+        border-radius: 28px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.02);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(67, 97, 238, 0.1);
+    }
+
+    .premium-card:hover {
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Card Header */
+    .card-header-premium {
+        background: linear-gradient(135deg, #4361ee 0%, #3a56d4 100%);
+        padding: 1.5rem 2rem;
+        text-align: center;
+        position: relative;
+    }
+
+    .card-header-premium h3 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .card-header-premium h3 i {
+        font-size: 1.6rem;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+
+    .card-header-premium::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -50%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transform: skewX(-20deg);
+        animation: shimmer 3s infinite;
+    }
+
+    @@keyframes shimmer {
+        0% { left: -50%; }
+        100% { left: 150%; }
+    }
+
+    /* Card Body */
+    .card-body-premium {
+        padding: 2rem 2.5rem;
+    }
+
+    /* Form Group Styles */
+    .form-group-premium {
+        margin-bottom: 1.8rem;
+    }
+
+    .form-label-premium {
+        display: block;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #5b6e8c;
+        margin-bottom: 10px;
+    }
+
+    .form-label-premium i {
+        margin-right: 8px;
+        color: #4361ee;
+        font-size: 0.8rem;
+        width: 20px;
+    }
+
+    .starvalid {
+        color: #dc2626;
+        font-size: 14px;
+        margin-left: 2px;
+    }
+
+    /* Premium Inputs */
+    .premium-input,
+    .premium-select,
+    .premium-textarea {
+        width: 100%;
+        padding: 0.85rem 1rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #1e293b;
+        background-color: #f8fafc;
+        border: 2px solid #e2e8f0;
+        border-radius: 16px;
+        transition: all 0.25s ease;
+    }
+
+    .premium-input:focus,
+    .premium-select:focus,
+    .premium-textarea:focus {
+        outline: none;
+        border-color: #4361ee;
+        background-color: #ffffff;
+        box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.12);
+    }
+
+    .premium-input:hover,
+    .premium-select:hover,
+    .premium-textarea:hover {
+        border-color: #cbd5e1;
+        background-color: #ffffff;
+    }
+
+    .premium-textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    /* Select Dropdown Custom Arrow */
+    .premium-select {
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%234361ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 14px;
+        cursor: pointer;
+    }
+
+    /* Date Picker Group */
+    .date-group-premium {
+        display: flex;
+        align-items: stretch;
+    }
+
+    .date-group-premium .input-group-addon {
+        background: linear-gradient(135deg, #4361ee, #3a56d4);
+        border: none;
+        border-radius: 16px 0 0 16px;
+        padding: 0 1rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .date-group-premium .input-group-addon i {
+        color: white;
+        font-size: 1rem;
+    }
+
+    .date-group-premium .form-control {
+        border-radius: 0 16px 16px 0;
+        border-left: none;
+    }
+
+    /* Checkbox Styling */
+    .checkbox-premium {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        padding: 0.5rem 0;
+    }
+
+    .checkbox-premium input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        accent-color: #4361ee;
+        cursor: pointer;
+    }
+
+    .checkbox-premium span {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #1e293b;
+    }
+
+    /* Radio Group */
+    .radio-group-premium {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        padding: 0.5rem 0;
+    }
+
+    .radio-premium {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #1e293b;
+    }
+
+    .radio-premium input[type="radio"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #4361ee;
+        cursor: pointer;
+    }
+
+    /* User Info Display */
+    .user-info-premium {
+        background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+        padding: 0.85rem 1rem;
+        border-radius: 16px;
+        font-weight: 600;
+        color: #1e293b;
+        display: inline-block;
+        width: 100%;
+        border: 1px solid rgba(67, 97, 238, 0.2);
+    }
+
+    .user-info-premium i {
+        color: #4361ee;
+        margin-right: 10px;
+    }
+
+    /* Button Styles */
+    .btn-premium-primary {
+        background: linear-gradient(135deg, #4361ee 0%, #3a56d4 100%);
+        border: none;
+        padding: 0.8rem 1.8rem;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: white;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(67, 97, 238, 0.25);
+    }
+
+    .btn-premium-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(67, 97, 238, 0.35);
+        background: linear-gradient(135deg, #3a56d4 0%, #2b4cd6 100%);
+    }
+
+    .btn-premium-secondary {
+        background: #f8fafc;
+        border: 2px solid #e2e8f0;
+        padding: 0.75rem 1.8rem;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: #475569;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+    }
+
+    .btn-premium-secondary:hover {
+        background: #ffffff;
+        border-color: #4361ee;
+        color: #4361ee;
+        transform: translateY(-1px);
+    }
+
+    /* Button Group */
+    .button-group-premium {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-start;
+        margin-top: 1.5rem;
+    }
+
+    /* Error Message */
+    .error-message-premium {
+        color: #dc2626;
+        font-size: 0.7rem;
+        font-weight: 500;
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .card-body-premium {
+            padding: 1.5rem;
+        }
+        .button-group-premium {
+            flex-direction: column;
+        }
+        .btn-premium-primary,
+        .btn-premium-secondary {
+            width: 100%;
+            justify-content: center;
+        }
+        .radio-group-premium {
+            gap: 1rem;
+        }
+        .form-label-premium {
+            margin-bottom: 6px;
+        }
+    }
+
+    /* Animation for form fields */
+    .premium-input, .premium-select, .premium-textarea {
+        animation: fadeInUp 0.4s ease-out;
+    }
+
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Datepicker Override */
+    .datepicker {
+        border-radius: 16px !important;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15) !important;
+        border: none !important;
+    }
+    .datepicker table tr td.active.active,
+    .datepicker table tr td.active:hover.active {
+        background: linear-gradient(135deg, #4361ee, #3a56d4) !important;
+    }
+    .datepicker table tr td.day:hover {
+        background: #eef2ff !important;
+    }
+</style>
+
+<div class="container-fluid" style="padding: 30px; background: linear-gradient(135deg, #f5f7fb 0%, #eef2f8 100%); min-height: 100vh;">
+    <div class="row">
+        <div class="col-lg-8 col-sm-12 col-xs-12 col-lg-offset-2">
+            <!-- Premium Card -->
+            <div class="premium-card">
+                <div class="card-header-premium">
+                    <h3>
+                        <i class="fas fa-calendar-alt"></i>
+                        Apply for Leave
+                    </h3>
+                </div>
+                <div class="card-body-premium">
+                    @using (Html.BeginForm())
+                    {
+                        <!-- User Selection Section -->
+                       if (ViewBag.usertype == true)
+                        {
+                            <div class="form-group-premium">
+                                <label class="form-label-premium">
+                                    <i class="fas fa-user-circle"></i> Select Employee <span class="starvalid">*</span>
+                                </label>
+                                @Html.DropDownListFor(model => model.EmployeeID, new SelectList(ViewBag.UserList, "ID", "FullName"), "-- Select Employee --", new
+                                {
+                                    @class = "premium-select",
+                                    @id = "EmployeeID"
+                                })
+                                @if (Model != null)
+                                {
+                                    @Html.HiddenFor(model => model.ID, new { @id = "hid" })
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-group-premium">
+                                <label class="form-label-premium">
+                                    <i class="fas fa-user-check"></i> Employee Name
+                                </label>
+                                <div class="user-info-premium">
+                                    <i class="fas fa-user"></i> <strong>@Model.Name</strong>
+                                </div>
+                                @Html.HiddenFor(model => model.EmployeeID, new { @id = "EmployeeID" })
+                                @if (Model != null)
+                                {
+                                    @Html.HiddenFor(model => model.ID, new { @id = "hid" })
+                                }
+                            </div>
+                        }
+
+                        <!-- Leave Type -->
+                        <div class="form-group-premium">
+                            <label class="form-label-premium">
+                                <i class="fas fa-tag"></i> Leave Type <span class="starvalid">*</span>
+                            </label>
+                            @Html.DropDownListFor(model => model.LeaveType, new SelectList(ViewBag.LeaveType, "LID", "LeaveName"), "-- Select Leave Type --", new
+                            {
+                                @class = "premium-select",
+                                @id = "LeaveType"
+                            })
+                        </div>
+
+                        <!-- Half Day Checkbox -->
+                        <div class="form-group-premium">
+                            <label class="checkbox-premium">
+                                <input type="checkbox" id="halfdaycheckbox" />
+                                <span><i class="fas fa-clock"></i> Apply for Half Day Leave</span>
+                            </label>
+                        </div>
+
+                        <!-- From Date -->
+                        <div class="form-group-premium">
+                            <label class="form-label-premium">
+                                <i class="fas fa-calendar-day"></i> From Date <span class="starvalid">*</span>
+                            </label>
+                            <div class="date-group-premium" id="data_2">
+                                <div class="input-group date">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                    @Html.TextBoxFor(model => model.Fromdate, new
+                                    {
+                                        @class = "premium-input",
+                                        @id = "Fromdate",
+                                        @maxlength = "10",
+                                        @autocomplete = "off",
+                                        @placeholder = "DD/MM/YYYY",
+                                        @onkeypress = "return false;",
+                                        @required = "required"
+                                    })
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Half Day Radio Buttons -->
+                        <div class="form-group-premium" id="halfradio" style="display: none;">
+                            <label class="form-label-premium">
+                                <i class="fas fa-sun"></i> Select Half <span class="starvalid">*</span>
+                            </label>
+                            <div class="radio-group-premium">
+                                <label class="radio-premium">
+                                    @Html.RadioButtonFor(model => model.halftime, "1", new { @class = "form-group", @id = "halftime", @name = "halftime" })
+                                    <i class="fas fa-sun"></i> First Half (9:00 AM - 1:00 PM)
+                                </label>
+                                <label class="radio-premium">
+                                    @Html.RadioButtonFor(model => model.halftime, "2", new { @class = "form-group", @id = "halftime", @name = "halftime" })
+                                    <i class="fas fa-moon"></i> Second Half (2:00 PM - 5:00 PM)
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- To Date -->
+                        <div class="form-group-premium" id="todaydiv">
+                            <label class="form-label-premium">
+                                <i class="fas fa-calendar-week"></i> To Date <span class="starvalid">*</span>
+                            </label>
+                            <div class="date-group-premium">
+                                <div class="input-group date">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                    @Html.TextBoxFor(model => model.Todate, new
+                                    {
+                                        @class = "premium-input",
+                                        @id = "Todate",
+                                        @maxlength = "10",
+                                        @autocomplete = "off",
+                                        @placeholder = "DD/MM/YYYY",
+                                        @onkeypress = "return false;",
+                                        @required = "required"
+                                    })
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Subject -->
+                        <div class="form-group-premium">
+                            <label class="form-label-premium">
+                                <i class="fas fa-heading"></i> Subject <span class="starvalid">*</span>
+                            </label>
+                            @Html.TextBoxFor(model => model.Subject, new
+                            {
+                                @class = "premium-input",
+                                @id = "Subject",
+                                @placeholder = "Enter leave subject / reason for leave"
+                            })
+                            <div class="error-message-premium" id="Uerr"></div>
+                        </div>
+
+                        <!-- Message / Reason -->
+                        <div class="form-group-premium">
+                            <label class="form-label-premium">
+                                <i class="fas fa-comment-dots"></i> Message / Description <span class="starvalid">*</span>
+                            </label>
+                            @Html.TextAreaFor(model => model.Reason, new
+                            {
+                                @class = "premium-textarea",
+                                @id = "Reason",
+                                @placeholder = "Please provide detailed reason for your leave request..."
+                            })
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="button-group-premium">
+                            <button type="button" class="btn-premium-secondary" onclick="resetapplication()">
+                                <i class="fas fa-undo-alt"></i> Reset Form
+                            </button>
+                            <button type="button" class="btn-premium-primary" onclick="submitapplication()">
+                                <i class="fas fa-paper-plane"></i> Submit Leave Application
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    // Preserve all your existing JavaScript functionality
+    // The ApplyLeave.js file will handle all validations and submissions
+    // Additional UI enhancements
+    $(document).ready(function () {
+        // Add animation classes to form fields
+        $('.premium-input, .premium-select, .premium-textarea').each(function (index) {
+            $(this).css('animation-delay', (index * 0.05) + 's');
+        });
+
+        // Toggle half-day radio visibility with animation
+        $('#halfdaycheckbox').change(function () {
+            if ($(this).is(':checked')) {
+                $('#halfradio').slideDown(300);
+            } else {
+                $('#halfradio').slideUp(300);
+            }
+        });
+
+        // Input focus effects
+        $('.premium-input, .premium-select, .premium-textarea').focus(function () {
+            $(this).closest('.form-group-premium').addClass('focused');
+        }).blur(function () {
+            $(this).closest('.form-group-premium').removeClass('focused');
+        });
+    });
+</script>
+
+<style>
+    /* Additional focus effects */
+    .form-group-premium.focused .form-label-premium i {
+        color: #2b4cd6;
+        transform: scale(1.05);
+    }
+
+    .premium-input:focus,
+    .premium-select:focus,
+    .premium-textarea:focus {
+        transform: translateY(-1px);
+    }
+
+    /* Placeholder styling */
+    .premium-input::placeholder,
+    .premium-textarea::placeholder {
+        color: #a0afc3;
+        font-weight: 400;
+        font-size: 0.85rem;
+    }
+
+    /* Disabled state */
+    .premium-input:disabled,
+    .premium-select:disabled {
+        background-color: #f1f5f9;
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+
+    /* Success/Error border states */
+    .premium-input.input-success {
+        border-color: #10b981;
+    }
+
+    .premium-input.input-error {
+        border-color: #dc2626;
+    }
+</style>

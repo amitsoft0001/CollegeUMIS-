@@ -1,0 +1,106 @@
+﻿@model List<DataLayer.Employee_DocumentUpload>
+@{
+    ViewBag.Title = "DocumentListEmployee";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+<style>
+    .right {
+        text-align: right;
+    }
+    .left {
+        text-align: left;
+    }
+    .textdesign {
+        padding-bottom: 20px;
+    }
+    .minheight {
+        min-height: 450px;
+    }
+</style>
+<script>
+    var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+</script>
+
+<script src="~/scripts/Customjs/DocumentListEmployee.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+
+<div class="container-fluid  minheight">
+    <div class="row ">
+        <div class="container-fluid">
+            @if (ViewBag.CollegeName != "")
+            {
+                <h3 class="text-center" style="padding-bottom:20px;">Employee Document List of @ViewBag.CollegeName </h3>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="container-fluid">
+            <div class="col-lg-10 col-sm-12 col-xs-12 col-lg-offset-1 ">
+                <div class="sparkline-list">
+                    @if (Model != null)
+                    {
+                        <div class="text-right ">
+                            <div class="col-lg-12 textdesign"><a class="btn btn-primary waves-effect waves-light" href="@Url.Action("EmployeeDocumentUpload","Home",new { id=ViewBag.ID, edit=@ViewBag.oneID})">Add Document</a></div>
+                        </div>
+                        <div class="text-center textdesign">
+                            @foreach (var item in Model.OrderBy(m => m.EID).Select(x => x.Fullname).Distinct().ToList())
+                            {
+                                <h4>Document List Of  <strong>@item</strong></h4>
+                            }
+                        </div>
+                        <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed dataTable " id="Edittable">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Document Type
+                                    </th>
+                                    <th>
+                                        Document No
+                                    </th>
+                                    <th>
+                                        Preview
+                                    </th>
+                                    <th>
+                                        Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                  {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DocName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Narration)
+                                        </td>
+                                        <td><a title="View" href="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/College/@item.DocumentURl" target="_blank" class="btn btn-info btn-sm">View</a></td>
+                                        <td>
+                                            <a class="btn btn-sm fa fa-edit myBtn " style="padding:1px 4px 1px 6px;color:black" title="Edit" href="/College/Home/EmployeeDocumentUpload/?Uid=@item.EncriptedID&id=@ViewBag.ID"></a>
+                                            <a class="btn btn-sm fa fa-trash" style="padding:1px 4px 1px 6px;color:gray" title="Delete" href="/College/Home/DeleteEmployeeDocument/?Uid=@item.EncriptedID&id=@ViewBag.ID" onClick="return confirm('Are you sure You want to delete this Document!!'); "></a>
+                                        </td>
+                                        @*&edit=@ViewBag.oneID*@
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function ()
+    {
+        $("#UserList option").each(function ()
+        {
+            //debugger;
+            if ($(this).val() ==((@TempData["EID"])))
+            {
+                $(this).attr('selected', 'selected');
+            }
+        });
+    });
+</script>

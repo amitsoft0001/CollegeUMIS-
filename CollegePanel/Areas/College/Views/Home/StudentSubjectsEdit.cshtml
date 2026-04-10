@@ -1,0 +1,325 @@
+﻿@model DataLayer.Student_Admission_Choicesubject
+@{
+    ViewBag.Title = "StudentSubjectsEdit";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+
+}
+
+<style>
+    .starvalid {
+        color: red;
+    }
+
+    .spacebottom {
+        margin-bottom: 15px;
+    }
+
+    .spacebot {
+        padding-bottom: 15px;
+    }
+
+    .textsize {
+        font-size: 12px;
+    }
+
+    .form-group-inner label {
+        font-size: 18px;
+        color: #303030;
+        padding: 10px 0;
+    }
+
+    .fontnew {
+        font-size: 25px;
+        padding-left: 20px;
+    }
+</style>
+<link href="~/Content/Recruitmentpreocess.css" rel="stylesheet" />
+<div class="container-fluid">
+    <div class="row ">
+        <div class="report-part">
+            <ul>
+                @*<li><a href="#"> Choose Subject Edit </a></li>*@
+                <li class="active"><a href="~/College/Home/StudentDetailsEdit/@ViewBag.ID"> Basic Detail </a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="single-cards-item DocumentUpload">
+        @if (TempData["StMessage"] == null) { }
+        else
+        {
+            <div class="text-danger spacebot" style="text-align:center !important">
+                <div>@TempData["StMessage"]</div>
+            </div>
+        }
+        <div>
+            <div class="row">
+                <div class="sparkline12-hd">
+                    <div class="main-sparkline12-hd">
+                        <h3 class="text-center">
+                            Choose Subject Details for @if (ViewBag.Name != null)
+                            {@ViewBag.Name}
+                        </h3>
+                    </div>
+                    <div class="sparkline12-graph  sparkline8-list">
+                        <div class="col-lg-12">
+                            <div class="basic-login-form-ad">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="all-form-element-inner">
+
+
+                                            @if (Model != null)
+                                            {
+                                                <div class="form-group-inner">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <label class="login2">Major Subject:</label>
+                                                            @Html.HiddenFor(model => model.hounors_subjectid)
+                                                            @*@Html.TextBoxFor(model => model.HonSubName, new { @class = "form-control", @id = "hounors_subjectid", @required = "required", @readonly = "readonly" })*@
+                                                            @Html.DisplayFor(model => model.HonSubName)
+                                                            @Html.HiddenFor(model => model.CollegeID)
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                if (ViewBag.stream != null && ViewBag.stream.Count > 0)
+                                                {
+                                                    int index = 0;
+                                                    <div class="form-group-inner">
+                                                        <div class="row">
+                                                            @foreach (var item in ViewBag.stream)
+                                                            {
+                                                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                    <label class="login2">Select @item.SubjectCategory <span class="starvalid">*</span></label>
+                                                                    <div class="form-select-list">
+                                                                        <!-- Normal HTML select tag with dynamic options -->
+                                                                        <select class="form-control custom-select-value subject-category" id="subject_category" name="minor_@index" required>
+                                                                            <option value="">--Select @item.SubjectCategory--</option>
+                                                                            @foreach (var subStream in item.subStreamMasters)
+                                                                            {
+                                                                                <option value="@subStream.Substreamcategoryid" @(Convert.ToInt32(ViewBag.SubjectIds[index]) == @subStream.Substreamcategoryid ? "selected" : "" ) )>@subStream.SubjectName</option>
+                                                                            }
+                                                                        </select>
+                                                                        <input type="hidden" name="ID" id="ID" value="@ViewBag.ID" />
+                                                                        <input type="hidden" id="hid" value="@Model.hid" />
+                                                                    </div>
+                                                                </div>
+
+                                                                index++; // Increment index to generate unique ids and names
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                }
+
+                                                @*<div class="form-group-inner">
+                                                        <div class="row">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <label class="login2">Select Minor <span class="starvalid">*</span></label>
+                                                                <div class="form-select-list">
+                                                                    @Html.DropDownListFor(model => model.MinorId, new SelectList(ViewBag.Minor, "StreamCategoryID", "streamCategory", ViewBag.Minor1), "--Select Minor--", new { @class = "form-control custom-select-value", @id = "minor", @name = "minor", @required = "required" })
+                                                                    @Html.ValidationMessageFor(model => model.MinorId, "", new { @class = "text-danger" })
+                                                                    @Html.HiddenFor(model => model.ID)
+                                                                    @Html.HiddenFor(model => model.hid)
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group-inner">
+                                                        <div class="row">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <label class="login2">Select MDC <span class="starvalid">*</span></label>
+                                                                <div class="form-select-list">
+                                                                    @Html.DropDownListFor(model => model.MDCId, new SelectList(ViewBag.MDC, "StreamCategoryID", "streamCategory", ViewBag.MDC1), "--Select MDC--", new { @class = "form-control custom-select-value", @id = "mdc", @name = "mdc", @required = "required" })
+                                                                    @Html.ValidationMessageFor(model => model.MDCId, "", new { @class = "text-danger" })
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group-inner">
+                                                        <div class="row">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <label class="login2">Select AEC <span class="starvalid">*</span></label>
+                                                                <div class="form-select-list">
+                                                                    @Html.DropDownListFor(model => model.AECId, new SelectList(ViewBag.AEC, "StreamCategoryID", "streamCategory", ViewBag.AEC1), "--Select AEC--", new { @class = "form-control custom-select-value", @id = "aec", @name = "aec", @required = "required" })
+                                                                    @Html.ValidationMessageFor(model => model.AECId, "", new { @class = "text-danger" })
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group-inner">
+                                                        <div class="row">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <label class="login2">Select SEC <span class="starvalid">*</span></label>
+                                                                <div class="form-select-list">
+                                                                    @Html.DropDownListFor(model => model.SECId, new SelectList(ViewBag.SEC, "StreamCategoryID", "streamCategory", ViewBag.SEC1), "--Select SEC--", new { @class = "form-control custom-select-value", @id = "sec", @name = "sec" })
+                                                                    @Html.ValidationMessageFor(model => model.SECId, "", new { @class = "text-danger" })
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group-inner">
+                                                        <div class="row">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <label class="login2">Select VAC <span class="starvalid">*</span></label>
+                                                                <div class="form-select-list">
+                                                                    @Html.DropDownListFor(model => model.VACId, new SelectList(ViewBag.VAC, "StreamCategoryID", "streamCategory", ViewBag.VAC1), "--Select VAC--", new { @class = "form-control custom-select-value", @id = "vac", @name = "vac" })
+                                                                    @Html.ValidationMessageFor(model => model.VACId, "", new { @class = "text-danger" })
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>*@
+                                                @*<div class="text-danger">
+                                                        Note  : if you Select Composition  1 Subjects in  @if (Model != null)
+                                                        {
+                                                            if (Model.Nationality == 24)
+                                                            { <span>RB Hindi</span>}
+                                                        }
+                                                        else
+                                                        {<span>STD. English</span> }
+
+                                                        then you cannot select Composition  2 Subjects.
+                                                    </div*@
+                                                <div class="form-group-inner">
+                                                    <div class="login-btn-inner">
+                                                        <div class="row">
+                                                            <div class="col-lg-12 text-center">
+                                                                <div class="document-btn">
+                                                                    <div class="login-horizental cancel-wp form-bc-ele">
+                                                                        <button class="btn btn-sm btn-primary login-submit-cs" type="submit" id="submitBtn">Submit</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $("#subsidiary1").change(function (event) {
+        var res = $("#subsidiary1").val();
+        $('#subsidiary2').find("option").remove();
+        $("#subsidiary2").append($("<option></option>").val("").html("--Select Subsidiary2--"));
+        var res = $(this).val();
+        if (res == "") {
+            res = 0;
+            return;
+        }
+        showloader();
+        $.ajax({
+            url: "/College/Home/getcollegesubsidiary2/",
+            data: { collegeid: $('#CollegeID').val(), subjectid: $('#hounors_subjectid').val(), subsidiary1: res, id: $('#ID').val() },
+            cache: false,
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+
+                $('#subsidiary2').find("option").remove();
+                $('#subsidiary2').append($("<option></option>").val("").html("Select Subsidiary2"));
+                $.each(data.data, function (key, value) {
+                    $('#subsidiary2').append($("<option></option>").val(value.StreamCategoryID).html(value.streamCategory));
+                });
+                hideloader();
+            },
+            error: function () {
+                hideloader();
+                alert("error")
+            }
+        });
+    });
+    $("#Compulsory1").change(function (event) {
+        $('#Compulsory2').find("option").remove();
+        $("#Compulsory2").append($("<option></option>").val("").html("--Select Compulsory1--"));
+        var res = $("#Compulsory1").val();
+        if (res == "") {
+            res = 0;
+            return;
+        }
+        showloader();
+        $.ajax({
+            url: "/College/Home/getcollegecompulsory2/",
+            data: { collegeid: $('#CollegeID').val(), compulsory1: res, id: $('#ID').val() },
+            cache: false,
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+
+
+                $('#Compulsory2').find("option").remove();
+                $('#Compulsory2').append($("<option></option>").val("").html("Select Composition 2"));
+                $.each(data.data, function (key, value) {
+                    $('#Compulsory2').append($("<option></option>").val(value.StreamCategoryID).html(value.streamCategory));
+                });
+                hideloader();
+            }
+            ,
+            error: function () {
+                hideloader();
+                // alert("error");
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        // Attach click event to the button with ID 'submitBtn'
+        $("#submitBtn").click(function (e) {
+            debugger;
+            e.preventDefault(); // Prevent the default form submission behavior
+            var obj = {};
+            obj.SID = $('#ID').val();
+            obj.ID = $('#hid').val();
+            var selectedValues = []; // Initialize an empty array to store selected values
+
+            // Iterate over each select element with class 'subject-category'
+            $(".subject-category").each(function () {
+                var selectedValue = $(this).val(); // Get the selected value
+                if (selectedValue) { // Only add it if there's a value selected
+                    selectedValues.push(selectedValue); // Add the selected value to the array
+                }
+            });
+
+            // Join the array into a string separated by commas
+            obj.subjectIds = selectedValues.join(",");
+
+            showloader();
+            $.ajax({
+                url: "/Student/Home/StudentSubjectsEdit",
+                data: JSON.stringify(obj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    debugger;
+                    hideloader();
+                    var response = data;
+                    if (res.success) {
+                        alert(res.data.Msg);
+                    }
+                    else {
+                        alert("Something went wrong...");
+                    }
+
+                }
+                ,
+                error: function () {
+                    hideloader();
+                    // alert("error");
+                }
+            });
+            // Add the values to a hidden field, or pass them however you need
+            // Optionally trigger form submission
+        });
+    });
+
+
+</script>

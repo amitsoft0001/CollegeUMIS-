@@ -1,0 +1,285 @@
+﻿@model DataLayer.EmployeeRegisteration
+@{
+    ViewBag.Title = "ViewProfile";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+<style>
+    .text-right {
+        text-align: left;
+    }
+
+    .text-bold {
+        font-weight: bold;
+    }
+</style>
+<div class="container-fluid">
+    <div class="all-content-wrapper" style="margin-left:0px !important">
+        <div class="advanced-form-area mg-b-15">
+            <div class="" style="min-height:450px;">
+
+                @{if (TempData["StMessage"] == null) { }
+            else
+            {
+            <div class="alert-wrap1 shadow-inner wrap-alert-b">
+
+                <div class="alert alert-success " role="alert" style="text-align:center !important">
+                    <div>@TempData["StMessage"]</div>
+
+                </div>
+            </div>
+                }
+                }
+                <div class="sparkline10-graph">
+                    <div class="col-lg-8 col-sm-12 col-xs-12 col-lg-offset-2  ">
+                        <div class="sparkline12-hd" style="margin-left:150px;">
+                            <div class="row">
+                                <div class="col-lg-3 pull-right">
+                                    <a class="btn btn-primary waves-effect waves-light" href="~/College/Home/UpdateUserProfile/@DataLayer.ClsLanguage.GetCookies("ENNBUID")">Edit Profile</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sparkline10-graph">
+                        <div class="input-knob-dial-wrap">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <h3 style="text-align:center">User Profile </h3>
+                                    <div class="form-group-inner">
+                                        <div class="login-btn-inner">
+                                            <div>
+                                                <div class="sparkline10-list mg-tb-30 responsive-mg-t-0 table-mg-t-pro-n dk-res-t-pro-0 nk-ds-n-pro-t-0" style="text-align: left;">
+
+                                                    <div class="sparkline10-graph">
+                                                        <div class="input-knob-dial-wrap">
+                                                            <div class="row all-form-element-inner">
+                                                                <div class="form-group-inner">
+                                                                    <div class="row login-btn-inner">
+                                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                            <div class="product-payment-inner-st">
+                                                                                <ul id="myTabedu1" class="tab-review-design">
+                                                                                    <li class="active"><a href="#description">Basic Information</a></li>
+                                                                                </ul>
+                                                                                <div id="myTabContent" class="tab-content custom-product-edit">
+                                                                                    <div class="product-tab-list tab-pane fade active in" id="description">
+                                                                                        <div>
+                                                                                            <div>
+                                                                                                <div class="review-content-section basic-detail-part">
+                                                                                                    <div id="dropzone1" class="pro-ad">
+                                                                                                        <div class="row">
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <label>Designation :</label>
+                                                                                                                <label><strong>@Model.DesignationName</strong></label>
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <label>User Name :</label>
+                                                                                                                <label><strong>@Model.UserName</strong></label>
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <label>Joining Date :</label>
+                                                                                                                <label><strong>@Model.JoiningDate</strong></label>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="row">
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Employee Type:</label></span>
+                                                                                                                <label><strong>@Model.FacultyTypeName</strong></label>
+
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Name:</label></span>
+                                                                                                                <label><strong>@Model.FirstName</strong></label>
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Gender:</label></span>
+                                                                                                                <label><strong>@Model.GenderName</strong></label>
+
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="row">
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Date of birth :</label></span>
+                                                                                                                <label><strong>@Model.DOB</strong></label>
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Cast Category:</label></span>
+                                                                                                                <label><strong>@Model.CastCategoryName</strong></label>
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Mobile No: </label></span>
+                                                                                                                <label><strong>@Model.MobileNo</strong></label>
+
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="row">
+
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Email Id: </label></span>
+                                                                                                                <label><strong>@Model.Email</strong></label>
+
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Blood Group :</label></span>
+                                                                                                                <label><strong>@Model.BloodGroupName</strong></label>
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Nationality :</label></span>
+                                                                                                                <label><strong>@Model.NationalityName</strong></label>
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                        <div class="row">
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="display:none;">
+                                                                                                                <span><label>Mother Tongue </label></span>
+                                                                                                                <label><strong>@Model.MotherTongueName</strong></label>
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Religion  </label></span>
+                                                                                                                <label><strong>@Model.ReligionName</strong></label>
+
+                                                                                                            </div>
+
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Emergency Contact No.</label></span>
+                                                                                                                <label><strong>@Model.EContactNo</strong></label>
+                                                                                                            </div>
+                                                                                                        </div>
+
+
+                                                                                                        <div class="row">
+                                                                                                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Current Address:</label></span>
+                                                                                                                <label><strong>@Model.CurrentAddress</strong></label>
+
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Parmanent Address:</label></span>
+                                                                                                                <label><strong>@Model.PA_Address</strong></label>
+                                                                                                            </div>
+
+
+                                                                                                        </div>
+
+
+
+                                                                                                        <ul id="myTabedu1" class="tab-review-design">
+                                                                                                            <li class="active"><a href="#description"> Father /Husband Details </a></li>
+                                                                                                        </ul>
+                                                                                                        <div class="row">
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Name:</label></span>
+                                                                                                                <label><strong>@Model.FatherMobile</strong></label>
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Mobile No:</label></span>
+                                                                                                                <label><strong>@Model.FatherMobile</strong></label>
+                                                                                                            </div>
+
+
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Email</label></span>
+                                                                                                                <label><strong>@Model.FatherEmail</strong></label>
+
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="row">
+
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Qualification</label></span>
+                                                                                                                <label><strong>@Model.FatherQualification</strong></label>
+
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Occupation</label></span>
+                                                                                                                <label><strong>@Model.FatherQualification</strong></label>
+
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                        <ul id="myTabedu1" class="tab-review-design">
+                                                                                                            <li class="active"><a href="#description">Mother Details </a></li>
+                                                                                                        </ul>
+                                                                                                        <div class="row">
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Name :</label></span>
+                                                                                                                <label><strong>@Model.MotherName</strong></label>
+
+                                                                                                            </div>
+
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Mobile No:</label></span>
+                                                                                                                <label><strong>@Model.MotherMobile</strong></label>
+
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Email:</label></span>
+                                                                                                                <label><strong>@Model.MotherEmail</strong></label>
+
+                                                                                                            </div>
+
+
+                                                                                                        </div>
+                                                                                                        <div class="row">
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Qualification:</label></span>
+                                                                                                                <label><strong>@Model.MotherQualification</strong></label>
+
+
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Occupation:</label></span>
+                                                                                                                <label><strong>@Model.MotherOccupation</strong></label>
+
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <ul id="myTabedu1" class="tab-review-design">
+                                                                                                            <li class="active"><a href="#description">Photo And Signature Details</a></li>
+                                                                                                        </ul>
+                                                                                                        <div class="row">
+
+                                                                                                            <div class="col-md-6">
+                                                                                                                <span><label>Photo:</label></span>
+                                                                                                                <img src="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/College/@Model.stphoto" alt="" onerror="this.src = '../../../images/noimage.png';" style="max-width:100px">
+
+                                                                                                            </div>
+                                                                                                            <div class="col-md-6">
+                                                                                                                <span><label>Signature:</label></span>
+                                                                                                                <img src="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/College/@Model.stsign" alt="" onerror="this.src = '../../../images/noimage.png';" style="max-width:100px">
+                                                                                                                @*onerror="this.src = '../../images/noimage.png';"*@
+
+                                                                                                            </div>
+                                                                                                        </div>
+
+
+
+
+                                                                                                    </div>
+
+
+
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>

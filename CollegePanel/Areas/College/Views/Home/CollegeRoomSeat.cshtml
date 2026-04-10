@@ -1,0 +1,312 @@
+﻿@model DataLayer.RoomSeatMaster
+@{
+    ViewBag.Title = "CollegeRoomSeat";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+<style>
+    .right {
+        text-align: right;
+    }
+
+    .left {
+        text-align: left;
+    }
+
+    .minheight {
+        min-height: 500px;
+    }
+
+    .textde {
+        padding-bottom: 20px;
+    }
+
+    .textdesign {
+        /*padding-top: 20px;*/
+    }
+    .panel-body a {
+        padding-top: 0px !important;
+    }
+</style>
+<script>
+       var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+</script>
+<script src="~/JS/Commonjs.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<script src="~/scripts/Customjs/CollegeRoomSeat.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<div class="container-fluid minheight">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+        <div class="text-danger text-center textde">
+
+            @if (TempData["Msg"] != null)
+            {
+                @TempData["Msg"];
+            }
+        </div>
+
+        <div class="row">
+            <div>
+                <h3 class="text-center" style="padding-bottom:20px;">College Room Seat Detail</h3>
+            </div>
+
+        </div>
+        <div class="row ">
+            <div class="sparkline-list">
+
+                @*@using (Html.BeginForm("", "Home", FormMethod.Post, new { id = "myform" }))
+                {
+                    <div class="row rowdesign" >
+                        <div class="col-md-2 ">
+                            <label>College:</label>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.DropDownList("College", new SelectList(ViewBag.College, "Value", "Text"), "--Select College--", new { @class = "form-control", @id = "College", @ng_model = "data.College" })
+                        </div>
+
+                        <div class="col-md-5 right">
+                            <button class="btn btn-primary waves-effect waves-light" id="search" type="button" onclick="searchfeedetail()">Search</button>
+                        </div>
+
+                    </div>
+                    
+                }*@
+                    <div class="panel-body">
+               @if (Model.seatList.Count > 0)               
+                   {
+
+                        <div id="divtable" >
+                            <div class="row">
+                                <div>
+                                    <h4 class="text-center" style="padding-bottom:20px;">Room Seat List</h4>
+                                </div>
+
+                            </div>
+                            <div class="dataTables_wrapper no-footer table-responsive">
+
+                                <table class="table table-bordered table-condensed dataTable " id="edittable">
+                                    <thead>
+                                        <tr role="row">
+                                            <th>S. No.</th>
+                                            <th>
+                                                Room No
+                                            </th>
+                                            <th>
+                                                Description
+                                            </th>
+                                            <th>
+                                                Row
+                                            </th>
+                                            <th>
+                                                Column
+                                            </th>
+                                            <th>
+                                                Capacity
+                                            </th>
+                                            <th>
+                                                Action
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody" role="row" >
+
+                                        @{ int i = 1;}
+                                        @foreach (var item in Model.seatList)
+                                        {
+                                            <tr >
+                                                <td>@i</td>
+                                                <td>@item.RoomNo</td>
+                                                <td>@item.Description</td>
+                                                <td>@item.Row</td>
+                                                <td>@item.Column</td>
+                                                <td>@item.Capacity<input type="hidden" id="roomid" name="roomid" value=@item.RoomMasterID /></td> 
+                                                <td><a class="btn btn-success btn-sm fa fa-edit myBtn " style="padding:1px 4px 1px 6px;margin-top:0px !important; color:white" title="Edit" data-id='@item.ID' data-description='@item.Description' data-row='@item.Row' data-column='@item.Column' data-capacity='@item.Capacity' data-roomno='@item.RoomNo' ></a></td>
+                                                
+                                            </tr>
+                                            { i = i + 1; }
+                                        }
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+                }
+                        <div id="divtableinsert" style="display:none">
+                            <div class="row textdesign">
+                                <div>
+                                    <h4 class="text-center" style="padding-bottom:20px;"> Add New Room Seat </h4>
+                                </div>
+
+                            </div>
+                            <div class="dataTables_wrapper no-footer table-responsive">
+
+                                <table class="table table-bordered table-condensed dataTable " id="table">
+                                    <thead>
+                                        <tr role="row">
+                                            <th>S. No.</th>
+                                            <th>
+                                                Room No
+                                            </th>
+                                            <th>
+                                                Description
+                                            </th>
+                                            <th>
+                                                Row
+                                            </th>
+                                            <th>
+                                                Column
+                                            </th>
+                                            <th>
+                                                Capacity
+                                            </th>
+                                            <th>
+                                                Action
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyins"></tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+                        <div id="newbtn">
+                            <div class="form-group-inner">
+                                <div class="login-btn-inner">
+                                    <div class="row">
+                                        <div class="col-lg-9"></div>
+                                        <div class="col-lg-3 pull-right sa-right right" style="float:right">
+
+                                            <input type="button" class="btn btn-primary" id="addRow" name="addRow" value="Add New Seat Detail" style="float:right" />
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group-inner" id="savebtn" style="display:none">
+                            <div class="login-btn-inner">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-offset-3">
+                                        <div class="col-lg-3"></div>
+                                        <div class="col-lg-9">
+                                            <button class="btn btn-primary waves-effect waves-light" id="save" type="button">Save</button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+               
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <div class="">
+        <div id="RoomSeat" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header header-color-modal bg-color-2">
+                        <h4 class="modal-title">Edit Room Seat Detail</h4>
+                        <div class="modal-close-area modal-close-df">
+                            <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-6">
+                                       Room No
+                                    </div>
+                                    <div class="col-lg- col-md-6 col-sm-12 col-xs-6">
+                                        <div class="form-group" id="" style="margin-top:0px">
+                                            <input type="text" class="form-control textdesign" name="RoomNo" id="RoomNo" placeholder="RoomNo" readonly="readonly" />                                          
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-6">
+                                       Description
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-6">
+                                        <div class="form-group" id="" style="margin-top:0px">
+                                            <input type="text" class="form-control textdesign" name="Description" id="Description" placeholder="Description" readonly="readonly" />                                          
+                                            <input type="hidden" class="form-control" title="hid" id="hid">
+                                            <input type="hidden" class="form-control" title="RoomID" id="RoomID">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-6">
+                                        <span class="starvalid">*</span>  Row
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-6">
+                                        <div class="form-group" id="" style="margin-top:0px">
+                                            <input type="text" class="form-control textdesign RColumn" name="RRow" id="RRow" placeholder="Rows" oninput="Onlynumericvalue(this);" maxlength="5" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-6">
+                                        <span class="starvalid">*</span>  Column
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-6">
+                                        <div class="form-group" id="" style="margin-top:0px">
+                                            <input type="text" class="form-control textdesign RColumn" name="RColumn" id="RColumn" placeholder="Column" oninput="Onlynumericvalue(this);" maxlength="5" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-6">
+                                        <span class="starvalid">*</span>  Capacity
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-6">
+                                        <div class="form-group" id="" style="margin-top:0px">
+                                            <input type="text" class="form-control textdesign" name="RCapacity" id="RCapacity" placeholder="Capacity" readonly="readonly" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row" style="height:10px">
+                                        &nbsp;
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-6">
+
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-6">
+                                        <a onclick="updatefee()" class="btn btn-sm btn-primary  login-submit-cs">Update </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer info-md">
+                        <a data-dismiss="modal" href="#">Close</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/JS/Commonjs.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+

@@ -1,0 +1,170 @@
+﻿@model DataLayer.UserLogin
+@{
+    ViewBag.Title = "Employee Subject Assign";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+<style>
+    .validation {
+        color: tomato;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-sm-12 col-xs-12">
+            @if (TempData["StMessage"] != null)
+            {
+                <div class="text-center" style="">
+                    <div class="alert-wrap1 shadow-inner wrap-alert-b">
+                        <div class="alert alert-success " role="alert" style="text-align:center !important">
+                            <div>@TempData["StMessage"]</div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (TempData["StError"] != null)
+            {
+                <div class="text-center" style="">
+                    <div class="alert-wrap1 shadow-inner wrap-alert-b">
+                        <div class="alert alert-warning " role="alert" style="text-align:center !important">
+                            <div class="text-danger">@TempData["StError"]</div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-sm-12 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading"> <h2>Assign Subject To Lecturer </h2></div>
+                <div class="panel-body">
+                    <div class="form-group-inner">
+                        @using (Html.BeginForm("EmployeeSubjectAssign", "Home", FormMethod.Post))
+                        {
+                            <div class="row">
+                                @Html.HiddenFor(model => model.SessionId)
+                                @Html.HiddenFor(model => model.CollegeID)
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                    <label class="fontnew "><strong>Education Type</strong></label>
+                                    @Html.DropDownListFor(model => model.EducationTypeId, new System.Web.Mvc.SelectList(Model.EduTypeList, "Value", "Text"), new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.EducationTypeId, "", new { @class = "validation" })
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                    <label class="fontnew "><strong>Course Category Type</strong></label>
+                                    @Html.DropDownListFor(model => model.CourseCategoryId, new System.Web.Mvc.SelectList(Model.CourseCategoryList, "Value", "Text"), new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.CourseCategoryId, "", new { @class = "validation" })
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                    <label class="fontnew "><strong>Employee</strong></label>
+                                    @Html.DropDownListFor(model => model.EmployeeID, new System.Web.Mvc.SelectList(Model.EmployeeList, "Value", "Text"), new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.EmployeeID, "", new { @class = "validation" })
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label class="fontnew "><strong>Subject</strong></label>
+                                    <div class="row">
+                                        <div id="grid">
+                                            <div class="grid">
+                                                @for (var i = 0; i < Model.AssignSubjectList.Count; ++i)
+                                                {
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                        @Html.HiddenFor(m => m.AssignSubjectList[i].Subject)
+                                                        @Html.HiddenFor(m => m.AssignSubjectList[i].SubjectId)
+                                                        @Html.CheckBoxFor(m => m.AssignSubjectList[i].IsActive, new { id = Model.AssignSubjectList[i].SubjectId })
+                                                        <label for="@Model.AssignSubjectList[i].SubjectId">
+
+                                                            @{ 
+                                                                var sub = @Model.AssignSubjectList[i].Subject + " (" + @Model.AssignSubjectList[i].SubjectCode + ")";
+
+                                                            }   
+                                                            @sub                                                       
+                                                        </label>
+                                                    </div>
+                                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div class="login-btn-inner">
+                                        <div class="login-horizental cancel-wp pull-left form-bc-ele">
+                                            <br />
+                                            <button id="btnSubmit" class="btn btn-sm btn-primary login-submit-cs" type="submit">Submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+      $(document).ready(function () {
+        $("#EducationTypeId").change(function () {
+           $("#CourseCategoryId").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("PopulateCourseCategoryDropdown", "Home")',
+                dataType: 'json',
+                data: { EduTypeID: $("#EducationTypeId").val(), CollegeID: $("#CollegeID").val(), EmployeeID: 0 },
+                success: function (states) {
+                    $.each(states, function (i, state) {
+                        $("#CourseCategoryId").append('<option value="' + state.Value + '">' +
+                            state.Text + '</option>');
+                    });
+                }, error: function (ex) { $("#CourseCategoryId").append('<option value="' + "" + '">' + "-- Select --" + '</option>'); }
+            }); return false;
+          });
+
+
+         
+
+
+
+
+
+
+     $("#CourseCategoryId").change(function () {
+            var collegeid = $("#CollegeID").val();
+            var employeeid = $("#EmployeeID").val();
+             var coursecategoryid= $("#CourseCategoryId").val();
+    if(employeeid > 0)
+    {
+            RecallGrid(collegeid,coursecategoryid, employeeid);
+    }
+        });
+        $("#EmployeeID").change(function () {
+            var collegeid = $("#CollegeID").val();
+            var employeeid = $("#EmployeeID").val();
+             var coursecategoryid= $("#CourseCategoryId").val();
+            RecallGrid(collegeid,coursecategoryid, employeeid);
+        });
+    });
+
+    function RecallGrid(collegeid,coursecategoryid, employeeid) {
+        $('#AjaxLoader').show();
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("EmployeeSubjectAssign", "Home")',
+            contentType: "application/json; charset=utf-8",
+            data: { CollegeId: collegeid, CourseCategoryID:coursecategoryid, EmployeeId: employeeid },
+            success: function (data) {
+                $('#grid').html($(data).find("#grid"));
+                $('#AjaxLoader').hide();
+            },
+            error: function () {
+                $('#AjaxLoader').hide();
+                toastr.error('Ooops! Something Went Wrong! Try Again');
+            }
+        });
+        return false;
+    };
+</script>
+<script src="~/scripts/jquery-1.10.2.js"></script>
+<script src="~/scripts/jquery.validate.js"></script>
+<script src="~/scripts/jquery.validate.unobtrusive.js"></script>

@@ -1,0 +1,232 @@
+﻿@using Website.Models;
+@{
+    ViewBag.Title = "EmployeeInformationDetail";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+    var UserID = EncriptDecript.Decrypt(DataLayer.ClsLanguage.GetCookies("ENNBUID"));
+}
+
+<style>
+    .right {
+        text-align: right;
+        margin-right: 20px;
+    }
+
+    .left {
+        text-align: left;
+        margin-left: 20px;
+    }
+      .acolor{
+        font-size: 14px;
+        color: white;
+        margin-top: 0px !important;
+        padding: 1px 4px 1px 6px;
+    }
+        .minheight {
+        min-height: 450px;
+    }
+
+</style>
+<script>
+    var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+</script>
+<script src="~/scripts/Customjs/EmployeeInformationDetail.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+
+<div class="container-fluid minheight">
+    <div class="row ">
+        <div>
+            <h3 class="text-center" style="padding-bottom:20px;">Employee Details</h3>
+        </div>
+        <div class="sparkline8-list">
+            <div class="row">
+                <div ng-app="informationApp" ng-controller="informationCtrl">
+                    <div class="row ">
+                        <div class="col-md-5 left" style="text-align:left">
+                            <b>
+                                Total Record(s) : | &nbsp;&nbsp;<spam style="border: 1px solid #bfc5cb;  padding: 7px; border-radius: 50%;">{{totalCount}}</spam>&nbsp;&nbsp;
+                            </b>
+                            <span class="form-group  page-size form-inline">
+                                <select id="ddlPageSize" class="form-control control-color"
+                                        ng-model="pageSizeSelected"
+                                        ng-change="changePageSize()">
+                                    <option value="1">1</option>
+                                    <option value="10">10</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="200">200</option>
+                                    <option value="500">500</option>
+                                </select>
+                            </span>
+                            <a class="btn btn-primary">Page: {{pageIndex}} / {{numPages}}</a>
+                        </div>
+                        @*<div class="col-md-5 right">
+                                <button ng-click="GetFilterUsers(ClubData)" class="btn btn-primary waves-effect waves-light" type="button">Search</button>
+                            </div>*@
+                    </div>
+
+                    <div class="panel-body">
+                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer table-responsive">
+                            <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed dataTable ">
+                                <thead>
+                                    <tr role="row">
+                                        <th width="50px">S. No.</th>
+                                        <th ng-click="sortBy('employeeNo')">
+                                            Employee ID<span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>
+                                            <span class="sortorder" ng-show="propertyName === 'employeeNo'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('memberName')">
+                                            Name<span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>
+                                            <span class="sortorder" ng-show="propertyName === 'memberName'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('characterCertificate')">
+                                            Character Certificate<span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>
+                                            <span class="sortorder" ng-show="propertyName === 'characterCertificate'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('gpfNo')">
+                                            GPF No<span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>
+                                            <span class="sortorder" ng-show="propertyName === 'gpfNo'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('isMarried')">
+                                            Marital Status<span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>
+                                            <span class="sortorder" ng-show="propertyName === 'isMarried'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('medicalReport')">
+                                            Medical Report<span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>
+                                            <span class="sortorder" ng-show="email === 'medicalReport'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('')">
+                                            Medical Report Document<span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>
+                                            <span class="sortorder" ng-show="propertyName === ''" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('email')">
+                                            Character Certificate Document<span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>
+                                            <span class="sortorder" ng-show="email === 'email'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('')">
+                                            Action
+                                            <span class="sortorder" ng-show="propertyName === ''" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        @if (EncriptDecript.Decrypt(DataLayer.ClsLanguage.GetCookies("ENNBUserType")) == Convert.ToInt32(DataLayer.CommonSetting.UserType.Admin).ToString())
+                                        {
+                                            <th ng-click="sortBy('')">
+                                                Status
+                                                <span class="sortorder" ng-show="propertyName === ''" ng-class="{reverse: reverse}"></span>
+                                            </th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr ng-repeat="qualidetail in qlist | filter:search  | orderBy:propertyName:reverse">
+                                        <td>{{ ((pageIndex-1)*pageSizeSelected)+$index+1 }}</td>
+                                        <td>{{qualidetail.employeeNo}}</td>
+                                        <td>{{qualidetail.memberName}}</td>
+                                        <td>{{qualidetail.characterCertificate}}</td>
+                                        <td>{{qualidetail.gpfNo}}</td>
+                                        <td ng-if="qualidetail.isMarried==true">
+                                            Married
+                                        </td>
+                                        <td ng-if="qualidetail.isMarried==false">
+                                            UnMarried
+                                        </td>
+                                        <td ng-if="qualidetail.medicalReport!=''">
+                                            <a class="btn btn-sm btn-primary myBtn acolor" style="color:white" data-medicalreport="{{qualidetail.medicalReport}}" data-name="{{qualidetail.memberName}}">Details</a>
+                                        </td>
+                                        <td ng-if="qualidetail.medicalReport==''"></td>
+                                        <td ng-if="qualidetail.medicalReportDoc!=''">
+                                            <a title="View" href="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/College/{{qualidetail.medicalReportDoc}}" target="_blank" class="btn btn-info btn-sm btndesign acolor" style="color:white">View</a>
+                                        </td>
+                                        <td ng-if="qualidetail.medicalReportDoc==''"></td>
+                                        <td ng-if="qualidetail.characterCertificateDoc!=''">
+                                            <a title="View" href="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/College/{{qualidetail.characterCertificateDoc}}" target="_blank" class="btn btn-info btn-sm btndesign acolor" style="color:white">View</a>
+                                        </td>
+                                        <td ng-if="qualidetail.characterCertificateDoc==''"></td>
+
+                                        <td ng-if="qualidetail.employeeID==@UserID">
+                                            <a title="Edit" href="~/College/Home/EmployeeInformation/{{qualidetail.encriptedID}}"><i class="fa fa-edit"></i></a>
+                                        </td>
+
+                                        <td ng-if="qualidetail.employeeID!=@UserID"></td>
+                                        @if (EncriptDecript.Decrypt(DataLayer.ClsLanguage.GetCookies("ENNBUserType")) == Convert.ToInt32(DataLayer.CommonSetting.UserType.Admin).ToString())
+                                        {
+                                            <td ng-if="qualidetail.isVerify==0">
+                                                <a class="btn btn-sm btn-primary acolor"style="color:white" href="~/College/Home/EmployeeInformationVerify/{{qualidetail.encriptedeID}}">Verify</a>
+                                            </td>
+                                            <td ng-if="qualidetail.isVerify==1">
+                                                <a class="btn btn-sm btn-primary acolor" style="color:white" href="~/College/Home/EmployeeInformationVerify/{{qualidetail.encriptedeID}}">Verified</a>
+                                            </td>
+                                            <td ng-if="qualidetail.isVerify==2">
+                                                <a class="btn btn-sm btn-primary acolor" style="color:white"  href="~/College/Home/EmployeeInformationVerify/{{qualidetail.encriptedeID}}">Rejected</a>
+                                            </td>
+                                        }
+                                    </tr>
+
+                                </tbody>
+                                <tfoot>
+                                    <tr ng-show="(qlist |filter:search).length == 0">
+                                        <td colspan="6" style="text-align:center">
+                                            <h4 style="color:red;"> </h4>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" colspan="14">
+                                            <div class="pull-left" ng-show="(qlist |filter:search).length > 0">
+                                                <div ng-show="numPages > 1">
+                                                    <pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected"
+                                                                direction-links="true" ng-model="pageIndex"
+                                                                max-size="maxSize" class="pagination" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 col-md-offset1">
+    <div class="container-fluid">
+        <div id="InformationproModalhdbgcl" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
+            <div class="modal-dialog" style="width:80%">
+                <div class="modal-content">
+                    <div class="modal-header header-color-modal bg-color-2">
+                        <h4 class="modal-title">Medical Report Of <span id="name"></span></h4>
+                        <div class="modal-close-area modal-close-df">
+                            <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                        </div>
+                    </div>
+                    <div class="modal-body" style="overflow:scroll">
+                        <div id="dynamicvalue"></div>
+                    </div>
+                    <div class="modal-footer info-md">
+                        <a data-dismiss="modal" href="#">Close</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).on('click', '.myBtn', function () {
+        var medicalreport = $(this).data("medicalreport");
+        var name = $(this).data("name");
+        if (medicalreport == "") {
+            $("#dynamicvalue").html('');
+            $("#InformationproModalhdbgcl").modal('');
+            return;
+        }
+        else {
+            $("#dynamicvalue").html(medicalreport);
+            $("#InformationproModalhdbgcl").modal();
+            $("#name").html(name);
+
+        }
+    });
+</script>
+
+
+

@@ -1,0 +1,1050 @@
+﻿@model DataLayer.EmployeeRegisteration
+@{
+    ViewBag.Title = "EmployeeRegistration";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+<style>
+    /* ========== BRAND COLORS ========== */
+    :root {
+        --brand-primary: #5f4fe3;
+        --brand-primary-dark: #4a3bc4;
+        --brand-secondary: #246dd4;
+        --brand-gradient: linear-gradient(135deg, #5f4fe3 0%, #246dd4 100%);
+        --brand-gradient-light: linear-gradient(135deg, rgba(95,79,227,0.1) 0%, rgba(36,109,212,0.1) 100%);
+        --bg-light: #f5f7ff;
+        --text-dark: #1e293b;
+        --text-gray: #64748b;
+        --border-light: #e2e8f0;
+        --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+        --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+        --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.1);
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 20px;
+        --radius-xl: 28px;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .emp-wrapper {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 10px;
+    }
+
+    /* Hero Section - Brand Colors */
+    .hero-brand {
+        background: var(--brand-gradient);
+        border-radius: var(--radius-xl);
+        padding: 28px 32px;
+        margin-bottom: 28px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-brand::after {
+        content: '👥';
+        position: absolute;
+        bottom: -15px;
+        right: 20px;
+        font-size: 90px;
+        opacity: 0.08;
+    }
+
+    .hero-brand h1 {
+        color: white;
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0;
+        letter-spacing: -0.3px;
+    }
+
+    .hero-brand p {
+        color: rgba(255,255,255,0.85);
+        font-size: 13px;
+        margin: 8px 0 0;
+    }
+
+    /* Stats Row */
+    .stats-row-brand {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+        margin-bottom: 28px;
+    }
+
+    .stat-card-brand {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 18px 22px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        box-shadow: var(--shadow-md);
+        border: 1px solid rgba(95,79,227,0.1);
+        transition: all 0.3s;
+    }
+
+    .stat-card-brand:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .stat-icon-brand {
+        width: 52px;
+        height: 52px;
+        background: var(--brand-gradient);
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        color: white;
+    }
+
+    .stat-content-brand h2 {
+        font-size: 24px;
+        font-weight: 800;
+        margin: 0;
+        color: var(--text-dark);
+    }
+
+    .stat-content-brand p {
+        font-size: 11px;
+        color: var(--text-gray);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin: 4px 0 0;
+    }
+
+    /* Main Form Card */
+    .form-card-brand {
+        background: white;
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+    }
+
+    /* Form Header Tabs */
+    .form-tabs-brand {
+        background: white;
+        padding: 0 28px;
+        display: flex;
+        gap: 8px;
+        border-bottom: 2px solid var(--border-light);
+    }
+
+    .tab-btn-brand {
+        padding: 16px 28px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-gray);
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s;
+        background: none;
+        border: none;
+    }
+
+    .tab-btn-brand i {
+        margin-right: 8px;
+    }
+
+    .tab-btn-brand.active {
+        color: var(--brand-primary);
+        border-bottom-color: var(--brand-primary);
+    }
+
+    /* Form Body */
+    .form-body-brand {
+        padding: 28px;
+    }
+
+    /* Two Column Layout */
+    .two-col-brand {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 28px;
+    }
+
+    /* Left Column */
+    .fields-col {
+        background: var(--bg-light);
+        border-radius: var(--radius-lg);
+        padding: 22px;
+    }
+
+    .section-title-brand {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--brand-primary);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .section-title-brand i {
+        font-size: 16px;
+    }
+
+    /* Grid Layout for Fields */
+    .fields-grid-brand {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+    }
+
+    .field-brand {
+        margin-bottom: 5px;
+    }
+
+    .field-brand label {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-gray);
+        margin-bottom: 6px;
+        text-transform: uppercase;
+    }
+
+    .field-brand .required {
+        color: #ef4444;
+    }
+
+    .field-brand input,
+    .field-brand select {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1.5px solid var(--border-light);
+        border-radius: var(--radius-sm);
+        font-size: 13px;
+        transition: all 0.2s;
+        background: white;
+    }
+
+    .field-brand input:focus,
+    .field-brand select:focus {
+        border-color: var(--brand-primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(95,79,227,0.1);
+    }
+
+    /* Date Input Group - Fixed */
+    .date-group-brand {
+        position: relative;
+    }
+
+    .date-group-brand input {
+        padding-right: 38px;
+    }
+
+    .date-group-brand .date-icon {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-gray);
+        pointer-events: none;
+        font-size: 14px;
+    }
+
+    /* Right Column - Photo Signature Premium */
+    .media-col-brand {
+        background: var(--brand-gradient);
+        border-radius: var(--radius-lg);
+        padding: 22px;
+    }
+
+    .media-header-brand {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .media-header-brand h3 {
+        color: white;
+        font-size: 18px;
+        margin: 0;
+    }
+
+    .media-header-brand p {
+        color: rgba(255,255,255,0.8);
+        font-size: 11px;
+        margin: 5px 0 0;
+    }
+
+    /* Photo Upload Premium */
+    .photo-upload-premium {
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px);
+        border-radius: var(--radius-lg);
+        padding: 25px 20px;
+        text-align: center;
+        margin-bottom: 20px;
+        border: 1px dashed rgba(255,255,255,0.3);
+    }
+
+    .photo-preview-brand {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 auto 15px;
+        border: 3px solid white;
+        box-shadow: var(--shadow-lg);
+    }
+
+    .btn-upload-brand {
+        background: white;
+        color: var(--brand-primary);
+        border: none;
+        padding: 10px 24px;
+        border-radius: 40px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-upload-brand:hover {
+        transform: scale(1.02);
+        box-shadow: var(--shadow-md);
+    }
+
+    .file-name-brand {
+        font-size: 10px;
+        color: rgba(255,255,255,0.7);
+        margin-top: 10px;
+        word-break: break-all;
+    }
+
+    /* Signature Upload Premium */
+    .signature-upload-premium {
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px);
+        border-radius: var(--radius-lg);
+        padding: 18px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .sign-preview-brand {
+        width: 100px;
+        height: 60px;
+        object-fit: contain;
+        background: white;
+        border-radius: var(--radius-sm);
+        padding: 5px;
+    }
+
+    .sign-info-brand {
+        flex: 1;
+    }
+
+    .sign-info-brand label {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 10px;
+    }
+
+    .btn-sign-brand {
+        background: white;
+        color: var(--brand-primary);
+        border: none;
+        padding: 8px 20px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-sign-brand:hover {
+        transform: scale(1.02);
+    }
+
+    /* Address Section */
+    .address-block-brand {
+        margin-top: 20px;
+        background: var(--bg-light);
+        border-radius: var(--radius-lg);
+        padding: 18px;
+    }
+
+    .address-header-brand {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .address-header-brand span {
+        font-weight: 700;
+        font-size: 13px;
+        color: var(--text-dark);
+    }
+
+    .checkbox-brand {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+    .checkbox-brand input {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        accent-color: var(--brand-primary);
+    }
+
+    .address-grid-brand {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    /* Family Section */
+    .family-block-brand {
+        margin-top: 20px;
+        background: var(--bg-light);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+    }
+
+    .family-header-brand {
+        background: white;
+        padding: 14px 20px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .family-header-brand span {
+        font-weight: 700;
+        font-size: 13px;
+        color: var(--text-dark);
+    }
+
+    .family-body-brand {
+        padding: 20px;
+        display: none;
+    }
+
+    .family-body-brand.open {
+        display: block;
+    }
+
+    /* Submit Button */
+    .submit-area-brand {
+        margin-top: 25px;
+        text-align: center;
+        padding: 20px;
+        background: var(--bg-light);
+        border-radius: var(--radius-lg);
+    }
+
+    .btn-submit-brand {
+        background: var(--brand-gradient);
+        border: none;
+        padding: 14px 50px;
+        border-radius: 50px;
+        color: white;
+        font-weight: 700;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: var(--shadow-md);
+    }
+
+    .btn-submit-brand:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    /* Alert Message */
+    .alert-brand {
+        background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+        border-left: 4px solid #10b981;
+        padding: 14px 20px;
+        border-radius: var(--radius-md);
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    /* Helper Text */
+    .helper-text-brand {
+        font-size: 10px;
+        color: var(--text-gray);
+        margin-top: 4px;
+    }
+
+    /* Responsive */
+    @@media (max-width: 1024px) {
+        .two-col-brand {
+            grid-template-columns: 1fr;
+        }
+        .stats-row-brand {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .stats-row-brand {
+            grid-template-columns: 1fr;
+        }
+        .fields-grid-brand {
+            grid-template-columns: 1fr;
+        }
+        .address-grid-brand {
+            grid-template-columns: 1fr;
+        }
+        .form-tabs-brand {
+            overflow-x: auto;
+            padding: 0 15px;
+        }
+        .tab-btn-brand {
+            padding: 12px 18px;
+            font-size: 12px;
+        }
+        .form-body-brand {
+            padding: 18px;
+        }
+        .signature-upload-premium {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+
+    /* Animation */
+    @@keyframes fadeSlide {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-card-brand {
+        animation: fadeSlide 0.4s ease;
+    }
+</style>
+
+<script>
+    var now = new Date();
+    var startdate = new Date(now.getFullYear() - 100, now.getMonth(), now.getDay());
+    var enddate = now;
+</script>
+<script src="~/scripts/Customjs/EmployeeRegistration.js"></script>
+<script src="~/JS/Commonjs.js"></script>
+
+<div class="emp-wrapper">
+    <!-- Hero Section -->
+    <div class="hero-brand">
+        <h1><i class="fa fa-id-card"></i> Employee Registration Portal</h1>
+        <p>Complete the registration form to add new employee to the system</p>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-row-brand">
+        <div class="stat-card-brand">
+            <div class="stat-icon-brand"><i class="fa fa-users"></i></div>
+            <div class="stat-content-brand">
+                <h2>0</h2>
+                <p>Total Employees</p>
+            </div>
+        </div>
+        <div class="stat-card-brand">
+            <div class="stat-icon-brand" style="background: linear-gradient(135deg, #f59e0b, #d97706);"><i class="fa fa-user-plus"></i></div>
+            <div class="stat-content-brand">
+                <h2>New</h2>
+                <p>Registration</p>
+            </div>
+        </div>
+        <div class="stat-card-brand">
+            <div class="stat-icon-brand"><i class="fa fa-building"></i></div>
+            <div class="stat-content-brand">
+                <h2>@(ViewBag.CollegeName?.ToString().Length > 15 ? ViewBag.CollegeName?.ToString().Substring(0, 15) + "..." : ViewBag.CollegeName)</h2>
+                <p>College</p>
+            </div>
+        </div>
+        <div class="stat-card-brand">
+            <div class="stat-icon-brand"><i class="fa fa-calendar"></i></div>
+            <div class="stat-content-brand">
+                <h2>@DateTime.Now.Year</h2>
+                <p>Session</p>
+            </div>
+        </div>
+    </div>
+
+    @if (TempData["StMessage"] != null)
+    {
+        <div class="alert-brand">
+            <i class="fa fa-check-circle" style="color: #10b981; font-size: 18px;"></i>
+            <span style="color: #065f46;">@TempData["StMessage"]</span>
+        </div>
+    }
+
+    @using (Html.BeginForm("EmployeeRegistration", "Home", FormMethod.Post, new { id = "myform", enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-card-brand">
+            <!-- Tabs -->
+            <div class="form-tabs-brand">
+                <button type="button" class="tab-btn-brand active" data-tab="basic">
+                    <i class="fa fa-info-circle"></i> Basic Info
+                </button>
+                <button type="button" class="tab-btn-brand" data-tab="personal">
+                    <i class="fa fa-user"></i> Personal
+                </button>
+                <button type="button" class="tab-btn-brand" data-tab="family">
+                    <i class="fa fa-users"></i> Family
+                </button>
+                <button type="button" class="tab-btn-brand" data-tab="address">
+                    <i class="fa fa-map-marker"></i> Address
+                </button>
+            </div>
+
+            <!-- Form Body -->
+            <div class="form-body-brand">
+                <div class="two-col-brand">
+                    <!-- Left Column - Form Fields -->
+                    <div class="fields-col">
+                        <!-- Tab: Basic Info -->
+                        <div id="tab-basic" class="tab-content-brand" style="display: block;">
+                            <div class="section-title-brand">
+                                <i class="fa fa-briefcase"></i> EMPLOYMENT DETAILS
+                            </div>
+                            <div class="fields-grid-brand">
+                                @if (ViewBag.RoleType == 1 && Model != null)
+                                {
+                                    <div class="field-brand">
+                                        <label>DESIGNATION</label>
+                                        <div style="padding:12px 14px; background:#e2e8f0; border-radius:8px;">@Model.DesignationName</div>
+                                        @Html.HiddenFor(model => model.Designation)
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="field-brand">
+                                        <label>DESIGNATION <span class="required">*</span></label>
+                                        @Html.DropDownListFor(model => model.Designation, new SelectList(ViewBag.Designation, "URoleID", "URole"), "Select Designation", new { @class = "form-control", @id = "Designation", @required = "required" })
+                                    </div>
+                                }
+
+                                <div class="field-brand">
+                                    <label>USERNAME <span class="required">*</span></label>
+                                    @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", @placeholder = "Enter username", @required = "required", @oninput = "SpaceRemovevalue(this);" })
+                                    <div id="UError" class="helper-text-brand" style="color:#ef4444;"></div>
+                                </div>
+
+                                <div class="field-brand">
+                                    <label>JOINING DATE <span class="required">*</span></label>
+                                    <div class="date-group-brand">
+                                        @Html.TextBoxFor(model => model.JoiningDate, new { @class = "form-control", @id = "JoiningDate", @placeholder = "DD/MM/YYYY", @autocomplete = "off", @required = "required" })
+                                        <i class="fa fa-calendar date-icon"></i>
+                                    </div>
+                                </div>
+
+                                <div class="field-brand">
+                                    <label>EMPLOYEE TYPE <span class="required">*</span></label>
+                                    @Html.DropDownListFor(model => model.facultyType, new SelectList(ViewBag.FacultyType, "URoleID", "URole", ""), "Select Type", new { @class = "form-control", @id = "FacultyType", @required = "required" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab: Personal Details -->
+                        <div id="tab-personal" class="tab-content-brand" style="display: none;">
+                            <div class="section-title-brand">
+                                <i class="fa fa-id-card"></i> PERSONAL INFORMATION
+                            </div>
+                            <div class="fields-grid-brand">
+                                <div class="field-brand">
+                                    <label>TITLE <span class="required">*</span></label>
+                                    @Html.DropDownListFor(model => model.title, new SelectList(ViewBag.stitle, "CommonId", "title"), "Select Title", new { @class = "form-control", @id = "title", @required = "required" })
+                                </div>
+
+                                <div class="field-brand">
+                                    <label>FIRST NAME <span class="required">*</span></label>
+                                    @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", @placeholder = "First name", @required = "required" })
+                                    @if (Model != null)
+                                    {@Html.HiddenFor(model => model.hid)}
+                                </div>
+
+                                <div class="field-brand">
+                                    <label>MIDDLE NAME</label>
+                                    @Html.TextBoxFor(model => model.MiddleName, new { @class = "form-control", @placeholder = "Middle name" })
+                                </div>
+
+                                <div class="field-brand">
+                                    <label>LAST NAME</label>
+                                    @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", @placeholder = "Last name" })
+                                </div>
+
+                                <div class="field-brand">
+                                    <label>GENDER</label>
+                                    @Html.DropDownListFor(model => model.Gender, new SelectList(ViewBag.Gender, "CommonId", "title", ""), "Select Gender", new { @class = "form-control", @id = "Gender" })
+                                </div>
+
+                                <div class="field-brand">
+                                    <label>DATE OF BIRTH</label>
+                                    <div class="date-group-brand">
+                                        @Html.TextBoxFor(model => model.DOB, new { @class = "form-control", @id = "datepicker", @placeholder = "DD/MM/YYYY", @autocomplete = "off" })
+                                        <i class="fa fa-calendar date-icon"></i>
+                                    </div>
+                                </div>
+
+                                <div class="field-brand">
+                                    <label>CATEGORY</label>
+                                    @Html.DropDownListFor(model => model.CastCategory, new SelectList(ViewBag.CasteCategory, "CommonId", "title", ""), "Select Category", new { @class = "form-control", @id = "Cast" })
+                                </div>
+
+                                <div class="field-brand">
+                                    <label>MOBILE NO <span class="required">*</span></label>
+                                    @Html.TextBoxFor(model => model.MobileNo, new { @class = "form-control", @maxlength = "10", @oninput = "OnlyIntvalue(this);", @placeholder = "9876543210", @required = "required", @id = "MobileNo" })
+                                    <div id="MError" class="helper-text-brand" style="color:#ef4444;"></div>
+                                </div>
+
+                                <div class="field-brand">
+                                    <label>EMAIL <span class="required">*</span></label>
+                                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = "employee@company.com", @type = "email", @required = "required", @id = "Email" })
+                                    <div id="EError" class="helper-text-brand" style="color:#ef4444;"></div>
+                                </div>
+
+                                <div class="field-brand">
+                                    <label>BLOOD GROUP</label>
+                                    @Html.DropDownListFor(model => model.BloodGroup, new SelectList(ViewBag.bloodgroup, "bloodgrouid", "BloodGroup", ""), "Select Blood Group", new { @class = "form-control", @id = "Blood_Group" })
+                                </div>
+
+                                <div class="field-brand">
+                                    <label>NATIONALITY</label>
+                                    @Html.DropDownListFor(model => model.Nationality, new SelectList(ViewBag.Nationality, "CommonId", "title", ""), "Select Nationality", new { @class = "form-control", @id = "Nationality" })
+                                </div>
+
+                                <div class="field-brand">
+                                    <label>RELIGION</label>
+                                    @Html.DropDownListFor(model => model.Religion, new SelectList(ViewBag.Religion, "CommonId", "title", ""), "Select Religion", new { @class = "form-control", @id = "Religion" })
+                                </div>
+
+                                <div id="ReligonOther" style="display:none; grid-column: span 2;">
+                                    <div class="field-brand">
+                                        <label>OTHER RELIGION <span class="required">*</span></label>
+                                        @Html.TextBoxFor(model => model.ReligonOther, new { @class = "form-control", @id = "txtReligonOther", @placeholder = "Please specify" })
+                                    </div>
+                                </div>
+
+                                <div class="field-brand">
+                                    <label>EMERGENCY CONTACT</label>
+                                    @Html.TextBoxFor(model => model.EContactNo, new { @class = "form-control", @maxlength = "10", @oninput = "OnlyIntvalue(this);", @placeholder = "Emergency number" })
+                                </div>
+
+                                <div class="field-brand">
+                                    <label>HEIGHT (CM)</label>
+                                    @Html.TextBoxFor(model => model.EmployeeHeight, new { @class = "form-control", @placeholder = "175", @oninput = "OnlyIntvalue(this);" })
+                                    <div class="helper-text-brand">Enter height in centimeters</div>
+                                </div>
+
+                                <div class="field-brand" style="grid-column: span 2;">
+                                    <label>IDENTIFICATION MARKS</label>
+                                    @Html.TextBoxFor(model => model.IdentificationsMarks, new { @class = "form-control", @placeholder = "Mole on cheek, scar on hand" })
+                                    <div class="helper-text-brand">Use commas to separate multiple marks</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab: Family Details -->
+                        <div id="tab-family" class="tab-content-brand" style="display: none;">
+                            <div class="section-title-brand">
+                                <i class="fa fa-male"></i> FATHER / HUSBAND DETAILS
+                            </div>
+                            <div class="fields-grid-brand">
+                                <div class="field-brand">
+                                    <label>TITLE</label>
+                                    @Html.DropDownListFor(model => model.Ftitle, new SelectList(ViewBag.ftitle, "CommonId", "title"), "Select Title", new { @class = "form-control", @id = "Ftitle" })
+                                </div>
+                                <div class="field-brand">
+                                    <label>NAME</label>
+                                    @Html.TextBoxFor(model => model.FatherName, new { @class = "form-control", @placeholder = "Father/Husband name" })
+                                </div>
+                                <div class="field-brand">
+                                    <label>MOBILE</label>
+                                    @Html.TextBoxFor(model => model.FatherMobile, new { @class = "form-control", @maxlength = "10", @oninput = "OnlyIntvalue(this);", @placeholder = "Mobile number" })
+                                </div>
+                                <div class="field-brand">
+                                    <label>EMAIL</label>
+                                    @Html.TextBoxFor(model => model.FatherEmail, new { @class = "form-control", @placeholder = "Email", @type = "email" })
+                                </div>
+                                <div class="field-brand">
+                                    <label>QUALIFICATION</label>
+                                    @Html.TextBoxFor(model => model.FatherQualification, new { @class = "form-control", @placeholder = "Qualification" })
+                                </div>
+                                <div class="field-brand">
+                                    <label>OCCUPATION</label>
+                                    @Html.TextBoxFor(model => model.FatherOccupation, new { @class = "form-control", @placeholder = "Occupation" })
+                                </div>
+                            </div>
+
+                            <div class="section-title-brand" style="margin-top: 25px;">
+                                <i class="fa fa-female"></i> MOTHER DETAILS
+                            </div>
+                            <div class="fields-grid-brand">
+                                <div class="field-brand">
+                                    <label>NAME</label>
+                                    @Html.TextBoxFor(model => model.MotherName, new { @class = "form-control", @placeholder = "Mother name" })
+                                </div>
+                                <div class="field-brand">
+                                    <label>MOBILE</label>
+                                    @Html.TextBoxFor(model => model.MotherMobile, new { @class = "form-control", @maxlength = "10", @oninput = "OnlyIntvalue(this);", @placeholder = "Mobile number" })
+                                </div>
+                                <div class="field-brand">
+                                    <label>EMAIL</label>
+                                    @Html.TextBoxFor(model => model.MotherEmail, new { @class = "form-control", @placeholder = "Email", @type = "email" })
+                                </div>
+                                <div class="field-brand">
+                                    <label>QUALIFICATION</label>
+                                    @Html.TextBoxFor(model => model.MotherQualification, new { @class = "form-control", @placeholder = "Qualification" })
+                                </div>
+                                <div class="field-brand">
+                                    <label>OCCUPATION</label>
+                                    @Html.TextBoxFor(model => model.MotherOccupation, new { @class = "form-control", @placeholder = "Occupation" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab: Address -->
+                        <div id="tab-address" class="tab-content-brand" style="display: none;">
+                            <div class="address-block-brand">
+                                <div class="address-header-brand">
+                                    <span><i class="fa fa-map-marker"></i> CORRESPONDENCE ADDRESS</span>
+                                </div>
+                                <div class="address-grid-brand">
+                                    <div class="field-brand" style="grid-column: span 2;">
+                                        <label>ADDRESS</label>
+                                        @Html.TextBoxFor(model => model.CurrentAddress, new { @class = "form-control", @placeholder = "House No, Street, Area" })
+                                    </div>
+                                    <div class="field-brand">
+                                        <label>CITY</label>
+                                        @Html.TextBoxFor(model => model.CA_City, new { @class = "form-control", @placeholder = "City" })
+                                    </div>
+                                    <div class="field-brand">
+                                        <label>PIN CODE</label>
+                                        @Html.TextBoxFor(model => model.CA_PinCode, new { @class = "form-control", @maxlength = "6", @oninput = "OnlyIntvalue(this);", @placeholder = "Pin code" })
+                                    </div>
+                                    <div class="field-brand">
+                                        <label>STATE</label>
+                                        @Html.DropDownListFor(model => model.CA_State, new SelectList(ViewBag.CAState, "stateID", "statename"), "Select State", new { @class = "form-control", @id = "State" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="address-block-brand" style="margin-top: 18px;">
+                                <div class="address-header-brand">
+                                    <span><i class="fa fa-home"></i> PERMANENT ADDRESS</span>
+                                    <div class="checkbox-brand" onclick="document.getElementById('parmanentcheckbox').click();">
+                                        <input type="checkbox" id="parmanentcheckbox">
+                                        <span>Same as above</span>
+                                    </div>
+                                </div>
+                                <div class="address-grid-brand">
+                                    <div class="field-brand" style="grid-column: span 2;">
+                                        <label>ADDRESS</label>
+                                        @Html.TextBoxFor(model => model.PA_Address, new { @class = "form-control", @placeholder = "Permanent Address" })
+                                    </div>
+                                    <div class="field-brand">
+                                        <label>CITY</label>
+                                        @Html.TextBoxFor(model => model.PA_City, new { @class = "form-control", @placeholder = "City" })
+                                    </div>
+                                    <div class="field-brand">
+                                        <label>PIN CODE</label>
+                                        @Html.TextBoxFor(model => model.PA_PinCode, new { @class = "form-control", @maxlength = "6", @oninput = "OnlyIntvalue(this);", @placeholder = "Pin code" })
+                                    </div>
+                                    <div class="field-brand">
+                                        <label>STATE</label>
+                                        @Html.DropDownListFor(model => model.PA_State, new SelectList(ViewBag.PAState, "stateID", "statename"), "Select State", new { @class = "form-control", @id = "PState" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column - Photo & Signature Premium -->
+                    <div class="media-col-brand">
+                        <div class="media-header-brand">
+                            <h3><i class="fa fa-camera"></i> Photo & Signature</h3>
+                            <p>Upload recent photograph and signature</p>
+                        </div>
+
+                        <!-- Photo Upload -->
+                        <div class="photo-upload-premium">
+                            @if (Model != null && !string.IsNullOrEmpty(Model.stphoto))
+                            {
+                                <img id="userImage" class="photo-preview-brand" src='@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/College/@Model.stphoto' />
+                            }
+                            else
+                            {
+                                <img id="userImage" class="photo-preview-brand" src='~/images/noimage.png' />
+                            }
+                            <div>
+                                <button type="button" class="btn-upload-brand" onclick="$('#photo').click();">
+                                    <i class="fa fa-upload"></i> Choose Photo
+                                </button>
+                                <input type="file" id="photo" onchange="show(this);" name="photo" style="display:none;" accept="image/*">
+                            </div>
+                            @Html.TextBoxFor(model => model.stphoto, new { @class = "file-name-brand", @id = "append-big-btn", @placeholder = "No file selected", @readonly = "readonly" })
+                            <div class="helper-text-brand" style="color:rgba(255,255,255,0.6);">JPG, PNG | Max: 50KB</div>
+                        </div>
+
+                        <!-- Signature Upload -->
+                        <div class="signature-upload-premium">
+                            @if (Model != null && !string.IsNullOrEmpty(Model.stsign))
+                            {
+                                <img id="signImage" class="sign-preview-brand" src='@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/College/@Model.stsign' />
+                            }
+                            else
+                            {
+                                <img id="signImage" class="sign-preview-brand" src='~/images/noimage.png' />
+                            }
+                            <div class="sign-info-brand">
+                                <label><i class="fa fa-pencil"></i> Signature</label>
+                                <button type="button" class="btn-sign-brand" onclick="$('#sign').click();">
+                                    Upload Signature
+                                </button>
+                                <input type="file" id="sign" onchange="show1(this)" name="sign" style="display:none;" accept="image/*">
+                                @Html.TextBoxFor(model => model.stsign, new { @class = "file-name-brand", @id = "append-big-btn2", @placeholder = "No file", @readonly = "readonly", style = "margin-top:8px;" })
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 15px; text-align: center; font-size: 10px; color: rgba(255,255,255,0.6);">
+                            <i class="fa fa-info-circle"></i> Allowed: JPG, JPEG, PNG
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="submit-area-brand">
+                    @if (ViewBag.updatebutton == true)
+                    {
+                        <button type="submit" class="btn-submit-brand" onclick="return checkphotosign()">
+                            <i class="fa fa-refresh"></i> UPDATE EMPLOYEE
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn-submit-brand" onclick="return checkphotosign()">
+                            <i class="fa fa-save"></i> REGISTER EMPLOYEE
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Loader -->
+<div id="progress" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999;">
+    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:white; padding:30px 50px; border-radius:20px; text-align:center; box-shadow:0 20px 40px rgba(0,0,0,0.2);">
+        <img src="~/images/loader4.gif" style="width:50px;" />
+        <p style="margin-top:12px; font-weight:600;">Processing...</p>
+    </div>
+</div>
+
+<script type="text/javascript">
+    // Image upload functions
+    function show(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) { $('#userImage').attr('src', e.target.result); }
+            reader.readAsDataURL(input.files[0]);
+            $('#append-big-btn').val(input.files[0].name);
+        }
+    }
+
+    function show1(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) { $('#signImage').attr('src', e.target.result); }
+            reader.readAsDataURL(input.files[0]);
+            $('#append-big-btn2').val(input.files[0].name);
+        }
+    }
+
+    function SpaceRemovevalue(textbox) {
+        textbox.value = textbox.value.split(' ').join('');
+    }
+
+    function OnlyIntvalue(input) {
+        input.value = input.value.replace(/[^0-9]/g, '');
+    }
+
+    function showloader() { $('#progress').show(); }
+    function checkphotosign() { showloader(); return true; }
+
+    $("#myform").submit(function(e) { showloader(); });
+
+    // Tab Switching
+    $(document).ready(function() {
+        $('.tab-btn-brand').click(function() {
+            var tab = $(this).data('tab');
+            $('.tab-btn-brand').removeClass('active');
+            $(this).addClass('active');
+            $('.tab-content-brand').hide();
+            $('#tab-' + tab).show();
+        });
+
+        // Religion other
+        var otherReligionId = @Convert.ToInt16(DataLayer.CommonSetting.Religion.OtherReligion);
+        if ($('#Religion').val() == otherReligionId) $('#ReligonOther').show();
+
+        $('#Religion').change(function() {
+            if ($(this).val() == otherReligionId) {
+                $('#ReligonOther').show();
+                $('#txtReligonOther').attr('required', 'required');
+            } else {
+                $('#ReligonOther').hide();
+                $('#txtReligonOther').removeAttr('required').val('');
+            }
+        });
+
+        // Preset values for edit mode
+        var selects = {
+            '#Designation': '@ViewBag.Designationid',
+            '#FacultyType': '@ViewBag.FacultyTypeid',
+            '#Gender': '@ViewBag.genderid',
+            '#Cast': '@ViewBag.castid',
+            '#Blood_Group': '@ViewBag.bloodgroupid',
+            '#title': '@ViewBag.titileid',
+            '#Ftitle': '@ViewBag.ftitileid',
+            '#Nationality': '@ViewBag.Nationalityid',
+            '#Religion': '@ViewBag.Religionid'
+        };
+        $.each(selects, function(sel, val) {
+            if (val) $(sel).val(val);
+        });
+
+        // Initialize datepickers
+        if (typeof $.fn.datepicker !== 'undefined') {
+            $('#JoiningDate, #datepicker').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true
+            });
+        }
+    });
+</script>

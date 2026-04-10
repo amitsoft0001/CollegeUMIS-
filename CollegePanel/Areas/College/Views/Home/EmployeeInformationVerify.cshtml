@@ -1,0 +1,430 @@
+﻿@model DataLayer.CollegeEmployee_Information
+
+@{
+    ViewBag.Title = "EmployeeInformationVerify";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+<style>
+    body {
+        padding: 0;
+    }
+
+    .event-form input[type="text"] {
+        width: 100%;
+        border: 1px solid #ccc;
+        line-height: 40px;
+        padding: 0 10px;
+    }
+
+    .event-form select {
+        width: 100%;
+        border: 1px solid #ccc;
+        line-height: 40px;
+        height: 40px;
+        padding: 0 10px;
+    }
+
+    .event-form textarea {
+        width: 100%;
+        border: 1px solid #ccc;
+        line-height: 40px;
+        padding: 0 10px;
+    }
+
+    button.Submit-btn {
+        font-size: 17px;
+        background-color: #1a6fe8;
+        border: 0;
+        color: #FFF;
+        padding: 8px 15px;
+        font-weight: 600;
+        border-radius: 4px;
+    }
+
+    .spacedesign {
+        padding-bottom: 20px;
+    }
+
+    .spaceleft {
+        padding-left: 10px;
+    }
+
+    .textareadesign {
+        border: 1px solid #ccc;
+    }
+
+    .textsize {
+        font-size: 12px;
+    }
+  
+
+    label {
+        padding: 10px;
+    }
+
+    .btndesign {
+        margin-top: 20px;
+    }
+
+    .starvalid {
+        color: red;
+    }
+
+    .minheight {
+        min-height: 450px;
+    }
+
+    .spacedesign {
+        padding-bottom: 20px;
+    }
+
+    .panel-body a {
+        font-size: 14px;
+        color: white;
+        margin-top: 0px !important;
+        padding: 1px 4px 1px 6px;
+    }
+
+    .right {
+        text-align: right;
+    }
+
+    .left {
+        text-align: left;
+    }
+</style>
+<div class="container-fluid minheight">
+    <div class="all-content-wrapper sparkline10-list" style="margin-left:0px !important">
+        <div class="advanced-form-area mg-b-15 ">
+            <div class="sparkline10-graph">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <h3 class="text-center">Employee Certificate Verification </h3>
+
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="panel-body">
+                                @if (Model != null)
+                                    {
+                                    <div class="product-payment-inner-st">
+                                        <div class="text-center spacedesign">
+                                            <ul id="myTabedu1" class="tab-review-design">
+                                                <li class="active"><span class="text-center"><a href="#description">Employee Information</a></span></li>
+                                            </ul>
+                                        </div>
+
+                                        <div id="myTabContent" class="tab-content custom-product-edit">
+                                            <div class="product-tab-list tab-pane fade active in" id="description">
+                                                <div class="review-content-section basic-detail-part">
+                                                    <div id="dropzone1" class="pro-ad">
+                                                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer table-responsive">
+                                                            <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed dataTable ">
+                                                                <tr role="row">
+                                                                    @Html.HiddenFor(m => m.hid)
+                                                                    <th>Employee ID:</th>
+                                                                    <td>@Model.EmployeeNo</td>
+                                                                    <th>Employee Name:</th>
+                                                                    <td>@Model.MemberName</td>
+                                                                    <th>Character Certificate Report:</th>
+                                                                    <td>@Model.CharacterCertificate</td>
+                                                                </tr>
+                                                                <tr role="row">
+                                                                    <th>Character Certificate:</th>
+                                                                    @if(Model.CharacterCertificateDoc!="")
+                                                                    {
+                                                                    <td><a title="View" href="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/College/@Model.CharacterCertificateDoc" target="_blank" class="btn btn-info btn-sm">View</a></td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>-</td>
+                                                                    }
+                                                                    <th>Medical Report:</th>
+                                                                    @if (Model.MedicalReport != "")
+                                                                        {
+                                                                        <td>
+                                                                            <a class="btn btn-sm btn-primary myBtn" style="padding:1px 4px 1px 6px;color:white" data-medicalreport="@Model.MedicalReport" data-name="@Model.MemberName">Details</a>
+                                                                        </td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                        <td>-</td>
+                                                                        }
+
+                                                                    <th>Medical Document:</th>
+                                                                    @if (Model.MedicalReportDoc != "")
+                                                                    {
+                                                                        <td><a title="View" href="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/College/@Model.MedicalReportDoc" target="_blank" class="btn btn-info btn-sm">View</a></td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>-</td>
+                                                                    }
+                                                                    
+                                                                </tr>
+                                                                <tr role="row">
+                                                                    <th>GPF NO</th>
+                                                                    <td>@Model.GPFNo</td>
+                                                                    <th>GPF Remarks:</th>
+                                                                    <td>@Model.GPFRemarks</td>
+                                                                    <th>Marital Status:</th>
+                                                                    <td>@(Model.IsMarried==true? "Married" : "UnMarried")</td>
+                                                                </tr>
+                                                                <tr role="row">
+                                                                    <th>Allegiance To The Constitution:</th>
+                                                                    <td>@(Model.IsConstitution == true ? "Yes" : "No")</td>
+                                                                    <th>Oath of Secrecy</th>
+                                                                    <td>@(Model.IsSecrecy == true ? "Yes" : "No")</td>
+                                                                    <th></th>
+                                                                    <td></td>
+                                                                </tr>
+                                                                @if (ViewBag.IsVerify == 1)
+                                                                {
+                                                                    <tr>
+                                                                        <th>Document Status:</th>
+                                                                        <td><div class="check-icon text-success">Approved</div></td>
+                                                                        <th>Verify Date</th>
+                                                                        <td>@Model.Verifydate</td>
+                                                                        <th></th>
+                                                                        <td></td>
+                                                                    </tr>
+                                                                }
+                                                                else if (ViewBag.IsVerify == 2)
+                                                                {
+                                                                    <tr>
+                                                                        <th>Document Status:</th>
+                                                                        <td><div class="check-icon text-danger">Rejected</div></td>
+                                                                        <th>Verify Date</th>
+                                                                        <td>@Model.Verifydate</td>
+                                                                        <th>Reject Reason:</th>
+                                                                        <td><div class="check-icon text-danger">@(ViewBag.Reason != null ? @ViewBag.Reason : "")</div></td>
+                                                                    </tr>
+                                                                    }
+                                                            </table>
+                                                        </div>
+
+                                                        @if (Model.NominneeList.Count > 0)
+                                                            {
+                                                            <label><strong>GPF Nominnee:</strong></label>
+                                                            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer table-responsive">
+                                                                <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed dataTable ">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>
+                                                                                S.No
+                                                                            </th>
+                                                                            <th>
+                                                                                Member Name
+                                                                            </th>
+                                                                            <th>
+                                                                                Percentage
+                                                                            </th>
+                                                                        </tr>
+
+                                                                        @{ int j = 1;}
+                                                                        @for (var i = 0; i < Model.NominneeList.Count; i++)
+                                                                            {
+                                                                            <tr>
+                                                                                <td>@j.</td>
+                                                                                <td>
+                                                                                    @Model.NominneeList[i].MemberName
+                                                                                </td>
+                                                                                <td>
+                                                                                    @Model.NominneeList[i].NominneePercentage
+                                                                                </td>
+                                                                            </tr>
+                                                                                                    j = j + 1;
+
+                                                                                                }
+                                                                    </thead>
+                                                                </table>
+                                                            </div>
+
+                                                                                                }
+                                                        @if (ViewBag.IsVerify == 0)
+                                                            {
+                                                            <div class="row  btndesign">
+                                                                <div class="col-lg-6 right">
+                                                                    <button type="submit" class="btn btn-primary waves-effect waves-light" id="submitapp"> Document Verify</button>
+                                                                </div>
+                                                                <div class="col-lg-6 left">
+                                                                    <button type="submit" class="btn btn-primary waves-effect waves-light" id="submitappreject"> Document Reject</button>
+                                                                </div>
+                                                            </div>
+                                                            }
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*<div class="minheight ">
+
+                <div class="advanced-form-area mg-b-15 ">
+                    <div class="container-fluid col-md-10 col-md-offset-1 col-sm-12 " style="display:block" id="">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="sparkline10-list mg-tb-30 responsive-mg-t-0 table-mg-t-pro-n dk-res-t-pro-0 nk-ds-n-pro-t-0" style="text-align: left;">
+
+                                    <div class="sparkline10-graph">
+                                        <div class="input-knob-dial-wrap">
+                                            <div>
+                                                <div class="form-group-inner">
+                                                    <div class="row login-btn-inner" style="margin:15px !important">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                            <div class="">
+
+                                                                <center>
+                                                                    <a style="color:red;font-size:60px"><span class="fa fa-times "></span></a><br /><br />
+                                                                    <h3>No Data Available!!!</h3>
+                                                                </center>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 col-md-offset1">
+    <div class="container-fluid">
+        <div id="InformationproModalhdbgcl" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
+            <div class="modal-dialog" style="width:80%">
+                <div class="modal-content">
+                    <div class="modal-header header-color-modal bg-color-2">
+                        <h4 class="modal-title">Medical Report </h4>
+                        <div class="modal-close-area modal-close-df">
+                            <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                        </div>
+                    </div>
+                    <div class="modal-body" style="overflow:scroll">
+                        <div>
+                            <h4>   Medical Report Of <span id="name"></span> </h4>                         
+                        </div>
+                        <div id="dynamicvalue"></div>
+                    </div>
+                    <div class="modal-footer info-md">
+                        <a data-dismiss="modal" href="#">Close</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).on('click', '.myBtn', function () {
+        debugger;
+        var medicalreport = $(this).data("medicalreport");
+        var name = $(this).data("name");
+        if (medicalreport == "") {
+            $("#dynamicvalue").html('');
+            $("#InformationproModalhdbgcl").modal('');
+            return;
+        }
+        else {
+            $("#dynamicvalue").html(medicalreport);
+            $("#InformationproModalhdbgcl").modal();
+            $("#name").html(name);
+
+        }
+    });
+</script>
+<script>
+    $("#submitapp").click(function (event) {
+        debugger;
+        var res = $("#hid").val();
+        ///alert(res);
+        if (res == "")
+            res = 0;
+        showloader();
+        $.ajax({
+            url: "/College/Home/EmployeeInformationVerifyed/",
+            data: { id: res },
+            cache: false,
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                hideloader();
+                if (data.Status) {
+                    alert(data.Msg);
+                    location.replace('/College/Home/EmployeeInformationDetail');
+                }
+                else {
+                    alert(data.Msg);
+                }
+                // console.log(data);
+
+            },
+            error: function (err) {
+                hideloader();
+                alert('error');
+
+                return false;
+            }
+        });
+    });
+    $("#submitappreject").click(function (event) {
+        // debugger;
+        var res = $("#hid").val();
+        if (res == "")
+            res = 0;
+        var a = confirm('Are you sure to Reject this Employee Certificate !!');
+        var txt;
+        if (a) {
+            var person = prompt("Please Enter Reason:", "");
+            if (person == null || person == "") {
+                return false;
+            }
+            else {
+                showloader();
+                $.ajax({
+                    url: "/College/Home/EmployeeInformationReject/",
+                    data: { id: res, reason: person },
+                    cache: false,
+                    type: "POST",
+                    dataType: "json",
+                    success: function (data) {
+                        hideloader();
+                        if (data.Status) {
+                            alert(data.Msg);
+                            location.replace('/College/Home/EmployeeInformationDetail');
+                        }
+                        else {
+                            alert(data.Msg);
+                        }
+                        // console.log(data);
+
+                    },
+                    error: function (err) {
+                        hideloader();
+                        alert('error');
+
+                        return false;
+                    }
+                });
+
+            }
+        }
+        else {
+            return false;
+        }
+
+
+    });
+</script>

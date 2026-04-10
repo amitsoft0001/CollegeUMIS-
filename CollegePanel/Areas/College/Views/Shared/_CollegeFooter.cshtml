@@ -1,0 +1,253 @@
+﻿<div class="footer-copyright-area">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="footer-copy-right">
+                    <div class="footer-content">
+                        <div class="footer-logo">
+                            <img src="~/images/logo-small.png" alt="logo" class="footer-logo-img" onerror="this.style.display='none'">
+                        </div>
+                        <div class="footer-text">
+                            <p>
+                                <i class="fas fa-copyright"></i> @DateTime.Now.Year.ToString()
+                                <span class="brand-name">@DataLayer.CommonSetting.ProjectName</span>
+                                <span class="separator">|</span>
+                                <span class="all-rights">All rights reserved</span>
+                            </p>
+                        </div>
+                        <div class="footer-social">
+                            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Premium Footer Styles */
+    .footer-copyright-area {
+        background: linear-gradient(135deg, #0a0a14 0%, #12121c 100%);
+        border-top: 1px solid rgba(124, 58, 237, 0.2);
+        padding: 25px 0;
+        margin-top: 40px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Animated border effect */
+    .footer-copyright-area::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #7c3aed, #a855f7, #7c3aed, transparent);
+        animation: borderSlide 3s linear infinite;
+    }
+
+    @@keyframes borderSlide {
+        0% { left: -100%; }
+        100% { left: 100%; }
+    }
+
+    .footer-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    /* Footer Logo */
+    .footer-logo-img {
+        max-height: 40px;
+        transition: transform 0.3s ease;
+        filter: brightness(0) invert(1);
+        opacity: 0.8;
+    }
+
+    .footer-logo-img:hover {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+
+    /* Footer Text */
+    .footer-text p {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 400;
+        letter-spacing: 0.5px;
+    }
+
+    .footer-text i {
+        color: #7c3aed;
+        margin-right: 5px;
+    }
+
+    .brand-name {
+        background: linear-gradient(135deg, #7c3aed, #a855f7);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        font-weight: 700;
+        margin: 0 8px;
+        position: relative;
+        display: inline-block;
+    }
+
+    .brand-name::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #7c3aed, #a855f7);
+        transition: width 0.3s ease;
+    }
+
+    .brand-name:hover::after {
+        width: 100%;
+    }
+
+    .separator {
+        color: #334155;
+        margin: 0 8px;
+    }
+
+    .all-rights {
+        color: #94a3b8;
+        font-size: 13px;
+    }
+
+    /* Social Icons */
+    .footer-social {
+        display: flex;
+        gap: 12px;
+    }
+
+    .social-icon {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(124, 58, 237, 0.1);
+        border-radius: 10px;
+        color: #a855f7;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        border: 1px solid rgba(124, 58, 237, 0.2);
+    }
+
+    .social-icon:hover {
+        background: linear-gradient(135deg, #7c3aed, #a855f7);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(124, 58, 237, 0.3);
+        text-decoration: none;
+    }
+
+    /* Back to Top Button */
+    .back-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 45px;
+        height: 45px;
+        background: linear-gradient(135deg, #7c3aed, #a855f7);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 999;
+        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+        text-decoration: none;
+        border: none;
+    }
+
+    .back-to-top.show {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .back-to-top:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(124, 58, 237, 0.5);
+        color: white;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .footer-content {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .footer-social {
+            justify-content: center;
+        }
+
+        .separator {
+            display: none;
+        }
+
+        .all-rights {
+            display: block;
+            margin-top: 5px;
+        }
+
+        .brand-name {
+            display: block;
+            margin: 5px 0;
+        }
+
+        .back-to-top {
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+        }
+    }
+</style>
+
+<!-- Back to Top Button -->
+<a href="#" class="back-to-top" id="backToTop">
+    <i class="fas fa-arrow-up"></i>
+</a>
+
+<script>
+    // Back to Top functionality
+    $(document).ready(function() {
+        var backToTop = $('#backToTop');
+
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 300) {
+                backToTop.addClass('show');
+            } else {
+                backToTop.removeClass('show');
+            }
+        });
+
+        backToTop.on('click', function(e) {
+            e.preventDefault();
+            $('html, body').animate({
+                scrollTop: 0
+            }, 500);
+        });
+    });
+</script>

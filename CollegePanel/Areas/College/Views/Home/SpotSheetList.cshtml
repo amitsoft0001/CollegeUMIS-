@@ -1,0 +1,190 @@
+﻿@model DataLayer.BL_StudentList
+@{
+    ViewBag.Title = "SpotSheetList";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+<style>
+    .right {
+        text-align: right;
+    }
+
+    .left {
+        text-align: left;
+    }
+
+    .dataTables_wrapper table thead tr th {
+        text-align: center;
+        vertical-align: middle;
+        padding: 10px;
+    }
+    .minheight{
+        min-height:450px;
+    }
+</style>
+<script>
+     var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+</script>
+<script src="~/scripts/Customjs/SubjectList.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<div class="container-fluid minheight">
+    <div class="row">
+        <div>
+            <h3 class="text-center" style="padding-bottom:20px;">Remaining Seat List </h3>
+        </div>
+
+    </div>
+    <div class="row ">
+        <div class="col-sm-12 ">
+            @using (Html.BeginForm())
+            {
+                <div class="row " style="padding-bottom:20px;padding-left:30px;padding-right:30px;">
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <label class="fontnewl "><strong>Education Type</strong></label>
+                        @Html.DropDownListFor(model => model.EduTypeID, new SelectList(ViewBag.Educationtype, "CommonId", "title"), "Select Programme Type..", new { @class = "form-control", @id = "Educationtype", @required = "required" })
+
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <label class="fontnewl "><strong>Course Category Type</strong></label>
+                        @Html.DropDownListFor(model => model.CourseCategoryID, new SelectList(ViewBag.CourseCategoryIDs, "CourseCategoryID", "CourseCategory"), "Select Course", new { @class = "form-control", @id = "CourseCategoryID", @required = "required" })
+                    </div>
+                    @*<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <label class="fontnewl "><strong>College</strong></label>
+                        @Html.DropDownList("CollegeID", new SelectList(ViewBag.College, "ID", "CollegeName"), "--Select College--", new { @class = "form-control custom-select-value", @id = "CollegeID", @name = "CollegeID", @ng_model = "ClubData.CollegeID" })
+
+                    </div>*@
+                </div>
+            }
+            <div class="panel-body">
+                <div class="dataTables_wrapper no-footer table-responsive">
+                    <div id="divtbl" style="display:none;">
+                        <table class="table table-bordered table-condensed dataTable ">
+                            <thead>
+                                <tr role="row">
+                                    <th width="50px">S.NO.</th>
+
+                                    <th>College Name</th>
+                                    <th>Subject</th>
+                                    <th>Total Seat</th>
+                                    <th>Remaining</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbl"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $("#Educationtype").change(function (event) {
+        $('#divtbl').removeAttr("style");
+        $("#divtbl").attr("style", "display: none;");
+        $("#CollegeID").val('');
+        $("#CourseCategoryID").val('');
+
+    });
+    $("#CourseCategoryID").change(function (event) {
+        $("#CollegeID").val('');
+        $('#divtbl').removeAttr("style");
+        $("#divtbl").attr("style", "display: none;");
+    });
+
+
+
+
+
+    $("#CourseCategoryID").change(function (event) {
+        if ($('#Educationtype').val() == "") {
+            alert('Please Select Education Type  !!');
+            $('#Educationtype').val("");
+            return;
+        }
+        if ($('#CourseCategoryID').val() == "") {
+            alert('Please Select CourseCategory  !!');
+            $('#CourseCategoryID').val("");
+            return;
+        }
+
+        $('#divtbl').removeAttr("style");
+        $("#divtbl").attr("style", "display: none;");
+        showloader();
+       // debugger;      
+        var streamCategory = $('#CourseCategoryID').val();
+        $.ajax({           
+            url: "/College/Home/GetRemainingSheet/",
+            data: { streamCatego: streamCategory },
+            cache: false,
+            type: "POST",
+            dataType: "json",
+            headers: { 'Authorization': 'Basic ' + btoa(username + ':' + password) },
+            success: function (datamain) {
+                hideloader();
+                $('#divtbl').removeAttr("style");
+                $("#divtbl").attr("style", "display: block;");
+                var htmlHeader = ''
+                var i = 0;
+                if (datamain != 0) {
+                    $.each(datamain, function (key, item) {
+                        i = i + 1;
+                        htmlHeader += '<tr>'
+                        htmlHeader += '<td>' + i + '</td>'
+                        htmlHeader += '<td>' + item.CollegeName + '</td>'
+                        htmlHeader += '<td>' + item.streamCategory + '</td>'
+                        htmlHeader += '<td>' + item.Reaming + '</td>'
+                        htmlHeader += '<td>' + (item.NewREm < 0 ? 0 : item.NewREm) + '</td>'
+                        htmlHeader += '</tr>'
+
+                    });
+                    $('#tbl').html(htmlHeader);
+                    $('#divtbl').removeAttr("style");
+                    $("#divtbl").attr("style", "display: block;");
+                    hideloader();
+                }
+                else {
+                    hideloader();
+                    $('#tbl').html(html);
+                    $('#tbl').removeAttr("style");
+                    $("#tbl").attr("style", "display: none;");
+                    alert('Student not found');
+                }
+            }
+        });
+    });
+
+
+
+
+
+
+    $("#Educationtype").change(function (event) {
+
+
+        $('#CourseCategoryID').find("option").remove();
+        $("#CourseCategoryID").append($("<option></option>").val("").html("--Select Course--"));
+        var res = $(this).val();
+        if (res == "")
+            return;
+        if (res == "")
+            res = 0;
+      //  debugger;
+
+        $.ajax({
+            url: "/College/Home/getcourse/",
+            data: { id: res },
+            cache: false,
+            type: "POST",
+            dataType: "json",
+            headers: { 'Authorization': 'Basic ' + btoa(username + ':' + password) },
+            success: function (data) {
+                $('#CourseCategoryID').find("option").remove();
+                $("#CourseCategoryID").append($("<option></option>").val("").html("--Select Course--"));
+                $.each(data.data, function (key, value) {
+                    $("#CourseCategoryID").append($("<option></option>").val(value.CourseCategoryID).html(value.CourseCategory));
+                });
+            }
+        });
+    });
+</script>

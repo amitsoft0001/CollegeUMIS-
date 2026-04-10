@@ -1,0 +1,321 @@
+﻿
+@{
+    ViewBag.Title = "GuestList";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+<style>
+    .right {
+        text-align: right;
+    }
+
+    .left {
+        text-align: left;
+    }
+
+    .spaceDesign {
+        padding-bottom: 20px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .panel-body a {
+        margin: 0 !important;
+    }
+
+    table.dataTable td {
+        padding: 5px !important;
+    }
+
+    .spacedesign {
+        padding-bottom: 20px;
+    }
+
+    .btndesign {
+        padding: 1px 4px 1px 6px;
+        color: white;
+    }
+</style>
+<script>
+    var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+</script>
+<script src="~/scripts/Customjs/GuestList.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<link href="~/sweetalert/sweetalert.css" rel="stylesheet" />
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,300' rel='stylesheet' type='text/css'>
+<style>
+    .dataTables_filter {
+        width: 50%;
+        display: inline-block;
+        text-align: right;
+    }
+
+    .dataTables_length {
+        width: 50%;
+        display: inline-block;
+    }
+
+    #DataTables_Table_0_wrapper {
+        margin: 10px 5px;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > td, .table > tfoot > tr > td {
+        padding: 5px 4px !important;
+        font-size: 15px;
+    }
+
+    .ui-checkbox, .ui-radio {
+        margin-top: 8px;
+    }
+
+    .fa-green {
+        color: green;
+        font-size: 18px;
+    }
+
+    .fa-red {
+        color: red;
+        font-size: 18px;
+    }
+
+    .recordStatus {
+        cursor: pointer;
+    }
+
+    .divMessage {
+        position: absolute;
+        text-align: center;
+        top: 0;
+    }
+
+    .lobibox-notify-icon i {
+        font-size: 35px;
+    }
+
+    .spacedesign {
+        padding-bottom: 20px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+</style>
+<div class="container-fluid ">
+    <div class="row ">
+        <div class="container-fluid">
+            <h3 class="text-center spacedesign">Guest List </h3>
+        </div>
+        <div class="row spacedesign">
+            <div class="col-lg-3 pull-right">
+                <a class="btn btn-primary waves-effect waves-light" href="@Url.Action("Eventinvitation", "Home")">Add Guest</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="container-fluid">
+            <div ng-app="guestlistApp" ng-controller="guestlistCtrl" class="sparkline-list">
+                @using (Html.BeginForm())
+                {
+                    <div class="row spaceDesign">
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <span><label>Event:</label></span>
+                            @Html.DropDownList("EventID", new SelectList(ViewBag.EventList, "ID", "EventName"), "--Select Event--", new
+                            {
+                               @class = "form-control",
+                               @id = "EventID",
+                               @name = "EventID",
+                               @ng_model = "EventID"
+                             })
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                            <label>Guest Name : </label>
+                            <input type="text" class="form-control" placeholder="Guest Name" id="Name" name="Name" ng-model="Name" />
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <span><label>Guest MobileNo:</label></span>
+                            <input type="text" class="form-control" placeholder="Guest Mobile No" id="MobileNo" name="MobileNo" ng-model="MobileNo" />
+                        </div>
+                    </div>
+                    <div class="row spaceDesign">
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            &nbsp;
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            &nbsp;
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 right">
+                            <button ng-click="GetFilterUsers(Name)" class="btn btn-primary waves-effect waves-light" type="button">Search</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 left">
+                            <div ng-show="(qlist |filter:search).length>0">
+                                <button type="submit" value="excel" id="btnexport" name="Excel" class="btn btn-primary waves-effect waves-light">Export to Excel</button>
+                            </div>
+                        </div>
+                        <div class="col-md-6 right">
+                            <b>
+                                Total Record(s) : | &nbsp;&nbsp;<spam style="border: 1px solid #bfc5cb;  padding: 7px; border-radius: 50%;">{{totalCount}}</spam>&nbsp;&nbsp;
+                            </b>
+                            <span class="form-group  page-size form-inline">
+                                <select id="ddlPageSize" class="form-control control-color"
+                                        ng-model="pageSizeSelected"
+                                        ng-change="changePageSize()">
+                                    <option value="1">1</option>
+                                    <option value="10">10</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="200">200</option>
+                                    <option value="500">500</option>
+                                </select>
+                            </span>
+                            <a class="btn btn-primary waves-effect waves-light">Page: {{pageIndex}} / {{numPages}}</a>
+                        </div>
+                    </div>
+                }
+                <div class="panel-body">
+                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer table-responsive">
+                        <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed dataTable ">
+                            <thead>
+                                <tr role="row">
+                                    <th width="50px">S.No.</th>
+                                    <th ng-click="sortBy('eventName')">
+                                        Event Name<span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>
+                                        <span class="sortorder" ng-show="propertyName === 'eventName'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    <th ng-click="sortBy('name')">
+                                        Guest Name<span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>
+                                        <span class="sortorder" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    <th ng-click="sortBy('designation')">
+                                        Guest Designation<span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>
+                                        <span class="sortorder" ng-show="propertyName === 'designation'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    <th ng-click="sortBy('mobileNo')">
+                                        Guest Mobile No<span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>
+                                        <span class="sortorder" ng-show="propertyName === 'mobileNo'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    <th ng-click="sortBy('email')">
+                                        Guest Email<span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>
+                                        <span class="sortorder" ng-show="propertyName === 'email'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    <th ng-click="sortBy('')">
+                                        Status
+                                        <span class="sortorder" ng-show="propertyName === ''" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    <th ng-click="sortBy('')">
+                                        Action
+                                        <span class="sortorder" ng-show="propertyName === ''" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="achievement in qlist | filter:search  | orderBy:propertyName:reverse">
+                                    <td>{{ ((pageIndex-1)*pageSizeSelected)+$index+1 }}</td>
+                                    <td>{{achievement.eventName}}</td>
+                                    <td>{{achievement.name}}</td>
+                                    <td>{{achievement.designation}}</td>
+                                    <td>{{achievement.mobileNo}}</td>
+                                    <td>{{achievement.email}}</td>
+                                    <td align="center">
+                                        <span class="recordStatus" data-val={{achievement.id}} data-type="activedeactivedatauser" data-status={{achievement.isActive}}>
+                                            <div ng-if="achievement.isActive=== true">
+                                                <i class='fa fa-check fa-green' title='Active'></i>
+                                            </div>
+                                            <div ng-if="achievement.isActive=== false">
+                                                <i class='fa fa-close fa-red' title='De-Active'></i>
+                                            </div>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-success btn-sm fa fa-edit myBtn " style="padding:1px 4px 1px 6px;color:white" title="Edit" href="~/College/Home/Eventinvitation/{{achievement.encriptedID}}"></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr ng-show="(qlist |filter:search).length == 0">
+                                    <td colspan="6" style="text-align:center">
+                                        <h4 style="color:red;"> </h4>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" colspan="14">
+                                        <div class="pull-left" ng-show="(qlist |filter:search).length > 0">
+                                            <div ng-show="numPages > 1">
+                                                <pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected"
+                                                            direction-links="true" ng-model="pageIndex"
+                                                            max-size="maxSize" class="pagination" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var u = window.location.protocol + "//" + window.location.host + "/";
+    function changeStatus(recType, val, ctrl) {
+        // debugger;
+        $.ajax({
+            type: 'POST',
+            url: u + "College/Home/ActiveDeactiveGuest", // we are calling json method
+            dataType: 'json',
+            async: false,
+            data: { id: val, type: recType },
+            success: function (result) {
+                if (result) {
+                    ctrl.html("<i class='fa fa-check fa-green' title='Active'></i>");
+                    setTimeout(function () { swal("Success!", "Status changed successfully.", "success"); }, 200);
+                    //window.location.reload();
+                }
+                else {
+
+                    ctrl.html("<i class='fa fa-close fa-red' title='De-Active'></i>");
+                    setTimeout(function () { swal("Success!", "Status changed successfully.", "success"); }, 200);
+                    //window.location.reload();
+                }
+
+                ctrl.data('status', result);
+                window.location.reload();
+            },
+            error: function (ex) {
+                setTimeout(function () { swal("Error!", "Something went wrong.", "error"); }, 200);
+            }
+        });
+    }
+
+    $(document).on('click', '.recordStatus', function () {
+
+        // debugger;
+        var ctrl = $(this);
+
+        var Tile = ctrl.data('msg');
+
+        if (Tile == undefined) {
+            Tile = ctrl.data('status') == true ? "Do you want to Deactive this Guest" : "Do you want to Active this Guest";
+        }
+        else {
+
+            Tile = (ctrl.data('status') == true ? Tile.replace('statusMsg', 'De-Active') : Tile.replace('statusMsg', 'Active'));
+        }
+        //console.log("Title" + Tile);
+        swal({
+            title: Tile,
+            //text: "Change status",
+            type: "warning",
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true,
+        },
+            function () {
+                changeStatus(ctrl.data('type'), ctrl.data('val'), ctrl)
+                //var i = deleteRecord(trr.data('type'), trr.data('val'), t, trr);
+            });
+    });
+</script>

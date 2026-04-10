@@ -1,0 +1,460 @@
+﻿@{
+    ViewBag.Title = "CollegeSeatList";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+<!-- Premium Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    :root {
+        --brand-primary: #4361ee;
+        --brand-secondary: #3f37c9;
+        --brand-accent: #7209b7;
+        --brand-gradient: linear-gradient(145deg, #4361ee 0%, #7209b7 100%);
+        --brand-gradient-soft: linear-gradient(145deg, rgba(67,97,238,0.08) 0%, rgba(114,9,183,0.08) 100%);
+        --brand-success: #10b981;
+        --brand-warning: #f59e0b;
+        --brand-danger: #ef4444;
+        --brand-info: #3b82f6;
+        --surface-white: #ffffff;
+        --surface-gray: #f8fafc;
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --text-muted: #64748b;
+        --border-light: rgba(203,213,225,0.4);
+        --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
+        --shadow-md: 0 10px 30px -12px rgba(0,0,0,0.1);
+        --shadow-lg: 0 20px 40px -15px rgba(67,97,238,0.15);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%); min-height: 100vh; }
+
+    /* Hero Section */
+    .hero-section {
+        background: var(--brand-gradient);
+        border-radius: 0 0 48px 48px;
+        padding: 35px 40px;
+        margin-bottom: 40px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+    }
+    .hero-section::before { content: ''; position: absolute; top: -40%; right: -15%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%); border-radius: 50%; }
+    .hero-section::after { content: ''; position: absolute; bottom: -30%; left: -10%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%); border-radius: 50%; }
+
+    .main-container { max-width: 1600px; margin: 0 auto; padding: 0 32px; }
+
+    /* Filter Card */
+    .filter-card {
+        background: var(--surface-white);
+        border-radius: 28px;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-light);
+        overflow: hidden;
+        margin-bottom: 32px;
+        transition: all 0.3s;
+    }
+    .filter-header {
+        background: var(--brand-gradient-soft);
+        padding: 20px 28px;
+        border-bottom: 2px dashed rgba(67,97,238,0.2);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .filter-header i { font-size: 24px; color: var(--brand-primary); }
+    .filter-header h4 { font-size: 18px; font-weight: 700; color: var(--text-primary); margin: 0; }
+    .filter-body { padding: 28px; }
+
+    /* Form Controls */
+    .form-label-modern {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .form-label-modern i { color: var(--brand-primary); font-size: 14px; }
+    .required-star { color: var(--brand-danger); font-size: 12px; }
+    .form-control-modern {
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        border: 2px solid #e2e8f0;
+        border-radius: 16px;
+        background: white;
+        transition: all 0.25s;
+        font-family: 'Inter', sans-serif;
+    }
+    .form-control-modern:focus {
+        border-color: var(--brand-primary);
+        box-shadow: 0 0 0 4px rgba(67,97,238,0.12);
+        outline: none;
+    }
+    .btn-search {
+        background: var(--brand-gradient);
+        border: none;
+        padding: 12px 32px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 14px;
+        color: white;
+        transition: all 0.3s;
+        box-shadow: 0 4px 12px rgba(67,97,238,0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 28px;
+        width: 100%;
+        justify-content: center;
+    }
+    .btn-search:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(67,97,238,0.4); color: white; }
+
+    /* Stats Bar */
+    .stats-bar {
+        background: var(--surface-white);
+        border-radius: 20px;
+        padding: 16px 24px;
+        margin-bottom: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        border: 1px solid var(--border-light);
+    }
+    .stats-info { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .stats-badge {
+        background: var(--brand-gradient-soft);
+        padding: 8px 18px;
+        border-radius: 40px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .stats-badge i { color: var(--brand-primary); font-size: 18px; }
+    .stats-badge span { font-weight: 700; font-size: 20px; color: var(--brand-primary); }
+    .page-size-select {
+        padding: 8px 12px;
+        border-radius: 12px;
+        border: 2px solid #e2e8f0;
+        font-weight: 500;
+        font-size: 13px;
+    }
+    .page-indicator {
+        background: var(--brand-gradient-soft);
+        padding: 8px 18px;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 13px;
+        color: var(--brand-primary);
+    }
+    .btn-excel {
+        background: linear-gradient(145deg, #10b981, #059669);
+        border: none;
+        padding: 10px 24px;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 13px;
+        color: white;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .btn-excel:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(16,185,129,0.3); color: white; }
+
+    /* Table Card */
+    .table-card {
+        background: var(--surface-white);
+        border-radius: 28px;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-light);
+        overflow: hidden;
+        margin-top: 20px;
+    }
+    .premium-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    .premium-table th {
+        padding: 16px 16px;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text-secondary);
+        background: #f8fafc;
+        border-bottom: 2px solid #e2e8f0;
+        text-align: left;
+    }
+    .premium-table td {
+        padding: 14px 16px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-primary);
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: middle;
+    }
+    .premium-table tr:hover td { background: var(--brand-gradient-soft); }
+
+    /* Seat Badges */
+    .seat-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px 12px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 13px;
+    }
+    .seat-total { background: #dbeafe; color: #1e40af; }
+    .seat-manual { background: #fef3c7; color: #b45309; }
+    .seat-consume { background: #fee2e2; color: #b91c1c; }
+    .seat-remaining { background: #dcfce7; color: #15803d; }
+
+    /* Pagination */
+    .pagination-modern {
+        display: flex;
+        justify-content: flex-end;
+        padding: 20px 24px;
+        background: white;
+        border-top: 1px solid #e2e8f0;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    .pagination-modern a, .pagination-modern span {
+        padding: 8px 14px;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
+        background: white;
+        border: 1px solid #e2e8f0;
+        color: var(--text-secondary);
+    }
+    .pagination-modern a:hover { background: var(--brand-gradient-soft); border-color: var(--brand-primary); color: var(--brand-primary); }
+
+    .empty-state { text-align: center; padding: 60px 20px; }
+    .empty-state i { font-size: 64px; color: #cbd5e1; margin-bottom: 20px; }
+    .empty-state h5 { font-size: 18px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+
+    @@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .animate { animation: fadeInUp 0.5s ease-out; }
+
+    @@media (max-width: 768px) {
+        .main-container { padding: 0 20px; }
+        .hero-section { padding: 25px 24px; }
+        .stats-bar { flex-direction: column; align-items: stretch; }
+        .stats-info { justify-content: space-between; }
+        .premium-table th, .premium-table td { padding: 10px 12px; font-size: 12px; }
+    }
+</style>
+
+<script>
+    var sessionid111 = '@ViewBag.CurrentSessionid';
+    var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+</script>
+<script src="~/scripts/Customjs/CollegeSeatList.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<script src="~/scripts/Customjs/Adminisssionseatlistcollege.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+
+<div class="hero-section">
+    <div class="main-container">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <div class="rounded-circle bg-white bg-opacity-20 p-3">
+                        <i class="fas fa-chair fs-3 text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-white mb-1 fw-bold" style="font-size: 32px; letter-spacing: -0.5px;">Seat Management</h1>
+                        <p class="text-white-50 mb-0">
+                            <i class="fas fa-building me-2"></i>@(ViewBag.CollegeName != null ? ViewBag.CollegeName : "College") · Seat Allocation Dashboard
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white bg-opacity-20 rounded-pill px-4 py-2">
+                <i class="fas fa-chart-line me-2"></i>Academic Year @ViewBag.CurrentSessionid
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="main-container animate" ng-app="admissionseatlistApp" ng-controller="admissionseatlistCtrl">
+    <!-- Filter Section -->
+    <div class="filter-card">
+        <div class="filter-header">
+            <i class="fas fa-sliders-h"></i>
+            <h4>Filter Seats</h4>
+        </div>
+        <div class="filter-body">
+            @using (Html.BeginForm())
+            {
+                <div class="row g-4">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="form-label-modern">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Admission Year</span>
+                        </div>
+                        @Html.DropDownList("session", new SelectList(ViewBag.Session, "ID", "Session", ""), "-- Select Year --", new { @class = "form-control-modern", @id = "session", @name = "session", @ng_model = "session" })
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="form-label-modern">
+                            <i class="fas fa-tag"></i>
+                            <span>Admission Category</span>
+                            <span class="required-star">*</span>
+                        </div>
+                        @Html.DropDownList("Admissiontype", new SelectList(ViewBag.Admissiontype, "CommonId", "title"), "-- Select Type --", new { @class = "form-control-modern", @id = "AdminissionType", @required = "required", @ng_model = "adminissionid" })
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="form-label-modern">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Programme Type</span>
+                            <span class="required-star">*</span>
+                        </div>
+                        @Html.DropDownList("EducationType", new SelectList(ViewBag.Educationtype, "CommonId", "title", @ViewBag.eduid), "-- Select Programme --", new { @class = "form-control-modern", @id = "Educationtype", @ng_model = "programeid" })
+                        @Html.Hidden("SessionId", new { @Value = ViewBag.CurrentSessionid, @id = "sesseionid", @ng_model = "sessionid" })
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="form-label-modern">
+                            <i class="fas fa-book"></i>
+                            <span>Select Course</span>
+                            <span class="required-star">*</span>
+                        </div>
+                        @Html.DropDownList("CourseCategoryID", new[]{
+                            new SelectListItem(){ Text = "-- Select Course --", Value = ""}
+                        }, new { @class = "form-control-modern", @id = "CourseCategoryID", @ng_model = "courseid" })
+                    </div>
+                    <div class="col-lg-12">
+                        <button ng-click="GetFilterUsers(ClubData)" class="btn-search" type="button">
+                            <i class="fas fa-search"></i> Search Seats
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Stats & Actions Bar -->
+    <div class="stats-bar">
+        <div class="stats-info">
+            <div class="stats-badge">
+                <i class="fas fa-database"></i>
+                <span>{{totalCount}}</span>
+                <span style="font-weight: 500;">Total Records</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <i class="fas fa-list-ol" style="color: var(--brand-primary);"></i>
+                <span class="fw-semibold">Show</span>
+                <select id="ddlPageSize" class="page-size-select" ng-model="pageSizeSelected" ng-change="changePageSize()">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="500">500</option>
+                    <option value="1000">1000</option>
+                </select>
+                <span class="fw-semibold">entries</span>
+            </div>
+            <div class="page-indicator">
+                <i class="fas fa-chart-simple me-1"></i> Page {{pageIndex}} / {{numPages}}
+            </div>
+        </div>
+        <div>
+            <button type="submit" value="excel" id="btnexport" name="Excel" class="btn-excel" ng-show="(qlist |filter:search).length>0">
+                <i class="fas fa-file-excel"></i> Export to Excel
+            </button>
+        </div>
+    </div>
+
+    <!-- Seats Table -->
+    <div class="table-card">
+        <div class="table-responsive">
+            <table class="premium-table">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">#</th>
+                        <th ng-click="sortBy('educationTypename')">
+                            Programme / Course <i class="fas fa-sort ms-1 opacity-50"></i>
+                        </th>
+                        <th>Admission Year</th>
+                        <th>Subject</th>
+                        <th>Total Seats</th>
+                        <th>Manual Seats</th>
+                        <th>Consumed</th>
+                        <th>Remaining</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="qualidetail in qlist | orderBy:propertyName:reverse">
+                        <td class="fw-bold" style="color: var(--brand-primary);">{{((pageIndex-1)*pageSizeSelected)+$index+1}}</td>
+                        <td><strong>{{qualidetail.educationTypename}}</strong> / {{qualidetail.courseCategory}}</td>
+                        <td><span class="badge bg-light text-dark px-2 py-1 rounded-pill">{{qualidetail.session}}</span></td>
+                        <td>{{qualidetail.streamCategory || '-'}}</td>
+                        <td><span class="seat-badge seat-total"><i class="fas fa-chair me-1"></i> {{qualidetail.seatsAvaible}}</span></td>
+                        <td><span class="seat-badge seat-manual"><i class="fas fa-plus-circle me-1"></i> {{qualidetail.add_manualseat || 0}}</span></td>
+                        <td><span class="seat-badge seat-consume"><i class="fas fa-user-check me-1"></i> {{qualidetail.consume_seat || 0}}</span></td>
+                        <td><span class="seat-badge seat-remaining"><i class="fas fa-chart-line me-1"></i> {{qualidetail.remainingseat || 0}}</span></td>
+                    </tr>
+                    <tr ng-show="(qlist |filter:search).length == 0">
+                        <td colspan="8" class="empty-state" style="padding: 60px;">
+                            <i class="fas fa-chair"></i>
+                            <h5>No Seats Found</h5>
+                            <p>Try adjusting your search filters</p>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot ng-show="(qlist |filter:search).length > 0 && numPages > 1">
+                    <tr>
+                        <td colspan="8">
+                            <div class="pagination-modern">
+                                <pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected"
+                                            direction-links="true" ng-model="pageIndex" max-size="5"
+                                            boundary-links="true" rotate="false" num-pages="numPages">
+                                </pagination>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal (Preserved) -->
+<div class="modal fade" id="InformationproModalhdbgcl" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border-radius: 24px; overflow: hidden;">
+            <div class="modal-header" style="background: var(--brand-gradient); border: none; padding: 20px 24px;">
+                <h4 class="modal-title text-white" style="font-weight: 700;"><i class="fas fa-info-circle me-2"></i>Seats Details</h4>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="padding: 24px;">
+                <div class="alert alert-warning" style="border-radius: 16px; background: #fef3c7; border: none;">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Note:</strong><br>
+                    1. University incorporated 3% Handicapped reservation into all category except Sports, NCC, ex-Servicemen, Ward.<br>
+                    2. No Handicapped reservation for Sports, NCC, Ex-servicemen, Ward.
+                </div>
+                <div id="dynamicvalue"></div>
+            </div>
+            <div class="modal-footer" style="border-top: 1px solid #e2e8f0; padding: 16px 24px;">
+                <button type="button" class="btn btn-modern-secondary" data-bs-dismiss="modal" style="padding: 8px 24px;">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS for Modal -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

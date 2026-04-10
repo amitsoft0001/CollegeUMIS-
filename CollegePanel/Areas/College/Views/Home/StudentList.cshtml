@@ -1,0 +1,364 @@
+﻿@model DataLayer.BL_StudentList
+@{
+    /**/
+
+    ViewBag.Title = "StudentList";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+    var permission = @DataLayer.ClsLanguage.GetCookies("NPermission");
+}
+
+<div class="munger_headtitlemit">
+<h2>Application Fees Student List</h2>
+</div>
+
+<script>
+    var Course
+</script>
+<script>
+      var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+</script>
+<style>
+    .error-msg {
+        color: #ff0000;
+        font-weight: bold;
+    }
+</style>
+
+<script src="~/scripts/Customjs/StudentLList.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<script src="~/JS/Studentadminissionform.js"></script>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        //debugger;
+        $("#EducationType").change(function (event) {
+            $('#Coursetype').find("option").remove();
+            $("#Coursetype").append($("<option></option>").val("").html("--Select Course--"));
+            var res = $(this).val();
+            debugger;
+            if (res == "")
+                res = 0;
+            $.ajax({
+                url: "/College/Home/getcourse/",
+                data: { id: res },
+                cache: false,
+                type: "POST",
+                dataType: "json",
+                headers: { 'Authorization': 'Basic ' + btoa(username + ':' + password) },
+                success: function (data) {
+                    //debugger;
+                   console.log(data);
+                    $('#Coursetype').find("option").remove();
+                    $("#Coursetype").append($("<option></option>").val("").html("--Select Course--"));
+                    $.each(data.data, function (key, value) {
+                        $("#Coursetype").append($("<option></option>").val(value.CourseCategoryID).html(value.CourseCategory));
+                    });
+                }
+            });
+        });
+    });
+
+</script>
+<script>
+    $(document).ready(function () {
+        $("#Coursetype").change(function (event) {
+            //debugger;
+            return;
+            $('#Subject').find("option").remove();
+            $("#Subject").append($("<option></option>").val("").html("--Select Subject--"));
+            var res = $(this).val();
+            if (res == "")
+                res = 0;
+            $.ajax({
+
+                url: "/College/Home/selectStreamCategory/",
+                data: { varid: res },
+
+                cache: false,
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                  //  console.log(data);
+                    $('#Subject').find("option").remove();
+                    $("#Subject").append($("<option></option>").val("").html("--Select Subject--"));
+                    $.each(data.data, function (key, value) {
+                        $("#Subject").append($("<option></option>").val(value.StreamCategoryID).html(value.streamCategory));
+                    });
+                }
+            });
+        });
+    });
+
+</script>
+
+
+
+
+<div ng-include="''">
+    <div ng-app="studentlistApp" ng-controller="studentlistCtrl">
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="sparkline12-list">
+                    <div class="sparkline12-graph">
+                        <div class="basic-login-form-ad">
+
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="all-form-element-inner">
+                                        <div class="form-group-inner">
+                                            @using (Html.BeginForm())
+                                        {
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                            <label class="login2">From date</label>
+                                                        </div>
+                                                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                                                          
+                                                            <input type="date" ng-model="ClubData.fromdate" class="form-control" placeholder="From Date " onkeypress="return false;" name="fromdate" />
+                                                        </div>
+                                                        </div>
+                                                    <div class="col-md-6">
+                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                            <label class="login2">To date</label>
+                                                        </div>
+                                                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+
+                                                            <input type="date" ng-model="ClubData.todate" class="form-control" placeholder="To Date " onkeypress="return false;" name="todate" />
+                                                        </div>
+                                                       
+                                                        </div>
+                                                    </div>                                            <p></p>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                            <label class="login2">Admission Year</label>
+                                                        </div>
+                                                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                                                            @Html.DropDownList("session", new SelectList(ViewBag.Session, "ID", "Session"), "--Select Session--", new { @class = "form-control custom-select-value", @id = "ddlsession", @name = "session", @ng_model = "ClubData.session" })
+                                                        </div>
+                                                       
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                            <label class="login2">Education Type</label>
+                                                        </div>
+                                                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                                                            @Html.DropDownList("EducationType", new SelectList(ViewBag.EducationType, "Value", "Text"), "--Select Programme--", new { @class = "form-control custom-select-value", @id = "EducationType", @name = "EducationType", @ng_model = "ClubData.EducationType" })
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <p></p>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                            <label class="login2">Course</label>
+                                                        </div>
+                                                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                                                            <select data-placeholder="Choose a Course..." class="form-control " tabindex="-1" title="Select Course" id="Coursetype" name="Coursetype" ng-model="ClubData.Coursetype">
+                                                                <option value="">Select Course</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                        <div class="col-md-6">
+                                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                                <label class="login2">Student Name</label>
+                                                            </div>
+                                                            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                                                                <input type="text" ng-model="ClubData.name" class="form-control" placeholder="name" name="name" />
+                                                            </div>
+
+                                                        </div>
+                                                   
+                                                </div>
+                                                <p></p>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                            <label class="login2">Application Fees Status</label>
+                                                        </div>
+                                                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                                                            <select id="ddStatus" class="form-control control-color" name="ddStatus"
+                                                                    ng-model="ClubData.IsFeeSubmit"
+                                                                    ng-change="GetIsPayStatus()">
+                                                                <option value="" disabled>---  Please select  ---</option>
+                                                                <option value="2">ALL</option>
+                                                                <option value="0">Pending</option>
+                                                                <option value="1">Paid</option>
+
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                            <label class="login2">ApplicationID</label>
+                                                        </div>
+                                                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                                                            <input type="text" ng-model="ClubData.ApplicationNo" class="form-control" name="ApplicationNo" placeholder="Application ID" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <p></p>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                       
+
+                                                    </div>
+                                                </div>
+                                                <p></p>
+                                                <div class="row">
+                                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="text-align:left;">
+                                                        <button type="submit" value="excel" id="btnexport" name="Excel" class="btn btn-primary waves-effect waves-light">Export to Excel</button>
+                                                    </div>
+                                                    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12" style="text-align:right;">
+                                                        <button ng-click="GetFilterUsers(ClubData)" style="min-width:150px;" class="btn btn-primary waves-effect waves-light" type="button">Search</button>
+                                                    </div>
+                                                </div>
+                                        }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-sm-12 col-xs-12 ">
+
+                <div class="row munger_rowmargin_none">
+
+                    <div class="col-md-5 pull-right" style="text-align:right" ng-show="(countries |filter:search).length != 0">
+                        <b>
+                            Total Record(s) : | &nbsp;&nbsp;<spam style="border: 1px solid #bfc5cb;  padding: 7px; border-radius: 50%;">{{totalCount}}</spam>&nbsp;&nbsp;
+                        </b>
+
+                        <span class="form-group  page-size form-inline">
+                            <select id="ddlPageSize" class="form-control control-color"
+                                    ng-model="pageSizeSelected"
+                                    ng-change="changePageSize()">
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                <option value="500">500</option>
+                                <option value="1000">1000</option>
+                                <option value="1500">1500</option>
+                            </select>
+
+                        </span>
+                        <a class="btn btn-primary">Page: {{pageIndex}} / {{numPages}}</a>
+
+
+                    </div>
+                </div>
+
+                <div class="panel-body">
+                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer table-responsive">
+                        <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed dataTable " id="dtstudent">
+                            <thead>
+                                <tr role="row">
+                                    <th width="50px">S. No.</th>
+                                    <th ng-click="sortBy('qualificationTypeName')">
+                                        Application No
+                                        <span class="sortorder" ng-show="propertyName === 'ApplicationNo'" ng-class="{reverse: reverse}"></span><span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>  
+                                    </th>
+                                    <th ng-click="sortBy('board_UniversityName')">
+                                        Student Name
+                                        <span class="sortorder" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span><span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>  
+                                    </th>
+                                    <th ng-click="sortBy('rollNo')">
+                                        Gender
+                                        <span class="sortorder" ng-show="propertyName === 'Gender'" ng-class="{reverse: reverse}"></span><span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>  
+                                    </th>
+                                    <th ng-click="sortBy('RollNo')">
+                                        DOB
+                                        <span class="sortorder" ng-show="propertyName === 'DOB'" ng-class="{reverse: reverse}"></span><span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>  
+                                    </th>
+
+                                    <th ng-click="sortBy('passingYear')">
+                                        Mobile No
+                                        <span class="sortorder" ng-show="propertyName === 'MobileNo'" ng-class="{reverse: reverse}"></span><span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>  
+                                    </th>
+                                    <th ng-click="sortBy('')">
+                                        Email
+                                        <span class="sortorder" ng-show="propertyName === 'Email'" ng-class="{reverse: reverse}"></span><span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>  
+                                    </th>
+                                    <th ng-click="sortBy('')">
+                                        Session
+                                        <span class="sortorder" ng-show="propertyName === 'Session'" ng-class="{reverse: reverse}"></span><span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>  
+                                    </th>
+                                    <th ng-click="sortBy('')">
+                                        FeeStatus
+                                        <span class="sortorder" ng-show="propertyName === 'FeeStatus'" ng-class="{reverse: reverse}"></span><span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>  
+                                    </th>
+                                    <th ng-click="sortBy('')">
+                                        Course
+                                        <span class="sortorder" ng-show="propertyName === 'Course'" ng-class="{reverse: reverse}"></span><span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>  
+                                    </th>
+                                    <th ng-click="sortBy('RollNo')">
+                                        Registration Date
+                                        <span class="sortorder" ng-show="adddate === 'adddate'" ng-class="{reverse: reverse}"></span><span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>  
+                                    </th>
+                                    @*<th ng-click="sortBy('')">
+                                        Action
+                                        <span class="sortorder" ng-show="propertyName === ''" ng-class="{reverse: reverse}"></span><span>&nbsp;<i class="fa fa-sort" aria-hidden="true"></i></span>  
+                                    </th>*@   
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="qualidetail in qlist | filter:search  | orderBy:propertyName:reverse">
+                                    <td>{{ ((pageIndex-1)*pageSizeSelected)+$index+1 }}</td>
+                                    <td>{{qualidetail.applicationNo}}</td>
+                                    <td>{{qualidetail.name}}</td>
+                                    <td>{{qualidetail.gender}}</td>
+                                    <td>{{qualidetail.dob}}</td>
+                                    <td>{{qualidetail.mobileNo}}</td>
+                                    <td>{{qualidetail.email}}</td>
+                                    <td>{{qualidetail.session}}</td>
+                                    <td>{{qualidetail.feeStatus}}</td>
+                                    <td>{{qualidetail.course}}</td>
+                                    <td>{{qualidetail.adddate}}</td>
+                                    @*<td>
+                                        <a class="btn btn-info btn-sm fa fa-eye" href="/College/Home/Student_Details/{{qualidetail.encriptedID}}" target="_blank" style="padding:1px 4px 1px 6px;color:white"></a>
+                                    </td>*@
+                                    
+                                    
+                                </tr>
+                            </tbody>
+
+                            <tfoot>
+                                <tr ng-show="(qlist |filter:search).length == 0">
+                                    <td colspan="6" style="text-align:center">
+                                        <h4 style="color:red;"> </h4>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" colspan="15">
+
+                                        <div class="pull-left" ng-show="(qlist |filter:search).length > 0">
+                                            <div ng-show="numPages > 1">
+
+                                                <pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected"
+                                                            direction-links="true" ng-model="pageIndex"
+                                                            max-size="maxSize" class="pagination" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,296 @@
+﻿
+@{
+    ViewBag.Title = "OfflineAd";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+<style>
+    .right {
+        text-align: right;
+    }
+
+    .left {
+        text-align: left;
+    }
+
+    .spacebottom {
+        padding-bottom: 20px;
+    }
+
+    .fontstyle {
+        font-weight: bold;
+    }
+
+    .spacedesign {
+        padding-bottom: 20px;
+        /*padding-left: 30px;*/
+        padding-right: 30px;
+    }
+
+    .btndesign {
+        margin-top: 20px;
+    }
+</style>
+<script>
+    var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+    var CuSession = '';
+</script>
+<script src="~/scripts/Customjs/FinalStudent.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<script src="~/scripts/Customjs/ExamFormList.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<div class="container-fluid">
+    <div class=" ">
+        <div class="col-lg-12">
+            <div class="">
+                @if (ViewBag.CollegeName != "")
+                {
+                    <h3 class="text-center spacebottom">Exam Form Fee List  </h3>
+                }
+            </div>
+            <div class="row sparkline-list">
+             <div ng-app="examfeelistApp" ng-controller="examfeelistCtrl" class="sparkline-list">
+                    @using (Html.BeginForm())
+                    {
+                        <div class="row spacedesign">
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                <span><label>Admission Year: </label></span>
+                                @Html.DropDownList("session", new SelectList(ViewBag.Session, "ID", "Session", ""), "--Select Session--", new { @class = "form-control custom-select-value", @id = "session", @name = "session", @ng_model = "session" })
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                <span><label>Programme:</label></span>
+                                @Html.DropDownList("program", (List<SelectListItem>)ViewBag.EducationType, "--Select--", new { @class = "form-control", @id = "EducationTypeID", @name = "EducationTypeID", @ng_model = "EducationTypeID", @required = "required"})
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                                <span><label>Course: </label></span>
+                                @Html.DropDownList("Course", new SelectList(ViewBag.Course, "ID", "FirstName", ""),"--Select Course--", new { @class = "form-control", @id = "CourseCategoryID", @name = "CourseCategoryID", @ng_model = "CourseCategoryID" })
+                            </div>
+
+                        </div>
+                        <div class="row spacedesign">
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="display:none">
+                                <span><label>Subject: </label></span>
+                                @Html.DropDownList("Subject", new SelectList(ViewBag.Course, "ID", "FirstName", ""), "--Select Subject--", new { @class = "form-control", @id = "Subject", @name = "Subject", @ng_model = "Subject" })
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                <span><label>Course Year: </label></span>
+                                @Html.DropDownList("CourseYearID", new SelectList(ViewBag.Course, "ID", "FirstName", ""), "--Select CourseYear--", new { @class = "form-control", @id = "CourseYearID", @name = "CourseYearID", @ng_model = "CourseYearID" })
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                <span><label>Select Exam Type: </label></span>
+                                <span class="form-group">
+                                    <select id="BackStatus" class="form-control control-color"
+                                            ng-model="BackStatus"
+                                            name="BackStatus">
+                                        <option value="0" selected="selected">Main Exam Fee</option>
+                                        <option value="1">Back  Exam Fee</option>
+                                    </select>
+                                </span>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                <span><label>Application No/Registration No: </label></span>
+                                <input type="text" ng-model="Application" class="form-control" placeholder="Application No" name="application" />
+                            </div>
+                        </div>
+                        <div class="row spacedesign">
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="display:none">
+                                <span><label>Document Status: </label></span>
+                                <div class="">
+                                    <span class="form-group">
+                                        <select id="ApplicationStatus" class="form-control control-color"
+                                                ng-model="ApplicationStatus"
+                                                name="ApplicationStatus">
+                                            <option value="3">--Select All--</option>
+                                            <option value="1">Verified</option>
+                                            <option value="0">Pending</option>
+                                            <option value="2">Reject</option>
+                                        </select>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="display:none">
+                                <span><label>Payment Status: </label></span>
+                                <span class="form-group">
+                                    <select id="paymentStatus" class="form-control control-color"
+                                            ng-model="paymentStatus"
+                                            name="paymentStatus">
+                                        <option value="3">--Select All--</option>
+                                        <option value="1">Paid</option>
+                                        <option value="0">Unpaid</option>
+                                    </select>
+                                </span>
+                            </div>
+                            
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 right btndesign">
+                                <button ng-click="GetFilterUsers(ClubData)" class="btn btn-primary waves-effect waves-light" type="button">Search</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 left">
+                                <div ng-show="(qlist |filter:search).length>0">
+                                    <button type="submit" value="excel" id="btnexport" name="Excel" class="btn btn-primary waves-effect waves-light">Export to Excel</button>
+                                </div>
+                            </div>
+                            <div class="col-md-6 right">
+                                <b>
+                                    Total Record(s) : | &nbsp;&nbsp;<spam style="border: 1px solid #bfc5cb;  padding: 7px; border-radius: 50%;">{{totalCount}}</spam>&nbsp;&nbsp;
+                                </b>
+                                <span class="form-group  page-size form-inline">
+                                    <select id="ddlPageSize" class="form-control control-color"
+                                            ng-model="pageSizeSelected"
+                                            ng-change="changePageSize()">
+                                        <option value="1">1</option>
+                                        <option value="10">10</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                        <option value="200">200</option>
+                                        <option value="500">500</option>
+                                    </select>
+
+                                </span>
+                                <a class="btn btn-primary waves-effect waves-light">Page: {{pageIndex}} / {{numPages}}</a>
+                            </div>
+                        </div>
+                    }
+                    <div class="panel-body">
+                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer table-responsive">
+                            <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed dataTable ">
+                                <thead>
+                                    <tr role="row">
+                                        <th width="50px">S.No.</th>
+                                        <th ng-click="sortBy('applicationNo')">
+                                            Application No
+                                            <span class="sortorder" ng-show="propertyName === 'applicationNo'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('enrollmentno')">
+                                            Registration No
+                                            <span class="sortorder" ng-show="propertyName === 'enrollmentno'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('studentName')">
+                                            Student Name
+                                            <span class="sortorder" ng-show="propertyName === 'studentName'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('casteCategoryName')">
+                                            Caste Category
+                                            <span class="sortorder" ng-show="propertyName === 'casteCategoryName'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('coursecategotyName')">
+                                            Course
+                                            <span class="sortorder" ng-show="propertyName === 'coursecategotyName'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        @*<th ng-click="sortBy('streamCategoryName')">
+                                                Honours Subject
+                                                <span class="sortorder" ng-show="propertyName === 'streamCategoryName'" ng-class="{reverse: reverse}"></span>
+                                            </th>*@
+                                        <th ng-click="sortBy('session')">
+                                            Session
+                                            <span class="sortorder" ng-show="propertyName === 'session'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('')">
+                                            Exam Form Status
+                                            <span class="sortorder" ng-show="propertyName === ''" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('isDocVerifyDatenew')">
+                                             Exam Form Verification Date
+                                            <span class="sortorder" ng-show="propertyName === 'isDocVerifyDate'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+
+                                        <th ng-click="sortBy('fees')">
+                                               Exam Fee Amount
+                                            <span class="sortorder" ng-show="propertyName === 'fees'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('isAdmissionFee')">
+                                             Fees Status
+                                            <span class="sortorder" ng-show="propertyName === 'isAdmissionFee'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('isfeesubmitDate')">
+                                             Fees Submission Date
+                                            <span class="sortorder" ng-show="propertyName === 'isfeesubmitDate'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('')">
+                                            Action
+                                            <span class="sortorder" ng-show="propertyName === ''" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr ng-repeat="recu in qlist | filter:search  | orderBy:propertyName:reverse">
+                                        <td>{{ ((pageIndex-1)*pageSizeSelected)+$index+1 }}</td>
+                                        <td>{{recu.applicationNo}}</td>
+                                        <td>{{recu.enrollmentNo}}</td>
+                                        <td>{{recu.studentName}}</td>
+                                        <td>{{recu.studentCasteCategoryName}}</td>
+                                        <td>{{recu.coursecategotyName}}</td>
+                                        @*<td>{{recu.streamCategoryName}}</td>*@
+                                        <td>{{recu.session}}</td>
+                                        <td ng-if="recu.isDocVerify==1">
+                                            <div class="check-icon text-success">Verified</div>
+                                        </td>
+                                        <td ng-if="recu.isDocVerify==0">
+                                            <div class="check-icon text-warning">Pending</div>
+                                        </td>
+                                        <td ng-if="recu.isDocVerify==2">
+                                            <div class="check-icon text-danger">Rejected</div>
+                                        </td>
+                                        <td>{{recu.isDocVerifyDatenew}}</td>
+                                        <td>{{recu.fees}}</td>
+
+                                        <td ng-if="recu.isAdmissionFee==true">
+                                            <div class="check-icon text-success">Paid</div>
+                                        </td>
+                                        <td ng-if="recu.isAdmissionFee==false">
+                                            <div class="check-icon text-warning"> Pending</div>
+                                        </td>
+                                        <td>{{recu.isfeesubmitDate}}</td>
+
+                                        <td>
+                                            <a ng-if="recu.educationTypeID==11 && recu.sessionid==39 && recu.application_feesubmit==1 &&  recu.enrollmentNo!='' && recu.isBack==0 && (  recu.currentcourseyear_id==3 || recu.currentcourseyear_id==6 || recu.currentcourseyear_id==9)" class="btn btn-sm btn-primary myBtn login-submit-cs" href="/College/Home/ExamFormVerifyUG/{{recu.encriptedID}}" target="_blank" style="padding:1px 4px 1px 6px;color:white">UG Part- 3</a>
+
+                                            <a ng-if="recu.educationTypeID==11 && recu.sessionid==39 && recu.application_feesubmit==1 &&  recu.enrollmentNo!='' && recu.isBack==0 && (  recu.currentcourseyear_id==2 || recu.currentcourseyear_id==5 || recu.currentcourseyear_id==8)" class="btn btn-sm btn-primary myBtn login-submit-cs" href="/College/Home/ExamFormVerifyUG/{{recu.encriptedID}}" target="_blank" style="padding:1px 4px 1px 6px;color:white">UG Part- 2</a>
+                                            <a ng-if="recu.educationTypeID==11 && recu.sessionid==39 && recu.application_feesubmit==1 && recu.enrollmentNo!='' && recu.isBack==1 && ( recu.currentcourseyear_id==2 || recu.currentcourseyear_id==5 || recu.currentcourseyear_id==8)" class="btn btn-sm btn-primary myBtn login-submit-cs" href="/College/Home/ExamFormVerifyBackUG/?id={{recu.encriptedID}}&courseyear={{recu.encriptedIDcourseyearid}}" target="_blank" style="padding:1px 4px 1px 6px;color:white">UG Part- 1 Backlog </a>
+                                            <a ng-if="recu.educationTypeID==11  && recu.application_feesubmit==1 &&  recu.enrollmentNo!='' && recu.isBack==0 && (  recu.currentcourseyear_id==1 || recu.currentcourseyear_id==4 || recu.currentcourseyear_id==7)" class="btn btn-sm btn-primary myBtn login-submit-cs" href="/College/Home/ExamFormVerifyUG/{{recu.encriptedID}}" target="_blank" style="padding:1px 4px 1px 6px;color:white">UG Part- 1</a>
+                                            @*<a ng-if="recu.educationTypeID==11 && recu.sessionid==40 && recu.isRegistrationFee==true && recu.enrollmentNo!='' && recu.isBack==0" class="btn btn-sm btn-primary myBtn login-submit-cs" href="/College/Home/ExamFormVerifyUG/{{recu.encriptedID}}" target="_blank" style="padding:1px 4px 1px 6px;color:white">UG Part- I </a>*@
+
+
+                                            <a ng-if="recu.educationTypeID==41  && recu.enrollmentNo!='' && recu.isBack==0" class="btn btn-sm btn-primary myBtn login-submit-cs" href="/College/Home/ExamFormVerify/{{recu.encriptedID}}" target="_blank" style="padding:1px 4px 1px 6px;color:white">LLB VerifyForm </a>
+                                            <a ng-if="recu.educationTypeID==41  && recu.enrollmentNo!='' && recu.isBack==1 " class="btn btn-sm btn-primary myBtn login-submit-cs" href="/College/Home/ExamFormVerifyback/?id={{recu.encriptedID}}&courseyear={{recu.encriptedIDcourseyearid}}" target="_blank" style="padding:1px 4px 1px 6px;color:white">LLB BackLog VerifyForm </a>
+
+                                            <a ng-if="recu.educationTypeID==13  && recu.application_feesubmit=='1' && recu.enrollmentNo!='' && recu.isBack==0" class="btn btn-sm btn-primary myBtn login-submit-cs" href="/College/Home/ExamFormVerify/{{recu.encriptedID}}" target="_blank" style="padding:1px 4px 1px 6px;color:white">vocational VerifyForm </a>
+                                            <a ng-if="recu.educationTypeID==13 && recu.application_feesubmit=='1'  && recu.enrollmentNo!='' && recu.isBack==1 " class="btn btn-sm btn-primary myBtn login-submit-cs" href="/College/Home/ExamFormVerifyback/?id={{recu.encriptedID}}&courseyear={{recu.encriptedIDcourseyearid}}" target="_blank" style="padding:1px 4px 1px 6px;color:white">vocational BackLog VerifyForm </a>
+
+                                            <a ng-if="recu.educationTypeID==12  && recu.enrollmentNo!='' && recu.isBack==0" class="btn btn-sm btn-primary myBtn login-submit-cs" href="/College/Home/ExamFormVerify/{{recu.encriptedID}}" target="_blank" style="padding:1px 4px 1px 6px;color:white">PG VerifyForm </a>
+                                            <a ng-if="recu.educationTypeID==12  && recu.enrollmentNo!='' && recu.isBack==1 " class="btn btn-sm btn-primary myBtn login-submit-cs" href="/College/Home/ExamFormVerifyback/?id={{recu.encriptedID}}&courseyear={{recu.encriptedIDcourseyearid}}" target="_blank" style="padding:1px 4px 1px 6px;color:white">PG BackLog VerifyForm </a>
+
+
+                                            <a ng-if="recu.educationTypeID==40  && recu.enrollmentNo!='' && recu.isBack==0" class="btn btn-sm btn-primary myBtn login-submit-cs" href="/College/Home/ExamFormVerify/{{recu.encriptedID}}" target="_blank" style="padding:1px 4px 1px 6px;color:white">B.Ed VerifyForm </a>
+                                            <a ng-if="recu.educationTypeID==40  && recu.enrollmentNo!='' && recu.isBack==1 " class="btn btn-sm btn-primary myBtn login-submit-cs" href="/College/Home/ExamFormVerifyback/?id={{recu.encriptedID}}&courseyear={{recu.encriptedIDcourseyearid}}" target="_blank" style="padding:1px 4px 1px 6px;color:white">B.Ed BackLog VerifyForm </a>
+
+                                        </td>
+                                       
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr ng-show="(qlist |filter:search).length == 0">
+                                        <td colspan="6" style="text-align:center">
+                                            <h4 style="color:red;"> </h4>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" colspan="18">
+                                            <div class="pull-left" ng-show="(qlist |filter:search).length > 0">
+                                                <div ng-show="numPages > 1">
+                                                    <pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected"
+                                                                direction-links="true" ng-model="pageIndex"
+                                                                max-size="maxSize" class="pagination" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,165 @@
+﻿<!-- jquery
+       ============================================ -->
+<script src="~/Content/js/vendor/jquery-1.12.4.min.js"></script>
+<script src="~/scripts/ASPSnippets_Pager.min.js"></script>
+<!-- bootstrap JS
+    ============================================ -->
+<script src="~/Content/js/bootstrap.min.js"></script>
+<!-- wow JS
+    ============================================ -->
+<script src="~/Content/js/wow.min.js"></script>
+<!-- price-slider JS
+    ============================================ -->
+<script src="~/Content/js/jquery-price-slider.js"></script>
+<!-- meanmenu JS
+    ============================================ -->
+<script src="~/Content/js/jquery.meanmenu.js"></script>
+<!-- owl.carousel JS
+    ============================================ -->
+<script src="~/Content/js/owl.carousel.min.js"></script>
+<!-- sticky JS
+    ============================================ -->
+<script src="~/Content/js/jquery.sticky.js"></script>
+<!-- scrollUp JS
+    ============================================ -->
+<script src="~/Content/js/jquery.scrollUp.min.js"></script>
+<!-- mCustomScrollbar JS
+    ============================================ -->
+<script src="~/Content/js/scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="~/Content/js/scrollbar/mCustomScrollbar-active.js"></script>
+<!-- metisMenu JS
+    ============================================ -->
+<script src="~/Content/js/metisMenu/metisMenu.min.js"></script>
+<script src="~/Content/js/metisMenu/metisMenu-active.js"></script>
+<!-- pwstrength JS
+   ============================================ -->
+@*<script src="~/Content/js/password-meter/pwstrength-bootstrap.min.js"></script>
+<script src="~/Content/js/password-meter/zxcvbn.js"></script>
+<script src="~/Content/js/password-meter/password-meter-active.js"></script>*@
+<!-- data table JS
+   ============================================ -->
+<script src="~/Content/js/data-table/bootstrap-table.js"></script>
+<script src="~/Content/js/data-table/tableExport.js"></script>
+<script src="~/Content/js/data-table/data-table-active.js"></script>
+<script src="~/Content/js/data-table/bootstrap-table-editable.js"></script>
+<script src="~/Content/js/data-table/bootstrap-editable.js"></script>
+<script src="~/Content/js/data-table/bootstrap-table-resizable.js"></script>
+<script src="~/Content/js/data-table/colResizable-1.5.source.js"></script>
+<script src="~/Content/js/data-table/bootstrap-table-export.js"></script>
+<!-- touchspin JS
+    ============================================ -->
+<script src="~/Content/js/touchspin/jquery.bootstrap-touchspin.min.js"></script>
+<script src="~/Content/js/touchspin/touchspin-active.js"></script>
+<!-- colorpicker JS
+    ============================================ -->
+<script src="~/Content/js/colorpicker/jquery.spectrum.min.js"></script>
+<script src="~/Content/js/colorpicker/color-picker-active.js"></script>
+<!-- datapicker JS
+    ============================================ -->
+<script src="~/Content/js/datapicker/bootstrap-datepicker.js"></script>
+<script src="~/Content/js/datapicker/datepicker-active.js"></script>
+<!-- input-mask JS
+    ============================================ -->
+<script src="~/Content/js/input-mask/jasny-bootstrap.min.js"></script>
+<!-- chosen JS
+    ============================================ -->
+<script src="~/Content/js/chosen/chosen.jquery.js"></script>
+<script src="~/Content/js/chosen/chosen-active.js"></script>
+<!-- select2 JS
+    ============================================ -->
+<script src="~/Content/js/select2/select2.full.min.js"></script>
+<script src="~/Content/js/select2/select2-active.js"></script>
+<!-- ionRangeSlider JS
+    ============================================ -->
+<script src="~/Content/js/ionRangeSlider/ion.rangeSlider.min.js"></script>
+<script src="~/Content/js/ionRangeSlider/ion.rangeSlider.active.js"></script>
+<!-- rangle-slider JS
+    ============================================ -->
+<script src="~/Content/js/rangle-slider/jquery-ui-1.10.4.custom.min.js"></script>
+<script src="~/Content/js/rangle-slider/jquery-ui-touch-punch.min.js"></script>
+<script src="~/Content/js/rangle-slider/rangle-active.js"></script>
+<!-- knob JS
+    ============================================ -->
+<script src="~/Content/js/knob/jquery.knob.js"></script>
+<script src="~/Content/js/knob/knob-active.js"></script>
+<!-- tab JS
+    ============================================ -->
+<script src="~/Content/js/tab.js"></script>
+<!-- plugins JS
+    ============================================ -->
+<script src="~/Content/js/plugins.js"></script>
+<!-- main JS
+    ============================================ -->
+<script src="~/Content/js/main.js"></script>
+<!-- tawk chat JS
+    ============================================ -->
+@*<script src="~/Content/js/tawk-chat.js"></script>*@
+<script>
+        $.fn.regexMask = function (mask) {
+            $(this).keypress(function (event) {
+                if (!event.charCode) return true;
+                var part1 = this.value.substring(0, this.selectionStart);
+                var part2 = this.value.substring(this.selectionEnd, this.value.length);
+                if (!mask.test(part1 + String.fromCharCode(event.charCode) + part2))
+                    return false;
+            });
+        };
+
+        $("input[type='text']").on('keypress', function (event) {
+            var regex = new RegExp("^[a-zA-Z0-9-,/.@@ ]+$");
+            var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+            if (!regex.test(key)) {
+                event.preventDefault();
+                return false;
+            }
+        });
+        $(document).ready(function () {
+            var mask = new RegExp('^[A-Za-z0-9@@. ]*$')
+            $("input[type='email']").regexMask(mask)
+        });
+        var startdate11 = new Date(2018, 1, 1);
+        var Enddate11 = new Date(2019, 1, 1);
+        //$('.data2').datepicker({        //    
+        //    minDate: new Date(2019, 1, 1),
+        //    maxDate: new Date()
+        //});
+
+
+        $(function () {
+        $('#datetimepicker5').datepicker({
+                icons: {
+                    time: "fa fa-clock-o",
+                    date: "fa fa-calendar",
+                    up: "fa fa-arrow-up",
+                    down: "fa fa-arrow-down"
+                }
+            });
+        });
+        //$(function () {
+        //    debugger;
+        //    $('#data_2').data("DateTimePicker").minDate(startdate11);
+        //});
+        //$(document).ready(function () {
+        //debugger;
+        //$('#data_2').data("DateTimePicker").maxDate(Enddate11);
+        //});
+        //$(document).ready(function () {
+
+        //    var minDate = new Date(2020, 1, 1);         
+        //    $('#data_datepicker .input-group.date').datepicker('startDate', minDate);
+          
+
+        //    $("#enddate").datepicker()
+        //        .on('changeDate', function (selected) {
+        //            var minDate = new Date(selected.date.valueOf());
+        //            $('#startdate').datepicker('setEndDate', minDate);
+        //        });
+
+        //});
+        //$("#data_2 ").datepicker({
+        //    maxDate: "-1d",
+        //    minDate: new Date(20019, 2, 5)
+        //});
+        
+        //$('#data_datepicker').datepicker( startDate, "01-01-2019");
+</script>

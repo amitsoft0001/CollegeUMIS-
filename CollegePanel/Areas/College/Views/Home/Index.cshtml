@@ -1,0 +1,556 @@
+﻿@{
+    ViewBag.Title = "CollegeDashboard";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+    var collegeName = DataLayer.ClsLanguage.GetCookies("NBCollegeName");
+}
+
+<!-- Premium Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+    :root {
+        --brand-primary: #4361ee;
+        --brand-secondary: #3f37c9;
+        --brand-accent: #7209b7;
+        --brand-gradient: linear-gradient(145deg, #4361ee 0%, #7209b7 100%);
+        --brand-gradient-soft: linear-gradient(145deg, rgba(67,97,238,0.08) 0%, rgba(114,9,183,0.08) 100%);
+        --brand-success: #10b981;
+        --brand-warning: #f59e0b;
+        --brand-danger: #ef4444;
+        --brand-info: #3b82f6;
+        --surface-white: #ffffff;
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --border-light: rgba(203,213,225,0.4);
+        --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
+        --shadow-md: 0 10px 30px -12px rgba(0,0,0,0.1);
+        --shadow-lg: 0 20px 40px -15px rgba(67,97,238,0.15);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%); min-height: 100vh; }
+
+    /* Hero Section */
+    .hero-dashboard {
+        background: var(--brand-gradient);
+        border-radius: 0 0 48px 48px;
+        padding: 35px 40px;
+        margin-bottom: 40px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+    }
+    .hero-dashboard::before { content: ''; position: absolute; top: -40%; right: -15%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%); border-radius: 50%; }
+    .hero-dashboard::after { content: ''; position: absolute; bottom: -30%; left: -10%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%); border-radius: 50%; }
+
+    .dashboard-container { max-width: 1600px; margin: 0 auto; padding: 0 32px; }
+
+    /* Stat Cards */
+    .stat-card { background: var(--surface-white); border-radius: 28px; padding: 24px; transition: all 0.3s; border: 1px solid var(--border-light); position: relative; overflow: hidden; height: 100%; }
+    .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--brand-gradient); }
+    .stat-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+    .stat-icon { width: 56px; height: 56px; background: var(--brand-gradient-soft); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+    .stat-icon i { font-size: 28px; background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .stat-value { font-size: 32px; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; letter-spacing: -1px; }
+    .stat-label { font-size: 14px; font-weight: 500; color: var(--text-secondary); }
+    .stat-sub { font-size: 12px; color: var(--text-muted); margin-top: 8px; display: flex; align-items: center; gap: 8px; }
+
+    /* Verification Cards */
+    .verification-card { background: var(--surface-white); border-radius: 28px; padding: 24px; border: 1px solid var(--border-light); transition: all 0.3s; height: 100%; }
+    .verification-card:hover { box-shadow: var(--shadow-md); }
+    .verification-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px dashed rgba(67,97,238,0.15); }
+    .verification-title { font-size: 18px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 10px; }
+    .pending-count { font-size: 36px; font-weight: 800; background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .verification-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
+    .verification-item:last-child { border-bottom: none; }
+    .verification-label { font-weight: 600; font-size: 14px; color: var(--text-primary); }
+    .verification-badge { padding: 4px 12px; border-radius: 30px; font-size: 12px; font-weight: 600; }
+    .badge-pending { background: #fef3c7; color: #b45309; }
+    .badge-approved { background: #dcfce7; color: #15803d; }
+    .badge-rejected { background: #fee2e2; color: #b91c1c; }
+
+    /* Chart Cards */
+    .chart-card { background: var(--surface-white); border-radius: 28px; padding: 24px; border: 1px solid var(--border-light); transition: all 0.3s; height: 100%; }
+    .chart-card:hover { box-shadow: var(--shadow-md); }
+    .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px dashed rgba(67,97,238,0.15); }
+    .chart-title { font-size: 18px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 10px; }
+    .chart-title i { color: var(--brand-primary); }
+
+    /* Department Cards */
+    .dept-card { background: var(--surface-white); border-radius: 20px; padding: 18px; transition: all 0.3s; border: 1px solid var(--border-light); }
+    .dept-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); background: var(--brand-gradient-soft); }
+    .dept-name { font-weight: 700; font-size: 16px; color: var(--text-primary); margin-bottom: 8px; }
+    .dept-count { font-size: 28px; font-weight: 800; color: var(--brand-primary); }
+    .dept-sub { font-size: 11px; color: var(--text-secondary); margin-top: 5px; }
+
+    /* Admission Timeline */
+    .timeline-card { background: var(--surface-white); border-radius: 28px; padding: 24px; border: 1px solid var(--border-light); height: 100%; }
+    .timeline-item { display: flex; align-items: center; gap: 15px; padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
+    .timeline-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--brand-primary); }
+    .timeline-dot-success { background: var(--brand-success); }
+    .timeline-dot-warning { background: var(--brand-warning); }
+    .timeline-dot-info { background: var(--brand-info); }
+    .timeline-content { flex: 1; }
+    .timeline-title { font-weight: 600; font-size: 14px; color: var(--text-primary); }
+    .timeline-date { font-size: 11px; color: var(--text-secondary); }
+    .timeline-count { font-weight: 700; font-size: 18px; color: var(--brand-primary); }
+
+    /* Quick Actions */
+    .quick-action-card { background: var(--brand-gradient); border-radius: 28px; padding: 28px; color: white; position: relative; overflow: hidden; height: 100%; transition: all 0.3s; }
+    .quick-action-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+    .quick-action-card::before { content: ''; position: absolute; top: -30%; right: -20%; width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%); border-radius: 50%; }
+    .quick-action-title { font-size: 20px; font-weight: 800; margin-bottom: 12px; }
+    .quick-action-desc { font-size: 13px; opacity: 0.9; margin-bottom: 24px; }
+    .quick-action-btn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); padding: 10px 20px; border-radius: 50px; color: white; font-weight: 600; font-size: 13px; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; width: 100%; justify-content: center; margin-bottom: 10px; }
+    .quick-action-btn:hover { background: white; color: var(--brand-primary); transform: translateX(5px); }
+
+    .welcome-text h2 { font-size: 28px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; color: white; }
+    .welcome-text p { font-size: 14px; opacity: 0.9; color: white; }
+    .date-badge { background: rgba(255,255,255,0.15); padding: 10px 20px; border-radius: 50px; font-size: 14px; font-weight: 600; color: white; backdrop-filter: blur(5px); }
+
+    @@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-dashboard { animation: fadeInUp 0.6s ease-out; }
+
+    @@media (max-width: 768px) { .dashboard-container { padding: 0 20px; } .hero-dashboard { padding: 28px 24px; } .welcome-text h2 { font-size: 22px; } .stat-value { font-size: 26px; } }
+</style>
+
+<div class="hero-dashboard">
+    <div class="dashboard-container">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div class="welcome-text">
+                <h2><i class="fas fa-graduation-cap me-2"></i>Student Admission Dashboard</h2>
+                <p><i class="fas fa-building me-2"></i>@collegeName · <i class="fas fa-calendar-alt ms-2 me-1"></i><span id="currentDate"></span> · <i class="fas fa-chart-line ms-2 me-1"></i>Academic Session 2025-26</p>
+            </div>
+            <div class="date-badge"><i class="fas fa-users me-2"></i>Real-time Analytics</div>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-container animate-dashboard">
+    <!-- Row 1: Main Student Stats -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-value" id="totalStudents">0</div>
+                <div class="stat-label">Total Students (All Time)</div>
+                <div class="stat-sub"><i class="fas fa-chart-line"></i> <span id="studentGrowth">+15%</span> from last year</div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                <div class="stat-value" id="currentSessionStudents">0</div>
+                <div class="stat-label">Current Session 2025-26</div>
+                <div class="stat-sub"><i class="fas fa-user-plus"></i> <span id="newAdmissions">0</span> new admissions</div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                <div class="stat-value" id="pendingVerification">0</div>
+                <div class="stat-label">Pending Verification</div>
+                <div class="stat-sub"><i class="fas fa-exclamation-triangle" style="color: var(--brand-warning);"></i> Requires immediate action</div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="stat-value" id="verifiedStudents">0</div>
+                <div class="stat-label">Verified Students</div>
+                <div class="stat-sub"><i class="fas fa-percent"></i> <span id="verificationRate">0%</span> verification rate</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 2: Verification Status & Admission Timeline -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-5">
+            <div class="verification-card">
+                <div class="verification-header">
+                    <div class="verification-title"><i class="fas fa-shield-alt"></i>Document Verification Status</div>
+                    <div class="pending-count" id="totalPendingCount">0</div>
+                </div>
+                <div id="verificationList">
+                    <div class="text-center text-muted py-4"><i class="fas fa-spinner fa-spin"></i> Loading...</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-7">
+            <div class="timeline-card">
+                <div class="chart-header">
+                    <div class="chart-title"><i class="fas fa-timeline"></i>Admission Timeline (2025-26)</div>
+                    <div class="verification-badge badge-approved"><i class="fas fa-chart-simple"></i> Live Data</div>
+                </div>
+                <div id="admissionTimeline">
+                    <div class="text-center text-muted py-4"><i class="fas fa-spinner fa-spin"></i> Loading...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 3: Charts - Admission Trends & Semester-wise -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-6">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title"><i class="fas fa-chart-line"></i>Admission Trends (Last 5 Years)</div>
+                    <div class="verification-badge badge-approved">Year-on-Year</div>
+                </div>
+                <canvas id="admissionTrendChart" style="height: 280px; width: 100%;"></canvas>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title"><i class="fas fa-chart-pie"></i>Semester-wise Admission</div>
+                    <div class="verification-badge badge-approved">Current Session</div>
+                </div>
+                <canvas id="semesterChart" style="height: 280px; width: 100%;"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 4: Department-wise & Course-wise Distribution -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-6">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title"><i class="fas fa-building"></i>Department-wise Student Distribution</div>
+                    <div class="verification-badge badge-approved"><i class="fas fa-chart-simple"></i> Current Session</div>
+                </div>
+                <div class="row g-3" id="departmentList">
+                    <div class="col-12 text-center text-muted py-4"><i class="fas fa-spinner fa-spin"></i> Loading...</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title"><i class="fas fa-book-open"></i>Top 5 Courses by Enrollment</div>
+                    <div class="verification-badge badge-approved">Most Popular</div>
+                </div>
+                <div id="courseList">
+                    <div class="text-center text-muted py-4"><i class="fas fa-spinner fa-spin"></i> Loading...</div>
+                </div>
+                <canvas id="courseChart" style="height: 200px; width: 100%; margin-top: 20px;"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 5: Employee Stats & Quick Actions -->
+    <div class="row g-4">
+        <div class="col-xl-4">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title"><i class="fas fa-user-tie"></i>Employee Overview</div>
+                    <div class="verification-badge badge-approved"><i class="fas fa-users"></i> Staff</div>
+                </div>
+                <div class="row text-center">
+                    <div class="col-6">
+                        <div class="stat-value" id="totalEmployees">0</div>
+                        <div class="stat-label">Total Employees</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="stat-value" id="totalDepartments">0</div>
+                        <div class="stat-label">Departments</div>
+                    </div>
+                </div>
+                <hr>
+                <div class="mt-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Teaching Faculty</span>
+                        <strong id="teachingFaculty">0</strong>
+                    </div>
+                    <div class="progress mb-3" style="height: 8px; border-radius: 10px;">
+                        <div id="teachingProgress" class="progress-bar" style="width: 0%; background: var(--brand-primary); border-radius: 10px;"></div>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Administrative Staff</span>
+                        <strong id="adminStaff">0</strong>
+                    </div>
+                    <div class="progress mb-3" style="height: 8px; border-radius: 10px;">
+                        <div id="adminProgress" class="progress-bar" style="width: 0%; background: var(--brand-accent); border-radius: 10px;"></div>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Support Staff</span>
+                        <strong id="supportStaff">0</strong>
+                    </div>
+                    <div class="progress" style="height: 8px; border-radius: 10px;">
+                        <div id="supportProgress" class="progress-bar" style="width: 0%; background: var(--brand-success); border-radius: 10px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="quick-action-card">
+                <div class="quick-action-title"><i class="fas fa-bolt me-2"></i>Quick Actions</div>
+                <div class="quick-action-desc">Manage student admissions, verification & more</div>
+                <a href="@Url.Action("StudentRegistration", "Home")" class="quick-action-btn"><i class="fas fa-user-plus"></i>Add New Student</a>
+                <a href="@Url.Action("StudentList", "Home")" class="quick-action-btn"><i class="fas fa-list"></i>View All Students</a>
+                <a href="@Url.Action("PendingVerification", "Home")" class="quick-action-btn"><i class="fas fa-shield-alt"></i>Verify Documents</a>
+                <a href="@Url.Action("AdmissionReport", "Home")" class="quick-action-btn"><i class="fas fa-chart-bar"></i>Admission Report</a>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title"><i class="fas fa-bell"></i>Recent Admission Alerts</div>
+                    <div class="verification-badge badge-warning"><i class="fas fa-clock"></i> Live</div>
+                </div>
+                <div id="recentAlerts">
+                    <div class="text-center text-muted py-4"><i class="fas fa-spinner fa-spin"></i> Loading...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Set current date
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById('currentDate').innerText = new Date().toLocaleDateString('en-US', options);
+
+    let admissionTrendChart, semesterChart, courseChart;
+
+    $(document).ready(function() {
+        fetchDashboardData();
+    });
+
+    function fetchDashboardData() {
+        $.ajax({
+            url: '/College/Home/GetStudentDashboardStats',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                updateDashboard(data);
+                initializeCharts(data);
+            },
+            error: function() {
+                setDemoData();
+            }
+        });
+    }
+
+    function updateDashboard(data) {
+        // Main Stats
+        $('#totalStudents').text(data.totalStudents || 0);
+        $('#currentSessionStudents').text(data.currentSessionStudents || 0);
+        $('#pendingVerification').text(data.pendingVerification || 0);
+        $('#verifiedStudents').text(data.verifiedStudents || 0);
+
+        let verificationRate = data.totalStudents > 0 ? ((data.verifiedStudents / data.totalStudents) * 100).toFixed(1) : 0;
+        $('#verificationRate').text(verificationRate + '%');
+        $('#newAdmissions').text(data.newAdmissions || 0);
+        $('#totalPendingCount').text(data.pendingVerification || 0);
+
+        // Employee Stats
+        $('#totalEmployees').text(data.totalEmployees || 0);
+        $('#totalDepartments').text(data.totalDepartments || 0);
+        $('#teachingFaculty').text(data.teachingFaculty || 0);
+        $('#adminStaff').text(data.adminStaff || 0);
+        $('#supportStaff').text(data.supportStaff || 0);
+
+        let totalEmp = data.totalEmployees || 1;
+        $('#teachingProgress').css('width', ((data.teachingFaculty / totalEmp) * 100) + '%');
+        $('#adminProgress').css('width', ((data.adminStaff / totalEmp) * 100) + '%');
+        $('#supportProgress').css('width', ((data.supportStaff / totalEmp) * 100) + '%');
+
+        // Verification List
+        if (data.verificationList && data.verificationList.length) {
+            let html = '';
+            data.verificationList.forEach(item => {
+                let badgeClass = item.status === 'pending' ? 'badge-pending' : (item.status === 'approved' ? 'badge-approved' : 'badge-rejected');
+                let badgeText = item.status === 'pending' ? 'Pending' : (item.status === 'approved' ? 'Approved' : 'Rejected');
+                html += `<div class="verification-item">
+                            <div class="verification-label">${item.documentType}</div>
+                            <div><span class="verification-badge ${badgeClass}">${badgeText}</span></div>
+                            <div><strong>${item.count}</strong> students</div>
+                        </div>`;
+            });
+            $('#verificationList').html(html);
+        } else {
+            $('#verificationList').html('<div class="text-center text-muted py-4">No verification data available</div>');
+        }
+
+        // Admission Timeline
+        if (data.admissionTimeline && data.admissionTimeline.length) {
+            let html = '';
+            data.admissionTimeline.forEach(item => {
+                let dotClass = item.status === 'completed' ? 'timeline-dot-success' : (item.status === 'ongoing' ? 'timeline-dot-warning' : 'timeline-dot-info');
+                html += `<div class="timeline-item">
+                            <div class="timeline-dot ${dotClass}"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">${item.title}</div>
+                                <div class="timeline-date">${item.date}</div>
+                            </div>
+                            <div class="timeline-count">${item.count}</div>
+                        </div>`;
+            });
+            $('#admissionTimeline').html(html);
+        }
+
+        // Department List
+        if (data.departmentList && data.departmentList.length) {
+            let html = '';
+            data.departmentList.forEach(dept => {
+                html += `<div class="col-md-6">
+                            <div class="dept-card">
+                                <div class="dept-name"><i class="fas fa-building me-2" style="color: var(--brand-primary);"></i>${dept.name}</div>
+                                <div class="dept-count">${dept.count}</div>
+                                <div class="dept-sub">Students</div>
+                            </div>
+                        </div>`;
+            });
+            $('#departmentList').html(html);
+        }
+
+        // Course List
+        if (data.courseList && data.courseList.length) {
+            let html = '<div class="mb-3">';
+            data.courseList.forEach(course => {
+                let percentage = (course.count / data.currentSessionStudents) * 100;
+                html += `<div class="d-flex justify-content-between align-items-center mb-2">
+                            <span><i class="fas fa-book me-2" style="color: var(--brand-primary);"></i>${course.name}</span>
+                            <strong>${course.count}</strong>
+                        </div>
+                        <div class="progress mb-3" style="height: 6px; border-radius: 10px;">
+                            <div class="progress-bar" style="width: ${percentage}%; background: var(--brand-gradient); border-radius: 10px;"></div>
+                        </div>`;
+            });
+            html += '</div>';
+            $('#courseList').html(html);
+        }
+
+        // Recent Alerts
+        if (data.recentAlerts && data.recentAlerts.length) {
+            let html = '';
+            data.recentAlerts.forEach(alert => {
+                html += `<div class="verification-item">
+                            <div><i class="fas fa-user-circle me-2" style="color: var(--brand-primary);"></i>${alert.name}</div>
+                            <div><span class="verification-badge badge-pending">${alert.action}</span></div>
+                            <div><small class="text-muted">${alert.time}</small></div>
+                        </div>`;
+            });
+            $('#recentAlerts').html(html);
+        } else {
+            $('#recentAlerts').html('<div class="text-center text-muted py-4">No recent alerts</div>');
+        }
+    }
+
+    function initializeCharts(data) {
+        // Admission Trend Chart
+        const trendCtx = document.getElementById('admissionTrendChart').getContext('2d');
+        admissionTrendChart = new Chart(trendCtx, {
+            type: 'line',
+            data: {
+                labels: data.trendYears || ['2021', '2022', '2023', '2024', '2025'],
+                datasets: [{
+                    label: 'Student Admissions',
+                    data: data.admissionTrend || [120, 145, 178, 210, 245],
+                    borderColor: '#4361ee',
+                    backgroundColor: 'rgba(67, 97, 238, 0.05)',
+                    borderWidth: 3,
+                    pointBackgroundColor: '#4361ee',
+                    pointBorderColor: 'white',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'top' } } }
+        });
+
+        // Semester Chart
+        const semCtx = document.getElementById('semesterChart').getContext('2d');
+        semesterChart = new Chart(semCtx, {
+            type: 'doughnut',
+            data: {
+                labels: data.semesterLabels || ['Semester I', 'Semester II', 'Semester III', 'Semester IV'],
+                datasets: [{
+                    data: data.semesterData || [85, 92, 78, 65],
+                    backgroundColor: ['#4361ee', '#7209b7', '#3f37c9', '#4895ef'],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom' } }, cutout: '60%' }
+        });
+
+        // Course Chart (Bar)
+        if (data.courseList && data.courseList.length) {
+            const courseCtx = document.getElementById('courseChart').getContext('2d');
+            courseChart = new Chart(courseCtx, {
+                type: 'bar',
+                data: {
+                    labels: data.courseList.map(c => c.name),
+                    datasets: [{
+                        label: 'Enrolled Students',
+                        data: data.courseList.map(c => c.count),
+                        backgroundColor: 'rgba(67, 97, 238, 0.7)',
+                        borderRadius: 10,
+                        barPercentage: 0.6
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+            });
+        }
+    }
+
+    function setDemoData() {
+        const demoData = {
+            totalStudents: 1245,
+            currentSessionStudents: 320,
+            pendingVerification: 48,
+            verifiedStudents: 1197,
+            newAdmissions: 85,
+            totalEmployees: 52,
+            totalDepartments: 8,
+            teachingFaculty: 32,
+            adminStaff: 12,
+            supportStaff: 8,
+            trendYears: ['2021', '2022', '2023', '2024', '2025'],
+            admissionTrend: [120, 145, 178, 210, 245],
+            semesterLabels: ['Sem I', 'Sem II', 'Sem III', 'Sem IV'],
+            semesterData: [85, 92, 78, 65],
+            verificationList: [
+                { documentType: 'Aadhar Card', status: 'pending', count: 18 },
+                { documentType: '10th Marksheet', status: 'pending', count: 12 },
+                { documentType: '12th Marksheet', status: 'pending', count: 10 },
+                { documentType: 'Transfer Certificate', status: 'pending', count: 8 }
+            ],
+            admissionTimeline: [
+                { title: 'Online Applications', date: 'March - April 2025', count: 320, status: 'ongoing' },
+                { title: 'Document Verification', date: 'May 2025', count: 272, status: 'ongoing' },
+                { title: 'Fee Payment', date: 'June 2025', count: 245, status: 'upcoming' }
+            ],
+            departmentList: [
+                { name: 'Computer Science', count: 95 },
+                { name: 'Commerce', count: 82 },
+                { name: 'Science', count: 78 },
+                { name: 'Arts', count: 65 }
+            ],
+            courseList: [
+                { name: 'BCA', count: 58 },
+                { name: 'B.Com', count: 52 },
+                { name: 'B.Sc', count: 48 },
+                { name: 'BA', count: 42 },
+                { name: 'MCA', count: 35 }
+            ],
+            recentAlerts: [
+                { name: 'Rahul Sharma', action: 'New Application', time: '5 min ago' },
+                { name: 'Priya Singh', action: 'Documents Pending', time: '15 min ago' },
+                { name: 'Amit Kumar', action: 'Verification Required', time: '1 hour ago' }
+            ]
+        };
+        updateDashboard(demoData);
+        initializeCharts(demoData);
+    }
+
+    setInterval(function() { fetchDashboardData(); }, 60000);
+</script>

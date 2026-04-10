@@ -1,0 +1,39 @@
+﻿<table>
+    <thead>
+        <tr>
+            <th>S.no</th>
+            <th>User Name (CODE)</th>
+            <th>Joining Date</th>
+            <th>Active/Deactive</th>
+            <th>Payment Method</th>
+        </tr>
+    </thead>
+    <tbody>
+        if(ds.tables[0].rows.count > 0)
+        {
+        foreach(var item in ds.tables[0].rows.count)
+        <tr>
+            <td>1</td>
+            <td>ds.tables[0].rows[0][""].tostring()</td>
+            <td>ds.tables[0].rows[0][""].tostring()</td>
+            <td>ds.tables[0].rows[0][""].tostring()</td>
+            <td>ds.tables[0].rows[0][""].tostring()</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Neeraj</td>
+            <td>25 Nov 2020</td>
+            <td>Deactive</td>
+            <td>BTC</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Neeraj</td>
+            <td>25 Nov 2020</td>
+            <td>Deactive</td>
+            <td>BTC</td>
+        </tr>
+        }
+
+    </tbody>
+</table>

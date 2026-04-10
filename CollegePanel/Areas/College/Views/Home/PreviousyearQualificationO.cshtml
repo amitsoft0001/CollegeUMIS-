@@ -1,0 +1,299 @@
+﻿
+
+@using DataLayer
+@model Tuple<DataLayer.StudentAdmissionQualification, List<DataLayer.StudentPreviousQualification>>
+@{
+    ViewBag.Title = "PreviousyearQualificationO";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+<script src="~/Content/js/vendor/jquery-1.12.4.min.js"></script>
+<script>
+   var art = '@Convert.ToInt32(CommonSetting.commQualification.Art12)';
+  var sci ='@Convert.ToInt32(CommonSetting.commQualification.Science12)';
+  var comm ='@Convert.ToInt32(CommonSetting.commQualification.Comm12)';
+</script>
+<script src="~/scripts/Customjs/PreviousyearQualificationo.js?id=@System.Configuration.ConfigurationManager.AppSettings["PreviousyearQualification"]"></script>
+<style>
+    .starvalid {
+        color: red;
+    }
+
+    .spacebottom {
+        margin-bottom: 30px;
+    }
+
+    .textsize {
+        font-size: 12px;
+    }
+</style>
+<link href="~/Content/Recruitmentpreocess.css" rel="stylesheet" />
+<div class="container-fluid">
+    <div class="report-part">
+        <ul>
+            <li><a href="~/College/Home/BasicDetailManualAd/?id=@ViewBag.oneID&eid=@ViewBag.ID"> Basic Detail </a></li>
+            <li class="active"><a id="preQuali"> Previous Year Qualification </a></li>
+            <li><a href="~/College/Home/ChosseSubjectsmanualad/@ViewBag.ID"> Choose Subject  </a></li>
+            <li><a href="~/College/Home/FeeSubmitManualAd/@ViewBag.ID"> Admission Fee </a></li>
+        </ul>
+    </div>
+    <div class="single-cards-item DocumentUpload">
+        <div class="row ">
+          
+        </div>
+        <div>
+            <div class="row">
+                <div class="col-lg-6 col-lg-offset-3">
+                    <div class="text-right">
+                        <div class="col-lg-12"><a class="btn btn-primary waves-effect waves-light" href="@Url.Action("StudentQualification","Home",new { id= @ViewBag.ID})" target="_blank" id="List">Document List</a></div>
+                    </div>
+                    <div class="sparkline12-hd">
+                        <div class="main-sparkline12-hd">
+                            <h3 class="text-center">Student Qualification </h3>
+                        </div>
+                        <div class="row spacebottom text-center">
+                            Name:
+                            @if (ViewBag.Name != null)
+                            {
+                                @ViewBag.Name
+                            }
+                        </div>
+
+                        <div class="sparkline12-graph  sparkline8-list">
+                            <div class="basic-login-form-ad">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="all-form-element-inner">
+                                            @*<form action="#">*@
+
+                                            @using (Html.BeginForm())
+                                            {
+                                                <div class="form-group-inner">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <label class="login2"><span class="starvalid">*</span>Qualification</label>
+                                                            <div class="form-select-list">
+                                                                @Html.DropDownListFor(model => model.Item1.QualicationType, new SelectList(ViewBag.Qualification, "Value", "Text", ViewBag.que), "--Select Qualification--", new { @class = "form-control custom-select-value", @id = "Qualification", @name = "Qualification", @required = "required" })
+                                                                @if (Model.Item1 != null)
+                                                                {
+                                                                    @Html.HiddenFor(model => model.Item1.ID, new { @id = "hid" })
+                                                                }
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="text-danger">
+                                                            <span id="Berr"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group-inner">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <label class="login2"><span class="starvalid">*</span>Upload Document</label>
+                                                            <div class="file-upload-inner file-upload-inner-right ts-forms">
+                                                                <div class="input append-big-btn">
+                                                                    <label class="icon-left" for="append-big-btn">
+                                                                        <i class=""></i>
+                                                                    </label>
+                                                                    <div class="file-button">
+                                                                        Browse
+                                                                        <input type="file" onchange="document.getElementById('append-big-btn').value = this.value; check(); encodeImagetoBase64(this);" id="file" name="file" required>
+                                                                    </div>
+                                                                    <input type="hidden" class="link">
+                                                                    <input type="text" id="append-big-btn" placeholder="no file selected" readonly value="@Model.Item1.FileURl">
+                                                                    <div class="text-danger textsize pt-10"> Allowed .ext is .jpg,.jpeg,.png,.pdf   ,Size should be less then 500KB </div>
+                                                                    @if (Model.Item1 != null)
+                                                                    {
+                                                                        <input type="hidden" id="hfile" name="hfile" value="@Model.Item1.FileURl">
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group-inner">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <label class="login2">Board/University Name <span class="starvalid">*</span></label>
+                                                            @Html.TextBoxFor(model => model.Item1.Board_UniversityName, new { @class = "form-control", @id = "UniversityName", @required = "required" })
+                                                            @Html.Hidden("EnID", (object)ViewBag.ID)
+                                                        </div>
+                                                        <div class="text-danger text-center">
+                                                            <span id="Uerr"> </span>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group-inner">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <label class="login2">Roll No <span class="starvalid">*</span></label>
+                                                            @Html.TextBoxFor(model => model.Item1.RollNo, new { @class = "form-control", @id = "RollNo", @required = "required", @MaxLength = "10" })
+                                                            @*<input type="text" class="form-control" id="UniversityName" required />*@
+                                                        </div>
+                                                        <div class="text-danger text-center">
+                                                            <span id="Uerr"> </span>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group-inner">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <label class="login2">Aggregate Percentage <span class="starvalid">*</span></label>
+                                                            @Html.TextBoxFor(model => model.Item1.Percentage, new { @class = "form-control", @id = "Percentage", @required = "required", @oninput = "Onlynumericvalue(this);", @maxlength = "5", @onchange = "percheck()" })
+                                                            @*<input type="text" class="form-control" id="Percentage" required oninput="Onlynumericvalue(this);" maxlength="5" />*@
+                                                            <div class="text-danger  textsize">
+                                                                <span id="Perr"></span>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group-inner">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <label class="login2">Passing Year <span class="starvalid">*</span></label>
+                                                            <div class="form-select-list">
+                                                                @Html.DropDownList("PassingYear", new SelectList(ViewBag.year, "Value", "Text", Model.Item1.PassingYear), "--Select Passing Year--", new { @class = "form-control custom-select-value", @id = "PassingYear", @name = "PassingYear", @required = "required" })
+
+                                                            </div>
+                                                            <div class="text-danger">
+                                                                <span id="Yerr"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            }
+                                            @*</form>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sparkline12-graph">
+                            <div class="basic-login-form-ad">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="all-form-element-inner">
+                                            @*<form action="#">*@
+                                            <div class="text-danger text-center">
+                                                @if (TempData["Msg"] != null)
+                                                {
+                                                    @TempData["Msg"];
+                                                }
+                                            </div>
+
+                                            @using (Html.BeginForm())
+                                            {
+                                                <div id="SubjectTable" class="dataTables_wrapper no-footer" style="display:none">
+                                                    <div class="text-center">
+                                                        <h3>Please Choose Subject For Intermediate Details</h3>
+                                                    </div>
+                                                    @Html.HiddenFor(model => model.Item1.ScopeIdentity, new { @id = "hid1" })
+                                                    <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed dataTable ">
+                                                        <thead>
+                                                            <tr>
+                                                                <th width="200">
+                                                                    @Html.DisplayName("Subject")
+                                                                </th>
+                                                                <th>
+                                                                    @Html.DisplayName("Total Marks")
+                                                                </th>
+                                                                <th>
+                                                                    @Html.DisplayName("Marks Obtained")
+                                                                </th>
+                                                                <th>
+                                                                    @Html.DisplayName("Percentage")
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @{int i = 0; }
+                                                            @foreach (var item in Model.Item2)
+                                                            {
+                                                                <tr>
+                                                                   
+                                                                        <td>
+                                                                            @Html.DropDownList("SubjectID", new SelectList(ViewBag.Subject, "Value", "Text", item.SubjectID), "--Select Subject--", new { @class = "form-control custom-select-value Subject", @id = "SubjectID", @required = "required" })
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.TextBox("TotalMarks", "", new
+                                                                               {
+                                                                                   @class = "form-control TotalMarks ",
+                                                                                   @id = "TotalMarks",
+                                                                                   @name = "TotalMarks",
+                                                                                   @required = "required",
+                                                                                   @oninput = "Onlynumericvalue(this);",
+                                                                                   @maxlength = "3",
+                                                                                   @Value = "100"
+                                                                                  
+                                                                               })
+                                                                        </td>
+                                                                    
+                                                                   
+
+                                                                    <td>
+                                                                        @Html.TextBox("MarksObtain", "", new { @class = "form-control MarksObtain ", @id = "MarksObtain", @name = "MarksObtain", @required = "required", @oninput = "Onlynumericvalue(this);", @maxlength = "3", @Value = item.MarksObtain })
+                                                                    </td>
+                                                                    <td>
+                                                                        @Html.TextBox("SubjectPercentage", "", new { @class = "form-control subper ", @id = "SubjectPercentage", @name = "SubjectPercentage", @required = "required", @Value = item.SubjectPercentage })
+                                                                    </td>
+
+                                                                    @if (item.ID > 0)
+                                                                    {
+                                                                        @Html.Hidden("ID", "", new { @Value = item.ID })
+                                                                    }
+
+                                                                </tr>
+                                                                i = i + 1;
+                                                            }
+
+
+
+
+                                                    </table>
+
+                                                    <div class="text-danger text-warning">1 .The above all 5 fields are mendatory field . <br /><br /></div>
+                                                    <div class="text-danger text-warning">2. Student Can edit Total Marks as according to his/her Intermediate MarksSheet. University shall not be responsible for any kind of discrepancy. </div>
+
+
+                                                </div>
+
+
+                                                                //if (@ViewBag.IsSubmit != 1)
+                                                                //{
+                                                                //    if (ViewBag.check_admissionopen == true)
+                                                                //    {
+                                                                    <div class="form-group-inner">
+                                                                        <div class="login-btn-inner">
+                                                                            <div class="row">
+                                                                                <div class="col-lg-12 text-center">
+                                                                                    <div class="document-btn">
+                                                                                        <div class="login-horizental cancel-wp form-bc-ele">
+                                                                                            <button class="btn btn-primary" type="button" onclick="resetapplication()">Reset</button>
+                                                                                            <button class="btn btn-sm btn-primary login-submit-cs" type="button" onclick="submitapplication()" id="btn" @*style="display:none"*@>Submit</button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                        @*}
+                                                                    }*@
+
+                                                                }
+                                            @*</form>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>       
+
+        </div>
+    </div>
+</div>

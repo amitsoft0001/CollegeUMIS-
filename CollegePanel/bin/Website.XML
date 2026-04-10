@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Website</name>
+    </assembly>
+    <members>
+        <member name="M:Website.Areas.college.Controllers.HomeController.EnrollmentRequestList">
+            [VerifyUrlFilterCollegeAttribute]
+        </member>
+        <member name="M:Website.Controllers.LoginController.Logout">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Website.Models.EncriptDecript.GeneratePassword(System.Int32,System.Int32)">
+            <summary>
+            Creates a pseudo-random password containing the number of character classes
+            defined by complexity, where 2 = alpha, 3 = alpha+num, 4 = alpha+num+special.
+            </summary>
+        </member>
+        <member name="T:AmazonUploader">
+            <summary>
+            Summary description for AmazonUploader
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,67 @@
+﻿@using Website.Models;
+@{
+    ViewBag.Title = "ManualAdmission";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+    var i = @EncriptDecript.Encrypt("1");
+}
+
+<style>
+    .single-product-text {
+        text-align: left !important;
+        min-height: 400px;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="single-cards-item" style="text-align:left">
+
+                <div class="single-product-text dashboard-part">
+
+                    <h4><a class="" href="#">Instructions for Application Manual Proccess.</a></h4>
+                    <span class="counter">
+                        Following are the stages for Application Manual Proccess Submission in the following order to add.
+                    </span>
+
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="cards-dtn">
+                                <h6></h6>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-6">
+                            <div class="box-col">
+                                <a href="/College/Home/BasicDetailManualAd/@i">
+                                    @*<div class="check-icon"><i class="fa fa-check"></i></div>*@
+                                    <div class="row">
+                                        <div class="col-xs-3 text-left">
+                                            <div class="box-icon icon1"><i class="fa fa-info"></i></div>
+                                        </div>
+                                        <div class="col-xs-9 text-right"><span class="text-head">Existing Registration Student</span></div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6" >
+                            <div class="box-col">
+                                <a href="/College/Home/BasicDetailManualAd/">
+                                   
+                                    <div class="row">
+                                        <div class="col-xs-3 text-left">
+                                            <div class="box-icon icon2"><i class="fa fa-upload"></i></div>
+                                        </div>
+                                        <div class="col-xs-9 text-right"><span class="text-head">New Registration Student</span></div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+

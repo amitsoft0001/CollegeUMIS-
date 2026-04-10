@@ -1,0 +1,217 @@
+﻿
+@{
+    ViewBag.Title = "GenerateRollNo";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+<script>
+    var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+
+</script>
+<style>
+    .minheight {
+        min-height: 600px;
+    }
+
+    .right {
+        text-align: right;
+    }
+
+    .left {
+        text-align: left;
+    }
+
+    .paddingbottom {
+        padding-bottom: 20px;
+        padding-top: 40px;
+    }
+    .spaceDesign{
+        padding-bottom:20px;
+        padding-left:30px;
+        padding-right:30px;
+    }
+</style>
+
+
+<script>
+    $(document).ready(function () {       
+        $("#EducationTypeID").change(function (event) {
+            debugger;
+            var v_session = '41';
+            $('#CourseCategoryID').find("option").remove();
+            $("#CourseCategoryID").append($("<option></option>").val("").html("--Select Course--"));
+            $('#divmsg').removeAttr("style");
+            $("#divmsg").attr("style", "display: none;");
+            var res = $(this).val();
+            if (res == "") {
+                res = 0;
+                return;
+            }
+            $.ajax({
+                url: "/College/Home/getcourseAvailable/",
+                data: { id: res, session: v_session},
+                cache: false,
+                type: "POST",
+                dataType: "json",
+                headers: { 'Authorization': 'Basic ' + btoa(username + ':' + password) },
+                success: function (data) {
+
+                    //console.log(data);
+                    $('#CourseCategoryID').find("option").remove();
+                    $("#CourseCategoryID").append($("<option></option>").val("").html("--Select Course--"));
+                    $.each(data.data, function (key, value) {
+                        $("#CourseCategoryID").append($("<option></option>").val(value.CourseCategoryID).html(value.CourseCategory));
+                    });
+                },
+                error: function () {
+                    alert("error coming");
+                }
+            });
+        });
+        $("#CourseCategoryID").change(function (event) {
+            showloader();
+           var res = $(this).val();
+            if (res == "") {
+                res = 0;
+                return;
+            }
+            $.ajax({
+                url: "/College/Home/getRollNoStatus/",
+                data: { CourseCategoryID: res },
+                cache: false,
+                type: "GET",
+                dataType: "json",
+                headers: { 'Authorization': 'Basic ' + btoa(username + ':' + password) },
+                success: function (data) {
+                    hideloader();
+                    if(data.Status)
+                    {
+                        $('#btnsubmitDiv').removeAttr("style");
+                        $("#btnsubmitDiv").attr("style", "display: block;");
+                        $('#divmsg').removeAttr("style");
+                        $("#divmsg").attr("style", "display: none;");
+                        //
+                    }
+                    else
+                    {
+                        $('#btnsubmitDiv').removeAttr("style");
+                        $("#btnsubmitDiv").attr("style", "display: none;");
+                        $('#divmsg').removeAttr("style");
+                        $("#divmsg").attr("style", "display: block;");
+                        $("#resmsg").html("Already generated Roll No for  this course !!!");
+                    }
+
+                
+                },
+                error: function (err) {
+
+                    hideloader();
+                    alert("error");
+
+                }
+            });
+        });
+    });   
+</script>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="container-fluid">
+            <h3 class="text-center" style="padding-bottom:20px;">Generate Roll No Of Students</h3>
+
+        </div>
+    </div>
+    <div class="row minheight">
+        <div class="container-fluid">
+            <div class="col-lg-10 col-sm-12 col-xs-12 col-lg-offset-1 ">
+                <div class="row spaceDesign" id="divmsg" style="display:none">
+                    <div class="text-center">
+                        <div class="alert-wrap1 shadow-inner wrap-alert-b">
+                            <div class="alert alert-success " role="alert" style="text-align:center !important">
+                                <div id="resmsg"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-body">
+                    @using (Html.BeginForm("", "Home", FormMethod.Post, new { id = "myform" }))
+                    {
+                        <div class="row spaceDesign">
+
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                <span><label>Programme Name:</label></span>
+                                @Html.DropDownList("program", new SelectList(ViewBag.EducationType, "Value", "Text"), "--Select Programme--", new { @class = "form-control", @id = "EducationTypeID" })
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                <span><label>Course Name:</label></span>
+                                @Html.DropDownList("CoursetypeID", new SelectList(ViewBag.Coursetype, "CourseCategoryID", "CourseCategory", ViewBag.CoursetypeID), "--Select Course--", new { @class = "form-control", @id = "CourseCategoryID" })
+                            </div>
+
+                        </div>
+                        <div class="row spaceDesign" id="btnsubmitDiv">
+                            <div class="col-md-6 left">
+                            </div>
+                            <div class="col-md-6 right">
+                                <button class="btn btn-primary waves-effect waves-light" type="button" id="btnsubmit">Generate</button>
+                            </div>
+                        </div>
+                        
+                    }
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+    </div>
+</div>
+
+<script>
+    $("#btnsubmit").click(function (event) {
+        showloader();
+        var EducationTypeID = $('#EducationTypeID').val();
+        var CourseCategoryID = $('#CourseCategoryID').val();
+        if (EducationTypeID == "") {
+            alert(' Please Select Programme First!!!!');
+            return;
+        }
+        if (CourseCategoryID == "") {
+            alert(' Please Select Course Category First!!!!');
+            return;
+        }
+        $.ajax({
+            url: "/College/Home/generaterollnoforstudent/",
+            data: { EducationTypeID: EducationTypeID, CourseCategoryID: CourseCategoryID },
+            cache: false,
+            type: "POST",
+            dataType: "json",
+            headers: { 'Authorization': 'Basic ' + btoa(username + ':' + password) },
+            success: function (data) {
+                hideloader();
+                if(data.Status)
+                {
+                    alert(data.Msg);
+                    location.replace('/College/Home/GenerateRollNo');
+                }
+                else
+                {
+                    alert(data.Msg);
+                    //location.replace('/College/Home/RoomMaster');
+                }
+               
+            },
+            error: function (err) {
+
+                hideloader();
+                alert("error");
+
+            }
+        });
+    });
+
+</script>
+

@@ -1,0 +1,516 @@
+﻿@model DataLayer.BL_CollegeLogin
+@{
+    // ViewBag.Title = "Index";
+    Layout = null;
+}
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>College Dev Login</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- favicon
+        ============================================ -->
+
+    <link rel="shortcut icon" type="image/x-icon" href="~/Content/img/favicon.png">
+    <!-- Google Fonts
+        ============================================ -->
+    <link href="https://fonts.googleapis.com/css?family=Play:400,700" rel="stylesheet">
+    <!-- Bootstrap CSS
+        ============================================ -->
+    <link rel="stylesheet" href="~/Content/css/bootstrap.min.css">
+    <!-- Bootstrap CSS
+        ============================================ -->
+    <link rel="stylesheet" href="~/Content/css/font-awesome.min.css">
+    <!-- owl.carousel CSS
+        ============================================ -->
+    <link rel="stylesheet" href="~/Content/css/owl.carousel.css">
+    <link rel="stylesheet" href="~/Content/css/owl.theme.css">
+    <link rel="stylesheet" href="~/Content/css/owl.transitions.css">
+    <!-- animate CSS
+        ============================================ -->
+    <link rel="stylesheet" href="~/Content/css/animate.css">
+    <!-- normalize CSS
+        ============================================ -->
+    <link rel="stylesheet" href="~/Content/css/normalize.css">
+    <!-- main CSS
+        ============================================ -->
+    <link rel="stylesheet" href="~/Content/css/main.css">
+    <!-- morrisjs CSS
+        ============================================ -->
+    <link rel="stylesheet" href="~/Content/css/morrisjs/morris.css">
+    <!-- mCustomScrollbar CSS
+        ============================================ -->
+    <link rel="stylesheet" href="~/Content/css/scrollbar/jquery.mCustomScrollbar.min.css">
+    <!-- metisMenu CSS
+        ============================================ -->
+    <link rel="stylesheet" href="~/Content/css/metisMenu/metisMenu.min.css">
+    <link rel="stylesheet" href="~/Content/css/metisMenu/metisMenu-vertical.css">
+    <!-- calendar CSS
+        ============================================ -->
+    <link rel="stylesheet" href="~/Content/css/calendar/fullcalendar.min.css">
+    <link rel="stylesheet" href="~/Content/css/calendar/fullcalendar.print.min.css">
+    <!-- forms CSS
+        ============================================ -->
+    <link rel="stylesheet" href="~/Content/css/form/all-type-forms.css">
+    <!-- style CSS
+        ============================================ -->
+    <link rel="stylesheet" href="~/Content/style.css">
+    <!-- responsive CSS
+        ============================================ -->
+    <link rel="stylesheet" href="~/Content/css/responsive.css">
+    <!-- modernizr JS
+        ============================================ -->
+    <script src="~/Content/js/vendor/modernizr-2.8.3.min.js"></script>
+    <script src="~/Content/js/vendor/jquery-1.12.4.min.js"></script>
+    <style>
+        .error-msg {
+            color: #ff0000;
+            font-weight: bold;
+        }
+    </style>
+    <style>
+        .right {
+            text-align: right !important;
+        }
+
+        .left {
+            text-align: left !important;
+        }
+
+        .starvalid {
+            color: red;
+        }
+    </style>
+    <link href="~/Content/css/preloader/preloader-style.css" rel="stylesheet" />
+    <style>
+        /*!
+        // 3. Loader
+        // --------------------------------------------------*/
+        .loader {
+            top: 0;
+            left: 0;
+            position: fixed;
+            opacity: 0.8;
+            z-index: 10000000;
+            background: Black;
+            height: 100%;
+            width: 100%;
+            margin: auto;
+        }
+
+        @@-webkit-keyframes stripMove {
+            0% {
+                transform: translate3d(0px, 0px, 0px);
+                -webkit-transform: translate3d(0px, 0px, 0px);
+                -moz-transform: translate3d(0px, 0px, 0px);
+            }
+
+            50% {
+                transform: translate3d(0px, 0px, 0px);
+                -webkit-transform: translate3d(0px, 0px, 0px);
+                -moz-transform: translate3d(0px, 0px, 0px);
+                transform: scale(4, 1);
+                -webkit-transform: scale(4, 1);
+                -moz-transform: scale(4, 1);
+            }
+
+            100% {
+                transform: translate3d(-50px, 0px, 0px);
+                -webkit-transform: translate3d(-50px, 0px, 0px);
+                -moz-transform: translate3d(-50px, 0px, 0px);
+            }
+        }
+
+        @@-moz-keyframes stripMove {
+            0% {
+                transform: translate3d(-50px, 0px, 0px);
+                -webkit-transform: translate3d(-50px, 0px, 0px);
+                -moz-transform: translate3d(-50px, 0px, 0px);
+            }
+
+            50% {
+                transform: translate3d(0px, 0px, 0px);
+                -webkit-transform: translate3d(0px, 0px, 0px);
+                -moz-transform: translate3d(0px, 0px, 0px);
+                transform: scale(4, 1);
+                -webkit-transform: scale(4, 1);
+                -moz-transform: scale(4, 1);
+            }
+
+            100% {
+                transform: translate3d(50px, 0px, 0px);
+                -webkit-transform: translate3d(50px, 0px, 0px);
+                -moz-transform: translate3d(50px, 0px, 0px);
+            }
+        }
+
+        @@keyframes stripMove {
+            0% {
+                transform: translate3d(-50px, 0px, 0px);
+                -webkit-transform: translate3d(-50px, 0px, 0px);
+                -moz-transform: translate3d(-50px, 0px, 0px);
+            }
+
+            50% {
+                transform: translate3d(0px, 0px, 0px);
+                -webkit-transform: translate3d(0px, 0px, 0px);
+                -moz-transform: translate3d(0px, 0px, 0px);
+                transform: scale(4, 1);
+                -webkit-transform: scale(4, 1);
+                -moz-transform: scale(4, 1);
+            }
+
+            100% {
+                transform: translate3d(50px, 0px, 0px);
+                -webkit-transform: translate3d(50px, 0px, 0px);
+                -moz-transform: translate3d(50px, 0px, 0px);
+            }
+        }
+    </style>
+    <style>
+        .preloader-single {
+            height: 100% !important;
+        }
+    </style>
+    <style>
+        .atag {
+            color: #337ab7 !important;
+            font-size: 14px;
+        }
+
+        .starvalid {
+            color: red;
+        }
+
+        img {
+            max-width: 85% !important;
+            height: auto;
+        }
+    </style>
+    <div class="loader" id="AjaxLoader" style="display:none;">
+        <div class="preloader-single shadow-inner">
+            <div class="ts_preloading_box">
+                <div id="ts-preloader-absolute22">
+                    <div class="tsperloader22" id="first_tsperloader22"></div>
+                    <div class="tsperloader22" id="second_tsperloader22"></div>
+                    <div class="tsperloader22" id="third_tsperloader22"></div>
+                </div>
+            </div>
+        </div>
+        <div class="strip-holder">
+            <div class="strip-1"></div>
+            <div class="strip-2"></div>
+            <div class="strip-3"></div>
+        </div>
+    </div>
+    <script>
+        $(document)
+            .ajaxStart(function () {
+                // $('#AjaxLoader').show();
+            })
+            .ajaxStop(function () {
+                //  $('#AjaxLoader').hide();
+            });
+        function showloader() {
+            $('#AjaxLoader').show();
+        }
+        function hideloader() {
+            $('#AjaxLoader').hide();
+        }
+    </script>
+</head>
+
+<body>
+
+    <div class="error-pagewrap">
+        <div class="error-page-int">
+            <div class="text-center m-b-md custom-login">
+                <p>
+                    @*<a href="/"><img src="~/images/logo.png" /></a>*@
+                    <a href="/"><img src="~/images/mu-logo-white.png" /></a>
+                </p>
+
+                <p>College Login</p>
+
+            </div>
+            <div class="content-error">
+                <div class="hpanel">
+                    <div class="panel-body">
+                        <div class="content-error error-msg"> @TempData["errorMsg"] </div>
+                        <form class="form-horizontal" id="loginid">
+
+                            <div class="form-group">
+                                <label class="control-label" for="username">Username</label>
+                                @*<input type="text" placeholder="Username" title="Please enter you username" required="" value="" name="username" id="username" class="form-control">*@
+                                @Html.TextBoxFor(Model => Model.Email, new { @class = "form-control", placeholder = "Username", @title = "Please Enter Username", @required = true, @id = "username" })
+
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="password">Password</label>
+                                @*<input type="password" title="Please enter your password" placeholder="******" required="" value="" name="password" id="password" class="form-control">*@
+                                @Html.PasswordFor(Model => Model.Password, new { @class = "form-control", placeholder = "Password", @title = "Please Enter Password", @required = true, @id = "password" })
+                            </div>
+                            <div class="checkbox login-checkbox">
+                                <label>
+                                    @*<input type="checkbox" class="i-checks"> Remember me*@
+                                    @Html.CheckBoxFor(model => model.rememberMe) Remember me
+                                </label>
+
+                            </div>
+                            <p></p>
+                            @*<div class="form-group">
+                                    <div id="dvCaptcha">
+                                    </div>
+                                    @Html.TextBoxFor(Model => Model.txtCaptcha, new { @class = "form-control", @title = "Captcha validation is required.", @name = "Captcha", @required = true, @id = "txtCaptcha", @Style = "display:none" })
+                                </div>*@
+
+                            @*<asp:TextBox ID="txtCaptcha" runat="server" Style="display: none" />*@
+                            @*<asp:RequiredFieldValidator ID="rfvCaptcha" ErrorMessage="Captcha validation is required." ControlToValidate="txtCaptcha"
+                                runat="server" ForeColor="Red" Display="Dynamic" />*@
+                            <button type="button" class="btn btn-success btn-block loginbtn" id="dosubmit">Login</button>
+                        </form>
+                        <form class="form-horizontal" id="optdiv" style="display:none">
+
+                            <div class="form-group">
+                                <label class="control-label" for="OTP">OTP</label>
+                                @Html.TextBoxFor(Model => Model.OTP, new { @class = "form-control", placeholder = "OTP", @title = "Please Enter OTP", @required = true, @id = "OTP", @maxlength = "10" })
+
+                            </div>
+
+
+                            <p></p>
+
+                            <button type="button" class="btn btn-success btn-block loginbtn" id="verifyotp">Verify OTP</button>
+                        </form>
+                        @*}*@
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-12-col-sm-12">
+                <a href="~/Login/ResetPassword">
+                    <i class="fa fa-key"></i>&nbsp;&nbsp; Forgot Password&nbsp;&nbsp;
+                </a>
+                <p></p>
+            </div>
+            <div class="text-center login-footer">
+                <p>Copyright ©  @DateTime.Now.Year.ToString()  <span>@DataLayer.CommonSetting.ProjectName</span>. All rights reserved. </p>
+            </div>
+        </div>
+    </div>
+    <!-- jquery
+        ============================================ -->
+    <script src="~/Content/js/vendor/jquery-1.12.4.min.js"></script>
+    <!-- bootstrap JS
+        ============================================ -->
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <!-- wow JS
+        ============================================ -->
+    <script src="~/Content/js/wow.min.js"></script>
+    <!-- price-slider JS
+        ============================================ -->
+    <script src="~/Content/js/jquery-price-slider.js"></script>
+    <!-- meanmenu JS
+        ============================================ -->
+    <script src="~/Content/js/jquery.meanmenu.js"></script>
+    <!-- owl.carousel JS
+        ============================================ -->
+    <script src="~/Content/js/owl.carousel.min.js"></script>
+    <!-- sticky JS
+        ============================================ -->
+    <script src="~/Content/js/jquery.sticky.js"></script>
+    <!-- scrollUp JS
+        ============================================ -->
+    <script src="~/Content/js/jquery.scrollUp.min.js"></script>
+    <!-- mCustomScrollbar JS
+        ============================================ -->
+    <script src="~/Content/js/scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="~/Content/js/scrollbar/mCustomScrollbar-active.js"></script>
+    <!-- metisMenu JS
+        ============================================ -->
+    <script src="~/Content/js/metisMenu/metisMenu.min.js"></script>
+    <script src="~/Content/js/metisMenu/metisMenu-active.js"></script>
+    <!-- tab JS
+        ============================================ -->
+    <script src="~/Content/js/tab.js"></script>
+    <!-- icheck JS
+        ============================================ -->
+    <script src="~/Content/js/icheck/icheck.min.js"></script>
+    <script src="~/Content/js/icheck/icheck-active.js"></script>
+    <!-- plugins JS
+        ============================================ -->
+    <script src="~/Content/js/plugins.js"></script>
+    <!-- main JS
+        ============================================ -->
+    <script src="~/Content/js/main.js"></script>
+    <!-- tawk chat JS
+        ============================================ -->
+    @*<script src="~/Content/js/tawk-chat.js"></script>*@
+</body>
+</html>
+<script>
+    $(function () {
+        //debugger;
+        $("[id*=dosubmit]").bind("click", function () {
+
+           // debugger;
+            if ($("[id*=username]").val() == "") {
+                alert("Please Enter user name !!"); return false;
+            }
+            if ($("[id*=password]").val() == "") {
+                alert("Please Enter Password !!"); return false;
+            }
+            //if ($("[id*=txtCaptcha]").val() == "")
+            //{
+            //   alert("Invalid Captcha !!"); return false;
+            //}
+            var objlogin = {
+                CollegeCode: $("[id*=username]").val(),
+                Password: $("[id*=password]").val()
+            };
+
+            //debugger;
+            showloader();
+            $.ajax({
+                type: "POST",
+                url: '/Login/devIndexNew',
+                data: '{objlogin: ' + JSON.stringify(objlogin) + '}',
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+
+
+                success: function (response) {
+                    hideloader();
+                    //alert(response.Message);
+                    //if (response.Status) {
+
+                    //    $("#loginid").css("display", "none");
+                    //    $("#optdiv").css("display", "block");
+                    //    // window.location.href = "/College/Home/Index";
+                    //}
+                    //else
+                    //{
+                    //    hideloader();
+                    //    grecaptcha.reset();
+                    //    //$("[id*=rfvCaptcha]").show();
+                    //    alert(response.Message);
+                    //}
+                    if (response.Status) {
+                        window.location.href = "/College/Home/Index";
+                    }
+                    else {
+                        hideloader();
+                        alert(response.Message);
+                    }
+                    
+                },
+                Error: function (response) {
+                    hideloader();
+
+                }
+            });
+
+        });
+    });
+    $(function () {
+        //debugger;
+        $("[id*=verifyotp]").bind("click", function () {
+
+            // debugger;
+            //if ($("[id*=username]").val() == "") {
+            //    alert("Please Enter user name !!"); return false;
+            //}
+            //if ($("[id*=password]").val() == "") {
+            //    alert("Please Enter Password !!"); return false;
+            //}
+            if ($("[id*=OTP]").val() == "")
+            {
+                alert("Enter OTP !!");
+                return false;
+            }
+            var objlogin = {
+                CollegeCode: $("[id*=username]").val(),
+                Password: $("[id*=password]").val(),
+                OTP: $("[id*=OTP]").val()
+            };
+
+            //debugger;
+            showloader();
+            $.ajax({
+                type: "POST",
+                url: '/Login/VerifyOTP',
+                data: '{objlogin: ' + JSON.stringify(objlogin) + '}',
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+
+
+                success: function (response) {
+                    hideloader();
+
+                    if (response.Status) {
+                        showloader();
+                        window.location.href = "/College/Home/Index";
+                    }
+                    else {
+                        hideloader();
+                        alert(response.Message);
+                    }
+
+                },
+                Error: function (response) {
+                    hideloader();
+
+                }
+            });
+
+        });
+    });
+</script>
+
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+
+<script type="text/javascript">
+    var onloadCallback = function () {
+        //debugger;
+        grecaptcha.render('dvCaptcha', {
+
+            'sitekey': '6Lek4JwUAAAAABWxgpAF18nsiR1nuikeWHzSmi3v',
+            'callback': function (response) {
+               // debugger;
+                $.ajax({
+
+                    type: "POST",
+                    url: "Login/VerifyCaptcha",
+
+                    data: "{response: '" + response + "'}",
+
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (r) {
+                       // debugger;
+                        var captchaResponse = r; //jQuery.parseJSON(r);
+                        //var captchaResponse = jQuery.parseJSON(r.d);
+                        if (captchaResponse.success)
+                        {
+                            $("[id*=txtCaptcha]").val(captchaResponse.success);
+                            $("[id*=rfvCaptcha]").hide();
+                            $("[id*=dosubmit]").enable = true;
+
+                        }
+                        else {
+                            $("[id*=txtCaptcha]").val("");
+                            $("[id*=rfvCaptcha]").show();
+                            var error = captchaResponse["error-codes"][0];
+                            $("[id*=rfvCaptcha]").html("RECaptcha error. " + error);
+                        }
+                    }
+                });
+            }
+        });
+    };
+</script>

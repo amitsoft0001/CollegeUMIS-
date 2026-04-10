@@ -1,0 +1,274 @@
+﻿@model DataLayer.CollegeEmployee_Information
+@{
+    ViewBag.Title = "EmployeeInformation";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+
+<style>
+    body {
+        padding: 0;
+    }
+
+    .event-form input[type="text"] {
+        width: 100%;
+        border: 1px solid #ccc;
+        line-height: 40px;
+        padding: 0 10px;
+    }
+
+    .event-form select {
+        width: 100%;
+        border: 1px solid #ccc;
+        line-height: 40px;
+        height: 40px;
+        padding: 0 10px;
+    }
+
+    .event-form textarea {
+        width: 100%;
+        border: 1px solid #ccc;
+        line-height: 40px;
+        padding: 0 10px;
+    }
+
+    button.Submit-btn {
+        font-size: 17px;
+        background-color: #1a6fe8;
+        border: 0;
+        color: #FFF;
+        padding: 8px 15px;
+        font-weight: 600;
+        border-radius: 4px;
+    }
+
+    .spacedesign {
+        padding-bottom: 20px;
+    }
+
+    .spaceleft {
+        padding-left: 10px;
+    }
+
+    .textareadesign {
+        border: 1px solid #ccc;
+    }
+    .textsize
+    {
+        font-size:12px;
+    }
+    .right{
+        text-align:right;
+    }
+</style>
+<script src="~/JS/Commonjs.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<script src="~/scripts/Customjs/EmployeeInformation.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<div class="container-fluid">
+    <div class="collegeTransferForm">
+        <div class="col-lg-8 col-md-12 col-sm-12 col-lg-offset-2">
+            <h2 class="text-center">Certificate And Attestation</h2>
+            <div class="event-form">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label> Medical Report:</label>
+                            @*@Html.TextBoxFor(model => model.MedicalReport, "", new { @class = "form-control", @id = "MedicalReport", @name = "MedicalReport", @placeholder = "Medical Report" })*@
+                            @Html.TextAreaFor(model => model.MedicalReport, new { @class = "form-control", @id = "MedicalReport", @name = "MedicalReport", @placeholder = "Medical Report" })
+                            @if (Model != null)
+                            {
+                                @Html.HiddenFor(model => model.hid);
+                                @Html.HiddenFor(model => model.Nominnee,new {@id="nomineeID" });
+                                @Html.HiddenFor(model => model.NominneePercentage, new { @id = "nomineeper" });
+                            }
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="login2">Medical Report Document</label>
+                            <div class="file-upload-inner file-upload-inner-right ts-forms">
+                                <div class="input append-big-btn">
+                                    <label class="icon-left" for="append-big-btn">
+                                        <i class=""></i>
+                                    </label>
+                                    <div class="file-button">
+                                        Browse
+                                        <input type="file" onchange="document.getElementById('append-big-btn').value = this.value; checkmed();" id="file" name="file" required>
+                                    </div>
+                                    <input type="hidden" class="link">
+                                    <input type="text" id="append-big-btn" placeholder="no file selected" readonly value="@Model.MedicalReportDoc">
+                                    <div class="text-danger textsize pt-10"> Allowed .ext is .jpg,.jpeg,.png,.pdf   ,Size should be less then 500KB </div>
+                                    @if (Model != null)
+                                    {
+                                        <input type="hidden" id="hfile" name="hfile" value="@Model.MedicalReportDoc">
+                                        if (Model.MedicalReportDoc != null)
+                                        {
+                                            <div class="right">
+                                                <a title="View" href="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/College/@Model.MedicalReportDoc" target="_blank" class="btn btn-info btn-sm btndesign">View</a>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Character Certificate:</label>
+                            @Html.TextBoxFor(model => model.CharacterCertificate, "", new { @class = "form-control", @id = "CharacterCertificate", @name = "CharacterCertificate", @placeholder = "Character Certificate Report" })                           
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="login2">Character Certificate Document</label>
+                            <div class="file-upload-inner file-upload-inner-right ts-forms">
+                                <div class="input append-big-btn">
+                                    <label class="icon-left" for="append-big-btn1">
+                                        <i class=""></i>
+                                    </label>
+                                    <div class="file-button">
+                                        Browse
+                                        <input type="file" onchange="document.getElementById('append-big-btn1').value = this.value; checkchar();" id="file1" name="file1" required>
+                                    </div>
+                                    <input type="hidden" class="link">
+                                    <input type="text" id="append-big-btn1" placeholder="no file selected" readonly value="@Model.CharacterCertificateDoc">
+                                    <div class="text-danger textsize pt-10"> Allowed .ext is .jpg,.jpeg,.png,.pdf   ,Size should be less then 500KB </div>
+                                    @if (Model != null)
+                                    {
+                                        <input type="hidden" id="chfile" name="chfile" value="@Model.CharacterCertificateDoc">
+                                        if (Model.CharacterCertificateDoc != null)
+                                        {
+                                            <div class="right">
+                                                <a title="View" href="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/College/@Model.CharacterCertificateDoc" target="_blank" class="btn btn-info btn-sm btndesign">View</a>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>GPF No:</label>
+                          @Html.TextBoxFor(model => model.GPFNo, new { @class = "form-control", @id = "GPFNo", @name = "GPFNo", @placeholder = "Employee GPFNo" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>GPF Remarks:</label>
+                            @Html.TextBoxFor(model => model.GPFRemarks, new { @class = "form-control", @id = "GPFRemarks", @name = "GPFRemarks", @placeholder = "Employee GPF Remarks" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12" style="">
+                        <label><span class="starvalid">*</span>Allegiance To The Constitution: </label>
+                        @Html.RadioButtonFor(model => model.IsConstitution, "True", new { @class = "", @id = "IsConstitution", @name = "IsConstitution" })Yes
+                        @Html.RadioButtonFor(model => model.IsConstitution, "False", new { @class = "", @id = "IsConstitution", @name = "IsConstitution" })No
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-2 col-xs-12" style="">
+                        &nbsp;
+                    </div>
+                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12" style="">
+                        <label><span class="starvalid">*</span>Oath of Secrecy:  </label>
+                        @Html.RadioButtonFor(model => model.IsSecrecy, "True", new { @class = "", @id = "IsSecrecy", @name = "IsSecrecy" })Yes
+                        @Html.RadioButtonFor(model => model.IsSecrecy, "False", new { @class = "", @id = "IsSecrecy", @name = "IsSecrecy" })No
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" style="">
+                        &nbsp;
+                    </div>
+                </div>                
+                <div class="row spacedesign">
+                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12" style="">
+                        <label><span class="starvalid">*</span>Marital Status:  </label>
+                        @Html.RadioButtonFor(model => model.IsMarried, "True", new { @class = "", @id = "IsMarried", @name = "IsMarried" })Yes
+                        @Html.RadioButtonFor(model => model.IsMarried, "False", new { @class = "", @id = "IsMarried", @name = "IsMarried" })No
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" style="">
+                        &nbsp;
+                    </div>                   
+                </div>
+                <div class="row spacedesign">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            @if (Model.NominneeList.Count > 0)
+                            {
+                                <label><span class="starvalid">*</span>GPF Nominnee:</label>
+                                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer table-responsive">
+                                    <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed dataTable ">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    S.No
+                                                </th>
+                                                <th>
+                                                    Member Name
+                                                </th>
+                                                <th>
+                                                    Percentage
+                                                </th>
+                                            </tr>
+
+                                            @{ int j = 1, k = 0;}
+                                            @for (var i = 0; i < Model.NominneeList.Count; i++)
+                                            {
+                                                <tr>
+                                                    <td>@j.</td>
+                                                    <td>
+                                                        @Html.HiddenFor(m => m.NominneeList[i].Id)
+                                                        <input type="checkbox" name="chk" class="from-control chk" value=@Model.NominneeList[i].Id id="@Model.NominneeList[i].Id">
+                                                        <label for="@Model.NominneeList[i].MemberName" class="labletext">
+                                                            @{ var sub = @Model.NominneeList[i].MemberName;
+                                                            }
+                                                            @sub
+                                                        </label>
+                                                    </td>
+                                                    <td>
+                                                        @Html.TextBox("Percentage", "", new { @class = "form-control Percentage", @id = "Percentage_" + @k, @name = "Percentage", @placeholder = "Nominnee Percentage", @maxlength = "6", @oninput = "OnlyIntvalue(this);", })
+                                                    </td>
+                                                </tr>
+                                                                    j = j + 1;
+                                                                    k = k + 1;
+                                                                }
+                                        </thead>
+                                    </table>
+                                </div>
+
+                                                                }
+                           
+
+                            </div>
+                        </div>
+                    
+                </div>
+            </div>
+            @if (ViewBag.IsVerify == 0)
+            {
+                <div class="form-group-inner spacedesign">
+                    <div class="login-btn-inner">
+                        <div class="row">
+                            <div class="col-lg-4"></div>
+                            <div class="col-lg-8">
+                                <div class="login-horizental cancel-wp pull-left form-bc-ele">
+                                    <button class="btn btn-sm btn-primary login-submit-cs" type="button" onclick="resetapplication()">Reset</button>
+                                    <button class="btn btn-sm btn-primary login-submit-cs" type="button" onclick="submitapplication()">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+           
+        </div>
+
+    </div>
+</div>
+
+
+

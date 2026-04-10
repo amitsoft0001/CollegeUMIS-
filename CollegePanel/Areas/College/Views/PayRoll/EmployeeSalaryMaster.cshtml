@@ -1,0 +1,280 @@
+﻿@model DataLayer.EmployeeSalaryMaster
+@{
+    ViewBag.Title = "EmployeeSalaryMaster";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+<style>
+    body {
+        padding: 0;
+    }
+
+    .event-form input[type="text"] {
+        width: 100%;
+        border: 1px solid #ccc;
+        line-height: 40px;
+        padding: 0 10px;
+    }
+
+    .event-form select {
+        width: 100%;
+        border: 1px solid #ccc;
+        line-height: 40px;
+        height: 40px;
+        padding: 0 10px;
+    }
+
+    .event-form textarea {
+        width: 100%;
+        border: 1px solid #ccc;
+        line-height: 40px;
+        padding: 0 10px;
+    }
+
+    button.Submit-btn {
+        font-size: 17px;
+        background-color: #1a6fe8;
+        border: 0;
+        color: #FFF;
+        padding: 8px 15px;
+        font-weight: 600;
+        border-radius: 4px;
+    }
+
+    .spacedesign {
+        padding-bottom: 20px;
+    }
+
+    .spaceleft {
+        padding-left: 10px;
+    }
+
+    .textareadesign {
+        border: 1px solid #ccc;
+    }
+
+    .mnheight {
+        min-height: 450px;
+    }
+     .btndesign {
+        margin-top: 20px;
+    }
+
+    .starvalid {
+        color: red;
+    }
+
+    .spacedesign {
+        padding-bottom: 20px;
+    }
+
+    .panel-body a {
+        font-size: 14px;
+        color: white;
+        margin-top: 0px !important;
+        padding: 1px 4px 1px 6px;
+    }
+
+    .right {
+        text-align: right;
+    }
+
+    .left {
+        text-align: left;
+    }
+</style>
+<script src="~/JS/Commonjs.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<script src="~/scripts/Customjs/EmployeeSalaryMaster.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<div class="container-fluid mnheight">
+    <div class="collegeTransferForm">
+        <div class="col-lg-8 col-lg-offset-2">
+            <h2 class="text-center">Add Salary Master</h2>
+            @if (Model != null) { 
+            <div class="event-form">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label><span class="starvalid">*</span>Employee Name:</label>
+                            @Html.DropDownListFor(model => model.EmployeeID, new SelectList(ViewBag.UserList, "ID", "UserName"), "--Select Employee--", new
+                       {
+                           @class = "form-control",
+                           @id = "EmployeeID",
+                           @name = "EmployeeID"
+                       })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label><span class="starvalid">*</span>PayBand:</label>
+                            @Html.DropDownListFor(model => model.PaybandID, new SelectList(ViewBag.PaybandList, "ID", "PaybandName"), "--Select Payband--", new
+                       {
+                           @class = "form-control",
+                           @id = "PaybandID",
+                           @name = "PaybandID"
+                       })
+                           
+                            @if (Model != null)
+                            {
+                                @Html.HiddenFor(model => model.aid);
+                            }
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label><span class="starvalid">*</span>Basic Salary:</label>
+                            @Html.TextBoxFor(model => model.BasicSalary, new { @class = "form-control", @id = "BasicSalary", @name = "BasicSalary", @placeholder = "Basic Salary", @maxlength = "10", @oninput = "OnlyIntvalue(this);" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label><span class="starvalid">*</span>HRA:(@Model.HRApercentge %)</label>
+                            @Html.TextBoxFor(model => model.HRA, new { @class = "form-control", @id = "HRA", @name = "HRA", @placeholder = "HRA" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label><span class="starvalid">*</span>DA:(@Model.DApercentage %)</label>
+                            @Html.TextBoxFor(model => model.DA, new { @class = "form-control textareadesign", @id = "DA", @name = "DA", @placeholder = "DA"})
+                        </div>
+                    </div>
+                </div>
+                @if (Model.Allowance_MasterList.Count > 0)
+                {
+                    <label><strong>Allowance:</strong></label>
+                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer table-responsive">
+                        <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed dataTable ">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        S.No
+                                    </th>
+                                    <th>
+                                        Allowance Name
+                                    </th>
+                                    <th>
+                                        Amount/Percentage
+                                    </th>
+                                    <th>
+                                        Allowance Amount Type
+                                    </th>
+                                    <th id="peramount" style="display:none">
+                                      Amount
+                                    </th>
+                                </tr>
+
+                                @{ int k = 1;}
+                                @for (var i = 0; i < Model.Allowance_MasterList.Count; i++)
+                                {
+                                    <tr>
+                                        <td>@k.</td>
+                                        <td>
+                                            @Model.Allowance_MasterList[i].allowancename
+                                            <input type="hidden" name="haid" value=@Model.Allowance_MasterList[i].id />
+                                        </td>
+                                        <td>                                           
+                                            @Html.TextBoxFor(model => model.Allowance_MasterList[i].Amount, new { @class = "form-control AllowanceAmount"@*@id = "AllowanceAmount",*@ , @name = "AllowanceAmount", @placeholder = " Allowance Amount", @maxlength = "10", @oninput = "OnlyIntvalue(this);" })
+                                        </td>
+                                        <td>
+                                            <span>
+                                                @Html.RadioButtonFor(model => model.Allowance_MasterList[i].AmountType, "True", new { @class = "AAmountType", @id = "AmountTypet", @name = "AAmountType" })Percentage
+                                                @Html.RadioButtonFor(model => model.Allowance_MasterList[i].AmountType, "False", new { @class = "AAmountType", @id = "AmountTypef", @name = "AAmountType" })Amount
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    k = k + 1;
+
+                                }
+                            </thead>
+                        </table>
+                    </div>
+                                    }
+                @if (Model.Deduction_MasterList.Count > 0)
+                {
+                    <label><strong>Deduction:</strong></label>
+                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer table-responsive">
+                        <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed dataTable ">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        S.No
+                                    </th>
+                                    <th>
+                                        Deduction Name
+                                    </th>
+                                    <th>
+                                       Amount/Percentage
+                                    </th>
+                                    <th>
+                                        Deduction Amount Type
+                                    </th>
+                                </tr>
+
+                                @{ int j = 1;}
+                                @for (var i = 0; i < Model.Deduction_MasterList.Count; i++)
+                                {
+                                    <tr>
+                                        <td>@j.</td>
+                                        <td>
+                                            @Model.Deduction_MasterList[i].deductionname
+                                            <input type="hidden" name="hdid" value=@Model.Deduction_MasterList[i].id />
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.Deduction_MasterList[i].Amount, new { @class = "form-control Amount"@*, @id = "Amount"*@, @name = "Amount", @placeholder = " Deduction Amount", @maxlength = "10", @oninput = "OnlyIntvalue(this);" })                                           
+                                        </td>
+                                        <td>
+                                            <span>
+                                                @Html.RadioButtonFor(model => model.Deduction_MasterList[i].AmountType, "True", new { @class = "DAmountType", @id = "DAmountTypet", @name = "DAmountType" })Percentage
+                                                @Html.RadioButtonFor(model => model.Deduction_MasterList[i].AmountType, "False", new { @class = "DAmountType", @id = "DAmountTypef", @name = "DAmountType" })Amount
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    j = j + 1;
+
+                                }
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12"><span class="starvalid ">*PF Deduction is 10% of your Basic Salary.</span></div>
+                    </div>
+                                    }
+                
+            </div>
+            <div class="form-group-inner spacedesign">
+                <div class="login-btn-inner">
+                    <div class="row">
+                        <div class="col-lg-3"></div>
+                        <div class="col-lg-9">
+                            <div class="login-horizental cancel-wp pull-left form-bc-ele">
+                                <button class="btn btn-sm btn-primary login-submit-cs" type="button" onclick="resetapplication()">Reset</button>
+                                <button class="btn btn-sm btn-primary login-submit-cs" type="button" onclick="submitapplication()">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                                    }
+        </div>
+    </div>
+</div>
+<script>
+    @*$(function ()
+    {
+        $("#EventID option").each(function ()
+        {
+            if ($(this).val() == ((@ViewBag.EventType)))
+            {
+                $(this).attr('selected', 'selected');
+            }
+        });
+    });*@
+
+</script>
+

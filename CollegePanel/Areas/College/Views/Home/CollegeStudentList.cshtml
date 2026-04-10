@@ -1,0 +1,905 @@
+﻿
+@{
+    ViewBag.Title = "CollegeStudentList";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+    //var CollegeName = @DataLayer.ClsLanguage.GetCookies("ENNBUserID");
+}
+
+<style>
+    .right {
+        text-align: right;
+       
+    }
+
+    .left {
+        text-align: left;
+      
+    }
+</style>
+<script>
+    var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';   
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+    var CuSession='@ViewBag.CuSession';
+
+</script>
+
+<script src="~/scripts/Customjs/CollegeStudentList.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<script src="~/scripts/Customjs/studentList.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<div class="container-fluid">
+    <div class="row ">
+        <div class="container-fluid">
+            @if (ViewBag.CollegeName != "")
+            {
+                <h3 class="text-center" style="padding-bottom:20px;">Selected Student List for @ViewBag.CollegeName  </h3>
+            }
+           
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="container-fluid">
+            <div ng-app="studentlistApp" ng-controller="studentlistCtrl" class="sparkline-list">
+                @using (Html.BeginForm())
+                {
+                    <div class="row" style="padding-bottom:20px;padding-left:30px;padding-right:30px;">
+
+
+                        <div class="col-md-2 ">
+                            <label>Programme Name:</label>
+                        </div>
+                        <div class="col-md-2">
+                            @Html.DropDownList("program", (List<SelectListItem>)ViewBag.EducationType, "--select--", new { @class = "form-control", @id = "EducationTypeID" })
+                        </div>
+                        <div class="col-md-2 ">
+                            <label>Course Name:</label>
+                        </div>
+                        <div class="col-md-2">
+                            <select data-placeholder="Choose a Course..." class="form-control " tabindex="-1" title="Select Course" id="CourseCategoryID" name="Coursetype" ng-model="Coursetype.search">
+                                <option value="">Select Course</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 ">
+                            <label>Subject Name:</label>
+                        </div>
+                        <div class="col-md-2">
+                            <select data-placeholder="Choose a Subject" class="form-control " tabindex="-1" title="Select Course" id="Subject" name="Subject" ng-model="Subject.search">
+                                <option value="">Select Subject</option>
+                            </select>
+                        </div>
+
+
+                    </div>
+                    <div class="row" style="padding-bottom:20px;padding-left:30px;padding-right:30px;">
+                        <div class="col-md-2">
+                            <label>Year:</label>
+                        </div>
+                        <div class="col-md-2 ">
+                            @Html.DropDownList("session", new SelectList(ViewBag.Session, "ID", "Session", ViewBag.CuSession), "--Select Session--", new { @class = "form-control custom-select-value", @id = "session", @name = "sessiontext", @ng_model = "session.search" })
+                        </div>
+
+
+                        <span class="form-group  page-size form-inline">
+                            <div class="col-md-2">
+                                <label>Reservation Type:</label>
+                            </div>
+                            <div class="col-md-2">
+                                <select id="SeatType" class="form-control control-color"
+                                        ng-model="SeatType"
+                                        name="SeatType">
+                                    <option value="2">--Select All--</option>
+                                    <option value="1">Handicapped</option>
+                                    <option value="0">Normal</option>
+                                </select>
+                            </div>
+                        </span>
+                        <div class="col-md-2">
+                            <label>Reservation Category:</label>
+                        </div>
+                        <div class="col-md-2 ">
+                            @Html.DropDownList("CastCategory", new SelectList(ViewBag.CasteCategory, "CommonId", "title", ""), "--Select Caste--     ", new { @class = "form-control", @id = "Cast", @name = "Cast", @ng_model = "Cast.search" })
+                        </div>
+
+                    </div>
+                    <div class="row" style="padding-bottom:20px;padding-left:30px;padding-right:30px;">
+                        <div class="col-md-2">
+                            <label>Student Application No:</label>
+                        </div>
+                        <div class="col-md-2 ">
+                            <input type="text" ng-model="Application.search" class="form-control" placeholder="Application No" name="application" />
+                        </div>
+                        <span class="form-group  page-size form-inline">
+                            <div class="col-md-2">
+                                <label>Admission Status:</label>
+                            </div>
+                            <div class="col-md-2">
+                                <select id="ApplicationStatus" class="form-control control-color"
+                                        ng-model="ApplicationStatus"
+                                        name="ApplicationStatus">
+                                    <option value="2">--Select All--</option>
+                                    <option value="1">Applied</option>
+                                    <option value="0">Pending</option>
+                                </select>
+                            </div>
+                        </span>
+                        <div class="col-md-2">
+                            <label>Counselling No:</label>
+                        </div>
+                        <div class="col-md-2 ">
+                            @Html.DropDownList("CounsellingNo", new SelectList(ViewBag.CounsellingNo, "CounsellingNo", "CounsellingNo", ""), "--Select CounsellingNo--", new { @class = "form-control", @id = "CounsellingNo", @name = "CounsellingNo", @ng_model = "CounsellingNo.search" })
+                        </div>
+                    </div>
+
+                    
+                    <div class="row" style="padding-bottom:20px;">
+                        <div class="col-md-6 left">
+                           
+                        </div>
+                        <div class="col-md-5 right">
+
+                            <button ng-click="GetFilterUsers(ClubData)" class="btn btn-primary waves-effect waves-light" type="button">Search</button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                            <div class="col-md-6 left">
+                        <div ng-show="(qlist |filter:search).length>0">
+                                <button type="submit" value="excel" id="btnexport" name="Excel" class="btn btn-primary waves-effect waves-light">Export to Excel</button>
+                            </div>
+                        </div>
+                            <div class="col-md-6 right">
+                                <b>
+                                    Total Record(s) : | &nbsp;&nbsp;<spam style="border: 1px solid #bfc5cb;  padding: 7px; border-radius: 50%;">{{totalCount}}</spam>&nbsp;&nbsp;
+                                </b>
+                                <span class="form-group  page-size form-inline">
+                                    <select id="ddlPageSize" class="form-control control-color"
+                                            ng-model="pageSizeSelected"
+                                            ng-change="changePageSize()">
+                                        <option value="1">1</option>
+                                        <option value="10">10</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                        <option value="200">200</option>
+                                        <option value="500">500</option>
+                                        <option value="1000">1000</option>
+                                    </select>
+
+                                </span>
+                                <a class="btn btn-primary waves-effect waves-light">Page: {{pageIndex}} / {{numPages}}</a>
+
+
+                            </div>
+
+                        </div>
+
+                }
+                <div class="panel-body">
+                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer table-responsive" >
+                        <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed dataTable ">
+                            <thead>
+                                <tr role="row">
+                                    <th ng-click="sortBy('')">
+                                        Applied For Admission
+                                        <span class="sortorder" ng-show="propertyName === ''" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    <th ng-click="sortBy('')">
+                                        Action
+                                        <span class="sortorder" ng-show="propertyName === ''" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                   
+                                    <th width="50px">S. No.</th>
+                                    <th ng-click="sortBy('applicationNo')">
+                                        Application No
+                                        <span class="sortorder" ng-show="propertyName === 'applicationNo'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    <th ng-click="sortBy('studentName')">
+                                        Student Name
+                                        <span class="sortorder" ng-show="propertyName === 'studentName'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    <th ng-click="sortBy('fatherName')">
+                                        Father Name
+                                        <span class="sortorder" ng-show="propertyName === 'fatherName'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    <th ng-click="sortBy('percentage')">
+                                        Intermediate (%)
+                                        <span class="sortorder" ng-show="propertyName === 'percentage'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                   
+                                    <th ng-click="sortBy('casteCategoryName')">
+                                        Caste Category
+                                        <span class="sortorder" ng-show="propertyName === 'casteCategoryName'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+
+                                    <th ng-click="sortBy('coursecategotyName')">
+                                        Course
+                                        <span class="sortorder" ng-show="propertyName === 'coursecategotyName'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    <th ng-click="sortBy('streamCategoryName')">
+                                        Honours Subject
+                                        <span class="sortorder" ng-show="propertyName === 'streamCategoryName'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    <th ng-click="sortBy('session')">
+                                        Session
+                                        <span class="sortorder" ng-show="propertyName === 'session'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    <th ng-click="sortBy('ishandicapped')">
+                                        Reservation Type
+                                        <span class="sortorder" ng-show="propertyName === 'ishandicapped'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    <th ng-click="sortBy('counsellingno')">
+                                        Counselling no
+                                        <span class="sortorder" ng-show="propertyName === 'counsellingno'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    <th ng-click="sortBy('casteCategoryName')">
+                                        Reservation Category
+                                        <span class="sortorder" ng-show="propertyName === 'casteCategoryName'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                  
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr ng-repeat="recu in qlist | filter:search  | orderBy:propertyName:reverse">
+                                    <td ng-if="recu.isApplied==true">
+                                        <div class="check-icon text-success"><i class="fa fa-check"></i><div>{{recu.isAppliedDate}}</div></div>
+                                    </td>
+                                    <td ng-if="recu.isApplied==false">
+                                        <div class="check-icon text-danger"><i class="fa fa-times"></i></div>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-sm btn-primary myBtn login-submit-cs" style="padding:1px 4px 1px 6px;color:white" data-id="{{recu.sid}}">View</a>
+
+                                    </td>
+                             
+                                     <td>{{ ((pageIndex-1)*pageSizeSelected)+$index+1 }}</td>
+                                    <td>{{recu.applicationNo}}</td>
+                                    <td>{{recu.studentName}}</td>
+                                    <td>{{recu.fatherName}}</td>
+                                    <td>{{recu.percenatge}}</td>
+                                    @*<td>{{recu.collegeName}}</td>*@
+                                    <td>{{recu.studentCasteCategoryName}}</td>
+                                    <td>{{recu.coursecategotyName}}</td>
+                                    <td>{{recu.streamCategoryName}}</td>
+                                    <td>{{recu.session}}</td>
+
+                                    <td ng-if="recu.ishandicapped==true">
+                                        Handicapped
+                                    </td>
+                                    <td ng-if="recu.ishandicapped==false">
+                                        Normal
+                                    </td>
+
+                                    <td>{{recu.counsellingno}}</td>
+                                    <td>{{recu.casteCategoryName}}</td>
+                                    
+
+                                  
+                                </tr>
+
+
+                            </tbody>
+                            <tfoot>
+                                <tr ng-show="(qlist |filter:search).length == 0">
+                                    <td colspan="6" style="text-align:center">
+                                        <h4 style="color:red;"> </h4>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" colspan="14">
+
+                                        <div class="pull-left" ng-show="(qlist |filter:search).length > 0">
+                                            <div ng-show="numPages > 1">
+
+
+                                                <pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected"
+                                                            direction-links="true" ng-model="pageIndex"
+                                                            max-size="maxSize" class="pagination" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+                                            </div>
+
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 col-md-offset1">
+    <div class="">
+        <div id="InformationproModalhdbgcl" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
+            <div class="modal-dialog" style="width:95%">
+                <div class="modal-content">
+                    <div class="modal-close-area modal-close-df">
+                        <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                    </div>
+                    <div class="modal-body" style="text-align: inherit;">
+
+                        <div id="dvContents" class="table-responsive">
+                            <div style="border-bottom:5px solid #05046c; margin-bottom:25px; text-align:center; padding:15px 0;"><img src="~/images/mu-logo-white.png" width="450px"></div>
+                            <div style="width:100%; margin:auto; padding:0; font-family:Arial, Helvetica, sans-serif;">
+                                <h1 style="text-align:center; padding:15px 0; font-size:22px;">Applicant Form</h1>
+                                <table width="90%" align="center" border="0" cellspacing="0" cellpadding="0" style="padding:0 15px; border:1px solid #666;">
+                                    <tr>
+                                        <td colspan="3">
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+                                                <tr>
+                                                    <td colspan="3" style="padding:15px 15px 0;">
+                                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                            <tr>
+                                                                <td width="40%" alight="left">
+                                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                        <tr>
+                                                                            <td width="50%"><label><span style="color:#e51515;"></span>Application No.</label></td>
+                                                                            <td width="50%" style="border:1px solid #666; padding:10px;"><span style="color:#666;" id="Applicationpp"></span></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                                <td width="20%" alight="left">&nbsp;</td>
+                                                                <td width="40%" alighn="right">
+                                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                        <tr>
+                                                                            <td width="50%"><label><span style="color:#e51515;"></span>Applied Course</label></td>
+                                                                            <td width="50%" style="border:1px solid #666; padding:10px;"><span style="color:#666;" id="AppliedCoursepp"></span></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3"><h2 style="color:#06056c; font-size:16px; padding:20px 15px 0;">Name of the Board from which you have passed the Intermediate exam.</h2></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" width="90%" style="padding:15px;" valign="top">
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td width="33%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Name of the Examination Board <br> प्रवेश श्रेणी</label></td>
+                                                    <td width="34%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Year of Passing <br> कार्यक्रम का प्रकार</label></td>
+                                                    <td width="33%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Date of Birth  <br> जन्म की तारीख</label></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">&nbsp;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="33%" style="border:1px solid #666; border-right:0; padding:10px;" id="BoardName"><span style="color:#666;"></span></td>
+                                                    <td width="34%" style="border:1px solid #666; border-right:0; padding:10px;" id="Passingyear"><span style="color:#666;"></span></td>
+                                                    <td width="33%" style="border:1px solid #666; padding:10px;"><span style="color:#666;" id="DOB"></span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">&nbsp;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">&nbsp;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                            <tr>
+                                                                <td width="20%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Applicant's Name<br> आवेदक का नाम</label></td>
+                                                                <td style="border:1px solid #666; padding:10px; width:80%;"><label><span style="color:#666;" id="Name"></span></label></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">&nbsp;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                            <tr>
+                                                                <td width="20%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Father's Name<br> आवेदक के पिता का नाम</label></td>
+                                                                <td style="border:1px solid #666; padding:10px; width:80%;"><label><span style="color:#666;" id="FatherName"></span></label></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">&nbsp;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                            <tr>
+                                                                <td width="20%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Mother's Name <br> आवेदक के माता का नाम</label></td>
+                                                                <td style="border:1px solid #666; padding:10px; width:80%;"><label><span style="color:#666;" id="MotherName"></span></label></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">&nbsp;</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td width="10%" valign="top" style="padding-top:51px">
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td colspan="3">&nbsp;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" style="border:1px solid #666;"><img width="160px" id="userImage" onerror="this.src='../../images/noimage.png';"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" style="border:1px solid #666; padding:5px;"><img width="140px" id="userSign" onerror="this.src='../../images/No-SignatureAVE.jpg';"></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td colspan="3"><h2 style="color:#06056c; font-size:16px; padding:0 15px;">Details of Mark Secured in Intermediate Examination  </h2></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3" style="padding:15px 15px 0;">
+                                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+                                                            <tr>
+                                                                <td width="50%"><label style="font-weight:bold;">Stream / संकाय</label></td>
+                                                                <td width="50%" style="border:1px solid #666; "><span style="color:#666;" id="lblintermediatestream"></span></td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td colspan="2">&nbsp;</td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td colspan="2">
+                                                                    <div id="intermidatesubjectys"></div>
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td colspan="2">&nbsp;</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="90%"><label style="font-weight:bold;">Document List / दस्तावेज़ सूची</label></td>
+                                                                @*<td width="10%" style="border:1px solid #666; padding:10px;"><span style="color:#666;">Science</span></td>*@
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td colspan="2">&nbsp;</td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td colspan="2">
+                                                                    <div id="document"></div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="2">&nbsp;</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="90%"><label style="font-weight:bold;">Educational Qualificatin / शैक्षिक योग्यता</label></td>
+                                                                @*<td width="10%" style="border:1px solid #666; padding:10px;"><span style="color:#666;">Science</span></td>*@
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="2">&nbsp;</td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td colspan="2">
+                                                                    <div id="Qualification"></div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" style="padding:0 15px">
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td colspan="5"><h2 style="color:#06056c; font-size:16px;">Personal Details / व्यक्तिगत विवरण</h2></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">&nbsp;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="20%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Gender / लिंग</label></td>
+                                                    <td width="20%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Nationality / राष्ट्रीयता :</label></td>
+                                                    <td width="20%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Religion / धर्म :</label></td>
+                                                    <td width="20%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Blood Group / रक्त समूह :</label></td>
+                                                    <td width="20%"><label style="font-weight:bold;"><span style="color:#e51515;"></span> Category /  जाति की श्रेणी:</label></td>
+
+                                                    
+
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">&nbsp;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="20%" style="border:1px solid #666; border-right:0; padding:10px;"><span style="color:#666;" id="Gender"></span></td>
+                                                    <td width="20%" style="border:1px solid #666; border-right:0; padding:10px;"><span style="color:#666;" id="Nationality"></span></td>
+                                                    <td width="20%" style="border:1px solid #666; border-right:0; padding:10px;"><span style="color:#666;" id="Religion"></span></td>
+                                                    <td width="20%" style="border:1px solid #666; padding:10px;"><span style="color:#666;" id="BloodGroup"></span></td>
+                                                    <td width="20%" style="border:1px solid #666; padding:10px;"><span style="color:#666;" id="castecategory"></span></td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">&nbsp;</td>
+                                                </tr>
+
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">&nbsp;</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="3">
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td colspan="3"><h2 style="color:#06056c; font-size:16px; padding:0 15px;">Correspondence Address / पत्राचार का पता </h2></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3" style="padding:15px 15px 0;">
+                                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+                                                            <tr>
+                                                                <td width="10%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>State / राज्य</label></td>
+                                                                <td width="20%" style="border:1px solid #666; padding:10px;"><span style="color:#666;" id="CAstate"></span></td>
+                                                                <td width="15px">&nbsp;</td>
+                                                                <td width="13%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>District / जिला</label></td>
+                                                                <td width="15%" style="border:1px solid #666; padding:10px;"><span style="color:#666;" id="CAdistrict"></span></td>
+                                                                <td width="15px">&nbsp;</td>
+                                                                <td width="15%"><label style="font-weight:bold;"><span style="color:#e51515;"></span> Address / पता</label></td>
+                                                                <td style="border:1px solid #666; padding:10px;"><span style="color:#666;" id="CAaddress"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="7">&nbsp;</td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td width="10%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>PIN Code / पिन कोड</label></td>
+                                                                <td width="20%" style="border:1px solid #666; padding:10px;"><span style="color:#666;" id="CApincode"></span></td>
+                                                                <td width="15px">&nbsp;</td>
+                                                                <td width="13%"><label style="font-weight:bold;"><span style="color:#e51515;"></span>Mobile No. / मोबाइल नंबर</label></td>
+                                                                <td width="15%" style="border:1px solid #666; padding:10px;"><span style="color:#666;" id="Mobile"></span></td>
+                                                                <td width="15px">&nbsp;</td>
+                                                                <td width="15%">
+                                                                    <label style="font-weight:bold;">
+                                                                        <span style="">Email ID / ईमेल आईडी</span>
+                                                                    </label>
+                                                                </td>
+                                                                <td style="border:1px solid #666; padding:10px;"><span style="color:#666;" id="emailid"></span></td>
+                                                            </tr>
+
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="3">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">&nbsp;</td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">&nbsp;</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="3" style="padding:0 15px">
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td colspan="5"><h2 style="color:#06056c; font-size:16px;">Weightage Details</h2></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">&nbsp;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="20%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span> Physical Disabled </label></td>
+                                                    <td width="20%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>NCC </label></td>
+                                                    <td width="20%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>SPOART QUOTA</label></td>
+                                                    <td width="20%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>EX-SERVICEMEN </label></td>
+                                                 
+                                                    <td width="20%" style="text-align:center;"><label style="font-weight:bold;"><span style="color:#e51515;"></span>WARD</label></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">&nbsp;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="20%" style="border:1px solid #666; border-right:0; padding:10px;text-align:center;"><span style="color:#666;" id="lbldisabled"></span></td>
+                                                    <td width="20%" style="border:1px solid #666; border-right:0; padding:10px;text-align:center;"><span style="color:#666;" id="lblNCC"></span></td>
+                                                    <td width="20%" style="border:1px solid #666; border-right:0; padding:10px;text-align:center;"><span style="color:#666;" id="lblsports"></span></td>
+                                                    <td width="20%" style="border:1px solid #666; border-right:0; padding:10px;text-align:center;"><span style="color:#666;" id="lblExServiceman"></span></td>
+
+                                                    <td width="20%" style="border:1px solid #666; padding:10px;text-align:center;"><span style="color:#666;" id="lblward">NO</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">&nbsp;</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="3" style="border-bottom:1px solid #ccc;">&nbsp;</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="3">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" style="padding:0 15px; font-size:20px;">Date:- @string.Format("{0:MMMM dd, yyyy}", DateTime.Now) </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" style="padding:0 15px; font-size:20px;" id="placeho">Place:- -------------------</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">&nbsp;</td>
+                                    </tr>
+
+                                </table>
+                                <tr>
+                                    <td colspan="3">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">&nbsp;</td>
+                                </tr>
+                            </div>
+                            <div style="height:70px; background-color:#05046c; color:#FFF; line-height:70px; text-align:center; font-family:Arial, Helvetica, sans-serif;">Copyright © 2019 Munger University. All rights reserved.</div>
+                        </div>
+                    </div>
+                    <div class="modal-footer info-md">
+                        <a href="#" id="btnPrint" onclick="return printdiv();">
+                            <i class="fa fa-print" aria-hidden="true"></i>
+                            Print
+                        </a>
+                        <a data-dismiss="modal" href="#">Close</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).on('click', '.myBtn', function () {
+        var id = $(this).data("id");
+        // debugger;
+
+        $.ajax({
+            url: "/College/Home/PrintApplicationCall",
+            data: { id: id },
+            cache: false,
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                $("#InformationproModalhdbgcl").modal();
+                $("#InformationproModalhdbgcl").modal();
+                //console.log("data" + JSON.stringify(data));
+
+
+                var intermidatesubjectys = "";
+                $("#document").html('');
+                intermidatesubjectys = intermidatesubjectys + "<table width='100%' border='0' cellspacing='0' cellpadding='0' style='border:1px solid #666; text-align:left;'>";
+                intermidatesubjectys = intermidatesubjectys + "<tr>";
+                intermidatesubjectys = intermidatesubjectys + '<th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee; width:50px;"><span style="color:#666;">Sr.No</span></th>';
+                intermidatesubjectys = intermidatesubjectys + '<th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee; width:50px;"><span style="color:#666;">Subject Name</span></th>';
+                intermidatesubjectys = intermidatesubjectys + '<th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee; width:50px;"><span style="color:#666;">Total Marks</span></th>';
+                intermidatesubjectys = intermidatesubjectys + '<th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee; width:50px;"><span style="color:#666;">Marks Obtained</span></th>';
+                intermidatesubjectys = intermidatesubjectys + '<th style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px; background-color:#eee; width:50px;"><span style="color:#666;">Percentage</span></th>';
+
+
+                intermidatesubjectys = intermidatesubjectys + "</tr>";
+                var i = 1;
+                $.each(data.ObjIntermidataeSubjects, function (index, value) {
+                    // debugger;
+                    //console.log(value);
+                    intermidatesubjectys = intermidatesubjectys + '<tr>';
+                    intermidatesubjectys = intermidatesubjectys + '<td style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px;"><span style="color:#666;">' + i + '</span></td>';
+                    intermidatesubjectys = intermidatesubjectys + '<td style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px;"><span style="color:#666;">' + value.SubjectName + '</td>';
+                    intermidatesubjectys = intermidatesubjectys + '<td style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px;"><span style="color:#666;">' + value.TotalMarks + '</td>';
+                    intermidatesubjectys = intermidatesubjectys + '<td style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px;"><span style="color:#666;">' + value.MarksObtain + '</td>';
+                    intermidatesubjectys = intermidatesubjectys + '<td style="border-right:1px solid #666; border-bottom:1px solid #666; padding:10px;"><span style="color:#666;">' + value.SubjectPercentage + '</td>';
+                    intermidatesubjectys = intermidatesubjectys + '</tr>';
+                    i = i + 1;
+
+                });
+                intermidatesubjectys = intermidatesubjectys + "</table>";
+                $("#intermidatesubjectys").html(intermidatesubjectys);
+
+                var result1 = "";
+                $("#document").html('');
+                result1 = result1 + "<table width='100%' border='0' cellspacing='0' cellpadding='0' style='border: 1px solid #ccc;'>";
+                result1 = result1 + "<tr>";
+                result1 = result1 + '<th width="20%" align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee; padding:10px 15px;">S. No.</th>';
+                result1 = result1 + '  <th width="40%" align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee; padding:10px 15px;">Document</th>';
+                result1 = result1 + '  <th width="40%" align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">View</th>';
+
+
+                result1 = result1 + "</tr>";
+                var i = 1;
+                $.each(data.ObjDocument, function (index, value) {
+                    // debugger;
+                    // console.log(value);
+                    result1 = result1 + '   <tr>';
+                    result1 = result1 + '    <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">' + i + '</td>';
+                    result1 = result1 + '    <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">' + value.DocumentType + '</td>';
+                    result1 = result1 + '    <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">' +'         <a title="View" href="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Document/' + value.FileName + '" target="_blank" class="btn btn-info btn-sm">View</a> ' + '</td>';
+                    result1 = result1 + '   </tr>';
+                    i = i + 1;
+
+                });
+                result1 = result1 + "</table>";
+                $("#document").html(result1);
+
+                var result2 = "";
+                $("#Qualification").html('');
+                result2 = result2 + "<table width='100%' border='0' cellspacing='0' cellpadding='0' style='border: 1px solid #ccc;'>";
+                result2 = result2 + "<tr>";
+                result2 = result2 + '<th width="8%" align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">S. No.</th>';
+                result2 = result2 + '  <th  align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee; padding:10px 15px;">Qualication</th>';
+                result2 = result2 + '  <th " align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">Board</th>';
+                result2 = result2 + '  <th  align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">RollNo</th>';
+                result2 = result2 + '  <th  align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">Percentage</th>';
+                result2 = result2 + '  <th  align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">Passing Year</th>';
+                result2 = result2 + '  <th  align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; background-color:#eee;  padding:10px 15px;">View</th>';
+                result2 = result2 + "</tr>";
+                var i = 1;
+                $.each(data.ObjQualification, function (index, Qvalue) {
+                    // debugger;
+                    //console.log(Qvalue);
+                    result2 = result2 + '   <tr>';
+                    result2 = result2 + '    <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">' + i + '</td>';
+                    result2 = result2 + '    <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">' + Qvalue.Qualication + '</td>';
+                    result2 = result2 + '    <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">' + Qvalue.Board + '</td>';
+                    result2 = result2 + '    <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">' + Qvalue.RollNo + '</td>';
+                    result2 = result2 + '    <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">' + Qvalue.Percentage + '</td>';
+                    result2 = result2 + '    <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">' + Qvalue.PassingYear + '</td>';
+                    result2 = result2 + '    <td align="left" valign="middle" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; padding:10px 15px;">' +'      <a title="View" href="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Document/' + Qvalue.DocumentURl + '" target="_blank" class="btn btn-info btn-sm" >View</a>     ' + '</td>';
+                    result2 = result2 + '   </tr>';
+                    i = i + 1;
+
+                });
+                result2 = result2 + "</table>";
+                $("#Qualification").html(result2);
+                //-------------
+                var choicesubject = "";
+
+                choicesubject = choicesubject + "</table>";
+                $("#choicesubject").html(choicesubject);
+                //---
+
+                $("#BoardName").text(data.ObjApplication.board_universityName);
+                $("#Passingyear").text(data.ObjApplication.passingyear);
+
+                $("#Applicationpp").text(data.ObjApplication.ApplicationNo);
+                $("#AppliedCoursepp").text(data.ObjApplication.CourseCategory);
+
+                $("#Name").text(data.ObjApplication.Name);
+                $("#DOB").text(data.ObjApplication.DOB);
+                $("#emailid").text(data.ObjApplication.Email);
+                $("#Gender").text(data.ObjApplication.Gender);
+                $("#Nationality").text(data.ObjApplication.NewNationality);
+                $("#Religion").text(data.ObjApplication.NewReligion);
+                $("#BloodGroup").text(data.ObjApplication.BloodGroup);
+                $("#Mobile").text(data.ObjApplication.MobileNo);
+                $("#CAstate").text(data.ObjApplication.CA_State);
+                $("#CAdistrict").text(data.ObjApplication.CA_City);
+                $("#CAaddress").text(data.ObjApplication.CurrentAddress);
+                $("#CApincode").text(data.ObjApplication.CA_PinCode);
+                $("#castecategory").text(data.ObjApplication.CastCategory);
+                $("#placeho").text("Place:- " + data.ObjApplication.CA_City);
+                //--Reservation Quoata
+                var sports = ""; var NCC = ""; var ExServiceMan = "";
+                var Handicapped = ""; var Ward = "";
+                if (data.ObjApplication.IsSports == true)
+                    sports = "Yes";
+                else sports = "NO";
+
+                if (data.ObjApplication.is_ncc_candidate == true)
+                    NCC = "Yes";
+                else NCC = "NO";
+
+                if (data.ObjApplication.isex_service_man == true)
+                    ExServiceMan = "Yes";
+                else ExServiceMan = "NO";
+
+                if (data.ObjApplication.ishandicapped == true)
+                    Handicapped = "Yes";
+                else Handicapped = "NO";
+
+                if (data.ObjApplication.IsStaff == true)
+                    Ward = "Yes";
+                else Ward = "NO";
+
+                $("#lblsports").text(sports);
+                $("#lblNCC").text(NCC);
+                $("#lblExServiceman").text(ExServiceMan);
+                $("#lbldisabled").text(Handicapped);
+                $("#lblward").text(Ward);
+                //----
+                $("#FatherName").text(data.ObjApplication.FatherName);
+                $("#MotherName").text(data.ObjApplication.MotherName);
+                //---- Payment Details
+                $("#lbltranactionID").text(data.ObjApplication.transactionID);
+                $("#lblpaymentby").text(data.ObjApplication.paymentBY);
+                $("#lblfees").text(data.ObjApplication.admissionFee);
+                $("#lblfeesstatus").text(data.ObjApplication.IsFeeSubmit);
+                //--- intermediate stream
+                $("#lblintermediatestream").text(data.ObjApplication.intermediatstream);
+                //----------
+                var signpath = "@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Photoandsign/" + data.ObjApplication.stsign
+                var Photo = "@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Photoandsign/" + data.ObjApplication.stphoto
+                $("#userImage").attr('src', Photo);
+                $("#userSign").attr('src', signpath);
+            },
+            error: function (data) {
+                alert('Error');
+            }
+
+        });
+
+    });
+</script>

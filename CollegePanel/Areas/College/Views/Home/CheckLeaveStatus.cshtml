@@ -1,0 +1,269 @@
+﻿
+@{
+    ViewBag.Title = "CheckLeaveStatus";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+<style>
+    .right {
+        text-align: right;
+        margin-right: 20px;
+    }
+
+    .left {
+        text-align: left;
+        margin-left: 20px;
+    }
+     .textdesign{
+        padding-bottom:20px;
+
+    }
+     .minheight{
+         min-height:450px;
+     }
+</style>
+<script>
+      var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+
+</script>
+<script src="~/scripts/Customjs/LeaveStatus.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+
+<div class="container-fluid minheight">
+    <div class="row ">
+        
+        @if (TempData["Msg"] == null) { }
+            else
+            {
+                <div class="alert-wrap1 shadow-inner wrap-alert-b">
+
+                    <div class="alert alert-success " role="alert" style="text-align:center !important">
+                        <div>@TempData["Msg"]</div>
+
+                    </div>
+                </div>
+            }
+        
+                               
+        <div class="col-lg-3 pull-right">
+                <a class="btn btn-primary waves-effect waves-light" href="@Url.Action("ApplyLeave", "Home")">Apply Leave</a>
+            </div> 
+       
+
+    </div>
+    <div class="row">
+        @if (ViewBag.Name != null)
+        {
+            <div class="text-center textdesign">
+                <h4>Leave Status of <strong>@ViewBag.Name</strong></h4>
+            </div>
+        }
+
+
+    </div>
+    <div class="sparkline8-list">
+
+
+        <div class="row">
+
+            <div class="col-lg-10 col-sm-12 col-xs-12 col-lg-offset-1">
+                <div ng-app="leavelistApp" ng-controller="leavelistCtrl">
+                    <div class="row" style="padding-bottom:20px;padding-left:30px;padding-right:30px;">
+
+                        <div class="col-md-2 ">
+                            <label>Select Month:</label>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.DropDownList("Month", new SelectList(ViewBag.Month, "Value", "Text", ViewBag.CuMonth), new { @class = "form-control", @name = "Month", @ng_Model = "Month" })
+                        </div>
+                        <div class="col-md-2 ">
+                            <label>Select Year:</label>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.DropDownList("Year", new SelectList(ViewBag.Year, "Value", "Text", ViewBag.CuYear), new { @class = "form-control", @id = "Year", @ng_Model = "Year" })
+                        </div>
+                        
+
+                    </div>
+              
+                    <div class="row ">
+
+                        <div class="col-md-5 left" style="text-align:left">
+                            <b>
+                                Total Record(s) : | &nbsp;&nbsp;<spam style="border: 1px solid #bfc5cb;  padding: 7px; border-radius: 50%;">{{totalCount}}</spam>&nbsp;&nbsp;
+                            </b>
+                            <span class="form-group  page-size form-inline">
+                                <select id="ddlPageSize" class="form-control control-color"
+                                        ng-model="pageSizeSelected"
+                                        ng-change="changePageSize()">
+                                    <option value="1">1</option>
+                                    <option value="10">10</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="200">200</option>
+                                    <option value="500">500</option>
+                                </select>
+
+                            </span>
+                            <a class="btn btn-primary">Page: {{pageIndex}} / {{numPages}}</a>
+
+
+                        </div>
+                        <div class="col-md-5 right">
+                            <button ng-click="GetFilterUsers(ClubData)" class="btn btn-primary waves-effect waves-light" type="button">Search</button>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer table-responsive">
+                            <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed dataTable ">
+                                <thead>
+                                    <tr role="row">
+                                        <th width="50px">S. No.</th>                                       
+                                        <th ng-click="sortBy('name')">
+                                            Name
+                                            <span class="sortorder" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('fromdate')">
+                                           From
+                                            <span class="sortorder" ng-show="propertyName === 'userName'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('todate')">
+                                            To
+                                            <span class="sortorder" ng-show="propertyName === 'todate'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+
+                                        <th ng-click="sortBy('day')">
+                                            Days
+                                            <span class="sortorder" ng-show="propertyName === 'day'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('halfdaytime')">
+                                            HalfDay Timing
+                                            <span class="sortorder" ng-show="propertyName === 'halfdaytime'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('day')">
+                                            Week Days
+                                            <span class="sortorder" ng-show="propertyName === 'day'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+
+                                        <th ng-click="sortBy('leaveName')">
+                                           Leave Type
+                                            <span class="sortorder" ng-show="propertyName === 'leaveName'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('subject')">
+                                            Subject
+                                            <span class="sortorder" ng-show="propertyName === 'subject'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('reason')">
+                                           Message
+                                            <span class="sortorder" ng-show="email === 'reason'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('leaveStatus')">
+                                            Status
+                                            <span class="sortorder" ng-show="propertyName === 'leaveStatus'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('')">
+                                            Action
+                                            <span class="sortorder" ng-show="propertyName === ''" ng-class="{reverse: reverse}"></span>
+                                        </th>                                   
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr ng-repeat="leave in qlist | filter:search  | orderBy:propertyName:reverse">
+                                        <td>{{ ((pageIndex-1)*pageSizeSelected)+$index+1 }}</td>
+                                        <td>{{leave.name}}</td>
+                                       <td>{{leave.fromdate}}</td>
+                                        <td>{{leave.todate}}</td>
+                                        <td>{{leave.day}}</td>
+                                        <td>{{leave.halfdaytime}}</td>
+                                        <td>{{leave.dayName}}</td>
+                                        <td>{{leave.leaveName}}</td>
+                                        <td>{{leave.subject}}</td>
+                                        <td>{{leave.reason}}</td>
+                                        <td ng-if="leave.leaveStatus==0">
+                                            <div class="check-icon text-warning">Pending</div>
+                                        </td>
+                                        <td ng-if="leave.leaveStatus==1">
+                                            <div class="check-icon text-success">Approved</div>
+                                        </td>
+                                        <td ng-if="leave.leaveStatus==2">
+                                            <div class="check-icon text-danger">Rejected</div>
+                                        </td>
+                                        <td ng-if="leave.leaveStatus==0">
+                                            @*<a class="btn btn-primary waves-effect waves-light" href="@Url.Action("PendingLeaveDelete","Home",new { id = {{leave.encriptedID}} })">Delete</a>*@
+                                            <a class="btn btn-sm btn-primary myBtn login-submit-cs" href="/College/Home/PendingLeaveDelete/{{leave.encriptedID}}" style="padding:1px 4px 1px 6px;color:white" onclick="confirm('Are You sure ,you want to delete this leave request.');">Delete</a>
+                                        </td>
+                                        <td ng-if="leave.leaveStatus==1">
+                                            
+                                        </td>
+                                        <td ng-if="leave.leaveStatus==2">
+                                            
+                                        </td>
+                                       
+                                    </tr>
+
+
+                                </tbody>
+                                <tfoot>
+                                    <tr ng-show="(qlist |filter:search).length == 0">
+                                        <td colspan="6" style="text-align:center">
+                                            <h4 style="color:red;"> </h4>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" colspan="14">
+
+                                            <div class="pull-left" ng-show="(qlist |filter:search).length > 0">
+                                                <div ng-show="numPages > 1">
+
+
+                                                    <pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected"
+                                                                direction-links="true" ng-model="pageIndex"
+                                                                max-size="maxSize" class="pagination" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+                                                </div>
+
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    $(function ()
+    {
+        $("#Month option").each(function ()
+        {
+            // debugger;
+            if ($(this).val() ==((@ViewBag.CuMonth)))
+            {
+                $(this).attr('selected', 'selected');
+            }
+        });
+    });
+    $(function ()
+    {
+        $("#Year option").each(function ()
+        {
+            // debugger;
+            if ($(this).val() ==((@ViewBag.CuYear)))
+            {
+                $(this).attr('selected', 'selected');
+            }
+        });
+    });
+
+</script>

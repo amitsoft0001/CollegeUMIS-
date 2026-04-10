@@ -1,0 +1,869 @@
+﻿@{
+    ViewBag.Title = "BackStudentList";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+<style>
+    /* ========== COMPLETE MODERN REDESIGN - Back Student List ========== */
+
+    :root {
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        --warning-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        --dark-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        --card-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.1);
+        --hover-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.15);
+        --border-radius-xl: 24px;
+        --border-radius-lg: 20px;
+        --border-radius-md: 16px;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+        background: var(--primary-gradient);
+        border-radius: var(--border-radius-xl);
+        padding: 30px 35px;
+        margin-bottom: 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-banner::before {
+        content: '📋';
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        font-size: 80px;
+        opacity: 0.1;
+        font-family: 'Segoe UI Emoji';
+    }
+
+    .hero-banner::after {
+        content: '';
+        position: absolute;
+        bottom: -30px;
+        left: -30px;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+
+    .hero-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 5px;
+        letter-spacing: -0.3px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-subtitle {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.9rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: var(--border-radius-lg);
+        padding: 20px;
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        border: 1px solid rgba(102, 126, 234, 0.1);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--hover-shadow);
+    }
+
+    .stat-icon {
+        width: 55px;
+        height: 55px;
+        background: var(--primary-gradient);
+        border-radius: var(--border-radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+    }
+
+    .stat-info h2 {
+        font-size: 1.8rem;
+        font-weight: 800;
+        margin: 0;
+        color: #1e293b;
+        line-height: 1.2;
+    }
+
+    .stat-info p {
+        margin: 0;
+        color: #64748b;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Filter Section - Glass Morphism */
+    .filter-glass {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: var(--border-radius-lg);
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: var(--card-shadow);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .filter-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .filter-field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .filter-label {
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #667eea;
+    }
+
+    .filter-input, .filter-select {
+        padding: 12px 16px;
+        border: 2px solid #e2e8f0;
+        border-radius: var(--border-radius-md);
+        font-size: 0.9rem;
+        transition: all 0.3s;
+        background: white;
+    }
+
+    .filter-input:focus, .filter-select:focus {
+        border-color: #667eea;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .search-btn-modern {
+        background: var(--primary-gradient);
+        border: none;
+        border-radius: var(--border-radius-md);
+        padding: 12px 24px;
+        color: white;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 28px;
+    }
+
+    .search-btn-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.4);
+    }
+
+    /* Action Bar */
+    .action-bar-modern {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        background: white;
+        padding: 15px 20px;
+        border-radius: var(--border-radius-lg);
+        margin-bottom: 25px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .excel-btn-modern {
+        background: var(--success-gradient);
+        border: none;
+        border-radius: var(--border-radius-md);
+        padding: 10px 25px;
+        color: white;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s;
+    }
+
+    .excel-btn-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px -5px rgba(17, 153, 142, 0.4);
+    }
+
+    .pagination-controls-modern {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: #f1f5f9;
+        padding: 8px 20px;
+        border-radius: 50px;
+    }
+
+    .page-select-modern {
+        padding: 8px 15px;
+        border-radius: 12px;
+        border: 1px solid #cbd5e1;
+        background: white;
+        font-weight: 600;
+    }
+
+    .page-badge-modern {
+        background: var(--primary-gradient);
+        padding: 8px 18px;
+        border-radius: 50px;
+        color: white;
+        font-weight: 700;
+        font-size: 0.85rem;
+    }
+
+    .total-badge {
+        background: var(--warning-gradient);
+        padding: 10px 20px;
+        border-radius: 50px;
+        color: white;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Table Styles - Premium Design */
+    .table-premium-wrapper {
+        background: white;
+        border-radius: var(--border-radius-lg);
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+    }
+
+    .table-premium {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table-premium thead {
+        background: var(--dark-gradient);
+    }
+
+    .table-premium thead th {
+        padding: 16px 12px;
+        color: white;
+        font-weight: 700;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: all 0.3s;
+        white-space: nowrap;
+    }
+
+    .table-premium thead th:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .table-premium tbody tr {
+        border-bottom: 1px solid #e2e8f0;
+        transition: all 0.3s;
+    }
+
+    .table-premium tbody tr:hover {
+        background: linear-gradient(90deg, #fef3c7 0%, #fffbeb 100%);
+        transform: scale(1.01);
+    }
+
+    .table-premium tbody td {
+        padding: 14px 12px;
+        color: #334155;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    /* Subject Score Badges */
+    .score-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-align: center;
+        min-width: 50px;
+    }
+
+    .score-pass {
+        background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        color: white;
+    }
+
+    .score-fail {
+        background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+        color: white;
+    }
+
+    .score-absent {
+        background: linear-gradient(135deg, #6b7280 0%, #9ca3af 100%);
+        color: white;
+    }
+
+    .score-default {
+        background: #e2e8f0;
+        color: #64748b;
+    }
+
+    /* Serial Number Badge */
+    .serial-badge-modern {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+        border-radius: 10px;
+        text-align: center;
+        line-height: 32px;
+        font-weight: 800;
+        color: #475569;
+    }
+
+    /* Empty State */
+    .empty-state-premium {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .empty-icon-premium {
+        width: 100px;
+        height: 100px;
+        background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .empty-icon-premium i {
+        font-size: 3rem;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* Pagination Modern */
+    .pagination-premium {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        padding: 20px;
+        background: #f8fafc;
+    }
+
+    .pagination-premium a,
+    .pagination-premium span {
+        width: 38px;
+        height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        background: white;
+        border: 1px solid #e2e8f0;
+        color: #667eea;
+        font-weight: 700;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+
+    .pagination-premium a:hover {
+        background: var(--primary-gradient);
+        color: white;
+        border-color: transparent;
+        transform: translateY(-2px);
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .hero-banner {
+            padding: 20px;
+        }
+
+        .hero-title {
+            font-size: 1.3rem;
+        }
+
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .stat-card {
+            padding: 15px;
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            font-size: 1.2rem;
+        }
+
+        .stat-info h2 {
+            font-size: 1.3rem;
+        }
+
+        .filter-glass {
+            padding: 15px;
+        }
+
+        .table-premium thead th,
+        .table-premium tbody td {
+            padding: 8px;
+            font-size: 0.7rem;
+        }
+
+        .score-badge {
+            padding: 2px 6px;
+            font-size: 0.65rem;
+            min-width: 40px;
+        }
+    }
+
+    /* Animation */
+    @@keyframes fadeSlideUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-up {
+        animation: fadeSlideUp 0.5s ease-out;
+    }
+
+    /* Scrollbar Styling */
+    .table-premium-wrapper::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .table-premium-wrapper::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 10px;
+    }
+
+    .table-premium-wrapper::-webkit-scrollbar-thumb {
+        background: var(--primary-gradient);
+        border-radius: 10px;
+    }
+</style>
+
+<script>
+    var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+</script>
+
+<script src="~/scripts/Customjs/FinalStudent.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<script src="~/scripts/Customjs/BackStudentList.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+
+<div class="container-fluid animate-fade-up" ng-app="examfeelistApp" ng-controller="examfeelistCtrl">
+    <!-- Hero Banner -->
+    <div class="hero-banner">
+        <div class="hero-title">
+            🎯 Backlog Student Management System
+        </div>
+        @if (ViewBag.CollegeName != "")
+        {
+            <div class="hero-subtitle">
+                <i class="fa fa-building"></i> {{ '@ViewBag.CollegeName' }} • Backlog Students Tracking
+            </div>
+        }
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fa fa-users"></i>
+            </div>
+            <div class="stat-info">
+                <h2>{{totalCount || 0}}</h2>
+                <p>Total Backlog Students</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background: var(--success-gradient);">
+                <i class="fa fa-book"></i>
+            </div>
+            <div class="stat-info">
+                <h2>{{getTotalBacklogs()}}</h2>
+                <p>Total Backlog Subjects</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background: var(--warning-gradient);">
+                <i class="fa fa-graduation-cap"></i>
+            </div>
+            <div class="stat-info">
+                <h2>{{getUniqueCourses()}}</h2>
+                <p>Courses Affected</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background: var(--danger-gradient);">
+                <i class="fa fa-calendar"></i>
+            </div>
+            <div class="stat-info">
+                <h2>{{getActiveSessions()}}</h2>
+                <p>Active Sessions</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="sparkline-list">
+        @using (Html.BeginForm())
+        {
+            <!-- Filter Section - Glass Morphism -->
+            <div class="filter-glass">
+                <div class="filter-grid">
+                    <div class="filter-field">
+                        <label class="filter-label"><i class="fa fa-calendar"></i> YEAR / SESSION</label>
+                        @Html.DropDownList("session", new SelectList(ViewBag.Session, "ID", "Session", ""), "-- Select Session --",
+                            new { @class = "filter-select", @id = "session", @name = "session", @ng_model = "session" })
+                    </div>
+
+                    <div class="filter-field">
+                        <label class="filter-label"><i class="fa fa-graduation-cap"></i> PROGRAMME</label>
+                        @Html.DropDownList("EducationTypeID", (List<SelectListItem>)ViewBag.EducationType, "-- Select Programme --",
+                            new { @class = "filter-select", @id = "EducationTypeID", @name = "EducationTypeID", @ng_model = "EducationTypeID", @ng_change = "onClearQlist()" })
+                    </div>
+
+                    <div class="filter-field">
+                        <label class="filter-label"><i class="fa fa-certificate"></i> COURSE</label>
+                        @Html.DropDownList("CourseCategoryID", new SelectList(ViewBag.Course, "ID", "FirstName", ""), "-- Select Course --",
+                            new { @class = "filter-select", @id = "CourseCategoryID", @name = "CourseCategoryID", @ng_model = "CourseCategoryID" })
+                    </div>
+
+                    <div class="filter-field">
+                        <label class="filter-label"><i class="fa fa-layer-group"></i> COURSE YEAR</label>
+                        @Html.Hidden("CollegeID", new { @Value = ViewBag.College, @id = "CollegeID", @name = "CollegeID", @ng_model = "CollegeID" })
+                        @Html.DropDownList("CourseYearID", new SelectList(ViewBag.Course, "ID", "FirstName", ""), "-- Select Year --",
+                            new { @class = "filter-select", @id = "CourseYearID", @name = "CourseYearID", @ng_model = "CourseYearID" })
+                    </div>
+
+                    <div class="filter-field">
+                        <label class="filter-label"><i class="fa fa-id-card"></i> REGISTRATION / APP NO.</label>
+                        @Html.TextBox("enrollmentno", "", new { @class = "filter-input", @id = "enrollmentno", @placeholder = "Enter Registration / Application No", @ng_model = "enrollmentno" })
+                    </div>
+
+                    <div>
+                        <button ng-click="GetFilterUsers(ClubData)" id="submit" class="search-btn-modern" type="button">
+                            <i class="fa fa-search"></i> SEARCH BACKLOG STUDENTS
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Bar -->
+            <div class="action-bar-modern">
+                <div ng-show="(qlist | filter:search).length > 0">
+                    <button type="submit" value="excel" id="btnexport" name="Excel" class="excel-btn-modern">
+                        <i class="fa fa-file-excel-o"></i> EXPORT TO EXCEL
+                    </button>
+                </div>
+
+                <div class="pagination-controls-modern">
+                    <span class="total-badge">
+                        <i class="fa fa-database"></i> TOTAL: {{totalCount || 0}}
+                    </span>
+
+                    <span style="font-weight: 600;">SHOW</span>
+                    <select id="ddlPageSize" class="page-select-modern"
+                            ng-model="pageSizeSelected"
+                            ng-change="changePageSize()">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                        <option value="500">500</option>
+                    </select>
+
+                    <div class="page-badge-modern">
+                        <i class="fa fa-file-text-o"></i> PAGE {{pageIndex}} / {{numPages}}
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- BCA Programme Table (EducationTypeID == 13) -->
+        <div class="table-premium-wrapper" ng-if="EducationTypeID==13">
+            <table class="table-premium">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th ng-click="sortBy('ApplicationNo')">APP NO <i class="fa fa-sort"></i></th>
+                        <th ng-click="sortBy('EnrollmentNo')">ENROLLMENT NO <i class="fa fa-sort"></i></th>
+                        <th ng-click="sortBy('CollegeName')">COLLEGE <i class="fa fa-sort"></i></th>
+                        <th ng-click="sortBy('YearName')">SEMESTER <i class="fa fa-sort"></i></th>
+                        <th ng-click="sortBy('session')">SESSION <i class="fa fa-sort"></i></th>
+                        <th ng-click="sortBy('Name')">STUDENT NAME <i class="fa fa-sort"></i></th>
+                        <th>BCA-101</th>
+                        <th>BCA-102</th>
+                        <th>BCA-103</th>
+                        <th>BCA-104</th>
+                        <th>BCA-105</th>
+                        <th>BCA-106</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="recu in qlist | filter:search | orderBy:propertyName:reverse">
+                        <td><span class="serial-badge-modern">{{((pageIndex-1)*pageSizeSelected)+$index+1}}</span></td>
+                        <td>{{recu.applicationNo}}</td>
+                        <td>{{recu.enrollmentNo}}</td>
+                        <td>{{recu.collegeName}}</td>
+                        <td>{{recu.yearName}}</td>
+                        <td>{{recu.session}}</td>
+                        <td><strong>{{recu.name}}</strong></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.paper1)">{{recu.paper1 || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.paper2)">{{recu.paper2 || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.paper3)">{{recu.paper3 || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.paper4)">{{recu.paper4 || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.paper5)">{{recu.paper5 || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.paper6)">{{recu.paper6 || '-'}}</span></td>
+                    </tr>
+                    <tr ng-show="(qlist | filter:search).length == 0">
+                        <td colspan="13">
+                            <div class="empty-state-premium">
+                                <div class="empty-icon-premium">
+                                    <i class="fa fa-graduation-cap"></i>
+                                </div>
+                                <h4 style="color: #64748b;">No Backlog Students Found</h4>
+                                <p style="color: #94a3b8;">Try adjusting your search filters</p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="13">
+                            <div class="pagination-premium" ng-show="(qlist | filter:search).length > 0 && numPages > 1">
+                                <pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected"
+                                            direction-links="true" ng-model="pageIndex"
+                                            max-size="5" class="pagination-premium"
+                                            boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <!-- Other Programme Tables (Similar structure with ng-if conditions) -->
+        <div class="table-premium-wrapper" ng-if="EducationTypeID==41">
+            <table class="table-premium">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th ng-click="sortBy('ApplicationNo')">APP NO</th>
+                        <th ng-click="sortBy('EnrollmentNo')">ENROLLMENT NO</th>
+                        <th ng-click="sortBy('CollegeName')">COLLEGE</th>
+                        <th ng-click="sortBy('YearName')">SEMESTER</th>
+                        <th ng-click="sortBy('session')">SESSION</th>
+                        <th ng-click="sortBy('Name')">STUDENT NAME</th>
+                        <th>PAPER-1</th>
+                        <th>PAPER-2</th>
+                        <th>PAPER-3</th>
+                        <th>PAPER-4</th>
+                        <th>PAPER-5</th>
+                        <th>PAPER-6</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="recu in qlist | filter:search | orderBy:propertyName:reverse">
+                        <td><span class="serial-badge-modern">{{((pageIndex-1)*pageSizeSelected)+$index+1}}</span></td>
+                        <td>{{recu.applicationNo}}</td>
+                        <td>{{recu.enrollmentNo}}</td>
+                        <td>{{recu.collegeName}}</td>
+                        <td>{{recu.yearName}}</td>
+                        <td>{{recu.session}}</td>
+                        <td><strong>{{recu.name}}</strong></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.paper1)">{{recu.paper1 || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.paper2)">{{recu.paper2 || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.paper3)">{{recu.paper3 || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.paper4)">{{recu.paper4 || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.paper5)">{{recu.paper5 || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.paper6)">{{recu.paper6 || '-'}}</span></td>
+                    </tr>
+                    <tr ng-show="(qlist | filter:search).length == 0">
+                        <td colspan="13"><div class="empty-state-premium"><div class="empty-icon-premium"><i class="fa fa-graduation-cap"></i></div><h4>No Records Found</h4></div></td>
+                    </tr>
+                </tbody>
+                <tfoot><tr><td colspan="13"><div class="pagination-premium" ng-show="(qlist | filter:search).length > 0 && numPages > 1"><pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex" max-size="5" class="pagination-premium" boundary-links="true" rotate="false" num-pages="numPages"></pagination></div></td></tr></tfoot>
+            </table>
+        </div>
+
+        <!-- Arts Programme Table (EducationTypeID == 11) -->
+        <div class="table-premium-wrapper" ng-if="EducationTypeID==11">
+            <table class="table-premium">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th ng-click="sortBy('ApplicationNo')">APP NO</th>
+                        <th ng-click="sortBy('EnrollmentNo')">ENROLLMENT NO</th>
+                        <th ng-click="sortBy('CollegeName')">COLLEGE</th>
+                        <th ng-click="sortBy('YearName')">YEAR</th>
+                        <th ng-click="sortBy('session')">SESSION</th>
+                        <th ng-click="sortBy('Name')">STUDENT NAME</th>
+                        <th>HONOURS</th>
+                        <th>SUBSIDIARY-1</th>
+                        <th>SUBSIDIARY-2</th>
+                        <th>COMP-1</th>
+                        <th>COMP-2</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="recu in qlist | filter:search | orderBy:propertyName:reverse">
+                        <td><span class="serial-badge-modern">{{((pageIndex-1)*pageSizeSelected)+$index+1}}</span></td>
+                        <td>{{recu.applicationNo}}</td>
+                        <td>{{recu.enrollmentNo}}</td>
+                        <td>{{recu.collegeName}}</td>
+                        <td>{{recu.yearName}}</td>
+                        <td>{{recu.session}}</td>
+                        <td><strong>{{recu.name}}</strong></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.hounorsSubject)">{{recu.hounorsSubject || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.subsidiary1)">{{recu.subsidiary1 || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.subsidiary2)">{{recu.subsidiary2 || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.compulsory1)">{{recu.compulsory1 || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.compulsory2)">{{recu.compulsory2 || '-'}}</span></td>
+                    </tr>
+                    <tr ng-show="(qlist | filter:search).length == 0"><td colspan="12"><div class="empty-state-premium"><div class="empty-icon-premium"><i class="fa fa-graduation-cap"></i></div><h4>No Records Found</h4></div></td></tr>
+                </tbody>
+                <tfoot><tr><td colspan="12"><div class="pagination-premium" ng-show="(qlist | filter:search).length > 0 && numPages > 1"><pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex" max-size="5" class="pagination-premium" boundary-links="true" rotate="false" num-pages="numPages"></pagination></div></td></tr></tfoot>
+            </table>
+        </div>
+
+        <!-- MBA Programme Table (EducationTypeID == 40) -->
+        <div class="table-premium-wrapper" ng-if="EducationTypeID==40">
+            <table class="table-premium">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th ng-click="sortBy('ApplicationNo')">APP NO</th>
+                        <th ng-click="sortBy('EnrollmentNo')">ENROLLMENT NO</th>
+                        <th ng-click="sortBy('CollegeName')">COLLEGE</th>
+                        <th ng-click="sortBy('YearName')">SEMESTER</th>
+                        <th ng-click="sortBy('session')">SESSION</th>
+                        <th ng-click="sortBy('Name')">STUDENT NAME</th>
+                        <th>P-1</th>
+                        <th>P-2</th>
+                        <th>P-3</th>
+                        <th>P-4</th>
+                        <th>P-5</th>
+                        <th>P-6</th>
+                        <th>P-7</th>
+                        <th>P-8</th>
+                        <th>P-9</th>
+                        <th>P-10</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="recu in qlist | filter:search | orderBy:propertyName:reverse">
+                        <td><span class="serial-badge-modern">{{((pageIndex-1)*pageSizeSelected)+$index+1}}</span></td>
+                        <td>{{recu.applicationNo}}</td>
+                        <td>{{recu.enrollmentNo}}</td>
+                        <td>{{recu.collegeName}}</td>
+                        <td>{{recu.yearName}}</td>
+                        <td>{{recu.session}}</td>
+                        <td><strong>{{recu.name}}</strong></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.paper1)">{{recu.paper1 || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.paper2)">{{recu.paper2 || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.paper3)">{{recu.paper3 || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.paper4)">{{recu.paper4 || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.paper5)">{{recu.paper5 || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.paper6)">{{recu.paper6 || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.paper7)">{{recu.paper7 || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.paper8)">{{recu.paper8 || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.paper9)">{{recu.paper9 || '-'}}</span></td>
+                        <td><span class="score-badge" ng-class="getScoreClass(recu.paper10)">{{recu.paper10 || '-'}}</span></td>
+                    </tr>
+                    <tr ng-show="(qlist | filter:search).length == 0"><td colspan="17"><div class="empty-state-premium"><div class="empty-icon-premium"><i class="fa fa-graduation-cap"></i></div><h4>No Records Found</h4></div>NonNull
+
+                </tbody>
+                <tfoot><tr><td colspan="17"><div class="pagination-premium" ng-show="(qlist | filter:search).length > 0 && numPages > 1"><pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex" max-size="5" class="pagination-premium" boundary-links="true" rotate="false" num-pages="numPages"></pagination></div>NonNull</tr></tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Helper functions for stats
+    $scope.getTotalBacklogs = function () {
+        var total = 0;
+        if ($scope.qlist) {
+            $scope.qlist.forEach(function (student) {
+                for (var key in student) {
+                    if (key.indexOf('paper') !== -1 || key.indexOf('Subject') !== -1) {
+                        if (student[key] && (student[key].toString().includes('Fail') || student[key].toString().includes('AB'))) {
+                            total++;
+                        }
+                    }
+                }
+            });
+        }
+        return total;
+    };
+
+    $scope.getUniqueCourses = function () {
+        var courses = new Set();
+        if ($scope.qlist) {
+            $scope.qlist.forEach(function (s) { if (s.courseCategory) courses.add(s.courseCategory); });
+        }
+        return courses.size || 0;
+    };
+
+    $scope.getActiveSessions = function () {
+        var sessions = new Set();
+        if ($scope.qlist) {
+            $scope.qlist.forEach(function (s) { if (s.session) sessions.add(s.session); });
+        }
+        return sessions.size || 0;
+    };
+
+    $scope.getScoreClass = function (score) {
+        if (!score || score === '-' || score === '') return 'score-default';
+        if (score.toString().toLowerCase().includes('fail')) return 'score-fail';
+        if (score.toString().toLowerCase().includes('ab') || score.toString().toLowerCase().includes('absent')) return 'score-absent';
+        if (score.toString().toLowerCase().includes('pass')) return 'score-pass';
+        if (!isNaN(score) && parseFloat(score) >= 40) return 'score-pass';
+        if (!isNaN(score) && parseFloat(score) < 40) return 'score-fail';
+        return 'score-default';
+    };
+</script>

@@ -1,0 +1,685 @@
+﻿@model DataLayer.CollegeExamCenter
+@{
+    ViewBag.Title = "CollegeTabulationRegisterBCABack";
+       Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+    var permission = @DataLayer.ClsLanguage.GetCookies("NPermission");
+    var rowCount = Convert.ToInt32(@ViewBag.totalCount);
+}
+<link href="~/Content/css/New.css" rel="stylesheet" />
+<script type="text/javascript">
+    var now = new Date();
+    var startdate = new Date(now.getFullYear() - 5, now.getMonth(), now.getDay());
+    var enddate = new Date(now.getFullYear() + 5, now.getMonth(), now.getDay());
+    var Resultdata = '@ViewBag.ResultMaster';
+
+</script>
+<script src="~/JS/Commonjs.js?id=@System.Configuration.ConfigurationManager.AppSettings[" Commonjs"]"></script>
+<style>
+    .hide {
+        display: none;
+        border-bottom: 1px solid #666
+    }
+
+    .show {
+        display: block;
+        border-bottom: 1px solid #666
+    }
+
+    .validation {
+        color: tomato;
+    }
+
+    .textdesign {
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .labletext {
+        font-weight: normal;
+    }
+
+    .hide {
+        display: none;
+    }
+
+    .readio-label {
+        padding-left: 20px;
+    }
+</style>
+<style>
+    .right {
+        text-align: right;
+    }
+
+    .left {
+        text-align: left;
+    }
+
+    .minheight {
+        min-height: 500px;
+    }
+
+    .textde {
+        padding-bottom: 20px;
+    }
+</style>
+@{
+    List<SelectListItem>
+    listItems = new List<SelectListItem>
+        ();
+        listItems.Add(new SelectListItem
+        {
+        Text = "10",
+        Value = "10"
+        });
+        listItems.Add(new SelectListItem
+        {
+        Text = "25",
+        Value = "25"
+        });
+        listItems.Add(new SelectListItem
+        {
+        Text = "50",
+        Value = "50"
+        });
+        listItems.Add(new SelectListItem
+        {
+        Text = "100",
+        Value = "100"
+        });
+        listItems.Add(new SelectListItem
+        {
+        Text = "500",
+        Value = "500"
+        });
+        listItems.Add(new SelectListItem
+        {
+        Text = "1000",
+        Value = "1000"
+        });
+        listItems.Add(new SelectListItem
+        {
+        Text = "2000",
+        Value = "2000"
+        });
+        }
+        <div class="container-fluid minheight">
+            <div class="row">
+                <div class="col-lg-12 col-sm-12 col-xs-12">
+                    @if (TempData["StMessage"] != null)
+                    {
+                    <div class="text-center" style="">
+                        <div class="alert-wrap1 shadow-inner wrap-alert-b">
+                            <div class="alert alert-success " role="alert" style="text-align:center !important">
+                                <div>@TempData["StMessage"]</div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-sm-12 col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading text-center"> <h3>TABULATION REGISTER(BCA BackLog)</h3></div>
+                        <div class="panel-body">
+                            <div class="text-danger text-center" style="padding-bottom:20px;">
+                                @if (TempData["Msg"] != null)
+                                {
+                                @TempData["Msg"];
+                                }
+                            </div>
+                            @using (Html.BeginForm("CollegeTabulationRegisterBCAback", "Exam", FormMethod.Post, new { id = "myform", enctype = "multipart/form-data" }))
+                            {
+                            <input type="hidden" id="CurrentYearName" value="@ViewBag.CurrentYearName" />
+                            <input type="hidden" id="MonthName" value="@ViewBag.MonthName" />
+                            <input type="hidden" id="CurrentDate" value="@ViewBag.CurrentDate" />
+                            <div class="row textdesign">
+                                <span><label class="readio-label"><strong>Search Criteria </strong></label></span>
+                                @Html.RadioButton("searchType", "True", new { @class = "", @id = "searchType", @name = "searchTypet" })Registration No/Application No
+                                @Html.RadioButton("searchType", "False", new { @class = "", @id = "searchType", @name = "searchTypef" })Full Data Collegewise
+                            </div>
+                            <div id="fullDiv" style="display:block">
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                        <label class="fontnew "><strong>Admission Year<span class="starvalid">*</span></strong></label>
+                                        @Html.DropDownList("Session", new SelectList(ViewBag.Session, "ID", "Session", @ViewBag.CurrentSession), "--Select Session--", new { @class = "form-control", @id = "Session", @name = "Session", @required = "required" })
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                        <label class="fontnew "><strong>Course Year<span class="starvalid">*</span></strong></label>
+                                        @Html.DropDownList("CourseYearID", new SelectList(ViewBag.CourseYear, "ID", "Name"), "Select Course Year", new { @class = "form-control", @id = "CourseYearID", @required = "required" })
+                                    </div>
+                                 
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                        <label class="fontnew "><strong>Select PageSize<span class="starvalid">*</span></strong></label>
+                                        @Html.DropDownList("PageSize", listItems, new { @class = "form-control", @id = "PageSize", @required = "required" })
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                        &nbsp;
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 right">
+                                        <label class="fontnew "><strong>&nbsp; </strong></label>
+                                        @*<button class="btn btn-primary waves-effect waves-light" type="submit" style="margin-top:25px">Search</button>*@
+                                        <input type="submit" value="Search" id="submit" class="btn btn-primary" style="margin-top:25px" />
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                            <div id="enrolldiv" style="display:none">
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                        <label class="fontnew "><strong>Registration No</strong></label>
+                                        @Html.TextBox("enrollmentno", "", new { @class = "form-control", @id = "enrollmentno", @placeholder = "Registration No" })
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                        <label class="fontnew "><strong>Application No</strong></label>
+                                        @Html.TextBox("ApplicationNo", "", new { @class = "form-control", @id = "ApplicationNo", @placeholder = "Application No" })
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 right">
+                                        <label class="fontnew "><strong>&nbsp; </strong></label>
+                                        @*<button class="btn btn-primary waves-effect waves-light" type="submit" style="margin-top:25px">Search</button>*@
+                                        <input type="submit" id="save" value="Search" class="btn btn-primary" style="margin-top:25px" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row textdesign">
+
+                                @if (@ViewBag.totalCount == 0)
+                                {
+                                <div class="text-center">
+                                    <div class="">
+                                        <div class="alert alert-danger " role="alert" style="text-align:center !important">
+                                            <div>No record Found</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                }
+                            </div>
+                            }
+
+                            <div id="grid">
+                                <div class="grid">
+                                    @if (Model.StudentListNew.Count > 0)
+                                    {
+                                    @Html.HiddenFor(model => model.PageIndex)
+                                    @Html.HiddenFor(model => model.PageSize)
+                                    @Html.HiddenFor(model => model.totalCount)
+                                    <div class="dataTables_wrapper ExamNumberSheet no-footer table-responsive textdesign.">
+                                        <div class="col-lg-6  left">
+                                            <span>Total Record : <strong><span id="totalcountID"></span></strong></span>
+                                        </div>
+                                        <div class="right col-lg-6">
+                                            <input type='button' id='btnPrint' class="btn btn-sm btn-primary login-submit-cs" value='Print'>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div style="display:none;">
+                                            <div id="trheading" style="border-bottom:5px solid #05046c; margin-bottom:25px; text-align:center; padding:15px 0; font-size:12px; font-family:Arial, Helvetica, sans-serif;">
+
+                                            </div>
+                                        </div>
+                                        <div class="dataTables_wrapper ExamNumberSheet no-footer table-responsive" id="PrintDiv">
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-bottom:0;">
+
+                                                <thead>
+                                                    <tr>
+                                                        <td style="text-align:center;" colspan="26">
+                                                            <h4>@DataLayer.CommonSetting.ProjectNamecapital (TABULATION REGISTER BACKLOG <span>@ViewBag.Coursename  @ViewBag.CourseYearname, Examination - @ViewBag.CurrentYearName  </span>) </h4>
+                                                        </td>
+                                                    </tr>
+                                                    <tr style="border-bottom:1px solid;border-right:1px;">
+                                                        <td colspan="10" align="center" width="33%">Examination held in the Month of : @ViewBag.MonthName , @ViewBag.CurrentYearName</td>
+                                                        <td colspan="7" align="center" width="33%">Session: @ViewBag.sessionname</td>
+                                                        <td colspan="9" align="center" width="33%">Date of Publication : @ViewBag.CurrentDate</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5" align="center" valign="middle" style="border:1px solid #666; ">
+                                                            College/P.G.Dept. :<strong><span id="CollegeName">@ViewBag.Collegename </span></strong>
+                                                        </td>
+                                                        <td colspan="3" align="center" valign="middle" style="border:1px solid #666; ">&nbsp;@ViewBag.PaperI</td>
+                                                        <td colspan="3" align="center" valign="middle" style="border:1px solid #666; ">&nbsp;@ViewBag.PaperII</td>
+                                                        <td colspan="3" align="center" valign="middle" style="border:1px solid #666; ">&nbsp;@ViewBag.PaperIII</td>
+                                                        <td colspan="3" align="center" valign="middle" style="border:1px solid #666; ">&nbsp;@ViewBag.PaperIV</td>
+                                                        <td colspan="3" align="center" valign="middle" style="border:1px solid #666; ">&nbsp;@ViewBag.PaperV</td>
+                                                        <td colspan="3" align="center" valign="middle" style="border:1px solid #666; ">&nbsp;@ViewBag.PaperVI</td>
+                                                        <td align="center" valign="middle" style="border-right:1px solid #666;  border-top:1px solid #666;  ">Grand</td>
+                                                        <td align="center" valign="middle" style="border-right:1px solid #666; border-top:1px solid #666; "></td>
+                                                        <td align="center" valign="middle" style="border-right:1px solid #666; ; border-top:1px solid #666; "></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="center" valign="middle" style="border-right:1px solid #666; border-left:1px solid #666; border-top:1px solid #666;  ">
+                                                            Sl.
+                                                        </td>
+                                                        <td align="center" valign="middle" style="border-right:1px solid #666; border-left:1px solid #666; border-top:1px solid #666;  ">Roll No.</td>
+                                                        <td align="center" valign="middle" style="border-right:1px solid #666; border-left:1px solid #666; border-top:1px solid #666; ">Reg No.</td>
+                                                        <td colspan="2" align="center" valign="middle" style="border-right:1px solid #666; border-left:1px solid #666; border-top:1px solid #666;">Name</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; ">Th.</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; ">Int.</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; ">Total</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; ">Th.</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; ">Int.</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; ">Total</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; ">Th.</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; ">Int.</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; ">Total</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; ">Th.</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; ">Int.</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; ">Total</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; ">Th.</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; ">Int.</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; ">Total</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; ">Th.</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; ">Int.</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; ">Total</td>
+                                                        <td align="center" valign="middle" style="border-right:1px solid #666; border-left:1px solid #666; ">Total</td>
+                                                        <td align="center" valign="middle" style="border-right:1px solid #666;">Result</td>
+                                                        <td align="center" valign="middle" style="border-right:1px solid #666; ">Remarks</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="center" valign="middle" style="border-right:1px solid #666; border-left:1px solid #666; "> No.</td>
+                                                        <td align="center" valign="middle" style="border-right:1px solid #666; border-left:1px solid #666; "></td>
+                                                        <td align="center" valign="middle" style="border-right:1px solid #666; border-left:1px solid #666; "></td>
+                                                        <td align="center" valign="middle" style=""></td>
+                                                        <td align="right" valign="middle" style="">
+                                                            <table style="border:1px solid #666;" cellpadding="0" cellspacing="0">
+                                                                <tr>
+                                                                    <td>F.M.</td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">80</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">20</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">100</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">80</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">20</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">100</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">80</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">20</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">100</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">80</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">20</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">100</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">80</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">20</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">100</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">80</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">20</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">100</td>
+
+                                                        <td align="center" valign="middle" style="border:1px solid #666; ">600</td>
+                                                        <td align="center" valign="middle" style="border-right:1px solid #666; "></td>
+                                                        <td align="center" valign="middle" style="border-right:1px solid #666;  "></td>
+                                                        <td align="center" valign="middle" style="border-right:1px solid #666; "></td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="center" valign="middle" style="border-right:1px solid #666; border-left:1px solid #666;"></td>
+                                                        <td align="center" valign="middle" style="border-right:1px solid #666; border-left:1px solid #666;"></td>
+                                                        <td align="center" valign="middle" style="border-right:1px solid #666; border-left:1px solid #666; "></td>
+                                                        <td align="center" valign="middle" style=""></td>
+                                                        <td align="right" valign="middle" style="">
+                                                            <table cellpadding="0" cellspacing="0" style="border:1px solid #666;">
+                                                                <tr>
+                                                                    <td>P.M.</td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                        <td colspan="2" align="center" valign="middle" style="border:1px solid #666; padding:3px;">40</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">40</td>
+                                                        <td colspan="2" align="center" valign="middle" style="border:1px solid #666; padding:3px;">40</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">40</td>
+                                                        <td colspan="2" align="center" valign="middle" style="border:1px solid #666; padding:3px;">40</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">40</td>
+                                                        <td colspan="2" align="center" valign="middle" style="border:1px solid #666; padding:3px;">40</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">40</td>
+                                                        <td colspan="2" align="center" valign="middle" style="border:1px solid #666; padding:3px;">40</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">40</td>
+                                                        <td colspan="2" align="center" valign="middle" style="border:1px solid #666; padding:3px;">40</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">40</td>
+                                                        <td align="center" valign="middle" style="border:1px solid #666; ">300</td>
+                                                        <td align="center" valign="middle" style="border-right:1px solid #666;  "></td>
+                                                        <td align="center" valign="middle" style="border-right:1px solid #666;  "></td>
+                                                        <td align="center" valign="middle" style="border-right:1px solid #666;  "></td>
+
+                                                    </tr>
+                                                </thead>
+                                                @foreach (var item in Model.StudentListNew)
+                                                {
+                                                <tr>
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">@item.Row</td>
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">@item.RollNo</td>
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">@item.EnrollmentNo</td>
+                                                    <td colspan="2" align="center" valign="middle" style="border:1px solid #666; padding:3px; white-space:normal;">@item.Name </td>
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">@(item.Paper_P1_Th_Obtained=="0"?"": item.Paper_P1_Th_Obtained)</td>
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">@(item.Paper_P1_Internal_Obtained == "0" ? "" : item.Paper_P1_Internal_Obtained)</td>
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">
+                                                        @( (Convert.ToInt32(item.Paper_P1_Th_Obtained == " " ? "0" : (item.Paper_P1_Th_Obtained == "A" ? "0" : @item.Paper_P1_Th_Obtained)) + Convert.ToInt32(item.Paper_P1_Internal_Obtained == " " ? "0" : (item.Paper_P1_Internal_Obtained == "A" ? "0" : @item.Paper_P1_Internal_Obtained))).ToString() =="0"? "": (Convert.ToInt32(item.Paper_P1_Th_Obtained == " " ? "0" : (item.Paper_P1_Th_Obtained == "A" ? "0" : @item.Paper_P1_Th_Obtained)) + Convert.ToInt32(item.Paper_P1_Internal_Obtained == " " ? "0" : (item.Paper_P1_Internal_Obtained == "A" ? "0" : @item.Paper_P1_Internal_Obtained))).ToString())
+                                                    </td>
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">@(item.Paper_P2_Th_Obtained == "0" ? "" : item.Paper_P2_Th_Obtained)</td>
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">@(item.Paper_P2_Internal_Obtained == "0" ? "" : item.Paper_P2_Internal_Obtained)</td>
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">
+                                                        @( (Convert.ToInt32(item.Paper_P2_Th_Obtained == " " ? "0" : (item.Paper_P2_Th_Obtained == "A" ? "0" : @item.Paper_P2_Th_Obtained)) + Convert.ToInt32(item.Paper_P2_Internal_Obtained == " " ? "0" : (item.Paper_P2_Internal_Obtained == "A" ? "0" : @item.Paper_P2_Internal_Obtained))).ToString() == "0" ? "" : (Convert.ToInt32(item.Paper_P2_Th_Obtained == " " ? "0" : (item.Paper_P2_Th_Obtained == "A" ? "0" : @item.Paper_P2_Th_Obtained)) + Convert.ToInt32(item.Paper_P2_Internal_Obtained == " " ? "0" : (item.Paper_P2_Internal_Obtained == "A" ? "0" : @item.Paper_P2_Internal_Obtained))).ToString())
+                                                    </td>
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">@(item.Paper_P3_Th_Obtained == "0" ? "" : item.Paper_P3_Th_Obtained)</td>
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">@(item.Paper_P3_Internal_Obtained == "0" ? "" : item.Paper_P3_Internal_Obtained)</td>
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">
+                                                        @( (Convert.ToInt32(item.Paper_P3_Th_Obtained == " " ? "0" : (item.Paper_P3_Th_Obtained == "A" ? "0" : @item.Paper_P3_Th_Obtained)) + Convert.ToInt32(item.Paper_P3_Internal_Obtained == " " ? "0" : (item.Paper_P3_Internal_Obtained == "A" ? "0" : @item.Paper_P3_Internal_Obtained))).ToString() == "0" ? "" : (Convert.ToInt32(item.Paper_P3_Th_Obtained == " " ? "0" : (item.Paper_P3_Th_Obtained == "A" ? "0" : @item.Paper_P3_Th_Obtained)) + Convert.ToInt32(item.Paper_P3_Internal_Obtained == " " ? "0" : (item.Paper_P3_Internal_Obtained == "A" ? "0" : @item.Paper_P3_Internal_Obtained))).ToString())
+                                                    </td>
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">@(item.Paper_P4_Th_Obtained == "0" ? "" : item.Paper_P4_Th_Obtained)</td>
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">@(item.Paper_P4_Internal_Obtained == "0" ? "" : item.Paper_P4_Internal_Obtained)</td>
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">
+                                                        @( (Convert.ToInt32(item.Paper_P4_Th_Obtained == " " ? "0" : (item.Paper_P4_Th_Obtained == "A" ? "0" : @item.Paper_P4_Th_Obtained)) + Convert.ToInt32(item.Paper_P4_Internal_Obtained == " " ? "0" : (item.Paper_P4_Internal_Obtained == "A" ? "0" : @item.Paper_P4_Internal_Obtained))).ToString() == "0" ? "" : (Convert.ToInt32(item.Paper_P4_Th_Obtained == " " ? "0" : (item.Paper_P4_Th_Obtained == "A" ? "0" : @item.Paper_P4_Th_Obtained)) + Convert.ToInt32(item.Paper_P4_Internal_Obtained == " " ? "0" : (item.Paper_P4_Internal_Obtained == "A" ? "0" : @item.Paper_P4_Internal_Obtained))).ToString())
+                                                    </td>
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">@(item.Paper_P5_Th_Obtained == "0" ? "" : item.Paper_P5_Th_Obtained)</td>
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">@(item.Paper_P5_Internal_Obtained == "0" ? "" : item.Paper_P5_Internal_Obtained)</td>
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">
+                                                        @( (Convert.ToInt32(item.Paper_P5_Th_Obtained == " " ? "0" : (item.Paper_P5_Th_Obtained == "A" ? "0" : @item.Paper_P5_Th_Obtained)) + Convert.ToInt32(item.Paper_P5_Internal_Obtained == " " ? "0" : (item.Paper_P5_Internal_Obtained == "A" ? "0" : @item.Paper_P5_Internal_Obtained))).ToString() == "0" ? "" : (Convert.ToInt32(item.Paper_P5_Th_Obtained == " " ? "0" : (item.Paper_P5_Th_Obtained == "A" ? "0" : @item.Paper_P5_Th_Obtained)) + Convert.ToInt32(item.Paper_P5_Internal_Obtained == " " ? "0" : (item.Paper_P5_Internal_Obtained == "A" ? "0" : @item.Paper_P5_Internal_Obtained))).ToString())
+                                                    </td>
+                                                    @if (ViewBag.CourseYearname == "Semester - 1")
+                                                    {
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">@(item.Paper_P6_Th_Obtained == "0" ? "" : item.Paper_P6_Th_Obtained)</td>
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">@(item.Paper_P6_Internal_Obtained == "0" ? "" : item.Paper_P6_Internal_Obtained)</td>
+                                                    }
+                                                    else
+                                                    {
+
+                                                    <td align="center" colspan="2" valign="middle" style="border:1px solid #666; padding:3px;">@(item.Paper_P6_Th_Obtained == "0" ? "" : item.Paper_P6_Th_Obtained) </td>
+                                                    }
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">
+                                                        @( (Convert.ToInt32(item.Paper_P6_Th_Obtained == " " ? "0" : (item.Paper_P6_Th_Obtained == "A" ? "0" : @item.Paper_P6_Th_Obtained)) + Convert.ToInt32(item.Paper_P6_Internal_Obtained == " " ? "0" : (item.Paper_P6_Internal_Obtained == "A" ? "0" : @item.Paper_P6_Internal_Obtained))).ToString() == "0" ? "" : (Convert.ToInt32(item.Paper_P6_Th_Obtained == " " ? "0" : (item.Paper_P6_Th_Obtained == "A" ? "0" : @item.Paper_P6_Th_Obtained)) + Convert.ToInt32(item.Paper_P6_Internal_Obtained == " " ? "0" : (item.Paper_P6_Internal_Obtained == "A" ? "0" : @item.Paper_P6_Internal_Obtained))).ToString())
+                                                    </td>
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">@item.TotalObetand</td>
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">@item.Result</td>
+                                                    <td align="center" valign="middle" style="border:1px solid #666; padding:3px;">@item.Remarks</td>
+                                                    @if (item.show == 1)
+                                                    {
+                                                    <td id="btm1" align="center" valign="middle" style="border-bottom:1px solid #666; padding:3px;">@item.YearName</td>
+                                                    }
+
+                                                </tr>
+                                                }
+                                                <tfoot style="border:0px solid;">
+                                                    <tr style="border:0px solid;">
+                                                        <td colspan="6" style="text-align:center"></td>
+                                                        <td colspan="7" style="text-align:center">
+
+                                                            <img src="~/images/white.png" width="60" />
+                                                        </td>
+                                                        <td colspan="7" style="text-align:center">
+                                                            <img src="~/images/white.png" width="60" />
+                                                        </td>
+                                                        <td colspan="7" style="text-align:center">
+                                                            <img src="~/images/white.png" width="60" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr style="border:0px solid;">
+                                                        <td colspan="6" style="text-align:center">
+                                                            Final TR Printed on
+                                                        </td>
+                                                        <td colspan="7" style="text-align:center">
+                                                            Tabulator - I
+                                                        </td>
+                                                        <td colspan="7" style="text-align:center">
+                                                            Tabulator - II
+                                                        </td>
+                                                        <td colspan="7" style="text-align:center">
+                                                            Controller of Examination
+                                                        </td>
+                                                    </tr>
+
+                                                </tfoot>
+
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12" style="text-align: center;">
+                                            <div class="pagination_wrapper">
+                                                <div class="pagination text-center">
+                                                    <div class="Pager"></div>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <style>
+            .blocktd {
+                display: block !important;
+            }
+
+            .nonetd {
+                display: none !important;
+            }
+        </style>
+        <script type="text/javascript">
+            $(document).on('click', '#save', function () {
+                if ($('#enrollmentno').val() == "") {
+                    if ($('#ApplicationNo').val() == "") {
+                        alert('Please Enter Application No  !!');
+                        return false;
+                    }
+                }
+                if ($('#ApplicationNo').val() == "") {
+                    if ($('#enrollmentno').val() == "") {
+                        alert('Please Enter Registration No  !!');
+                        return false;
+                    }
+                }
+                $('#AjaxLoader').show();
+            });
+            $(document).on('click', '#submit', function () {
+                if ($('#Session').val() == "") {
+                    alert('Please Select Session  !!');
+                    return false;
+                }
+                if ($('#CourseYearID').val() == "") {
+                    alert('Please Select Course Year  !!');
+                    return false;
+                }
+                if ($('#CollegeID').val() == "") {
+                    alert('Please Select College  !!');
+                    return false;
+                }
+                $('#AjaxLoader').show();
+            });
+            $(document).on('click', 'input[name$="searchType"]', function () {
+                debugger;
+                var searchType = $(this).val();
+                if (searchType == 'False') {
+                    $("#enrolldiv").removeAttr("style");
+                    $("#enrolldiv").attr("style", "display:none");
+                    $("#fullDiv").attr("style", "display:block");
+                    $("#grid").html('');
+                }
+                else {
+                    $("#fullDiv").removeAttr("style");
+                    $("#fullDiv").attr("style", "display:none");
+                    $("#enrolldiv").attr("style", "display:block");
+                    $("#grid").html('');
+                }
+            });
+
+            function clear() {
+                $("#CollegeID").val('');
+                $("#Session").val('');
+                $("#CourseYearID").val('');
+            }
+            $("#CourseYearID").change(function (event) {
+                $("#CollegeID").val('');
+                $('#grid').html('');
+            });
+            $("#Session").change(function (event) {
+                $('#grid').html('');
+                $("#CourseYearID").val('');
+                $("#CollegeID").val('');
+            });
+
+            $(document).ready(function () {
+                var pageindex = $("#PageIndex").val();
+                var pagesize = $("#PageSize").val();
+                var recordcount = $("#totalCount").val();
+                $("#totalcountID").html(recordcount);
+                console.log(recordcount);
+                $(".Pager").ASPSnippets_Pager({
+                    ActiveCssClass: "current",
+                    PagerCssClass: "pager",
+                    PageIndex: pageindex,
+                    PageSize: pagesize,
+                    RecordCount: recordcount
+                });
+            });
+
+
+
+            $("body").on("click", ".Pager .page", function () {
+                GetData(parseInt($(this).attr('page')));
+
+            });
+
+
+
+
+            function GetData(pageindex) {
+                $('#AjaxLoader').show();
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("CollegeTabulationRegisterBCA", "Exam")',
+                    contentType: "application/json; charset=utf-8",
+                    data: {
+                        page: pageindex,
+                        Session: $("#Session").val(),
+                        EduTypeID: 13,
+                        CourseCategoryID: 26,
+                        CollegeID: $('#CollegeID').val(),
+                        CourseYearID: $('#CourseYearID').val(),
+                        pagesize: $('#PageSize').val(),
+                        HonoursSubjectID: $('#HonoursSubjectID').val(),
+                        enrollmentno: $('#enrollmentno').val(),
+                    },
+                    success: function (data) {
+                        $('#grid').html($(data).find(".grid"));
+
+                        var pageindex = $("#PageIndex").val();
+                        var pagesize = $("#PageSize").val();
+                        var recordcount = $("#totalCount").val();
+                        $("#totalcountID").html(recordcount);
+                        console.log('Total' + recordcount);
+                        $(".Pager").ASPSnippets_Pager({
+                            ActiveCssClass: "current",
+                            PagerCssClass: "pager",
+                            PageIndex: pageindex,
+                            PageSize: pagesize,
+                            RecordCount: recordcount
+                        });
+                        $('#AjaxLoader').hide();
+                    },
+                    error: function () {
+
+                        $('#AjaxLoader').hide();
+
+                        alert('Ooops! Something Went Wrong! Try Again');
+                    }
+                });
+            }
+
+
+            if ('@ViewBag.searchType' == 'True') {
+                debugger
+                $('#searchTypet').prop('checked', true);
+
+                $("#fullDiv").removeAttr("style");
+                $("#fullDiv").attr("style", "display:none");
+                $("#enrolldiv").attr("style", "display:block");
+                //$("#btm").attr("style", "display:block;border-bottom:1px solid #666");
+                $("#btm").removeClass('hide');
+                //$("#btm").addClass('show');
+
+                $("#btm").attr('rowspan', '4');
+                $("#btm").attr('valign', 'middle');
+
+
+            }
+            else {
+                $('#searchTypef').prop('checked', true);
+
+                $("#enrolldiv").removeAttr("style");
+                $("#enrolldiv").attr("style", "display:none");
+                $("#fullDiv").attr("style", "display:block");
+                $("#btm").removeClass('show');
+                $("#btm").addClass('hide');
+                $("#btm").attr('rowspan', '4');
+                $("#btm").attr('valign', 'middle');
+
+
+
+            }
+            $(function () {
+                $("#Session option").each(function () {
+                    if ($(this).val() == (('@ViewBag.CurrentSession'))) {
+                        $(this).attr('selected', 'selected');
+                    }
+                });
+            });
+
+
+            $(function () {
+                $("#Educationtype option").each(function () {
+                    if ($(this).val() == (('@ViewBag.educationtypeID1'))) {
+                        $(this).attr('selected', 'selected');
+                    }
+                });
+            });
+            $(function () {
+                $("#CourseCategoryID option").each(function () {
+                    if ($(this).val() == (('@ViewBag.coursecategoryID'))) {
+                        $(this).attr('selected', 'selected');
+                    }
+                });
+            });
+            $(function () {
+                $("#CourseYearID option").each(function () {
+                    if ($(this).val() == (('@ViewBag.yearid'))) {
+                        $(this).attr('selected', 'selected');
+                    }
+                });
+            });
+
+            $('body').delegate('#btnPrint', 'click', function () {
+                $("#trheading").attr("style", "text-align: center;");
+                var contents = $("#PrintDiv").html();
+                var frame1 = $('<iframe />');
+                frame1[0].name = "frame1";
+                frame1.css({ "position": "absolute", "top": "-1000000px" });
+                $("body").append(frame1);
+                var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+                frameDoc.document.open();
+                frameDoc.document.write('<html><head><title>.</title>');
+                frameDoc.document.write('</head><body>');
+                frameDoc.document.write('<link href="style.css" rel="stylesheet" type="text/css" />');
+                frameDoc.document.write(contents);
+                frameDoc.document.write('</body></html>');
+                frameDoc.document.close();
+                setTimeout(function () {
+                    window.frames["frame1"].focus();
+                    window.frames["frame1"].print();
+                    frame1.remove();
+                }, 500);
+            });
+
+        </script>
+        <script src="~/scripts/jquery-1.10.2.js"></script>
+        <script src="~/scripts/jquery.validate.js"></script>
+        <script src="~/scripts/jquery.validate.unobtrusive.js"></script>

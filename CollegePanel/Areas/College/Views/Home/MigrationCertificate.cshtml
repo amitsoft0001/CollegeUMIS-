@@ -1,0 +1,324 @@
+﻿
+@{
+    ViewBag.Title = "MigrationCertificate";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+<style>
+    
+    .Minheight {
+        min-height: 450px;
+    }
+
+     .right {
+        text-align: right;
+    }
+
+    .left {
+        text-align: left;
+    }
+
+    .spacedesign {
+        padding-bottom: 20px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .textce {
+        text-align: center;
+    }
+
+    .btnstyle {
+        margin-top:30px;
+         margin-left:30px;
+    }
+
+    .btntext {
+        color: white;
+    }
+</style>
+<script>
+    var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+
+</script>
+<div class="container-fluid Minheight">
+    <div class="row">
+        <div class="all-content-wrapper" style="margin-left:0px !important">
+            <!-- Advanced Form Start -->
+            <div class="panel-body">
+                <div class="row spacedesign basic-application">
+                    <h2 class="text-center">Migration Certificate</h2>
+                </div>
+                <div class="row spacedesign">
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <span><label>Year:</label></span>
+                        @Html.DropDownList("session", new SelectList(ViewBag.Session, "ID", "Session", ViewBag.CuSession), "--Select Session--", new { @class = "form-control custom-select-value", @id = "session", @name = "sessiontext", @ng_model = "session.search" })
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <span><label>Registration No:</label></span>
+                        <input type="text" class="form-control" placeholder="Registration No" name="RegistrationNo" id="RegistrationNo" />
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 btnstyle">
+                        <button class="btn btn-primary waves-effect waves-light" type="button" id="btnsearch">Search</button>
+                    </div>
+                </div>
+            </div>
+
+                @*<div class="row spacedesign ">
+
+                    <div class="col-md-6 left">
+                        &nbsp;
+                    </div>
+                    <div class="col-md-4 right">
+                        <button class="btn btn-primary waves-effect waves-light" type="button" id="btnsearch">Search</button>
+                    </div>
+                </div>*@
+                <div class="sparkline12-graph sparkline-list">
+                    <div class="basic-login-form-ad">
+                        <div class="spacedesign" id="printreport" style="display:none">
+                            <div style="border:3px solid #333; padding:15px; font-size:15px; font-family:Arial, Helvetica, sans-serif; width:768px; margin:auto;">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td align="left" valign="top" >Serial No:<span id="CertificateID"></span></td>
+                                        <td align="right" valign="top">Memo No: _________________</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="left" valign="top">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="center" valign="top"><img src="~/images/mu-logo-white.png" width="350"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="left" valign="top">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="left" valign="top">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="center" valign="top"><h3>MIGRATION CERTIFICATE</h3></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="left" valign="top">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="left" valign="top">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="center" valign="middle" style="border-bottom:1px solid #333; padding:5px 0; height:40px;" ><strong><span id="StudentName"></span></strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="left" valign="top">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="left" valign="top">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="left" valign="top">
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td align="left" valign="middle" width="120">Student of the </td>
+                                                    <td align="center" valign="middle" style="border-bottom:1px solid #333; padding:5px 0; height:40px;" ><strong><span id="CourseCategory"></span></strong></td>
+                                                    <td align="center" valign="middle" width="120">College Name</td>
+                                                    <td align="center" valign="middle" style="border-bottom:1px solid #333; padding:5px 0; height:40px;" ><strong><span id="CollegeName"></span></strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="left" valign="middle">Registration No</td>
+                                                    <td align="center" valign="middle" style="border-bottom:1px solid #333; padding:5px 0; height:40px;" ><strong><span id="Registration"></span></strong></td>
+                                                    <td colspan="2" align="left" valign="middle">is informed that this university has no objection  to </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="left" valign="top">&nbsp;<input type="hidden" id="sid" name="sid"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="left" valign="middle">his/ her continuing studies at another University.</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="left" valign="top">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="left" valign="top">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="left" valign="top">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="left" valign="top">
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td align="center" valign="middle" width="300">Date of Issue:@System.DateTime.Now.ToString("dd MMM yyyy")</td>
+                                                    <td align="center" valign="middle">&nbsp;</td>
+                                                    <td align="center" valign="middle">&nbsp;</td>
+                                                    <td align="center" valign="middle" width="300">Controller</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="left" valign="top">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="left" valign="top">&nbsp;</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row" id="btnPrintdiv" style="display:none">
+
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 textce btntext">
+                                <a href="#" id="btnPrint" onclick="return printdiv();" class="btn btn-primary waves-effect waves-light  ">
+                                    <i class="fa fa-print" aria-hidden="true"></i>
+                                    Print
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+        </div>
+            </div>
+</div>
+<script>
+    $(function ()
+    {
+        $("#session option").each(function ()
+        {
+            if ($(this).val() ==((@ViewBag.CuSession)))
+            {
+                $(this).attr('selected', 'selected');
+            }
+        });
+    });
+    $("#btnsearch").click(function (event) {
+
+        var RegistrationNo = $('#RegistrationNo').val();
+        //alert(RegistrationNo);
+        var session=$('#session').val();
+        if (session == "") {
+            alert('Please Select session No!!!!');
+            return;
+        }
+        if (RegistrationNo == "") {
+            
+            alert('Please Enter Registration No!!!!');
+            return;
+        }
+       
+        showloader();
+        $.ajax({
+            url: "/College/Home/FindStudentDetail/",
+            data: { RegistrationNo: RegistrationNo ,session:session},
+            cache: false,
+            type: "POST",
+            dataType: "json",
+            headers: { 'Authorization': 'Basic ' + btoa(username + ':' + password) },
+            success: function (data) {
+                //console.log(data);
+
+                if(data.CollegeName!=null)
+                {
+
+                    $('#printreport').removeAttr("style");
+                    $("#printreport").attr("style", "display: block;");
+                    $('#btnPrintdiv').removeAttr("style");
+                    $("#btnPrintdiv").attr("style", "display: block;");
+                    $('#sid').val(data.sid);
+                    
+                    $('#CertificateID').html(data.SerialNo);
+                    $('#StudentName').html(data.Title+' '+data.StudentName + ' '+ data.PTitle+ ' '+ data.FatherName);
+                    $('#CollegeName').html(data.CollegeName);
+                    $('#Registration').html(data.RegistrationNo);
+                    $('#CourseCategory').html(data.CourseCategory +'('+data.streamCategory+')');
+                   hideloader();
+                }
+                else
+                {
+                    hideloader();
+                    alert('Registeration No Doesnot exist!!!!');
+                    $('#printreport').removeAttr("style");
+                    $("#printreport").attr("style", "display: none;");
+                    $('#btnPrintdiv').removeAttr("style");
+                    $("#btnPrintdiv").attr("style", "display: none;");
+                }
+            }  ,
+            error: function (data) {
+                $('#printreport').removeAttr("style");
+                $("#printreport").attr("style", "display: none;");
+                $('#btnPrintdiv').removeAttr("style");
+                $("#btnPrintdiv").attr("style", "display: none;");
+                hideloader();
+                alert('Registeration No Doesnot exist!!!!');
+               
+            }
+        });
+
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        $("#btnPrint").click(function () {
+            var sid= $('#sid').val();
+            var session=$('#session').val();
+            if (session == "") {
+                alert('Please Select session No!!!!');
+                return;
+            }
+            var Type="Migration";
+            showloader();
+            $.ajax({
+                url: "/College/Home/PrintStudentCertificate/",
+                data: { sid: sid ,session:session,Type:Type},
+                cache: false,
+                type: "POST",
+                dataType: "json",
+                headers: { 'Authorization': 'Basic ' + btoa(username + ':' + password) },
+                success: function (data) {
+                    console.log(data);
+
+                    if(data.Status)
+                    {
+                        hideloader();
+                        var contents = $("#printreport").html();
+                        //console.log(contents);
+                        var frame1 = $('<iframe />');
+                        frame1[0].name = "frame1";
+                        frame1.css({ "position": "absolute", "top": "-1000000px" });
+                        $("body").append(frame1);
+                        var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+                        frameDoc.document.open();
+                        //Create a new HTML document.
+                        frameDoc.document.write('<html><head><title>.</title>');
+
+                        frameDoc.document.write('</head><body>');
+                        //Append the external CSS file.
+                        frameDoc.document.write('<link href="style.css" rel="stylesheet" type="text/css" />');
+                        //Append the DIV contents.
+                        frameDoc.document.write(contents);
+                        frameDoc.document.write('</body></html>');
+                        frameDoc.document.close();
+                        setTimeout(function () {
+                            window.frames["frame1"].focus();
+                            window.frames["frame1"].print();
+                            frame1.remove();
+                        }, 500);
+                    }
+                    else
+                    {
+                        hideloader();
+                        alert('Something Went Wrong!!!!');
+                       
+                    }
+                }  ,
+                error: function (data) {
+                   
+                    hideloader();
+                    alert('Registeration No Doesnot exist!!!!');
+               
+                }
+            });
+            
+        });
+    });
+</script>

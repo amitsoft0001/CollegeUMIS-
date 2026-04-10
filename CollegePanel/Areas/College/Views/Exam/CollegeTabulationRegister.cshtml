@@ -1,0 +1,734 @@
+﻿@model DataLayer.CollegeExamCenter
+@{
+    ViewBag.Title = "CollegeTabulationRegister";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+    var rowCount = Convert.ToInt32(@ViewBag.totalCount);
+}
+
+<!-- Google Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link href="~/Content/css/New.css" rel="stylesheet" />
+
+<style>
+    /* ============================================
+       TABULATION REGISTER - PREMIUM REDESIGN
+       Color Scheme: #4361ee (Primary) | #1e293b (Dark)
+    ============================================ */
+    
+    * {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #4361ee;
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #2b4cd6;
+    }
+
+    /* Modern Card Styles */
+    .premium-card {
+        background: #ffffff;
+        border-radius: 24px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        margin-bottom: 1.8rem;
+        overflow: hidden;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        border: 1px solid rgba(67, 97, 238, 0.08);
+    }
+
+    .premium-card:hover {
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+    }
+
+    .card-header-premium {
+        background: linear-gradient(135deg, #4361ee 0%, #3a56d4 100%);
+        padding: 1.2rem 1.8rem;
+        border-bottom: none;
+    }
+
+    .card-header-premium h3 {
+        margin: 0;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .card-header-premium h3 i {
+        font-size: 1.5rem;
+    }
+
+    .card-body-premium {
+        padding: 1.8rem;
+    }
+
+    /* Form Labels & Controls */
+    .form-label-premium {
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: #5b6e8c;
+        margin-bottom: 8px;
+    }
+
+    .form-label-premium i {
+        margin-right: 6px;
+        color: #4361ee;
+        font-size: 0.75rem;
+    }
+
+    .starvalid {
+        color: #dc2626;
+        margin-left: 2px;
+    }
+
+    /* Premium Select Dropdowns */
+    .premium-select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #1e293b;
+        background-color: #ffffff;
+        border: 2px solid #e2e8f0;
+        border-radius: 14px;
+        transition: all 0.25s ease;
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%234361ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 14px;
+        cursor: pointer;
+    }
+
+    .premium-select:hover {
+        border-color: #4361ee;
+        background-color: #fafbff;
+    }
+
+    .premium-select:focus {
+        outline: none;
+        border-color: #4361ee;
+        box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.12);
+    }
+
+    /* Premium Input */
+    .premium-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #1e293b;
+        background-color: #ffffff;
+        border: 2px solid #e2e8f0;
+        border-radius: 14px;
+        transition: all 0.25s ease;
+    }
+
+    .premium-input:focus {
+        outline: none;
+        border-color: #4361ee;
+        box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.12);
+    }
+
+    .premium-input::placeholder {
+        color: #a0afc3;
+        font-weight: 400;
+    }
+
+    /* Radio Button Styling */
+    .radio-group-premium {
+        display: flex;
+        gap: 1.5rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .radio-premium {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #1e293b;
+    }
+
+    .radio-premium input[type="radio"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #4361ee;
+        cursor: pointer;
+    }
+
+    /* Premium Buttons */
+    .btn-premium-primary {
+        background: linear-gradient(135deg, #4361ee 0%, #3a56d4 100%);
+        border: none;
+        padding: 0.7rem 1.8rem;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: white;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(67, 97, 238, 0.2);
+    }
+
+    .btn-premium-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
+        background: linear-gradient(135deg, #3a56d4 0%, #2b4cd6 100%);
+    }
+
+    .btn-premium-secondary {
+        background: #f8fafc;
+        border: 2px solid #e2e8f0;
+        padding: 0.65rem 1.6rem;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: #1e293b;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+    }
+
+    .btn-premium-secondary:hover {
+        background: #ffffff;
+        border-color: #4361ee;
+        color: #4361ee;
+        transform: translateY(-1px);
+    }
+
+    /* Stats Bar */
+    .stats-bar-premium {
+        background: #f8fafc;
+        border-radius: 60px;
+        padding: 0.5rem 1.2rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .stats-number-premium {
+        background: #4361ee;
+        color: white;
+        border-radius: 40px;
+        padding: 4px 12px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        min-width: 50px;
+        text-align: center;
+    }
+
+    /* Table Container */
+    .table-container-premium {
+        overflow-x: auto;
+        border-radius: 20px;
+        background: #ffffff;
+    }
+
+    /* Tabulation Table Styles */
+    .tabulation-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 11px;
+        font-family: 'Inter', monospace;
+    }
+
+    .tabulation-table th,
+    .tabulation-table td {
+        border: 1px solid #cbd5e1;
+        padding: 8px 6px;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .tabulation-table th {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        color: white;
+        font-weight: 700;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .tabulation-table tr:hover {
+        background: #f8fafc;
+    }
+
+    /* Print Header */
+    #trheading {
+        border-bottom: 3px solid #4361ee;
+        margin-bottom: 20px;
+        text-align: center;
+        padding: 20px 0;
+        font-family: 'Inter', Arial, sans-serif;
+    }
+
+    /* Alert Styles */
+    .alert-premium-success {
+        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        color: #065f46;
+        border: none;
+        border-radius: 16px;
+        padding: 1rem;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .alert-premium-danger {
+        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        color: #991b1b;
+        border: none;
+        border-radius: 16px;
+        padding: 1rem;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    /* Pagination */
+    .pager {
+        display: flex;
+        gap: 6px;
+        justify-content: center;
+        margin-top: 20px;
+        flex-wrap: wrap;
+    }
+
+    .pager a, .pager .current {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 36px;
+        height: 36px;
+        padding: 0 12px;
+        border-radius: 10px;
+        background: white;
+        border: 1px solid #e2e8f0;
+        color: #475569;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .pager a:hover {
+        background: #4361ee;
+        color: white;
+        border-color: #4361ee;
+    }
+
+    .pager .current {
+        background: linear-gradient(135deg, #4361ee, #3a56d4);
+        color: white;
+        border-color: #4361ee;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .card-body-premium {
+            padding: 1rem;
+        }
+        .radio-group-premium {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .tabulation-table {
+            font-size: 9px;
+        }
+        .tabulation-table th,
+        .tabulation-table td {
+            padding: 4px 2px;
+        }
+    }
+
+    /* Utility */
+    .right { text-align: right; }
+    .left { text-align: left; }
+    .minheight { min-height: 500px; }
+    .validation { color: #dc2626; font-size: 12px; margin-top: 5px; }
+    .hide { display: none; }
+</style>
+
+<script type="text/javascript">
+    var now = new Date();
+    var startdate = new Date(now.getFullYear() - 5, now.getMonth(), now.getDay());
+    var enddate = new Date(now.getFullYear() + 5, now.getMonth(), now.getDay());
+    var Resultdata = '@ViewBag.ResultMaster';
+</script>
+<script src="~/JS/Commonjs.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+
+@{
+    List<SelectListItem> listItems = new List<SelectListItem>();
+    listItems.Add(new SelectListItem { Text = "50", Value = "50" });
+    listItems.Add(new SelectListItem { Text = "100", Value = "100" });
+    listItems.Add(new SelectListItem { Text = "500", Value = "500" });
+    listItems.Add(new SelectListItem { Text = "1000", Value = "1000" });
+    listItems.Add(new SelectListItem { Text = "2000", Value = "2000" });
+}
+
+<div class="container-fluid minheight" style="padding: 25px 30px; background: #f5f7fb;">
+    <div class="row">
+        <div class="col-lg-12 col-sm-12 col-xs-12">
+            @if (TempData["StMessage"] != null)
+            {
+                <div class="alert-premium-success">
+                    <i class="fas fa-check-circle"></i> @TempData["StMessage"]
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12 col-sm-12 col-xs-12">
+            <!-- Main Premium Card -->
+            <div class="premium-card">
+                <div class="card-header-premium">
+                    <h3>
+                        <i class="fas fa-table-list"></i>
+                        TABULATION REGISTER (B.A / B.Com / B.Sc.)
+                    </h3>
+                </div>
+                <div class="card-body-premium">
+                    @if (TempData["Msg"] != null)
+                    {
+                        <div class="alert-premium-danger">
+                            <i class="fas fa-exclamation-triangle"></i> @TempData["Msg"]
+                        </div>
+                    }
+
+                    @using (Html.BeginForm("CollegeTabulationRegister", "Exam", FormMethod.Post, new { id = "myform", enctype = "multipart/form-data" }))
+                    {
+                        <input type="hidden" id="CurrentYearName" value="@ViewBag.CurrentYearName" />
+                        <input type="hidden" id="MonthName" value="@ViewBag.MonthName" />
+                        <input type="hidden" id="CurrentDate" value="@ViewBag.CurrentDate" />
+
+                        <!-- Search Criteria Radio -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <label class="form-label-premium"><i class="fas fa-search"></i> Search Criteria</label>
+                                <div class="radio-group-premium">
+                                    <label class="radio-premium">
+                                        @Html.RadioButton("searchType", "True", new { @id = "searchType", @name = "searchTypet" })
+                                        <i class="fas fa-id-card"></i> Registration No / Application No
+                                    </label>
+                                    <label class="radio-premium">
+                                        @Html.RadioButton("searchType", "False", new { @id = "searchTypef", @name = "searchTypef" })
+                                        <i class="fas fa-building"></i> Full Data Collegewise
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Full Data Div -->
+                        <div id="fullDiv" style="display: block;">
+                            <div class="row g-4">
+                                <div class="col-lg-4 col-md-6">
+                                    <label class="form-label-premium"><i class="fas fa-calendar-alt"></i> Year <span class="starvalid">*</span></label>
+                                    @Html.DropDownList("Session", new SelectList(ViewBag.Session, "ID", "Session", @ViewBag.CurrentSession), "--Select Session--", new { @class = "premium-select", @id = "Session", @name = "Session" })
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <label class="form-label-premium"><i class="fas fa-graduation-cap"></i> Education Type <span class="starvalid">*</span></label>
+                                    @Html.DropDownList("EduTypeID", (List<SelectListItem>)ViewBag.EducationType, "Select Programme Type..", new { @class = "premium-select", @id = "EduTypeID", @name = "EduTypeID" })
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <label class="form-label-premium"><i class="fas fa-layer-group"></i> Course Category <span class="starvalid">*</span></label>
+                                    @Html.DropDownList("CourseCategoryID", new SelectList(ViewBag.coursesfordrop, "CourseCategoryID", "CourseCategory"), "Select Course", new { @class = "premium-select", @id = "CourseCategoryID" })
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <label class="form-label-premium"><i class="fas fa-calendar-week"></i> Course Year <span class="starvalid">*</span></label>
+                                    @Html.DropDownList("CourseYearID", new SelectList(ViewBag.CourseYear, "ID", "Name"), "Select Course Year", new { @class = "premium-select", @id = "CourseYearID" })
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <label class="form-label-premium"><i class="fas fa-book"></i> Honours Subject <span class="starvalid">*</span></label>
+                                    @Html.DropDownList("HonoursSubjectID", new SelectList(ViewBag.Subject, "StreamCategoryID", "streamCategory"), "Select Subject", new { @class = "premium-select", @id = "HonoursSubjectID" })
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <label class="form-label-premium"><i class="fas fa-list-ol"></i> Page Size <span class="starvalid">*</span></label>
+                                    @Html.DropDownList("pagesize", listItems, new { @class = "premium-select", @id = "pagesize" })
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-12 right">
+                                    <button type="submit" class="btn-premium-primary">
+                                        <i class="fas fa-search"></i> Search Records
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Enrollment Div -->
+                        <div id="enrolldiv" style="display: none;">
+                            <div class="row g-4">
+                                <div class="col-lg-4 col-md-6">
+                                    <label class="form-label-premium"><i class="fas fa-id-card"></i> Registration No</label>
+                                    @Html.TextBox("enrollmentno", "", new { @class = "premium-input", @id = "enrollmentno", @placeholder = "Enter Registration No" })
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <label class="form-label-premium"><i class="fas fa-file-alt"></i> Application No</label>
+                                    @Html.TextBox("ApplicationNo", "", new { @class = "premium-input", @id = "ApplicationNo", @placeholder = "Enter Application No" })
+                                </div>
+                                <div class="col-lg-4 col-md-6 d-flex align-items-end">
+                                    <button type="submit" id="submitbtn" class="btn-premium-primary" style="width: 100%;">
+                                        <i class="fas fa-search"></i> Search
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- No Record Message -->
+                        if (@ViewBag.totalCount == 0 && Model.StudentListNew.Count == 0)
+                        {
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <div class="alert-premium-danger">
+                                        <i class="fas fa-database"></i> No record Found
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                    <!-- Grid Section -->
+                    <div id="grid">
+                        @@if (Model.StudentListNew.Count > 0)
+                        {
+                            <div class="grid">
+                                @Html.HiddenFor(model => model.PageIndex)
+                                @Html.HiddenFor(model => model.PageSize)
+                                @Html.HiddenFor(model => model.totalCount)
+
+                                <!-- Action Bar -->
+                                <div class="row mt-4 mb-3">
+                                    <div class="col-lg-6 left">
+                                        <div class="stats-bar-premium">
+                                            <i class="fas fa-database"></i> Total Records :
+                                            <span class="stats-number-premium" id="totalcountID">@Model.totalCount</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 right">
+                                        <button id="btnPrint" class="btn-premium-secondary">
+                                            <i class="fas fa-print"></i> Print Tabulation Register
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Print Div -->
+                                <div id="PrintDiv">
+                                    <div id="trheading" style="display:none; border-bottom:3px solid #4361ee; margin-bottom:25px; text-align:center; padding:20px 0;">
+                                        <img src="/images/mu-logo-white.png" width="200px" style="margin-bottom:10px;">
+                                        <h2 style="color:#1e293b;">TABULATION REGISTER</h2>
+                                        <p><strong>@ViewBag.Coursename</strong> | <strong>@ViewBag.CourseYearname</strong> | Examination - @ViewBag.CurrentYearName</p>
+                                        <table width="100%" style="margin-top:15px;">
+                                            <tr>
+                                                <td align="center">Examination held in: @ViewBag.MonthName/@ViewBag.CurrentYearName</td>
+                                                <td align="center">Session: @ViewBag.sessionname</td>
+                                                <td align="center">Date of Publication: @ViewBag.CurrentDate</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+
+                                    <div class="table-container-premium">
+                                        <table class="tabulation-table" style="width:100%;">
+                                            @{
+                                                int i = 1;
+                                                if (ViewBag.YearID == Convert.ToInt32(DataLayer.CommonSetting.CourseYearID.BA3rd) || ViewBag.YearID == Convert.ToInt32(DataLayer.CommonSetting.CourseYearID.Bsc3rd) || ViewBag.YearID == Convert.ToInt32(DataLayer.CommonSetting.CourseYearID.Bcom3rd))
+                                                {
+                                                    // 3rd Year Header (Keep your existing complex header)
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="3" rowspan="3">@(ViewBag.CollegeName != null ? ViewBag.CollegeName : "")</th>
+                                                            <th rowspan="3">Hons.<br>Subject</th>
+                                                            <th colspan="5">Part-I</th>
+                                                            <th colspan="5">Part-II</th>
+                                                            <th colspan="9">Part-III</th>
+                                                            <th rowspan="3">Hons.<br>Total</th>
+                                                            <th rowspan="3">Gen.<br>Studies</th>
+                                                            <th colspan="8">Subsidiary</th>
+                                                            <th colspan="4">Compulsory</th>
+                                                            <th rowspan="3">Grand<br>Total</th>
+                                                            <th rowspan="3">Result</th>
+                                                        </tr>
+                                                        <!-- Rest of your complex headers - KEPT INTACT -->
+                                                        <tr>
+                                                            <th colspan="3">Theory</th><th rowspan="2">Prac I</th><th rowspan="2">Total I</th>
+                                                            <th colspan="3">Theory</th><th rowspan="2">Prac II</th><th rowspan="2">Total II</th>
+                                                            <th colspan="5">Theory</th><th colspan="3">Prac</th><th rowspan="2">Total</th>
+                                                            <th colspan="4">Part I</th><th colspan="4">Part II</th>
+                                                            <th colspan="2">Part I</th><th colspan="2">Part II</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>P-I</th><th>P-II</th><th>Total</th>
+                                                            <th>P-III</th><th>P-IV</th><th>Total</th>
+                                                            <th>P-V</th><th>P-VI</th><th>P-VII</th><th>P-VIII</th><th>Total</th>
+                                                            <th>VII</th><th>VIII</th><th>Total</th>
+                                                            <th>Sub-I</th><th>Prac</th><th>Sub-I</th><th>Prac</th>
+                                                            <th>Sub-I</th><th>Prac</th><th>Sub-I</th><th>Prac</th>
+                                                            <th>RB/Hin</th><th>MB</th><th>RB/Hin</th><th>MB</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Roll No</th><th>Reg.No</th><th>Name</th>
+                                                            <th>FM</th><th colspan="3">200/150</th><th>50</th><th>200</th>
+                                                            <th colspan="3">200/150</th><th>50</th><th>200</th>
+                                                            <th colspan="5">100/75</th><th colspan="3">400/300/200</th><th>100</th>
+                                                            <th colspan="2">100/75</th><th colspan="2">200/100</th><th colspan="2">400/300</th><th>400</th><th>100</th>
+                                                            <th>100/75</th><th>25</th><th>100/75</th><th>25</th><th>100/75</th><th>25</th><th>100/75</th><th>25</th>
+                                                            <th colspan="2">100/50+50</th><th colspan="2">100/50+50</th><th>500</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>PM</th><th colspan="3">90/67</th><th>23</th><th>90</th>
+                                                            <th colspan="3">90/67</th><th>23</th><th>90</th>
+                                                            <th colspan="5"></th><th colspan="3">150/135</th><th>45</th>
+                                                            <th colspan="2">45</th><th colspan="2">90/45</th><th colspan="2"></th><th>360</th><th>33</th>
+                                                            <th>33/23</th><th>10</th><th>33/23</th><th>10</th><th>33/23</th><th>10</th><th>33/23</th><th>10</th>
+                                                            <th colspan="2">33/15+15</th><th colspan="2">33/15+15</th><th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var item in Model.StudentListNew)
+                                                        {
+                                                            <tr>
+                                                                <td>@item.RollNo</td>
+                                                                <td>@item.EnrollmentNo</td>
+                                                                <td>@item.Name</td>
+                                                                <td>@item.Honours</td>
+                                                                <td>@item.HonoursP1</td>
+                                                                <td>@item.Honoursp2</td>
+                                                                <td>@item.TotalPaperObetand</td>
+                                                                <td>@item.HonoursPer</td>
+                                                                <td>@item.SumHonours</td>
+                                                                <td>@item.HonoursP12nd</td>
+                                                                <td>@item.Honoursp22nd</td>
+                                                                <td>@item.TotalPaperObetand2nd</td>
+                                                                <td>@item.HonoursPer2nd</td>
+                                                                <td>@item.SumHonours2nd</td>
+                                                                <td>@item.HonoursP13rd</td>
+                                                                <td>@item.Honoursp23rd</td>
+                                                                <td>@item.Honoursp33rd</td>
+                                                                <td>@item.Honoursp43rd</td>
+                                                                <td>@item.TotalPaperObetand3rd</td>
+                                                                <td>@item.HonoursPer3rd</td>
+                                                                <td>&nbsp;</td>
+                                                                <td>@item.HonoursPer3rd</td>
+                                                                <td>@item.SumHonours3rd</td>
+                                                                <td>@(Convert.ToInt32(item.SumHonours3rd) + Convert.ToInt32(@item.SumHonours2nd) + Convert.ToInt32(@item.SumHonours))</td>
+                                                                <td>@item.GenStudies3rd</td>
+                                                                <td colspan="2">@item.Subsidiary1<br />@item.SumSubsidiary1</td>
+                                                                <td colspan="2">@item.Subsidiary2<br />@item.SumSubsidiary2</td>
+                                                                <td colspan="2">@item.Subsidiary1<br />@item.SumSubsidiary12nd</td>
+                                                                <td colspan="2">@item.Subsidiary2<br />@item.SumSubsidiary22nd</td>
+                                                                <td colspan="4">@item.TotalCompulsory</td>
+                                                                <td>@item.GrandTotal</td>
+                                                                <td>@item.FinalResult</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="4"></td>
+                                                                <td colspan="4">@item.SumCompulsory</td>
+                                                                <td colspan="4">@item.SumCompulsory2nd</td>
+                                                                <td colspan="21"></td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                }
+                                                else
+                                                {
+                                                    // 1st/2nd Year Simplified Header
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="5">@(ViewBag.CollegeName != null ? ViewBag.CollegeName : "")</th>
+                                                            <th colspan="7">Honours</th>
+                                                            <th colspan="4">Subsidiary I</th>
+                                                            <th colspan="4">Subsidiary II</th>
+                                                            <th colspan="4">Compulsory</th>
+                                                            <th>G.Total</th>
+                                                            <th>Result</th>
+                                                            <th>Remarks</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>S.No</th><th>Roll No</th><th>Reg No</th><th colspan="2">Name</th>
+                                                            <th>Subject</th><th>P-I</th><th>P-II</th><th>P-III</th><th>Total</th><th>Prac</th><th>Honor Total</th>
+                                                            <th>Subject</th><th>Th.</th><th>Prac</th><th>Total</th>
+                                                            <th>Subject</th><th>Th.</th><th>Prac</th><th>Total</th>
+                                                            <th>Subject</th><th>RB/NHn</th><th>MB</th><th>Total</th>
+                                                            <th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th colspan="5">FM</th>
+                                                            <th colspan="4">200/150</th><th>50</th><th>200</th>
+                                                            <th>&nbsp;</th><th>100/75</th><th>25</th><th>100</th>
+                                                            <th>&nbsp;</th><th>100/75</th><th>25</th><th>100</th>
+                                                            <th>&nbsp;</th><th colspan="2">100/50+50</th><th>100</th><th>500</th><th>&nbsp;</th><th>&nbsp;</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th colspan="5">PM</th>
+                                                            <th colspan="4">90/67</th><th>23</th><th>90</th>
+                                                            <th>&nbsp;</th><th>33/23</th><th>10</th><th>33</th>
+                                                            <th>&nbsp;</th><th>33/23</th><th>10</th><th>33</th>
+                                                            <th>&nbsp;</th><th colspan="2">33/15+15</th><th>33</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var item in Model.StudentListNew)
+                                                        {
+                                                            <tr>
+                                                                <td>@item.Row</td>
+                                                                <td>@item.RollNo</td>
+                                                                <td>@item.EnrollmentNo</td>
+                                                                <td colspan="2">@item.Name</td>
+                                                                <td>@item.Honours</td>
+                                                                <td>@item.HonoursP1</td>
+                                                                <td>@item.Honoursp2</td>
+                                                                <td>@(item.Honours != "CHEMISTRY" ? "" : item.Honoursp3)</td>
+                                                                <td>@(Convert.ToInt32(item.HonoursP1 == "A" ? "0" : item.HonoursP1) + Convert.ToInt32(item.Honoursp2 == "A" ? "0" : item.Honoursp2) + Convert.ToInt32(item.Honoursp3 == "A" ? "0" : item.Honoursp3))</td>
+                                                                <td>@(item.HounorsPraTotalMarks == 0 ? "" : item.HonoursPer)</td>
+                                                                <td>@item.TotalHonours</td>
+                                                                <td>@item.Subsidiary1</td>
+                                                                <td>@item.Subsidiary1P1</td>
+                                                                <td>@(item.Subsidiary1PraTotalMarks == 0 ? "" : item.Subsidiary1Per)</td>
+                                                                <td>@item.SumSubsidiary1</td>
+                                                                <td>@item.Subsidiary2</td>
+                                                                <td>@item.Subsidiary2P1</td>
+                                                                <td>@(item.Subsidiary2PraTotalMarks == 0 ? "" : item.Subsidiary2Per)</td>
+                                                                <td>@item.SumSubsidiary2</td>
+                                                                <td>@item.Compulsory1 - @item.Compulsory2</td>
+                                                                <td>@item.CompulsoryP1</td>
+                                                                <td>@(item.Compulsory2TotalMarks == 0 ? "" : item.CompulsoryP2)</td>
+                                                                <td>@item.SumCompulsory</td>
+                                                                <td>@item.TotalObetand</td>
+                                                                <td>@item.ResultName</td>
+                                                                <td>@item.Remarks</td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                }
+                                            }
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Pagination -->
+                                <div class="row

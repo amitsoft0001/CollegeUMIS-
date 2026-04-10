@@ -1,0 +1,389 @@
+﻿@model DataLayer.EventOrganiserMaster
+@{
+    ViewBag.Title = "Eventinvitation";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+<!-- Premium Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    :root {
+        --brand-primary: #4361ee;
+        --brand-secondary: #3f37c9;
+        --brand-accent: #7209b7;
+        --brand-gradient: linear-gradient(145deg, #4361ee 0%, #7209b7 100%);
+        --brand-gradient-soft: linear-gradient(145deg, rgba(67,97,238,0.08) 0%, rgba(114,9,183,0.08) 100%);
+        --brand-success: #10b981;
+        --brand-warning: #f59e0b;
+        --brand-danger: #ef4444;
+        --surface-white: #ffffff;
+        --surface-gray: #f8fafc;
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --text-muted: #64748b;
+        --border-light: rgba(203,213,225,0.4);
+        --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
+        --shadow-md: 0 10px 30px -12px rgba(0,0,0,0.1);
+        --shadow-lg: 0 20px 40px -15px rgba(67,97,238,0.15);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%); min-height: 100vh; }
+
+    /* Hero Section */
+    .hero-section {
+        background: var(--brand-gradient);
+        border-radius: 0 0 48px 48px;
+        padding: 35px 40px;
+        margin-bottom: 40px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+    }
+    .hero-section::before { content: ''; position: absolute; top: -40%; right: -15%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%); border-radius: 50%; }
+    .hero-section::after { content: ''; position: absolute; bottom: -30%; left: -10%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%); border-radius: 50%; }
+
+    .main-container { max-width: 900px; margin: 0 auto; padding: 0 32px; }
+
+    /* Form Card */
+    .form-card {
+        background: var(--surface-white);
+        border-radius: 32px;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-light);
+        overflow: hidden;
+        margin-bottom: 40px;
+        transition: all 0.3s;
+    }
+    .form-card:hover { box-shadow: var(--shadow-lg); }
+
+    .form-header {
+        background: var(--brand-gradient-soft);
+        padding: 24px 32px;
+        border-bottom: 2px dashed rgba(67,97,238,0.2);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+    .form-header-icon {
+        width: 56px;
+        height: 56px;
+        background: var(--brand-gradient);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 20px rgba(67,97,238,0.25);
+    }
+    .form-header-icon i { font-size: 28px; color: white; }
+    .form-header-title { font-size: 24px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.5px; }
+    .form-header-subtitle { font-size: 14px; color: var(--text-secondary); margin-top: 4px; }
+
+    .form-body { padding: 32px; }
+
+    /* Form Controls */
+    .form-group-modern { margin-bottom: 24px; }
+    .form-label-modern {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .form-label-modern i { color: var(--brand-primary); font-size: 16px; }
+    .required-star { color: var(--brand-danger); font-size: 14px; }
+
+    .form-control-modern {
+        width: 100%;
+        padding: 14px 18px;
+        font-size: 14px;
+        font-weight: 500;
+        border: 2px solid #e2e8f0;
+        border-radius: 20px;
+        background: white;
+        transition: all 0.25s;
+        font-family: 'Inter', sans-serif;
+    }
+    .form-control-modern:focus {
+        border-color: var(--brand-primary);
+        box-shadow: 0 0 0 4px rgba(67,97,238,0.12);
+        outline: none;
+    }
+
+    select.form-control-modern {
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234361ee' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 18px center;
+    }
+
+    /* Buttons */
+    .btn-group-modern { display: flex; gap: 16px; justify-content: center; margin-top: 32px; padding-top: 24px; border-top: 2px solid var(--border-light); }
+    .btn-modern-primary {
+        background: var(--brand-gradient);
+        border: none;
+        padding: 14px 36px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 14px;
+        color: white;
+        transition: all 0.3s;
+        box-shadow: 0 6px 16px rgba(67,97,238,0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .btn-modern-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(67,97,238,0.4); color: white; }
+    .btn-modern-secondary {
+        background: white;
+        border: 2px solid #e2e8f0;
+        padding: 12px 32px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--text-secondary);
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .btn-modern-secondary:hover { border-color: var(--brand-primary); color: var(--brand-primary); transform: translateY(-2px); }
+
+    /* Animations */
+    @@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .animate { animation: fadeInUp 0.5s ease-out; }
+
+    @@media (max-width: 768px) {
+        .main-container { padding: 0 20px; }
+        .hero-section { padding: 25px 24px; }
+        .form-header-title { font-size: 20px; }
+        .form-body { padding: 24px; }
+        .btn-group-modern { flex-direction: column; }
+        .btn-modern-primary, .btn-modern-secondary { justify-content: center; }
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/JS/Commonjs.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<script src="~/scripts/Customjs/Eventinvitation.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+
+<div class="hero-section">
+    <div class="main-container">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <div class="rounded-circle bg-white bg-opacity-20 p-3">
+                        <i class="fas fa-user-plus fs-3 text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-white mb-1 fw-bold" style="font-size: 32px; letter-spacing: -0.5px;">Guest Management</h1>
+                        <p class="text-white-50 mb-0"><i class="fas fa-envelope-open-text me-2"></i>Invite and manage event guests</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white bg-opacity-20 rounded-pill px-4 py-2">
+                <i class="fas fa-user-friends me-2"></i>Add New Guest
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="main-container animate">
+    <div class="form-card">
+        <div class="form-header">
+            <div class="form-header-icon">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <div>
+                <div class="form-header-title">@(Model != null && Model.hid > 0 ? "Edit Guest Details" : "Add New Guest")</div>
+                <div class="form-header-subtitle"><i class="fas fa-info-circle me-1"></i>Fill in the guest information below</div>
+            </div>
+        </div>
+        <div class="form-body">
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <div class="form-group-modern">
+                        <div class="form-label-modern">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Select Event</span>
+                            <span class="required-star">*</span>
+                        </div>
+                        @Html.DropDownListFor(model => model.EventID, new SelectList(ViewBag.EventList, "ID", "EventName"), "-- Select Event --", new
+                        {
+                            @class = "form-control-modern",
+                            @id = "EventID",
+                            @name = "EventID"
+                        })
+                    </div>
+
+                    <div class="form-group-modern">
+                        <div class="form-label-modern">
+                            <i class="fas fa-user"></i>
+                            <span>Guest Full Name</span>
+                            <span class="required-star">*</span>
+                        </div>
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control-modern", @id = "Name", @name = "Name", @placeholder = "Enter guest's full name" })
+                        @if (Model != null)
+                        {
+                            @Html.HiddenFor(model => model.hid)
+                        }
+                    </div>
+
+                    <div class="form-group-modern">
+                        <div class="form-label-modern">
+                            <i class="fas fa-briefcase"></i>
+                            <span>Guest Designation</span>
+                            <span class="required-star">*</span>
+                        </div>
+                        @Html.TextBoxFor(model => model.Designation, new { @class = "form-control-modern", @id = "Designation", @name = "Designation", @placeholder = "e.g., CEO, Director, Professor, HOD" })
+                    </div>
+
+                    <div class="form-group-modern">
+                        <div class="form-label-modern">
+                            <i class="fas fa-envelope"></i>
+                            <span>Email Address</span>
+                            <span class="required-star">*</span>
+                        </div>
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control-modern", @id = "Email", @name = "Email", @placeholder = "guest@example.com", @type = "email" })
+                    </div>
+
+                    <div class="form-group-modern">
+                        <div class="form-label-modern">
+                            <i class="fas fa-phone-alt"></i>
+                            <span>Mobile Number</span>
+                            <span class="required-star">*</span>
+                        </div>
+                        @Html.TextBoxFor(model => model.MobileNo, new { @class = "form-control-modern", @id = "MobileNo", @name = "MobileNo", @placeholder = "Enter 10-digit mobile number", @maxlength = "10", @oninput = "OnlyIntvalue(this);" })
+                    </div>
+
+                    <div class="btn-group-modern">
+                        <button type="button" class="btn-modern-secondary" onclick="resetapplication()">
+                            <i class="fas fa-undo-alt"></i> Reset Form
+                        </button>
+                        <button type="button" class="btn-modern-primary" onclick="submitapplication()">
+                            <i class="fas fa-paper-plane"></i> @(Model != null && Model.hid > 0 ? "Update Guest" : "Send Invitation")
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // Preselect dropdown values from ViewBag
+        $("#EventID option").each(function() {
+            if ($(this).val() == ('@ViewBag.EventType')) {
+                $(this).attr('selected', 'selected');
+            }
+        });
+    });
+
+    function OnlyIntvalue(elem) {
+        var value = elem.value;
+        elem.value = value.replace(/[^0-9]/g, '');
+    }
+
+    function resetapplication() {
+        if (confirm('Are you sure you want to reset the form? All unsaved data will be lost.')) {
+            document.getElementById('EventID').value = '';
+            document.getElementById('Name').value = '';
+            document.getElementById('Designation').value = '';
+            document.getElementById('Email').value = '';
+            document.getElementById('MobileNo').value = '';
+            document.getElementById('Name').focus();
+        }
+    }
+
+    function submitapplication() {
+        var eventId = document.getElementById('EventID').value;
+        var name = document.getElementById('Name').value.trim();
+        var designation = document.getElementById('Designation').value.trim();
+        var email = document.getElementById('Email').value.trim();
+        var mobileNo = document.getElementById('MobileNo').value.trim();
+
+        if (eventId === '') {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({ icon: 'warning', title: 'Validation Error', text: 'Please select an event', confirmButtonColor: '#4361ee' });
+            } else {
+                alert('Please select an event');
+            }
+            document.getElementById('EventID').focus();
+            return false;
+        }
+
+        if (name === '') {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({ icon: 'warning', title: 'Validation Error', text: 'Please enter guest name', confirmButtonColor: '#4361ee' });
+            } else {
+                alert('Please enter guest name');
+            }
+            document.getElementById('Name').focus();
+            return false;
+        }
+
+        if (designation === '') {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({ icon: 'warning', title: 'Validation Error', text: 'Please enter guest designation', confirmButtonColor: '#4361ee' });
+            } else {
+                alert('Please enter guest designation');
+            }
+            document.getElementById('Designation').focus();
+            return false;
+        }
+
+        if (email === '') {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({ icon: 'warning', title: 'Validation Error', text: 'Please enter guest email', confirmButtonColor: '#4361ee' });
+            } else {
+                alert('Please enter guest email');
+            }
+            document.getElementById('Email').focus();
+            return false;
+        }
+
+        var emailPattern = /^[^\s]+[^\s]+\.[^\s]+$/;
+        if (!emailPattern.test(email)) {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({ icon: 'warning', title: 'Invalid Email', text: 'Please enter a valid email address', confirmButtonColor: '#4361ee' });
+            } else {
+                alert('Please enter a valid email address');
+            }
+            document.getElementById('Email').focus();
+            return false;
+        }
+
+        if (mobileNo === '') {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({ icon: 'warning', title: 'Validation Error', text: 'Please enter mobile number', confirmButtonColor: '#4361ee' });
+            } else {
+                alert('Please enter mobile number');
+            }
+            document.getElementById('MobileNo').focus();
+            return false;
+        }
+
+        if (mobileNo.length !== 10) {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({ icon: 'warning', title: 'Invalid Mobile', text: 'Mobile number must be 10 digits', confirmButtonColor: '#4361ee' });
+            } else {
+                alert('Mobile number must be 10 digits');
+            }
+            document.getElementById('MobileNo').focus();
+            return false;
+        }
+
+        document.forms[0].submit();
+        return true;
+    }
+</script>
+
+<!-- SweetAlert2 for better UX -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

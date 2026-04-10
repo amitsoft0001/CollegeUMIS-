@@ -1,0 +1,515 @@
+﻿    $(document).ready(function () {
+        //debugger;
+        $("#EducationType").change(function (event) {
+            $('#Coursetype').find("option").remove();
+            $("#Coursetype").append($("<option></option>").val("").html("--Select Course--"));
+            var res = $(this).val();
+            if (res == "")
+                res = 0;
+            $.ajax({
+                url: "/College/Home/getcourse/",
+                data: { id: res },
+                cache: false,
+                type: "POST",
+                dataType: "json",
+                headers: { 'Authorization': 'Basic ' + btoa(username + ':' + password) },
+                success: function (data) {
+
+                    //console.log(data);
+                    $('#Coursetype').find("option").remove();
+                    $("#Coursetype").append($("<option></option>").val("").html("--Select Course--"));
+                    $.each(data.data, function (key, value) {
+                        $("#Coursetype").append($("<option></option>").val(value.CourseCategoryID).html(value.CourseCategory));
+                    });
+                }
+            });
+        });
+        $("#Coursetype").change(function (event) {
+            //  debugger;
+            $('#Subject').find("option").remove();
+            $("#Subject").append($("<option></option>").val("").html("--Select Subject--"));
+            var res = $(this).val();
+            if (res == "")
+                res = 0;
+            $.ajax({
+
+                url: "/College/Home/getsubjtectbycousrescollege/",
+                data: { id: res },
+
+                cache: false,
+                type: "POST",
+                dataType: "json",
+                headers: { 'Authorization': 'Basic ' + btoa(username + ':' + password) },
+                success: function (data) {
+                    // console.log(data);
+                    $('#Subject').find("option").remove();
+                    $("#Subject").append($("<option></option>").val("").html("--Select Subject--"));
+                    $.each(data.data, function (key, value) {
+                        $("#Subject").append($("<option></option>").val(value.StreamCategoryID).html(value.streamCategory));
+                    });
+                }
+            });
+        });
+        $(function ()
+        {
+            $('#btnPrint').hide();
+            $("#ddlsession option").each(function ()
+            {
+                if ($(this).val() ==((CuSession)))
+                {
+                    $(this).attr('selected', 'selected');
+                }
+            });
+        });
+        $(function () {
+            $("#btnPrint").click(function () {
+                var contents = $("#printreport").html();
+                console.log(contents);
+                var frame1 = $('<iframe />');
+                frame1[0].name = "frame1";
+                frame1.css({ "position": "absolute", "top": "-1000000px" });
+                $("body").append(frame1);
+                var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+                frameDoc.document.open();
+                //Create a new HTML document.
+                frameDoc.document.write('<html><head><title>.</title>');
+
+                frameDoc.document.write('</head><body>');
+                //Append the external CSS file.
+                frameDoc.document.write('<link href="style.css" rel="stylesheet" type="text/css" />');
+                //Append the DIV contents.
+                frameDoc.document.write(contents);
+                frameDoc.document.write('</body></html>');
+                frameDoc.document.close();
+                setTimeout(function () {
+                    window.frames["frame1"].focus();
+                    window.frames["frame1"].print();
+                    frame1.remove();
+                }, 500);
+            });
+        });
+
+        $("[id*=submit]").bind("click", function () {
+            var currentsession = $("#ddlsession :selected").text();
+            var semester = $("#Coursetype :selected").text();
+            var Education = $("#EducationType :selected").text();
+            var id = $(this).data("id");
+            var EducationType = $("#EducationType").val();
+            var Coursetype = $("#Coursetype").val();
+            var Subject = $("#Subject").val();
+            var ddlsession = $("#ddlsession").val();
+            var Subjectname = $("#Subject :selected").text();
+
+
+            if (ddlsession == "") {
+                alert("Please Select Session!!!");
+                $("#ddlsession").focus();
+                return;
+            }
+            if (EducationType == "") {
+                alert("Please Select Education Type!!!");
+                $("#EducationType").focus();
+                return;
+            }
+            if (Coursetype == "") {
+                alert("Please Select Course!!!");
+                $("#Coursetype").focus();
+                return;
+            }
+            if (Subject == "") {
+                alert("Please Select Subject !!");
+                $("#Subject").focus();
+                return;
+            }
+
+
+            $.ajax({
+
+                url: "/College/Home/CounsellingSheetReport",
+                data: {
+                    EducationType: EducationType,
+                    Coursetype: Coursetype,
+                    Subject: Subject,
+                    ddlsession: ddlsession
+                },
+                cache: false,
+
+                type: "POST",
+                dataType: "json",
+                headers: { 'Authorization': 'Basic ' + btoa(username + ':' + password) },
+                success: function (data) {
+                    //console.log("data" + data);
+                    var result = "";
+                    $("#DivPrintList").html('');
+                    result = result + '<div style="border-bottom:5px solid #05046c; margin-bottom:25px; text-align:center; padding:15px 0; font-size:12px; font-family:Arial, Helvetica, sans-serif;">';
+                    result = result + '<img src="https://admission.mungeruniversity.ac.in/images/mu-logo-white.png" width="450px">';
+                    result = result + ' <h1>COUNSELLING-REPORT</h1>';
+                    result = result + '<h3>' + Cucollegename + '</h3>';
+                    result = result + ' <p> <b>' + Subjectname + '</b>  (' + Education + '),Course - ' + semester + ', Academic Session - ' + currentsession + '</p>';
+                    result = result + '</div>';
+                    result = result + ' <div class="table-responsive">';
+                    result = result + '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table">';
+                    result = result + '<tr>';
+                    result = result + ' <td rowspan="4" align="center" valign="middle" bgcolor="#F9F9F9"></td>';
+                    result = result + '<td colspan="5" align="center" valign="middle" bgcolor="#FFBBBB">GEN</td>';
+                    result = result + '<td colspan="5" align="center" valign="middle" bgcolor="#D0F7CE">SC</td>';
+                    result = result + '<td colspan="5" align="center" valign="middle" bgcolor="#CEEFFF">ST</td>';
+                    result = result + '<td colspan="5" align="center" valign="middle" bgcolor="#FCF2BE">BC1</td>';
+                    result = result + '<td colspan="5" align="center" valign="middle" bgcolor="#F0E1FF">BC2</td>';
+                    result = result + '<td colspan="5" align="center" valign="middle" bgcolor="#FFE1DD">WBC</td>';
+                    result = result + '<td colspan="5" align="center" valign="middle" bgcolor="#C7F3F2">NCC</td>';
+                    result = result + '<td colspan="5" align="center" valign="middle" bgcolor="#FADEF1">SPORTS</td>';
+                    result = result + '<td colspan="5" align="center" valign="middle" bgcolor="#D2D2FF">EX-SERVICEMEN</td>';
+                    result = result + '<td colspan="5" align="center" valign="middle" bgcolor="#E4F1E7">STAFF</td>';
+                    result = result + '<td colspan="5" align="center" valign="middle" bgcolor="#E4F1E7">GEW</td>';
+                    result = result + '</tr>';
+                    result = result + ' <td colspan="2" align="center" valign="middle" bgcolor="#FFBBBB">TOTAL</td>';
+                    result = result + ' <td colspan="3" align="center" valign="middle" bgcolor="#FFBBBB">OCCUPIED</td>';
+                    result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#D0F7CE">TOTAL</td>';
+                    result = result + '<td colspan="3" align="center" valign="middle" bgcolor="#D0F7CE">OCCUPIED</td>';
+                    result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#CEEFFF">TOTAL</td>';
+                    result = result + '<td colspan="3" align="center" valign="middle" bgcolor="#CEEFFF">OCCUPIED</td>';
+                    result = result + ' <td colspan="2" align="center" valign="middle" bgcolor="#FCF2BE">TOTAL</td>';
+                    result = result + '<td colspan="3" align="center" valign="middle" bgcolor="#FCF2BE">OCCUPIED</td>';
+                    result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#F0E1FF">TOTAL</td>';
+                    result = result + '<td colspan="3" align="center" valign="middle" bgcolor="#F0E1FF">OCCUPIED</td>';
+                    result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#FFE1DD">TOTAL</td>';
+                    result = result + '<td colspan="3" align="center" valign="middle" bgcolor="#FFE1DD">OCCUPIED</td>';
+                    result = result + ' <td colspan="2" align="center" valign="middle" bgcolor="#C7F3F2">TOTAL</td>';
+                    result = result + '<td colspan="3" align="center" valign="middle" bgcolor="#C7F3F2">OCCUPIED</td>';
+                    result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#FADEF1">TOTAL</td>';
+                    result = result + ' <td colspan="3" align="center" valign="middle" bgcolor="#FADEF1">OCCUPIED</td>';
+                    result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#D2D2FF">TOTAL</td>';
+                    result = result + '<td colspan="3" align="center" valign="middle" bgcolor="#D2D2FF">OCCUPIED</td>';
+                    result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#E4F1E7">TOTAL</td>';
+                    result = result + '<td colspan="3" align="center" valign="middle" bgcolor="#E4F1E7">OCCUPIED</td>';
+                    result = result + '<td colspan="2" align="center" valign="middle" bgcolor="#E4F1E7">TOTAL</td>';
+                    result = result + '<td colspan="3" align="center" valign="middle" bgcolor="#E4F1E7">OCCUPIED</td>';
+                    result = result + '</tr>';
+                    result = result + '<tr>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFBBBB">N</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFBBBB">H</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFBBBB">H</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFBBBB">N</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFBBBB">R</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE">N</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE">H</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE">H</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE">N</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE">R</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF">N</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF">H</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF">H</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF">N</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF">R</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE">N</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE">H</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE">H</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE">N</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE">R</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF">N</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF">H</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF">H</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF">N</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF">R</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">N</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">H</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">H</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">N</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">R</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2">N</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2">H</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2">H</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2">N</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2">R</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FADEF1">N</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FADEF1">H</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FADEF1">H</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FADEF1">N</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FADEF1">R</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF">N</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF">H</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF">H</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF">N</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF">R</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">N</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">H</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">H</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">N</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">R</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">N</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">H</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">H</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">N</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">R</td>';
+                    result = result + '</tr >';
+                    var i = 1; var TotasheetGEN1 = 0;
+                    var TotalHandiGEN1 = 0;
+                    var consumeseatHinGEN1 = 0;
+                    var consumeseatGEN1 = 0;
+                    var RemainingGEN1 = 0;
+                    var TotaSCsheet1 = 0;
+                    var TotalHandiCS1 = 0;
+                    var consumeseatHinCS1 = 0;
+                    var consumeseatSC1 = 0;
+                    var RemainingSC1 = 0;
+                    var TotasheetTS1 = 0;
+                    var TotalHandiST1 = 0;
+                    var consumeseatHinST1 = 0;
+                    var consumeseatST1 = 0;
+                    var RemainingST1 = 0;
+                    var TotasheetBC11 = 0;
+                    var TotalHandiBC11 = 0;
+                    var consumeseatHinBC11 = 0;
+                    var consumeseatBC11 = 0;
+                    var RemainingBC11 = 0;
+                    var TotasheetBC21 = 0;
+                    var TotalHandiBC21 = 0;
+                    var consumeseatHinBC21 = 0;
+                    var consumeseatBC21 = 0;
+                    var RemainingBC21 = 0;
+                    var TotasheetWBC1 = 0;
+                    var TotalHandiWBC1 = 0;
+                    var consumeseatHinWBC1 = 0;
+                    var consumeseatWBC1 = 0;
+                    var RemainingWBC1 = 0;
+
+                    var TotasheetNCC1 = 0;
+                    var TotalHandiNCC1 = 0;
+                    var consumeseatHinNCC1 = 0;
+                    var consumeseatNCC1 = 0;
+                    var RemainingNCC1 = 0;
+
+                    var TotasheetSPORTS1 = 0;
+                    var TotalHandiSPORTS1 = 0;
+                    var consumeseatHinSPORTS1 = 0;
+                    var consumeseatSPORTS1 = 0;
+                    var RemainingSports1 = 0;
+
+                    var TotasheetEXSERVICEMEN1 = 0;
+                    var TotalHandiEXSERVICEMEN1 = 0;
+                    var consumeseatHinEXSERVICEMEN1 = 0;
+                    var consumeseatEXSERVICEMEN1 = 0;
+                    var RemainingExserviceman1 = 0;
+
+                    var TotasheetUSTAFF1 = 0;
+                    var TotalHandiUSTAFF1 = 0;
+                    var consumeseatHinUSTAFF1 = 0;
+                    var consumeseatUSTAFF1 = 0;
+                    var RemainingUniversityStaff1 = 0;
+
+                    var TotasheetGEW = 0;
+                    var TotalHandGEW = 0;
+                    var consumeseathandiGEW = 0;
+                    var consumeseatGEW = 0;
+                    var RemainingGEW = 0;
+
+                    $.each(data, function (index, value) {
+                        //debugger;
+                        // console.log(value);
+                        result = result + '<tr>';
+                       // result = result + '<td align="center" valign="middle" bgcolor="#F9F9F9">' + value.CollegeName + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#FFBBBB">' + value.TotasheetGEN + '</td>';
+                        result = result + ' <td align="center" valign="middle" bgcolor="#FFBBBB">' + value.TotalHandiGEN + '</td>';
+                        result = result + ' <td align="center" valign="middle" bgcolor="#FFBBBB">' + value.consumeseatHinGEN + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#FFBBBB">' + value.consumeseatGEN + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#FFBBBB">' + value.RemainingGEN + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE">' + value.TotaSCsheet + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE">' + value.TotalHandiCS + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE">' + value.consumeseatHinCS + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE">' + value.consumeseatSC + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE">' + value.RemainingSC + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF">' + value.TotasheetTS + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF">' + value.TotalHandiST + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF">' + value.consumeseatHinST + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF">' + value.consumeseatST + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF">' + value.RemainingST + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE">' + value.TotasheetBC1 + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE">' + value.TotalHandiBC1 + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE">' + value.consumeseatHinBC1 + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE">' + value.consumeseatBC1 + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE">' + value.RemainingBC1 + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF">' + value.TotasheetBC2 + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF">' + value.TotalHandiBC2 + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF">' + value.consumeseatHinBC2 + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF">' + value.consumeseatBC2 + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF">' + value.RemainingBC2 + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">' + value.TotasheetWBC + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">' + value.TotalHandiWBC + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">' + value.consumeseatHinWBC + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">' + value.consumeseatWBC + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD">' + value.RemainingWBC + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2">' + value.TotasheetNCC + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2">' + value.TotalHandiNCC + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2">' + value.consumeseatHinNCC + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2">' + value.consumeseatNCC + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2">' + value.RemainingNCC + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#FADEF1">' + value.TotasheetSPORTS + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#FADEF1">' + value.TotalHandiSPORTS + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#FADEF1">' + value.consumeseatHinSPORTS + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#FADEF1">' + value.consumeseatSPORTS + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#FADEF1">' + value.RemainingSports + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF">' + value.TotasheetEXSERVICEMEN + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF">' + value.TotalHandiEXSERVICEMEN + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF">' + value.consumeseatHinEXSERVICEMEN + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF">' + value.consumeseatEXSERVICEMEN + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF">' + value.RemainingExserviceman + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">' + value.TotasheetUSTAFF + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">' + value.TotalHandiUSTAFF + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">' + value.consumeseatHinUSTAFF + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">' + value.consumeseatUSTAFF + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">' + value.RemainingUniversityStaff + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">' + value.TotasheetGEW + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">' + value.TotalHandGEW + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">' + value.consumeseathandiGEW + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">' + value.consumeseatGEW + '</td>';
+                        result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7">' + value.RemainingGEW + '</td>';
+                        result = result + '</tr>';
+                        TotasheetGEN1 = TotasheetGEN1 + parseInt(value.TotasheetGEN);
+                        TotalHandiGEN1 = TotalHandiGEN1 + parseInt(value.TotalHandiGEN);
+                        consumeseatHinGEN1 = consumeseatHinGEN1 + parseInt(value.consumeseatHinGEN);
+                        consumeseatGEN1 = consumeseatGEN1 + parseInt(value.consumeseatGEN);
+                        RemainingGEN1 = RemainingGEN1 + parseInt(value.RemainingGEN);
+
+                        TotaSCsheet1 = TotaSCsheet1 + parseInt(value.TotaSCsheet);
+                        TotalHandiCS1 = TotalHandiCS1 + parseInt((value.TotalHandiCS));
+                        consumeseatHinCS1 = consumeseatHinCS1 + parseInt(value.consumeseatHinCS);
+                        consumeseatSC1 = consumeseatSC1 + parseInt((value.consumeseatSC));
+                        RemainingSC1 = RemainingSC1 + parseInt(value.RemainingSC);
+
+                        TotasheetTS1 = TotasheetTS1 + parseInt(value.TotasheetTS);
+                        TotalHandiST1 = TotalHandiST1 + parseInt((value.TotalHandiST));
+                        consumeseatHinST1 = consumeseatHinST1 + parseInt(value.consumeseatHinST);
+                        consumeseatST1 = consumeseatST1 + parseInt((value.consumeseatST));
+                        RemainingST1 = RemainingST1 + parseInt(value.RemainingST);
+
+
+                        TotasheetBC11 = TotasheetBC11 + parseInt(value.TotasheetBC1);
+                        TotalHandiBC11 = TotalHandiBC11 + parseInt((value.TotalHandiBC1));
+                        consumeseatHinBC11 = consumeseatHinBC11 + parseInt(value.consumeseatHinBC1);
+                        consumeseatBC11 = consumeseatBC11 + parseInt((value.consumeseatBC1));
+                        RemainingBC11 = RemainingBC11 + parseInt(value.RemainingBC1);
+
+                        TotasheetBC21 = TotasheetBC21 + parseInt(value.TotasheetBC2);
+                        TotalHandiBC21 = TotalHandiBC21 + parseInt((value.TotalHandiBC2));
+                        consumeseatHinBC21 = consumeseatHinBC21 + parseInt(value.consumeseatHinBC2);
+                        consumeseatBC21 = consumeseatBC21 + parseInt((value.consumeseatBC2));
+                        RemainingBC21 = RemainingBC21 + parseInt(value.RemainingBC2);
+
+                        TotasheetWBC1 = TotasheetWBC1 + parseInt(value.TotasheetWBC);
+                        TotalHandiWBC1 = TotalHandiWBC1 + parseInt((value.TotalHandiWBC));
+                        consumeseatHinWBC1 = consumeseatHinWBC1 + parseInt(value.consumeseatHinWBC);
+                        consumeseatWBC1 = consumeseatWBC1 + parseInt((value.consumeseatWBC));
+                        RemainingWBC1 = RemainingWBC1 + parseInt(value.RemainingWBC);
+
+                        TotasheetNCC1 = TotasheetNCC1 + parseInt(value.TotasheetNCC);
+                        TotalHandiNCC1 = TotalHandiNCC1 + parseInt((value.TotalHandiNCC));
+                        consumeseatHinNCC1 = consumeseatHinNCC1 + parseInt(value.consumeseatHinNCC);
+                        consumeseatNCC1 = consumeseatNCC1 + parseInt((value.consumeseatNCC));
+                        RemainingNCC1 = RemainingNCC1 + parseInt(value.RemainingNCC);
+
+                        TotasheetSPORTS1 = TotasheetSPORTS1 + parseInt(value.TotasheetSPORTS);
+                        TotalHandiSPORTS1 = TotalHandiSPORTS1 + parseInt((value.TotalHandiSPORTS));
+                        consumeseatHinSPORTS1 = consumeseatHinSPORTS1 + parseInt(value.consumeseatHinSPORTS);
+                        consumeseatSPORTS1 = consumeseatSPORTS1 + parseInt((value.consumeseatSPORTS));
+                        RemainingSports1 = RemainingSports1 + parseInt(value.RemainingSports);
+
+                        TotasheetEXSERVICEMEN1 = TotasheetEXSERVICEMEN1 + parseInt(value.TotasheetEXSERVICEMEN);
+                        TotalHandiEXSERVICEMEN1 = TotalHandiEXSERVICEMEN1 + parseInt((value.TotalHandiEXSERVICEMEN));
+                        consumeseatHinEXSERVICEMEN1 = consumeseatHinEXSERVICEMEN1 + parseInt(value.consumeseatHinEXSERVICEMEN);
+                        consumeseatEXSERVICEMEN1 = consumeseatEXSERVICEMEN1 + parseInt((value.consumeseatEXSERVICEMEN));
+                        RemainingExserviceman1 = RemainingExserviceman1 + parseInt(value.RemainingExserviceman);
+
+                        TotasheetUSTAFF1 = TotasheetUSTAFF1 + parseInt(value.TotasheetUSTAFF);
+                        TotalHandiUSTAFF1 = TotalHandiUSTAFF1 + parseInt((value.TotalHandiUSTAFF));
+                        consumeseatHinUSTAFF1 = consumeseatHinUSTAFF1 + parseInt(value.consumeseatHinUSTAFF);
+                        consumeseatUSTAFF1 = consumeseatUSTAFF1 + parseInt((value.consumeseatUSTAFF));
+                        RemainingUniversityStaff1 = RemainingUniversityStaff1 + parseInt(value.RemainingUniversityStaff);
+
+                        TotasheetGEW = TotasheetGEW + parseInt(value.TotasheetGEW);
+                        TotalHandGEW = TotalHandGEW + parseInt((value.TotalHandGEW));
+                        consumeseathandiGEW = consumeseathandiGEW + parseInt(value.consumeseathandiGEW);
+                        consumeseatGEW = consumeseatGEW + parseInt((value.consumeseatGEW));
+                        RemainingGEW = RemainingGEW + parseInt(value.RemainingGEW);
+
+
+                        i = i + 1;
+                    });
+                    result = result + '<tr>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#F9F9F9" style="font-weight:bold">Total:</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFBBBB" style="font-weight:bold">' + TotasheetGEN1 + '</td>';
+                    result = result + ' <td align="center" valign="middle" bgcolor="#FFBBBB" style="font-weight:bold">' + TotalHandiGEN1 + '</td>';
+                    result = result + ' <td align="center" valign="middle" bgcolor="#FFBBBB" style="font-weight:bold">' + consumeseatHinGEN1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFBBBB" style="font-weight:bold">' + consumeseatGEN1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFBBBB" style="font-weight:bold">' + RemainingGEN1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE" style="font-weight:bold">' + TotaSCsheet1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE" style="font-weight:bold">' + TotalHandiCS1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE" style="font-weight:bold">' + consumeseatHinCS1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE" style="font-weight:bold">' + consumeseatSC1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D0F7CE" style="font-weight:bold" >' + RemainingSC1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF" style="font-weight:bold">' + TotasheetTS1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF" style="font-weight:bold">' + TotalHandiST1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF" style="font-weight:bold"> ' + consumeseatHinST1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF" style="font-weight:bold">' + consumeseatST1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#CEEFFF" style="font-weight:bold">' + RemainingST1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE" style="font-weight:bold">' + TotasheetBC11 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE" style="font-weight:bold">' + TotalHandiBC11 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE" style="font-weight:bold">' + consumeseatHinBC11 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE" style="font-weight:bold">' + consumeseatBC11 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FCF2BE" style="font-weight:bold">' + RemainingBC11 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF" style="font-weight:bold">' + TotasheetBC21 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF" style="font-weight:bold">' + TotalHandiBC21 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF" style="font-weight:bold">' + consumeseatHinBC21 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF" style="font-weight:bold">' + consumeseatBC21 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#F0E1FF" style="font-weight:bold">' + RemainingBC21 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD" style="font-weight:bold">' + TotasheetWBC1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD" style="font-weight:bold">' + TotalHandiWBC1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD" style="font-weight:bold">' + consumeseatHinWBC1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD" style="font-weight:bold">' + consumeseatWBC1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FFE1DD" style="font-weight:bold">' + RemainingWBC1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2" style="font-weight:bold">' + TotasheetNCC1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2" style="font-weight:bold">' + TotalHandiNCC1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2" style="font-weight:bold">' + consumeseatHinNCC1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2" style="font-weight:bold">' + consumeseatNCC1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#C7F3F2" style="font-weight:bold">' + RemainingNCC1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FADEF1" style="font-weight:bold">' + TotasheetSPORTS1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FADEF1" style="font-weight:bold">' + TotalHandiSPORTS1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FADEF1" style="font-weight:bold">' + consumeseatHinSPORTS1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FADEF1" style="font-weight:bold">' + consumeseatSPORTS1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#FADEF1" style="font-weight:bold">' + RemainingSports1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF" style="font-weight:bold">' + TotasheetEXSERVICEMEN1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF" style="font-weight:bold">' + TotalHandiEXSERVICEMEN1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF" style="font-weight:bold">' + consumeseatHinEXSERVICEMEN1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF" style="font-weight:bold">' + consumeseatEXSERVICEMEN1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#D2D2FF" style="font-weight:bold">' + RemainingExserviceman1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7" style="font-weight:bold">' + TotasheetUSTAFF1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7" style="font-weight:bold">' + TotalHandiUSTAFF1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7" style="font-weight:bold">' + consumeseatHinUSTAFF1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7" style="font-weight:bold">' + consumeseatUSTAFF1 + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7" style="font-weight:bold">' + RemainingUniversityStaff1 + '</td>';
+
+
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7" style="font-weight:bold">' + TotasheetGEW + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7" style="font-weight:bold">' + TotalHandGEW + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7" style="font-weight:bold">' + consumeseathandiGEW + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7" style="font-weight:bold">' + consumeseatGEW + '</td>';
+                    result = result + '<td align="center" valign="middle" bgcolor="#E4F1E7" style="font-weight:bold">' + RemainingGEW + '</td>';
+
+                    result = result + '</tr>';
+                    result = result + "</table>";
+                    result = result + '</div>';
+                    $('#btnPrint').show();
+                    $("#DivPrintList").html(result);
+                },
+                error: function (data) {
+                    alert('Network Error ...');
+                }
+            });
+        });
+    });
+
+
+  
+
+    
+  

@@ -1,0 +1,244 @@
+﻿
+@{
+    ViewBag.Title = "EmployeeSalaryMasterList";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+    var collegeName = @DataLayer.ClsLanguage.GetCookies("NBCollegeName");
+}
+<style>
+    .right {
+        text-align: right;
+    }
+    .left {
+        text-align: left;
+    }
+    .spacedesign {
+        padding-bottom: 20px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+    .table.dataTable td {
+        padding: 2px !important;
+    }
+    .alert {
+        padding: 5px !important;
+    }
+    .panel-body a {
+        color: blue;
+    }
+</style>
+<script>
+    var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+</script>
+<script src="~/scripts/Customjs/EmployeeSalaryMasterList.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+
+<div class="container-fluid">
+    <div class="row ">
+        <div>
+            <h3 class="text-center" style="padding-bottom:20px;">Employee Salary List </h3>
+        </div>
+        <div class="row spacedesign">
+            @if (ViewBag.Usertype == Convert.ToInt32(DataLayer.CommonSetting.UserType.Admin))
+            {
+                <div class="col-lg-3 pull-right">
+                    <a class="btn btn-primary waves-effect waves-light" href="@Url.Action("EmployeeSalaryMaster", "PayRoll")">Add SalaryMaster</a>
+                </div>
+            }
+        </div>
+        <div class="sparkline8-list">
+            <div class="row">
+                <div ng-app="empSallistApp" ng-controller="empsallistCtrl">
+                    <div class="row spacedesign">
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <span><label>Employee Name:</label></span>
+                            @Html.DropDownList("EmployeeID", new SelectList(ViewBag.UserList, "ID", "UserName"), "--Select Employee--", new
+                     {
+                         @class = "form-control",
+                         @id = "EmployeeID",
+                         @name = "EmployeeID",
+                         @ng_Model = "EmployeeID"
+                     })
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <span><label>Payband:</label></span>
+                            @Html.DropDownList("PaybandID", new SelectList(ViewBag.PaybandList, "ID", "PaybandName"), "--Select Payband--", new
+                      {
+                          @class = "form-control",
+                          @id = "PaybandID",
+                          @name = "PaybandID",
+                          @ng_Model = "PaybandID"
+                      })
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <span><label>Employee Name:</label></span>
+                            <input type="text" ng-model="Name" class="form-control" placeholder="Employee Name " name="Name" />
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-md-6 left">
+                            <b>
+                                Total Record(s) : | &nbsp;&nbsp;<spam style="border: 1px solid #bfc5cb;  padding: 7px; border-radius: 50%;">{{totalCount}}</spam>&nbsp;&nbsp;
+                            </b>
+                            <span class="form-group  page-size form-inline">
+                                <select id="ddlPageSize" class="form-control control-color"
+                                        ng-model="pageSizeSelected"
+                                        ng-change="changePageSize()">
+                                    <option value="1">1</option>
+                                    <option value="10">10</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="200">200</option>
+                                    <option value="500">500</option>
+                                </select>
+                            </span>
+                            <a class="btn btn-primary waves-effect waves-light">Page: {{pageIndex}} / {{numPages}}</a>
+                        </div>
+                        <div class="col-md-6 right">
+                            <button ng-click="GetFilterUsers(ClubData)" class="btn btn-primary waves-effect waves-light" type="button">Search</button>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer table-responsive">
+                            <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed dataTable ">
+                                <thead>
+                                    <tr role="row">
+                                        <th width="50px">S. No.</th>
+                                        <th ng-click="sortBy('employeeCode')">
+                                            Employee ID
+                                            <span class="sortorder" ng-show="propertyName === 'employeeCode'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('employeeName')">
+                                            Name
+                                            <span class="sortorder" ng-show="propertyName === 'employeeName'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('designation')">
+                                            Designation
+                                            <span class="sortorder" ng-show="propertyName === 'designation'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('basicSalary')">
+                                            Basic Salary
+                                            <span class="sortorder" ng-show="propertyName === 'basicSalary'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('hra')">
+                                            HRA
+                                            <span class="sortorder" ng-show="propertyName === 'hra'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('da')">
+                                            DA
+                                            <span class="sortorder" ng-show="propertyName === 'da'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('')">
+                                            Action
+                                            <span class="sortorder" ng-show="propertyName === ''" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('')">
+                                            Details
+                                            <span class="sortorder" ng-show="propertyName === ''" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat-start="qualidetail in qlist | filter:search  | orderBy:propertyName:reverse">
+                                        <td>{{ ((pageIndex-1)*pageSizeSelected)+$index+1 }}</td>
+                                        <td>{{qualidetail.employeeCode}}</td>
+                                        <td>{{qualidetail.employeeName}}</td>
+                                        <td>{{qualidetail.designation}}</td>
+                                        <td>{{qualidetail.basicSalary}}</td>
+                                        <td>{{qualidetail.hra}}</td>
+                                        <td>{{qualidetail.da}}</td>
+                                        <td>
+                                            <a title="Edit" href="~/College/Payroll/EmployeeSalaryMaster/{{qualidetail.encriptedID}}"><i class="fa fa-edit"></i></a>
+                                        </td>
+                                        <td class="text-center">
+                                            <div id="show_{{qualidetail.employeeCode}}" ng-click="ShowQueryListDiv(qualidetail.employeeCode,qualidetail.encriptedID)" class="showid">
+                                                <a href="javascript:;">Show</a>
+                                            </div>
+                                            <a id="trhide{{qualidetail.employeeCode}}" style="display:none" href="javascript:;" class="hidevid" ng-click="hideQueryListDiv(qualidetail.employeeCode)">Hide</a>
+                                        </td>
+                                    </tr>
+                                    <tr ng-repeat-end="" id="trQueryComments{{qualidetail.employeeCode}}" style="display: none;" class="hidevid">
+                                        <td colspan="100" valign="top">
+                                            <table class="tablestyle" cellspacing="0" rules="all" border="0" style="width: 100%;">
+                                                <tr valign="top">
+                                                    <td>
+                                                        <div class="alert alert-info">
+                                                            <span style="font-weight: bold;">Allowance Details:</span>
+                                                        </div>
+                                                        <table class="tablestyle" cellspacing="0" rules="all" border="1" style="width: 100%;">
+                                                            <tr>
+                                                                <th>Allowance Name</th>
+                                                                <th>Amount</th>
+                                                                @*<th>Amount Type</th>*@
+                                                            </tr>
+                                                            <tr ng-repeat="qyComments in allowanceList">
+                                                                <td>{{qyComments.allowancename}}</td>
+                                                                <td>{{qyComments.Amount}}</td>
+                                                                @*<td>{{(qyComments.AmountType==false?"Amount":"Percentage")}}</td>*@
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Total Allowances</th>
+                                                                <td>{{TotalAllow}}</td>                                                                
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Gross Salary:</th>
+                                                                <td>{{grossTotal}}</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td valign="top">
+                                                        <div class="alert alert-info">
+                                                            <span style="font-weight: bold;">Deduction Details:</span>
+                                                        </div>
+                                                        <table class="tablestyle" cellspacing="0" rules="all" border="1" style="width: 100%;">
+                                                            <tr>
+                                                                <th>Deduction Name</th>
+                                                                <th>Amount</th>
+                                                                @*<th>Amount Type</th>*@
+                                                            </tr>
+                                                            <tr ng-repeat="qComments in deductionList">
+                                                                <td>{{qComments.deductionname}}</td>
+                                                                <td>{{qComments.Amount}}</td>
+                                                                @*<td>{{(qComments.AmountType==false?"Amount":"Percentage")}}</td>*@
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Total Deduction:</th>
+                                                                <td>{{TotalDec}}</td>                                                               
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Net Salary:</th>
+                                                                <td>{{netTotal}}</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr ng-show="(qlist |filter:search).length == 0">
+                                        <td colspan="6" style="text-align:center">
+                                            <h4 style="color:red;"> </h4>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" colspan="14">
+                                            <div class="pull-left" ng-show="(qlist |filter:search).length > 0">
+                                                <div ng-show="numPages > 1">
+                                                    <pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected"
+                                                                direction-links="true" ng-model="pageIndex"
+                                                                max-size="maxSize" class="pagination" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

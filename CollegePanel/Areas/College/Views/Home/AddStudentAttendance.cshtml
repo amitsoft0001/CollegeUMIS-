@@ -1,0 +1,220 @@
+﻿@model DataLayer.StudentAttendanceAdd
+@{
+    ViewBag.Title = "Add Student Attendance";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+@{
+    var grid = new WebGrid(Model.AttendanceList, canPage: true, canSort: true, rowsPerPage: 50, selectionFieldName: "SelectedRow", ajaxUpdateContainerId: "grid");
+}
+<style>
+    .validation {
+        color: tomato;
+    }
+
+    .form-control-file {
+        padding: 0px !important;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-sm-12 col-xs-12">
+            @if (TempData["StMessage"] != null)
+            {
+                <div class="text-center" style="">
+                    <div class="alert-wrap1 shadow-inner wrap-alert-b">
+                        <div class="alert alert-success " role="alert" style="text-align:center !important">
+                            <div>@TempData["StMessage"]</div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (TempData["StError"] != null)
+            {
+                <div class="text-center" style="">
+                    <div class="alert-wrap1 shadow-inner wrap-alert-b">
+                        <div class="alert alert-warning " role="alert" style="text-align:center !important">
+                            <div class="text-danger">@TempData["StError"]</div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-12" style="text-align:left">
+                            <i class="fa fa-plus fa-fw"> </i> Add Student Attendance
+                        </div>
+                        <div class="col-lg-6 col-sm-12" style="text-align:right">
+                            <a href="~/Img/Attendance.xlsx" target="_blank"><i class="fa fa-download fa-fw"> </i> Excel Formet</a>
+                        </div>
+                    </div>
+                 
+                </div>
+                    <div class="panel-body">
+                        @using (Html.BeginForm("AddStudentAttendance", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            <div class="form-group-inner">
+                                <div class="row">
+                                    @Html.HiddenFor(model => model.SessionID)
+                                    @Html.HiddenFor(model => model.CollegeID)
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="fontnew "><strong>Education Type</strong></label>
+                                        @Html.DropDownListFor(model => model.EduTypeID, (List<SelectListItem>)ViewBag.EducationType, "--Select--", new { @class = "form-control", @id = "EduTypeID" })
+                                        @*@Html.DropDownListFor(model => model.EduTypeID, new System.Web.Mvc.SelectList(Model.EduTypeList, "Value", "Text"), new { @class = "form-control" })*@
+                                        @Html.ValidationMessageFor(model => model.EduTypeID, "", new { @class = "validation" })
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="fontnew "><strong>Course Category Type</strong></label>
+                                        @Html.DropDownListFor(model => model.CourseCategoryID, new System.Web.Mvc.SelectList(Model.CourseCategoryList, "Value", "Text"), new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.CourseCategoryID, "", new { @class = "validation" })
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="fontnew "><strong>Course Year</strong></label>
+                                        @Html.DropDownListFor(model => model.StudentYear, new SelectList(ViewBag.CourseYear, "ID", "Name"), new { @class = "form-control" , @id = "CourseYearID" })                                       
+                                        @Html.ValidationMessageFor(model => model.StudentYear, "", new { @class = "validation" })
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="fontnew "><strong>Subject</strong></label>
+                                        @Html.DropDownListFor(model => model.SubjectCode, new System.Web.Mvc.SelectList(Model.SubjectList, "Value", "Text"), new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.SubjectCode, "", new { @class = "validation" })
+                                    </div>
+
+                                    <div class="clearfix"></div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="fontnew "><strong>Employee</strong></label>
+                                        @if (Model.UserType == 2)
+                                        {
+                                            @Html.DropDownListFor(model => model.EmployeeID, new System.Web.Mvc.SelectList(Model.EmployeeList, "Value", "Text"), new { @class = "form-control", @disabled = "disabled" })
+                                            @Html.HiddenFor(model => model.EmployeeID)
+                                        }
+                                        else if (Model.UserType == 1)
+                                        {
+                                            @Html.DropDownListFor(model => model.EmployeeID, new System.Web.Mvc.SelectList(Model.EmployeeList, "Value", "Text"), new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.EmployeeID, "", new { @class = "validation" })
+                                        }
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="fontnew "><strong>Upload Excel File</strong></label>
+                                        @Html.TextBoxFor(model => model.ExcelPath, new { @type = "file", @class = "form-control form-control-file" })
+                                        @Html.ValidationMessageFor(model => model.ExcelPath, "", new { @class = "validation" })
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="login-btn-inner">
+                                            <div class="login-horizental cancel-wp pull-left form-bc-ele">
+                                                <button id="btnSubmit" class="btn btn-sm btn-primary login-submit-cs" type="submit">Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).on('click', '#btnSubmit', function () {                        
+            var $form = $('form');           
+            if ($form.valid()) {               
+                $('#AjaxLoader').css("display", "block");
+                return false;
+            }
+            else {
+                return false;
+            }
+
+        }); 
+</script>
+<script type="text/javascript">
+    $(document).ready(function () { 
+        $("#EduTypeID").change(function () {
+            $("#CourseCategoryID").empty();
+            $("#SubjectCode").empty();
+            $("#SubjectCode").append('<option value="' + "" + '">' + "-- Select --" + '</option>');
+            $("#StudentID").empty();
+            $("#StudentID").append('<option value="' + "" + '">' + "-- Select --" + '</option>');
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("PopulateCourseCategoryDropdown", "Home")',
+                dataType: 'json',
+                data: { EduTypeID: $("#EduTypeID").val(), CollegeID: $("#CollegeID").val(), EmployeeID: $("#EmployeeID").val() },
+                success: function (states) {
+                    $.each(states, function (i, state) {
+                        $("#CourseCategoryID").append('<option value="' + state.Value + '">' +
+                            state.Text + '</option>');
+                    });
+                }, error: function (ex) { $("#CourseCategoryID").append('<option value="' + "" + '">' + "-- Select --" + '</option>'); }
+            }); return false;
+        });
+        $("#CourseCategoryID").change(function () {
+            $("#SubjectCode").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("PopulateSubjectDropdown", "Home")',
+                dataType: 'json',
+                data: { CourseCategoryID: $("#CourseCategoryID").val(), CollegeID: $("#CollegeID").val(), EmployeeID: $("#EmployeeID").val() },
+                success: function (states) {
+                    $.each(states, function (i, state) {
+                        $("#SubjectCode").append('<option value="' + state.Value + '">' +
+                            state.Text + '</option>');
+                    });
+                }, error: function (ex) { $("#SubjectCode").append('<option value="' + "" + '">' + "-- Select --" + '</option>'); }
+            }); return false;
+        }).change();
+
+         $("#SubjectCode").change(function () {
+            var usertype = @Model.UserType;
+            if(usertype == 1)
+            {
+                $("#EmployeeID").empty();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("PopulateLecturerDropdown", "Home")',
+                    dataType: 'json',
+                    data: { CollegeID: $("#CollegeID").val(), SubjectCode: $("#SubjectCode").val(),CourseCategoryID: $("#CourseCategoryID").val() },
+                    success: function (states) {
+                        $.each(states, function (i, state) {
+                            $("#EmployeeID").append('<option value="' + state.Value + '">' +
+                                state.Text + '</option>');
+                        });
+                    }, error: function (ex) { $("#EmployeeID").append('<option value="' + "" + '">' + "-- Select --" + '</option>'); }
+                }); return false;
+            }
+        })
+
+    });
+
+
+    $("#CourseCategoryID").change(function (event) {
+        $("#CourseYearID").val('');
+        if ($('#CourseCategoryID').val() == "") {
+            alert('Please Select Course  !!');
+            return;
+        }
+
+        var res = $('#CourseCategoryID').val();
+        $.ajax({
+            url: "/College/Exam/CourseYear/",
+            data: { id: res },
+            cache: false,
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                $('#CourseYearID').find("option").remove();
+                $("#CourseYearID").append($("<option></option>").val("").html("--Select Course Year--"));
+                $.each(data.data, function (key, value) {
+                    $("#CourseYearID").append($("<option></option>").val(value.ID).html(value.YearName));
+                });
+            }
+        });
+    });
+
+
+</script>
+
+<script src="~/scripts/jquery-1.10.2.js"></script>
+<script src="~/scripts/jquery.validate.js"></script>
+<script src="~/scripts/jquery.validate.unobtrusive.js"></script>

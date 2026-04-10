@@ -1,0 +1,303 @@
+﻿/*Modification in Theme*/
+.cbx-popular-reg-wrapper {
+    padding: 20px 0;
+    background: rgba(33, 208, 132, 0.1);
+}
+
+.job-search .recruitz-btn {
+    /*width: 200px;
+  height: 50px;*/
+    box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.2);
+    border: 0px solid;
+}
+
+.section_title {
+    text-align: center;
+    margin-bottom: 20px !important;
+}
+
+.container {
+    padding-right: 0px !important;
+    padding-left: 0px !important;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.input-group {
+    width: 100%;
+    display: inline-table;
+    vertical-align: middle;
+    margin-right: 15px;
+    margin-bottom: 15px;
+}
+
+    .input-group .form-control {
+        min-height: 50px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        box-shadow: none;
+        border-color: #dddddd;
+        color: #475059;
+        font-weight: bold;
+        font-family: 'Cabin', sans-serif;
+    }
+
+.single-resume-top-area .panel-group .panel .panel-collapse .panel-body {
+    border: 2px solid #D2F6E7;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+/*.dashboard-content-wrapper .dashwidget {
+  border: 1px dashed;
+  border-color: #3FD083;
+  padding: 10px 10px !important;
+  margin-bottom: 30px;
+}*/
+/*Modification in Theme*/
+
+.clearfix:before,
+.clearfix:after {
+    display: table;
+    content: " ";
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+.updateSpinner {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url('/images/giphy.gif') center no-repeat;
+    background-size: 150px 150px;
+}
+
+.validation {
+    color: tomato;
+}
+
+.required {
+    color: red;
+}
+
+.logopreview {
+    max-width: 300px !important;
+    max-height: 150px !important;
+    border: 1px solid #808080 !important;
+}
+
+.logopreview2 {
+    max-width: 190px;
+    max-height: 150px;
+    border: 1px solid #808080;
+}
+
+textarea {
+    resize: vertical;
+}
+
+input[type=file] {
+    padding: 13px;
+}
+
+.content {
+    padding: 0px;
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 99999999 !important;
+    border-bottom: 1px solid #3FD083;
+}
+
+    .sticky > .content {
+        padding-top: 100px;
+    }
+
+.disabled {
+    /*padding: 14px;*/
+    background-color: #D2F6E7;
+}
+
+.verified i {
+    color: #21d084;
+    margin-left: 20px;
+}
+
+.cmpltd {
+    float: right;
+    color: #21d084;
+    margin-right: 45%;
+}
+
+.ncmpltd {
+    float: right;
+    color: #E74C3B;
+    margin-right: 43%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Custom Radio Button Start*/
+.textoption {
+    color: #808080;
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.radiotextsty {
+    color: #808080;
+    font-size: 18px;
+}
+
+.customradio1 {
+    margin-left: 25px;
+}
+
+.customradio2 {
+    margin-bottom: 10px !important;
+}
+
+.customradio {
+    display: inline-block;
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 0px;
+    cursor: pointer;
+    font-size: 18px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+    /* Hide the browser's default radio button */
+    .customradio input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+/* Create a custom radio button */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 22px;
+    width: 22px;
+    background-color: white;
+    border-radius: 5%;
+    border: 1px solid #808080;
+}
+
+/* On mouse-over, add a grey background color */
+.customradio:hover input ~ .checkmark {
+    background-color: transparent;
+}
+
+/* When the radio button is checked, add a blue background */
+.customradio input:checked ~ .checkmark {
+    background-color: white;
+    border: 1px solid #21d084;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.customradio input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.customradio .checkmark:after {
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 5%;
+    background: #21d084;
+}
+
+/* Custom Radio Button End*/
+
+
+/* Pagination CSS Start */
+.Pager {
+    text-align: center;
+}
+
+    .Pager b {
+        float: left;
+    }
+
+    .Pager span {
+        height: 40px;
+        width: 40px;
+        text-align: center;
+        color: #fff;
+        display: inline-block;
+        line-height: 40px;
+        background: #006df0;
+        border-color: #006df0;
+        margin-left: 3px;
+        margin-right: 3px;
+        border-radius: 4px;
+    }
+
+    .Pager a {
+        display: inline-block;
+        text-align: center;
+        height: 40px;
+        width: 40px;
+        color: #006df0;
+        line-height: 40px;
+        border: 1px solid #006df0;
+        border-radius: 4px;
+        margin-left: 3px;
+        margin-right: 3px;
+    }
+
+        .Pager a:hover {
+            background: #001069;
+            border-color: #001069;
+            color: #fff;
+        }
+/* Pagination CSS End*/
+.well {  
+    background-color: #DFF2EB !important;   
+}
+.tablestyle > tbody > tr > td, .tablestyle > tbody > tr > th, .tablestyle > tfoot > tr > td, .tablestyle > tfoot > tr > th, .tablestyle > thead > tr > td, .tablestyle > thead > tr > th {
+    border: 1px solid #21d084;
+    font-size: 13px;
+    padding:5px;
+    line-height: 25px;
+}

@@ -1,0 +1,719 @@
+﻿@model List<DataLayer.EnrollmentRequest>
+@{
+    ViewBag.Title = "Generate ID Card";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+<style>
+    /* ========== PREMIUM LIGHT BLUE THEME - CONSISTENT ========== */
+    :root {
+        --primary-gradient: linear-gradient(135deg, #2b7be4 0%, #1a5bbf 100%);
+        --primary-light: #e8f0fe;
+        --primary-soft: #6ea8fe;
+        --primary-dark: #1a5bbf;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --info: #3b82f6;
+        --dark: #1e293b;
+        --gray-50: #f8fafc;
+        --gray-100: #f1f5f9;
+        --gray-200: #e2e8f0;
+        --gray-600: #475569;
+        --white: #ffffff;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 20px;
+        --radius-xl: 28px;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: linear-gradient(145deg, #f0f9ff 0%, #eef2ff 100%);
+        font-family: 'Inter', 'Segoe UI', sans-serif;
+    }
+
+    /* Main Container */
+    .idcard-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 24px 28px;
+    }
+
+    /* Page Header */
+    .page-header-modern {
+        background: var(--white);
+        border-radius: var(--radius-xl);
+        padding: 24px 32px;
+        margin-bottom: 28px;
+        box-shadow: var(--shadow-md);
+        border: 1px solid rgba(43, 123, 228, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .page-header-modern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+        }
+
+    .header-title {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .header-icon {
+        width: 56px;
+        height: 56px;
+        background: var(--primary-light);
+        border-radius: var(--radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .header-icon i {
+            font-size: 28px;
+            color: #2b7be4;
+        }
+
+    .header-text h2 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin: 0;
+        background: var(--primary-gradient);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+    }
+
+    .header-text p {
+        margin: 4px 0 0;
+        color: var(--gray-600);
+        font-size: 0.85rem;
+    }
+
+    /* Filter Section */
+    .filter-section {
+        background: var(--white);
+        border-radius: var(--radius-xl);
+        padding: 24px 28px;
+        margin-bottom: 28px;
+        box-shadow: var(--shadow-md);
+        border: 1px solid rgba(43, 123, 228, 0.08);
+    }
+
+    .filter-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin-bottom: 24px;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+        .filter-group label {
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-600);
+        }
+
+            .filter-group label i {
+                margin-right: 6px;
+                color: #2b7be4;
+            }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 12px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            background: var(--white);
+        }
+
+            .filter-group select:focus,
+            .filter-group input:focus {
+                outline: none;
+                border-color: #2b7be4;
+                box-shadow: 0 0 0 3px rgba(43, 123, 228, 0.1);
+            }
+
+    .filter-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 16px;
+        padding-top: 8px;
+    }
+
+    /* Buttons */
+    .btn-primary-modern {
+        background: var(--primary-gradient);
+        border: none;
+        padding: 12px 32px;
+        border-radius: 40px;
+        font-weight: 600;
+        color: white;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .btn-primary-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            color: white;
+        }
+
+    .btn-outline-modern {
+        background: transparent;
+        border: 2px solid #2b7be4;
+        padding: 12px 32px;
+        border-radius: 40px;
+        font-weight: 600;
+        color: #2b7be4;
+        transition: all 0.2s;
+    }
+
+        .btn-outline-modern:hover {
+            background: #2b7be4;
+            color: white;
+        }
+
+    /* ID Card Grid */
+    .idcard-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+
+    .idcard-wrapper {
+        page-break-after: always;
+        break-inside: avoid;
+    }
+
+    /* ID Card Premium Design */
+    .idcard-premium {
+        background: var(--white);
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid rgba(43, 123, 228, 0.15);
+        transition: transform 0.3s;
+        max-width: 1050px;
+        margin: 0 auto;
+    }
+
+        .idcard-premium:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.2);
+        }
+
+    .idcard-inner {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    /* Left Card */
+    .idcard-left {
+        flex: 1;
+        min-width: 280px;
+        background: linear-gradient(145deg, #ffffff, var(--primary-light));
+        border-radius: var(--radius-lg);
+        padding: 20px;
+        border: 1px solid rgba(43, 123, 228, 0.2);
+    }
+
+    .college-header {
+        text-align: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid var(--primary);
+    }
+
+    .college-name {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: var(--primary-dark);
+        text-transform: uppercase;
+    }
+
+    .affiliation-text {
+        font-size: 0.7rem;
+        color: var(--gray-600);
+        margin: 5px 0;
+    }
+
+    .session-badge {
+        background: var(--primary-gradient);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 30px;
+        font-size: 0.7rem;
+        display: inline-block;
+        margin-top: 8px;
+    }
+
+    .photo-section {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .student-photo {
+        width: 120px;
+        height: 130px;
+        border: 3px solid var(--primary);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        background: var(--gray-100);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .student-photo img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+    .info-table {
+        flex: 1;
+        font-size: 0.8rem;
+    }
+
+    .info-row {
+        display: flex;
+        padding: 6px 0;
+        border-bottom: 1px dashed var(--gray-200);
+    }
+
+    .info-label {
+        width: 100px;
+        font-weight: 700;
+        color: var(--gray-600);
+    }
+
+    .info-value {
+        flex: 1;
+        color: var(--dark);
+        font-weight: 500;
+    }
+
+    /* Right Card */
+    .idcard-right {
+        flex: 1;
+        min-width: 280px;
+        background: linear-gradient(145deg, #ffffff, var(--primary-light));
+        border-radius: var(--radius-lg);
+        padding: 20px;
+        border: 1px solid rgba(43, 123, 228, 0.2);
+    }
+
+    .detail-row-card {
+        display: flex;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--gray-200);
+    }
+
+    .detail-label-card {
+        width: 130px;
+        font-weight: 700;
+        color: var(--gray-600);
+    }
+
+    .detail-value-card {
+        flex: 1;
+        color: var(--dark);
+    }
+
+    .signature-section {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid var(--gray-200);
+    }
+
+    .signature-box {
+        text-align: center;
+    }
+
+    .signature-img {
+        max-width: 160px;
+        height: 45px;
+        object-fit: contain;
+        margin-bottom: 5px;
+    }
+
+    .signature-label {
+        font-size: 0.7rem;
+        color: var(--gray-600);
+    }
+
+    /* Print Button */
+    .print-section {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid var(--gray-200);
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 60px;
+        background: var(--white);
+        border-radius: var(--radius-xl);
+    }
+
+        .empty-state i {
+            font-size: 64px;
+            color: #cbd5e1;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h4 {
+            color: var(--gray-600);
+            margin-bottom: 10px;
+        }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .idcard-container {
+            padding: 16px;
+        }
+
+        .filter-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .idcard-inner {
+            flex-direction: column;
+        }
+
+        .photo-section {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .info-table {
+            width: 100%;
+        }
+    }
+
+    @@media print {
+        body {
+            background: white;
+            padding: 0;
+            margin: 0;
+        }
+
+        .filter-section,
+        .page-header-modern,
+        .print-section,
+        .btn-primary-modern,
+        .btn-outline-modern {
+            display: none !important;
+        }
+
+        .idcard-premium {
+            box-shadow: none;
+            border: 1px solid #ccc;
+            page-break-after: always;
+        }
+
+        .idcard-wrapper {
+            page-break-after: always;
+        }
+    }
+</style>
+
+<script>
+    var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+</script>
+
+<script>
+    $(document).ready(function () {
+        // Set selected values
+        $("#EducationTypeID option").each(function () {
+            if ($(this).val() == ('@ViewBag.Education')) {
+                $(this).attr('selected', 'selected');
+            }
+        });
+
+        $("#CourseCategoryID option").each(function () {
+            if ($(this).val() == ('@ViewBag.CoursetypeID')) {
+                $(this).attr('selected', 'selected');
+            }
+        });
+
+        // Course change handler
+        $("#EducationTypeID").change(function (event) {
+            $('#CourseCategoryID').find("option").remove();
+            $("#CourseCategoryID").append($("<option></option>").val("").html("--Select Course--"));
+            var res = $(this).val();
+            if (res == "") {
+                res = 0;
+                return;
+            }
+            $.ajax({
+                url: "/College/Home/getcourse/",
+                data: { id: res },
+                cache: false,
+                type: "POST",
+                dataType: "json",
+                headers: { 'Authorization': 'Basic ' + btoa(username + ':' + password) },
+                success: function (data) {
+                    $('#CourseCategoryID').find("option").remove();
+                    $("#CourseCategoryID").append($("<option></option>").val("").html("--Select Course--"));
+                    $.each(data.data, function (key, value) {
+                        $("#CourseCategoryID").append($("<option></option>").val(value.CourseCategoryID).html(value.CourseCategory));
+                    });
+                }
+            });
+        });
+    });
+
+    // Print function
+    function printdiv() {
+        var contents = $("#dvContents").html();
+        var frame1 = $('<iframe />');
+        frame1[0].name = "frame1";
+        frame1.css({ "position": "absolute", "top": "-1000000px" });
+        $("body").append(frame1);
+        var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+        frameDoc.document.open();
+        frameDoc.document.write('<html><head><title>ID Cards</title>');
+        frameDoc.document.write('<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">');
+        frameDoc.document.write('<style>');
+        frameDoc.document.write('body { font-family: "Inter", sans-serif; padding: 20px; }');
+        frameDoc.document.write('.idcard-premium { background: white; border-radius: 20px; overflow: hidden; border: 1px solid #e2e8f0; max-width: 1050px; margin: 0 auto 30px; page-break-after: always; }');
+        frameDoc.document.write('.idcard-inner { display: flex; flex-wrap: wrap; padding: 20px; gap: 20px; }');
+        frameDoc.document.write('.idcard-left, .idcard-right { flex: 1; min-width: 280px; background: linear-gradient(145deg, #ffffff, #e8f0fe); border-radius: 16px; padding: 20px; }');
+        frameDoc.document.write('.college-header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #2b7be4; }');
+        frameDoc.document.write('.college-name { font-size: 1.1rem; font-weight: 800; color: #1a5bbf; }');
+        frameDoc.document.write('.session-badge { background: linear-gradient(135deg, #2b7be4, #1a5bbf); color: white; padding: 4px 12px; border-radius: 30px; display: inline-block; }');
+        frameDoc.document.write('.photo-section { display: flex; gap: 20px; margin-bottom: 20px; }');
+        frameDoc.document.write('.student-photo { width: 120px; height: 130px; border: 3px solid #2b7be4; border-radius: 12px; overflow: hidden; }');
+        frameDoc.document.write('.student-photo img { width: 100%; height: 100%; object-fit: cover; }');
+        frameDoc.document.write('.info-row { display: flex; padding: 6px 0; border-bottom: 1px dashed #e2e8f0; }');
+        frameDoc.document.write('.info-label { width: 100px; font-weight: 700; color: #475569; }');
+        frameDoc.document.write('.info-value { flex: 1; }');
+        frameDoc.document.write('.detail-row-card { display: flex; padding: 8px 0; border-bottom: 1px solid #e2e8f0; }');
+        frameDoc.document.write('.detail-label-card { width: 130px; font-weight: 700; color: #475569; }');
+        frameDoc.document.write('.signature-section { display: flex; justify-content: space-between; margin-top: 20px; padding-top: 15px; border-top: 1px solid #e2e8f0; }');
+        frameDoc.document.write('.signature-img { max-width: 160px; height: 45px; object-fit: contain; }');
+        frameDoc.document.write('</style>');
+        frameDoc.document.write('</head><body>');
+        frameDoc.document.write(contents);
+        frameDoc.document.write('</body></html>');
+        frameDoc.document.close();
+        setTimeout(function () {
+            window.frames["frame1"].focus();
+            window.frames["frame1"].print();
+            frame1.remove();
+        }, 500);
+        return false;
+    }
+</script>
+
+<div class="idcard-container">
+
+    <!-- Page Header -->
+    <div class="page-header-modern" data-aos="fade-up">
+        <div class="header-title">
+            <div class="header-icon">
+                <i class="fa fa-id-card"></i>
+            </div>
+            <div class="header-text">
+                <h2>Generate ID Cards</h2>
+                <p><i class="fa fa-print"></i> Download & Print Student Identity Cards (Current Session Only)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section" data-aos="fade-up" data-aos-delay="100">
+        @using (Html.BeginForm("GenerateIDCard", "Home", FormMethod.Post, new { id = "myform", enctype = "multipart/form-data" }))
+        {
+            <div class="filter-grid">
+                <div class="filter-group">
+                    <label><i class="fa fa-graduation-cap"></i> Programme Name</label>
+                    @Html.DropDownList("program", new SelectList(ViewBag.EducationType, "Value", "Text"), "-- Select Programme --", new { @class = "form-control", @id = "EducationTypeID" })
+                </div>
+                <div class="filter-group">
+                    <label><i class="fa fa-book"></i> Course Name</label>
+                    @Html.DropDownList("CoursetypeID", new SelectList(ViewBag.Coursetype, "CourseCategoryID", "CourseCategory", ViewBag.CoursetypeID), "-- Select Course --", new { @class = "form-control", @id = "CourseCategoryID" })
+                </div>
+                <div class="filter-group">
+                    <label><i class="fa fa-user"></i> Student Name</label>
+                    <input type="text" class="form-control" placeholder="Enter student name" name="Name" />
+                </div>
+                <div class="filter-group">
+                    <label><i class="fa fa-hashtag"></i> Roll No</label>
+                    <input type="text" class="form-control" placeholder="Enter roll number" name="Enrollment" />
+                </div>
+            </div>
+            <div class="filter-actions">
+                <button class="btn-primary-modern" id="submit" type="submit">
+                    <i class="fa fa-search"></i> Search Students
+                </button>
+            </div>
+        }
+    </div>
+
+    <!-- ID Cards Display -->
+    @if (Model != null && Model.Count > 0)
+    {
+        <div id="dvContents">
+            <div class="idcard-grid">
+                @foreach (var item in Model)
+                {
+                    <div class="idcard-wrapper">
+                        <div class="idcard-premium">
+                            <div class="idcard-inner">
+                                <!-- Left Side -->
+                                <div class="idcard-left">
+                                    <div class="college-header">
+                                        <div class="college-name">@item.collegeName</div>
+                                        @if (item.is_affiliated == 0)
+                                        {
+                                            <div class="affiliation-text">(A Constituent Unit of Munger University, Munger, Bihar)</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="affiliation-text">(An Affiliated Unit of Munger University, Munger, Bihar)</div>
+                                        }
+                                        <div class="session-badge">Session: @item.sessionname</div>
+                                    </div>
+
+                                    <div class="photo-section">
+                                        <div class="student-photo">
+                                            <img src="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Photoandsign/@item.photo"
+                                                 onerror="this.src='../../images/noimage.png';" />
+                                        </div>
+                                        <div class="info-table">
+                                            <div class="info-row">
+                                                <div class="info-label"><i class="fa fa-user"></i> Name</div>
+                                                <div class="info-value">: @item.Name</div>
+                                            </div>
+                                            <div class="info-row">
+                                                <div class="info-label"><i class="fa fa-hashtag"></i> Roll No</div>
+                                                <div class="info-value">: @item.RollNo</div>
+                                            </div>
+                                            <div class="info-row">
+                                                <div class="info-label"><i class="fa fa-male"></i> @(item.Ftitle == 20 ? "Father's Name" : (item.Ftitle == 21 ? "Husband's Name" : "Father's Name"))</div>
+                                                <div class="info-value">: @item.FatherName</div>
+                                            </div>
+                                            <div class="info-row">
+                                                <div class="info-label"><i class="fa fa-female"></i> Mother's Name</div>
+                                                <div class="info-value">: @item.MotherName</div>
+                                            </div>
+                                            <div class="info-row">
+                                                <div class="info-label"><i class="fa fa-tint"></i> Blood Group</div>
+                                                <div class="info-value">: @item.bloodgroup</div>
+                                            </div>
+                                            <div class="info-row">
+                                                <div class="info-label"><i class="fa fa-birthday-cake"></i> Date of Birth</div>
+                                                <div class="info-value">: @item.DOB</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Right Side -->
+                                <div class="idcard-right">
+                                    <div class="detail-row-card">
+                                        <div class="detail-label-card"><i class="fa fa-calendar-check"></i> Date of Admission</div>
+                                        <div class="detail-value-card">: @item.EnrollmentGrantDate</div>
+                                    </div>
+                                    <div class="detail-row-card">
+                                        <div class="detail-label-card"><i class="fa fa-book-open"></i> Course Name</div>
+                                        <div class="detail-value-card">: @item.CourseApplied (@item.streamCategory)</div>
+                                    </div>
+                                    <div class="detail-row-card">
+                                        <div class="detail-label-card"><i class="fa fa-mobile-alt"></i> Mobile No</div>
+                                        <div class="detail-value-card">: @item.Mobile</div>
+                                    </div>
+                                    <div class="detail-row-card">
+                                        <div class="detail-label-card"><i class="fa fa-envelope"></i> Email</div>
+                                        <div class="detail-value-card">: @item.Email</div>
+                                    </div>
+                                    <div class="detail-row-card">
+                                        <div class="detail-label-card"><i class="fa fa-map-marker-alt"></i> Address</div>
+                                        <div class="detail-value-card">: @item.Address</div>
+                                    </div>
+
+                                    <div class="signature-section">
+                                        <div class="signature-box">
+                                            <img src="~/images/PrincipalSignature/@(item.CollegeCode + ".jpg")"
+                                                 class="signature-img"
+                                                 onerror="this.src='../../images/white_img.png';" />
+                                            <div class="signature-label">Principal's Signature</div>
+                                        </div>
+                                        <div class="signature-box">
+                                            <img src="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Photoandsign/@item.stsign"
+                                                 class="signature-img"
+                                                 onerror="this.src='../../images/white_img.png';" />
+                                            <div class="signature-label">Student's Signature</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Print Button -->
+        <div class="print-section">
+            <a href="#" id="btnPrint" class="btn-primary-modern" onclick="return printdiv();">
+                <i class="fa fa-print"></i> Print All ID Cards
+            </a>
+        </div>
+    }
+    else if (Model != null && Model.Count == 0)
+    {
+        <div class="empty-state">
+            <i class="fa fa-id-card"></i>
+            <h4>No Students Found</h4>
+            <p>No ID cards available for the selected criteria. Please try different search filters.</p>
+        </div>
+    }
+</div>
+
+<script>
+    $("#myform").submit(function (e) {
+        // Form submission handler - keeps original functionality
+    });
+</script>

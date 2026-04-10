@@ -1,0 +1,206 @@
+﻿@model DataLayer.Student_AchievementManagement
+@{
+    ViewBag.Title = "StudentAchievement";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+<style>
+    .starvalid {
+        color: red;
+    }
+
+    .spacebottom {
+        margin-bottom: 30px;
+    }
+
+    .textsize {
+        font-size: 12px;
+    }
+
+    .right {
+        text-align: right;
+    }
+
+    .left {
+        text-align: left;
+    }
+
+    .spaceDesign {
+        padding-bottom: 20px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+    .minheight {
+        min-height: 450px;
+    }
+</style>
+<script>
+    var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+    var display='@ViewBag.Display';
+</script>
+<script src="~/scripts/Customjs/StudentAchievement.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<div class="container-fluid minheight">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div>
+            <div class="spaceDesign">
+                @if (ViewBag.studentname != null)
+                {
+                    <h3 class="text-center">Add Achievements Of @ViewBag.studentname</h3>
+                }
+                else
+                {
+                    <h3 class="text-center">Student Achievement</h3>
+                }
+            </div>
+            <div class="sparkline12-graph  sparkline8-list">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div>
+                        @using (Html.BeginForm())
+                        {
+                            if (ViewBag.Display != "1")
+                            {
+                                <div class="row spaceDesign">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                        <span><label>Programme:<span class="starvalid">*</span></label></span>
+                                        @Html.DropDownListFor(model => model.program, new SelectList(ViewBag.EducationType, "Value", "Text"), "--Select Programme--", new { @class = "form-control", @id = "EducationTypeID", @name = "EducationTypeID", @ng_model = "EducationTypeID" })
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                        <span><label>Course:<span class="starvalid">*</span></label></span>
+                                        @Html.DropDownListFor(model => model.Course, new SelectList(ViewBag.Course, "CourseCategoryID", "CourseCategory"), "--Select Course--", new { @class = "form-control", @id = "Course", @name = "Course", @ng_model = "Course" })
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                        <span><label>Year:<span class="starvalid">*</span></label></span>
+                                        @Html.DropDownListFor(model => model.SessionID, new SelectList(ViewBag.Session, "sessionid", "sessionname"), "--Select Session--", new { @class = "form-control custom-select-value", @id = "SessionID", @name = "SessionID", @ng_model = "session.search" })
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="row spaceDesign">
+                                @if (ViewBag.Display != "1")
+                                {
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                        <span><label>Student:<span class="starvalid">*</span></label></span>
+                                        @Html.DropDownListFor(model => model.SID, new SelectList(ViewBag.studentList, "ID", "Name"), "--Select Student--", new { @class = "form-control custom-select-value", @id = "SID", @name = "SID", @required = "required" })
+                                        @if (Model != null)
+                                        {
+                                            @Html.HiddenFor(model => model.hid)
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    @Html.HiddenFor(model => model.SID)
+                                    @Html.HiddenFor(model => model.SessionID)
+                                    if (Model != null)
+                                    {
+                                        @Html.HiddenFor(model => model.hid)
+                                    }
+                                }
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                    <span><label>Achievement Category:<span class="starvalid">*</span></label></span>
+                                    @Html.DropDownListFor(model => model.AchievementMasterID, new SelectList(ViewBag.AchievementList, "ID", "Name"), "--Select Achievement Category--", new { @class = "form-control custom-select-value", @id = "AchievementMasterID", @name = "AchievementMasterID", @required = "required", })
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                    <label class="login2">Description: <span class="starvalid">*</span></label>
+                                    @Html.TextBoxFor(model => model.Description, new { @class = "form-control", @id = "Description", @required = "required", @placeholder = "Description" })
+                                </div>
+                                @if (ViewBag.Display == "1")
+                                {
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                        <label class="login2">Upload Document<span class="starvalid">*</span></label>
+                                        <div class="file-upload-inner file-upload-inner-right ts-forms">
+                                            <div class="input append-big-btn">
+                                                <label class="icon-left" for="append-big-btn">
+                                                    <i class=""></i>
+                                                </label>
+                                                <div class="file-button">
+                                                    Browse
+                                                    <input type="file" onchange="document.getElementById('append-big-btn').value = this.value; check();" id="file" name="file" required>
+                                                </div>
+                                                <input type="hidden" class="link">
+                                                <input type="text" id="append-big-btn" placeholder="no file selected" readonly value="@Model.DocumentURl">
+                                                <div class="text-danger textsize pt-10"> Allowed .ext is .jpg,.jpeg,.png,.pdf   ,Size should be less then 500KB </div>
+                                                @if (Model != null)
+                                                {
+                                                    <input type="hidden" id="hfile" name="hfile" value="@Model.DocumentURl">
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            if (ViewBag.Display != "1")
+                            {
+                                <div class="row spaceDesign">
+                                    <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                                        <label class="login2">Upload Document<span class="starvalid">*</span></label>
+                                        <div class="file-upload-inner file-upload-inner-right ts-forms">
+                                            <div class="input append-big-btn">
+                                                <label class="icon-left" for="append-big-btn">
+                                                    <i class=""></i>
+                                                </label>
+                                                <div class="file-button">
+                                                    Browse
+                                                    <input type="file" onchange="document.getElementById('append-big-btn').value = this.value; check();" id="file" name="file" required>
+                                                </div>
+                                                <input type="hidden" class="link">
+                                                <input type="text" id="append-big-btn" placeholder="no file selected" readonly value="@Model.DocumentURl">
+                                                <div class="text-danger textsize pt-10"> Allowed .ext is .jpg,.jpeg,.png,.pdf   ,Size should be less then 500KB </div>
+                                                @if (Model != null)
+                                                {
+                                                    <input type="hidden" id="hfile" name="hfile" value="@Model.DocumentURl">
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <div class="form-group-inner">
+                                <div class="login-btn-inner">
+                                    <div class="row">
+                                        <div class="col-lg-12 text-center">
+                                            <div class="document-btn">
+                                                <div class="login-horizental cancel-wp form-bc-ele">
+                                                    @if (ViewBag.Display != "1")
+                                                    {
+                                                        <button class="btn btn-primary" type="button" onclick="resetapplication()">Reset</button>
+                                                    }
+                                                    <button class="btn btn-sm btn-primary login-submit-cs" type="button" onclick="submitapplication()" id="btn">Upload</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(function ()
+    {
+        $("#SessionID option").each(function ()
+        {
+            if ($(this).val() == ((@ViewBag.SessionID)))
+            {
+                $(this).attr('selected', 'selected');
+            }
+        });
+    });
+    $(function ()
+    {
+        $("#Course option").each(function ()
+        {
+            if ($(this).val() == ((@ViewBag.CourseID)))
+            {
+                $(this).attr('selected', 'selected');
+            }
+        });
+    });
+</script>

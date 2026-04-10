@@ -1,0 +1,609 @@
+﻿@model DataLayer.UserLogin
+@{
+    ViewBag.Title = "UserRolePermission";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+<!-- Premium Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="~/scripts/Resources/hummingbird-treeview.css" rel="stylesheet" />
+
+<style>
+    :root {
+        --brand-primary: #4361ee;
+        --brand-secondary: #3f37c9;
+        --brand-gradient: linear-gradient(135deg, #4361ee 0%, #7209b7 100%);
+        --brand-light: #eef2ff;
+        --brand-soft: #f8f9ff;
+        --brand-glow: rgba(67, 97, 238, 0.15);
+        --gray-50: #f9fafb;
+        --gray-100: #f3f4f6;
+        --gray-200: #e5e7eb;
+        --gray-700: #374151;
+        --gray-900: #111827;
+    }
+
+    * {
+        font-family: 'Inter', sans-serif;
+    }
+
+    body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #eef2f7 100%);
+    }
+
+    /* Premium Header Card */
+    .premium-header-card {
+        background: var(--brand-gradient);
+        border-radius: 28px;
+        padding: 32px 40px;
+        margin-bottom: 32px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 20px 35px -12px rgba(67, 97, 238, 0.35);
+    }
+
+    .premium-header-card::before {
+        content: '';
+        position: absolute;
+        top: -30%;
+        right: -10%;
+        width: 280px;
+        height: 280px;
+        background: rgba(255,255,255,0.08);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .premium-header-card::after {
+        content: '';
+        position: absolute;
+        bottom: -20%;
+        left: -5%;
+        width: 220px;
+        height: 220px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    /* Glass Card */
+    .glass-card-premium {
+        background: rgba(255, 255, 255, 0.97);
+        backdrop-filter: blur(2px);
+        border-radius: 28px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+        border: 1px solid rgba(255,255,255,0.4);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+
+    /* Premium Select */
+    .premium-select-modern {
+        border: 2px solid var(--gray-200);
+        border-radius: 16px;
+        padding: 12px 18px;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.3s;
+        background: white;
+        width: 100%;
+    }
+
+    .premium-select-modern:focus {
+        border-color: var(--brand-primary);
+        box-shadow: 0 0 0 4px var(--brand-glow);
+        outline: none;
+    }
+
+    /* Premium Button */
+    .btn-premium-save {
+        background: var(--brand-gradient);
+        border: none;
+        padding: 14px 36px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 15px;
+        color: white;
+        transition: all 0.3s;
+        box-shadow: 0 6px 20px rgba(67, 97, 238, 0.35);
+        letter-spacing: 0.3px;
+    }
+
+    .btn-premium-save:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 28px rgba(67, 97, 238, 0.45);
+        color: white;
+    }
+
+    .btn-outline-premium-action {
+        background: white;
+        border: 2px solid var(--brand-primary);
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 13px;
+        color: var(--brand-primary);
+        transition: all 0.3s;
+    }
+
+    .btn-outline-premium-action:hover {
+        background: var(--brand-primary);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    /* Treeview Container Premium */
+    .treeview-premium-container {
+        background: var(--gray-50);
+        border-radius: 24px;
+        padding: 20px;
+        border: 1px solid var(--gray-200);
+        max-height: 520px;
+        overflow-y: auto;
+    }
+
+    /* Custom Treeview Styling */
+    .hummingbird-treeview {
+        background: transparent !important;
+        border: none !important;
+    }
+
+    .hummingbird-base {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .hummingbird-base li {
+        margin: 10px 0;
+        padding: 6px 0;
+    }
+
+    .hummingbird-base li label {
+        font-weight: 600;
+        color: var(--gray-900);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+    }
+
+    .hummingbird-base li ul li label {
+        font-weight: 500;
+        color: var(--gray-700);
+    }
+
+    .hummingbird-base li ul li ul li label {
+        font-weight: 400;
+        color: #4b5563;
+    }
+
+    /* Checkbox Styling */
+    .hummingbird-base input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: var(--brand-primary);
+        border-radius: 6px;
+        transition: all 0.2s;
+    }
+
+    /* Treeview Icons */
+    .fa-minus, .fa-plus {
+        font-size: 12px;
+        margin-right: 8px;
+        color: var(--brand-primary);
+        cursor: pointer;
+    }
+
+    /* Alert Premium */
+    .alert-premium {
+        background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+        border: none;
+        border-radius: 20px;
+        padding: 16px 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 2px 12px rgba(16, 185, 129, 0.12);
+    }
+
+    /* Left margins for hierarchy */
+    .left-margin {
+        margin-left: 28px;
+    }
+
+    .left-margin1 {
+        margin-left: 56px;
+    }
+
+    /* Custom Scrollbar */
+    .treeview-premium-container::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .treeview-premium-container::-webkit-scrollbar-track {
+        background: var(--gray-200);
+        border-radius: 10px;
+    }
+
+    .treeview-premium-container::-webkit-scrollbar-thumb {
+        background: var(--brand-primary);
+        border-radius: 10px;
+    }
+
+    /* Animations */
+    @@keyframes fadeSlideUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-premium {
+        animation: fadeSlideUp 0.5s ease-out;
+    }
+
+    /* Label styling */
+    .form-label-premium {
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+    }
+
+    .badge-premium {
+        background: var(--brand-light);
+        color: var(--brand-primary);
+        padding: 6px 14px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+</style>
+
+<div class="container-fluid px-4 py-4 animate-premium">
+    <!-- Premium Header -->
+    <div class="premium-header-card">
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <div class="rounded-circle bg-white bg-opacity-20 p-3">
+                        <i class="fas fa-lock fs-3 text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-white mb-1 fw-bold" style="font-size: 32px;">Role & Permission Manager</h1>
+                        <p class="text-white-50 mb-0">
+                            <i class="fas fa-shield-alt me-2"></i>Control access levels and module permissions
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-2 mt-sm-0">
+                <span class="badge-premium bg-white bg-opacity-20 text-white">
+                    <i class="fas fa-users me-1"></i> Role Management
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Card -->
+    <div class="glass-card-premium">
+        <div class="p-4 p-lg-5">
+            @if (TempData["Msg"] != null)
+            {
+                <div class="alert-premium">
+                    <div class="d-flex align-items-center gap-3">
+                        <i class="fas fa-check-circle fa-2x text-success"></i>
+                        <div>
+                            <strong class="text-success">Success!</strong>
+                            <p class="mb-0 text-success-emphasis">@TempData["Msg"]</p>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @using (Html.BeginForm())
+            {
+                <!-- Select Employee Section -->
+                <div class="row mb-5">
+                    <div class="col-lg-8 col-md-10 mx-auto">
+                        <div class="text-center mb-4">
+                            <div class="d-inline-flex align-items-center gap-2 px-4 py-2 rounded-pill" style="background: var(--brand-light);">
+                                <i class="fas fa-user-shield" style="color: var(--brand-primary);"></i>
+                                <span class="fw-semibold" style="color: var(--brand-primary);">Assign Permissions</span>
+                            </div>
+                        </div>
+
+                        <div class="row g-4 align-items-end">
+                            <div class="col-md-8">
+                                <div class="form-label-premium">
+                                    <i class="fas fa-user-circle" style="color: var(--brand-primary);"></i>
+                                    Select Employee
+                                </div>
+                                @Html.DropDownListFor(model => model.ID, new SelectList(ViewBag.UserList, "ID", "UserName"), "-- Select Employee --", new { @class = "premium-select-modern", @id = "ddluser", @required = "required", onchange = "document.forms[0].submit();" })
+                                <input type="hidden" name="selectedItems" id="selectedItems" />
+                            </div>
+                            <div class="col-md-4">
+                                <div class="text-muted small mt-2">
+                                    <i class="fas fa-info-circle"></i> Change employee to load permissions
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Permission Tree Section -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle p-2" style="background: var(--brand-light); width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-tree" style="color: var(--brand-primary); font-size: 20px;"></i>
+                                </div>
+                                <div>
+                                    <h4 class="mb-0 fw-bold" style="color: var(--gray-900);">Module Permissions</h4>
+                                    <p class="text-muted small mb-0">Select/Deselect modules to control access</p>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="button" id="checkAllBtn" class="btn-outline-premium-action">
+                                    <i class="fas fa-check-double me-1"></i> Check All
+                                </button>
+                                <button type="button" id="uncheckAllBtn" class="btn-outline-premium-action">
+                                    <i class="fas fa-ban me-1"></i> Uncheck All
+                                </button>
+                                <button type="button" id="expandAllBtn" class="btn-outline-premium-action">
+                                    <i class="fas fa-expand-alt me-1"></i> Expand
+                                </button>
+                                <button type="button" id="collapseAllBtn" class="btn-outline-premium-action">
+                                    <i class="fas fa-compress-alt me-1"></i> Collapse
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Treeview Container -->
+                        <div class="treeview-premium-container">
+                            <div id="treeview_container" class="hummingbird-treeview">
+                                <ul id="treeview" class="hummingbird-base">
+                                    @{
+                                        var menuitem = (List<DataLayer.College_MenuMaster>)ViewBag.menuList;
+                                        foreach (var item in menuitem.Where(s => s.ParentID == 0).OrderBy(obj => obj.orderposition).ToList())
+                                        {
+                                            <li>
+                                                <i class="fa fa-minus" style="color: var(--brand-primary);"></i>
+                                                <label>
+                                                    <input id="@item.MenuID" data-id="custom-0" name="level1" type="checkbox" value="@item.MenuID" checked="@item.checkchecked">
+                                                    <span class="fw-bold">@item.MenuName</span>
+                                                </label>
+                                                <ul style="display: block;">
+                                                    @foreach (var firstItem in (menuitem.Where(s => s.ParentID == item.MenuID).OrderBy(obj => obj.orderposition).ToList()))
+                                                    {
+                                                        var a = item.MenuID.ToString();
+                                                        a = "Level2" + a.ToString();
+                                                        <li>
+                                                            <label class="left-margin">
+                                                                <input id="@firstItem.MenuID" data-id="@firstItem.MenuID" name="@a" type="checkbox" checked="@firstItem.checkchecked" value="@firstItem.MenuID">
+                                                                <span>@firstItem.MenuName</span>
+                                                            </label>
+                                                            <ul style="display: block;">
+                                                                @foreach (var secondItem in (menuitem.Where(s => s.ParentID == firstItem.MenuID).OrderBy(obj => obj.orderposition).ToList()))
+                                                                {
+                                                                    var b = firstItem.MenuID.ToString();
+                                                                    b = "Level3" + b.ToString();
+                                                                    <li>
+                                                                        <label class="left-margin1">
+                                                                            <input class="hummingbirdNoParent" id="@secondItem.MenuID" data-id="@secondItem.MenuID" name="@b" type="checkbox" checked="@secondItem.checkchecked" value="@secondItem.MenuID">
+                                                                            <span>@secondItem.MenuName</span>
+                                                                        </label>
+                                                                    </li>
+                                                                }
+                                                            </ul>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                                @Html.HiddenFor(model => model.menustr, new { Value = "", @id = "menustr" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Save Button Section -->
+                <div class="row mt-5">
+                    <div class="col-12 text-center">
+                        <button id="btnsave" class="btn-premium-save" onclick="return checkboxlist()" type="submit">
+                            <i class="fas fa-save me-2"></i> Save Permissions
+                        </button>
+                        <p class="text-muted small mt-3">
+                            <i class="fas fa-shield-alt me-1"></i> Changes will take effect immediately
+                        </p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="~/scripts/Resources/hummingbird-treeview.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Initialize hummingbird treeview
+        $("#treeview").hummingbird();
+
+        // ========== FIXED CHECK ALL FUNCTIONALITY ==========
+        // Check All - Manually check all checkboxes
+        $("#checkAllBtn").click(function (e) {
+            e.preventDefault();
+            // Check all checkboxes inside treeview
+            $("#treeview").find('input[type="checkbox"]').prop('checked', true);
+            // Also trigger hummingbird plugin to update its internal state
+            $("#treeview").hummingbird("checkAll");
+            // Manually trigger change event
+            $("#treeview").find('input[type="checkbox"]').trigger('change');
+        });
+
+        // Uncheck All - Manually uncheck all checkboxes
+        $("#uncheckAllBtn").click(function (e) {
+            e.preventDefault();
+            // Uncheck all checkboxes inside treeview
+            $("#treeview").find('input[type="checkbox"]').prop('checked', false);
+            // Also trigger hummingbird plugin to update its internal state
+            $("#treeview").hummingbird("uncheckAll");
+            // Manually trigger change event
+            $("#treeview").find('input[type="checkbox"]').trigger('change');
+        });
+
+        // Expand All - Expand all tree nodes
+        $("#expandAllBtn").click(function (e) {
+            e.preventDefault();
+            // Find all parent list items and expand them
+            $("#treeview").find('li').each(function () {
+                var $this = $(this);
+                var $subUl = $this.children('ul');
+                if ($subUl.length) {
+                    $subUl.show();
+                    var $minusIcon = $this.children('i.fa-minus, i.fa-plus');
+                    if ($minusIcon.hasClass('fa-plus')) {
+                        $minusIcon.removeClass('fa-plus').addClass('fa-minus');
+                    }
+                }
+            });
+        });
+
+        // Collapse All - Collapse all tree nodes
+        $("#collapseAllBtn").click(function (e) {
+            e.preventDefault();
+            // Find all parent list items and collapse them (except root level if needed)
+            $("#treeview").find('li').each(function () {
+                var $this = $(this);
+                var $subUl = $this.children('ul');
+                // Don't collapse root level? Collapse all for better UX
+                if ($subUl.length) {
+                    $subUl.hide();
+                    var $minusIcon = $this.children('i.fa-minus, i.fa-plus');
+                    if ($minusIcon.hasClass('fa-minus')) {
+                        $minusIcon.removeClass('fa-minus').addClass('fa-plus');
+                    }
+                }
+            });
+            // Ensure root level is visible
+            $("#treeview > li > ul").show();
+            $("#treeview > li > i").removeClass('fa-plus').addClass('fa-minus');
+        });
+
+        // Handle plus/minus icon clicks for expand/collapse
+        $(document).on('click', '.hummingbird-base li i.fa-minus, .hummingbird-base li i.fa-plus', function (e) {
+            e.stopPropagation();
+            var $icon = $(this);
+            var $parentLi = $icon.closest('li');
+            var $subUl = $parentLi.children('ul');
+
+            if ($subUl.length) {
+                if ($icon.hasClass('fa-minus')) {
+                    $subUl.slideUp(200);
+                    $icon.removeClass('fa-minus').addClass('fa-plus');
+                } else {
+                    $subUl.slideDown(200);
+                    $icon.removeClass('fa-plus').addClass('fa-minus');
+                }
+            }
+        });
+
+        // Smooth alert fade
+        setTimeout(function () {
+            $(".alert-premium").fadeOut(500);
+        }, 4000);
+    });
+
+    function checkboxlist() {
+        var id = $('#ddluser').val();
+        if (id == "" || id == null) {
+            SwalFire({
+                icon: 'warning',
+                title: 'Selection Required',
+                text: 'Please select an employee first!'
+            });
+            return false;
+        }
+
+        var chekboxklist = "";
+        var i = 0;
+        var j = 0;
+
+        $.each($("input[name='level1']"), function () {
+            j = 0;
+            var name = "Level2" + $(this).val();
+            var c = document.getElementsByName(name);
+
+            $.each($("input[name='" + name + "']:checked"), function () {
+                j = 1;
+                var name1 = "Level3" + $(this).val();
+                var c = document.getElementsByName(name1);
+
+                $.each($("input[name='" + name1 + "']:checked"), function () {
+                    j = 1;
+                    if (i == 0) {
+                        chekboxklist += $(this).val();
+                        i = 1;
+                    } else {
+                        chekboxklist += "," + $(this).val();
+                    }
+                });
+
+                if (j == 1) {
+                    chekboxklist += "," + $(this).val();
+                }
+            });
+
+            if (j == 1) {
+                chekboxklist += "," + $(this).val();
+            }
+        });
+
+        $("#menustr").val(chekboxklist);
+        $("#selectedItems").val(chekboxklist);
+
+        if (chekboxklist.length <= 0) {
+            SwalFire({
+                icon: 'warning',
+                title: 'No Selection',
+                text: 'Please select at least one menu item!'
+            });
+            return false;
+        }
+
+        return true;
+    }
+
+    // SweetAlert2 for better UX
+    function SwalFire(options) {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: options.icon || 'info',
+                title: options.title || 'Message',
+                text: options.text || '',
+                confirmButtonColor: '#4361ee',
+                confirmButtonText: 'OK'
+            });
+        } else {
+            alert(options.text);
+        }
+    }
+</script>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

@@ -1,0 +1,679 @@
+﻿@model DataLayer.EmployeeRegisteration
+@{
+    ViewBag.Title = "UpdateUserProfile";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+<style>
+    Category label {
+        padding: 10px;
+    }
+
+    .starvalid {
+        color: red;
+    }
+</style>
+<script src="~/scripts/Customjs/EmployeeRegistration.js"></script>
+<script type="text/javascript">
+
+    function show(input) {
+        debugger;
+        if (input.files && input.files[0]) {
+            var filerdr = new FileReader();
+            filerdr.onload = function (e) {
+                $('#userImage').attr('src', e.target.result);
+            }
+            filerdr.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function show1(input) {
+        if (input.files && input.files[0]) {
+            var filerdr1 = new FileReader();
+            filerdr1.onload = function (e) {
+                $('#signImage').attr('src', e.target.result);
+            }
+            filerdr1.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+<script src="~/JS/Commonjs.js"></script>
+
+<div class="container-fluid">
+    <div class="all-content-wrapper" style="margin-left:0px !important">
+        <!-- Advanced Form Start -->
+        <div class="advanced-form-area mg-b-15">
+            @{
+
+                if (TempData["StMessage"] == null) { }
+                else
+                {
+                    <div class="alert-wrap1 shadow-inner wrap-alert-b">
+
+                        <div class="alert alert-success " role="alert" style="text-align:center !important">
+                            <div>@TempData["StMessage"]</div>
+
+                        </div>
+                    </div>
+                }
+            }
+            <div class="sparkline10-graph">
+                <div class="input-knob-dial-wrap">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <h3 style="text-align:center">Employee Registration Form </h3>
+                            <div class="form-group-inner">
+                                <div class="login-btn-inner">
+                                    <div>
+                                        <div class="sparkline10-list mg-tb-30 responsive-mg-t-0 table-mg-t-pro-n dk-res-t-pro-0 nk-ds-n-pro-t-0" style="text-align: left;">
+
+                                            <div class="sparkline10-graph">
+                                                <div class="input-knob-dial-wrap">
+                                                    <div class="row all-form-element-inner">
+                                                        <div class="form-group-inner">
+                                                            <div class="row login-btn-inner">
+                                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                    <div class="product-payment-inner-st">
+                                                                        <ul id="myTabedu1" class="tab-review-design">
+                                                                            <li class="active"><a href="#description">Basic Information</a></li>
+                                                                        </ul>
+                                                                        <div id="myTabContent" class="tab-content custom-product-edit">
+                                                                            <div class="product-tab-list tab-pane fade active in" id="description">
+                                                                                <div>
+                                                                                    <div>
+                                                                                        <div class="review-content-section basic-detail-part">
+                                                                                            @using (Html.BeginForm("UpdateUserProfile", "Home", FormMethod.Post, new { id = "myform", enctype = "multipart/form-data" }))
+
+                                                                                            {
+                                                                                                @Html.AntiForgeryToken()
+                                                                                                <div id="dropzone1" class="pro-ad">
+                                                                                                    <div class="row">
+
+
+                                                                                                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                            <label>Designation :</label>
+                                                                                                            <div><label><strong>@Model.DesignationName</strong></label></div>
+                                                                                                            @*@Html.DropDownListFor(model => model.Designation, new SelectList(ViewBag.Designation, "URoleID", "URole"), "Select Designation Type..", new { @class = "form-control", @id = "Designation", @readonly = "readonly" })*@
+                                                                                                            @if (Model != null)
+                                                                                                            {
+                                                                                                                @Html.HiddenFor(model => model.Designation)
+                                                                                                            }
+                                                                                                        </div>
+                                                                                                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                            <label>User Name :</label>
+                                                                                                            @Html.TextBoxFor(model => model.UserName, "", new { @class = "form-control", @placeholder = "User Name", @required = "required" })
+
+                                                                                                        </div>
+                                                                                                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                            <label><span>&nbsp;</span> </label>
+                                                                                                            <label><span id="UError" class="text-danger"></span></label>
+
+                                                                                                        </div>
+
+                                                                                                    </div>
+                                                                                                    <div class="row">
+
+                                                                                                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+
+                                                                                                            <div class="data-custon-pick" >
+                                                                                                                <span><label>Joining Date  <span class="starvalid">*</span></label></span>
+                                                                                                                <div class="input-mark-inner mg-b-22 input-group date">
+
+                                                                                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                                                                                    @Html.TextBoxFor(model => model.JoiningDate, new { @class = "form-control", @id = "JoiningDate", @maxlenght = "10", @autocomplete = "off", @placeholder = "DD/MM/YYYY", @onkeypress = "return false;", @required = "required" , @readonly = "readonly" })
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                            <span><label>Employee Type:</label></span>
+                                                                                                            @*@Html.DropDownListFor(model => model.facultyType, new SelectList(ViewBag.FacultyType, "URoleID", "URole", ""), "Select Faculty Type ..", new { @class = "form-control", @id = "FacultyType", @required = "required", @readonly = "readonly" })*@
+                                                                                                            @if (Model.facultyType == 1)
+                                                                                                            {<div>
+                                                                                                                <label><strong>Permanent</strong></label>
+                                                                                                            </div>
+                                                                                                            }
+                                                                                                            else
+                                                                                                            {
+                                                                                                                <div><label><strong>Temporary</strong>
+                                                                                                            </label></div>
+                                                                                                            }
+
+                                                                                                            @if (Model != null)
+                                                                                                            {
+                                                                                                                @Html.HiddenFor(model => model.facultyType)
+                                                                                                            }
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="row">
+                                                                                                        <span><label class="col-md-12 pl-10">(Name of applicant )</label></span>
+                                                                                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                            <span><label>Title <span class="starvalid">*</span></label></span>
+                                                                                                            @Html.DropDownListFor(model => model.title, new SelectList(ViewBag.stitle, "CommonId", "title"), "Select Title..", new { @class = "form-control", @id = "title", @required = "required" })
+                                                                                                        </div>
+                                                                                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                            <span><label>First Name <span class="starvalid">*</span></label></span>
+
+                                                                                                            @Html.TextBoxFor(model => model.FirstName, "", new { @class = "form-control", @placeholder = "First Name", @required = "required" })
+                                                                                                            @if (Model != null)
+                                                                                                            {
+                                                                                                                @Html.HiddenFor(model => model.hid)
+                                                                                                                @Html.HiddenFor(model => model.EID)
+                                                                                                            }
+
+                                                                                                        </div>
+                                                                                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                            <span><label>Middle Name</label></span>
+                                                                                                            @Html.TextBoxFor(model => model.MiddleName, "", new { @class = "form-control", @placeholder = "Middle Name" })
+                                                                                                        </div>
+                                                                                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                            <span><label>Last Name <span class="starvalid">*</span></label></span>
+                                                                                                            @Html.TextBoxFor(model => model.LastName, "", new { @class = "form-control", @placeholder = "Last Name" })
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="row">
+                                                                                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                            <span><label>Sex  <span class="starvalid">*</span></label></span>
+                                                                                                            @Html.DropDownListFor(model => model.Gender, new SelectList(ViewBag.Gender, "CommonId", "title", ""), "Select Gender ..", new { @class = "form-control", @id = "Gender", @required = "required" })
+
+                                                                                                        </div>
+                                                                                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+
+                                                                                                            <div class="data-custon-pick" id="data_2">
+                                                                                                                <span><label>Date of birth  <span class="starvalid">*</span></label></span>
+                                                                                                                <div class="input-mark-inner mg-b-22 input-group date">
+
+                                                                                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                                                                                    @Html.TextBoxFor(model => model.DOB, new { @class = "form-control", @id = "datepicker", @maxlenght = "10", @autocomplete = "off", @placeholder = "DD/MM/YYYY", @onkeypress = "return false;", @required = "required" })
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                            <span><label>Category. <span class="starvalid">*</span></label></span>
+                                                                                                            @*<span><img src="~/Img/name.png" class="lable-text"></span>*@
+                                                                                                            @Html.DropDownListFor(model => model.CastCategory, new SelectList(ViewBag.CasteCategory, "CommonId", "title", ""), "Select Caste ..", new { @class = "form-control", @id = "Cast", @required = "required" })
+
+                                                                                                        </div>
+                                                                                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                            <span><label>Mobile No. <span class="starvalid">*</span></label></span>
+                                                                                                            @Html.TextBoxFor(model => model.MobileNo, new { @class = "form-control", @maxlength = "10", @minlength = "6", @oninput = "OnlyIntvalue(this);", @placeholder = "Mobile no.", @required = "required", @id = "MobileNo" })
+
+                                                                                                        </div>
+
+                                                                                                    </div>
+                                                                                                    <div class="row" id="mid" style="display:none">
+                                                                                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                            <label><span>&nbsp;</span> </label>
+
+
+                                                                                                        </div>
+                                                                                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                            <label><span>&nbsp;</span> </label>
+
+
+                                                                                                        </div>
+
+                                                                                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                            <label><span>&nbsp;</span> </label>
+
+
+                                                                                                        </div>
+                                                                                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                            <label><span>&nbsp;</span> </label>
+                                                                                                            <label><span id="MError" class="text-danger"></span></label>
+
+                                                                                                        </div>
+
+                                                                                                    </div>
+                                                                                                    <div class="row">
+                                                                                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                            <span><label>Email Id  <span class="starvalid">*</span></label></span>
+                                                                                                            @Html.TextBoxFor(model => model.Email, "", new { @class = "form-control", @placeholder = "Email Address", @type = "email", @required = "required", @id = "Email" })
+
+                                                                                                        </div>
+                                                                                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                            <span><label>Blood Group <span class="starvalid">*</span></label></span>
+                                                                                                            @Html.DropDownListFor(model => model.BloodGroup, new SelectList(ViewBag.bloodgroup, "bloodgrouid", "BloodGroup", ""), "Select Blood_Group ..", new { @class = "form-control", @id = "Blood_Group", @required = "required" })
+
+                                                                                                        </div>
+                                                                                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                            <span><label>Nationality  <span class="starvalid">*</span></label></span>
+                                                                                                            @*<span><label>Nationality  <img src="~/Img/national.png" />(राष्ट्रीयता)&nbsp;<span class="starvalid">*</span></label></span>*@
+                                                                                                            @Html.DropDownListFor(model => model.Nationality, new SelectList(ViewBag.Nationality, "CommonId", "title", ""), "Select Nationality ..", new { @class = "form-control", @id = "Nationality", @required = "required" })
+
+                                                                                                        </div>
+                                                                                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="display:none;">
+                                                                                                            <span><label>Mother Tongue </label></span>
+                                                                                                            @Html.DropDownListFor(model => model.MotherTongue, new SelectList(ViewBag.MotherTongue, "CommonId", "title", ""), "Select MotherTongue ..", new { @class = "form-control", @id = "MotherTongue" })
+
+                                                                                                        </div>
+                                                                                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                            <span><label>Religion  <span class="starvalid">*</span></label></span>
+                                                                                                            @Html.DropDownListFor(model => model.Religion, new SelectList(ViewBag.Religion, "CommonId", "title", ""), "Select Religion ..", new { @class = "form-control", @id = "Religion", @required = "required" })
+
+                                                                                                        </div>
+                                                                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="ReligonOther" style="display: none;">
+                                                                                                            <span><label>Mention your Religon  <span class="starvalid">*</span></label></span>
+                                                                                                            @Html.TextBoxFor(model => model.ReligonOther, new { @class = "form-control", @Id = "txtReligonOther", @placeholder = "Mention your Religon (अपने धर्म का उल्लेख करें)" })
+
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="row" id="eid" style="display:none">
+                                                                                                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                                                                            <label><span>&nbsp;</span> </label>
+                                                                                                            <label><span id="EError" class="text-danger"></span></label>
+
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="row">
+                                                                                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                            <span><label>Emergency Contact No. <span class="starvalid">*</span></label></span>
+                                                                                                            @Html.TextBoxFor(model => model.EContactNo, new { @class = "form-control", @maxlength = "10", @minlength = "6", @oninput = "OnlyIntvalue(this);", @placeholder = "Emergency Contact No." })
+
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="row">
+                                                                                                        <div class="col-md-12">
+                                                                                                            <ul id="myTabedu1" class="tab-review-design">
+                                                                                                                <li class="active">
+                                                                                                                    <a href="#description">
+
+                                                                                                                        @*<img src="~/Img/address.png" />*@
+                                                                                                                        Correspondence   Address
+                                                                                                                    </a>
+                                                                                                                </li>
+                                                                                                            </ul>
+
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="row">
+                                                                                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                            <span><label>Address<span class="starvalid">*</span></label></span>
+                                                                                                            @Html.TextBoxFor(model => model.CurrentAddress, "", new { @class = "form-control", @placeholder = "Address", @required = "required" })
+
+                                                                                                        </div>
+                                                                                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                            <span><label>City <span class="starvalid">*</span></label></span>
+                                                                                                            @Html.TextBoxFor(model => model.CA_City, "", new { @class = "form-control", @placeholder = "city", @required = "required" })
+                                                                                                        </div>
+                                                                                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                            <span><label>PinCode <span class="starvalid">*</span></label></span>
+                                                                                                            @Html.TextBoxFor(model => model.CA_PinCode, "", new { @class = "form-control", @placeholder = "PinCode", @id = "pincode", @oninput = "OnlyIntvalue(this);", @Maxlength = "6", @required = "required" })
+                                                                                                        </div>
+                                                                                                        <div class="form-group col-md-4" style="display:none">
+                                                                                                            <span class="form-group col-md-4"><label>Country <span class="starvalid">*</span></label></span>
+                                                                                                            @Html.DropDownListFor(model => model.CA_Country, new SelectList(ViewBag.country, "ID", "Name", ""), new { @class = "form-control", @id = "Country", @required = "required" })
+                                                                                                        </div>
+                                                                                                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                            <span><label>State <span class="starvalid">*</span></label></span>
+                                                                                                            @Html.DropDownListFor(model => model.CA_State, new SelectList(ViewBag.CAState, "stateID", "statename"), "Select State..", new { @class = "form-control", @id = "State", @required = "required" })
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="row">
+                                                                                                        <div class="col-md-12">
+                                                                                                            <ul id="myTabedu1" class="tab-review-design">
+                                                                                                                <li class="active"><a href="#description">Permanent  Address (स्थाई पता)</a></li>
+
+                                                                                                            </ul>
+                                                                                                        </div>
+                                                                                                        <div class="col-sm-12">
+                                                                                                            <div class="dec-body checkbox-content">
+                                                                                                                <input type="checkbox" value=""
+                                                                                                                       id="parmanentcheckbox" /> ( if Your Permanent Address and Correspondence  Address are Same @*<img src="~/Img/patrachar.png" />*@
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+
+
+                                                                                                        <div class="row">
+                                                                                                            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Address <span class="starvalid">*</span></label></span>
+                                                                                                                @Html.TextBoxFor(model => model.PA_Address, "", new { @class = "form-control", @placeholder = "PAddress", @required = "required" })
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                                <span><label>City <span class="starvalid">*</span></label></span>
+                                                                                                                @Html.TextBoxFor(model => model.PA_City, "", new { @class = "form-control", @placeholder = "Pcity", @required = "required" })
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                                <span><label>PinCode <span class="starvalid">*</span></label></span>
+                                                                                                                @Html.TextBoxFor(model => model.PA_PinCode, "", new { @class = "form-control", @placeholder = "PPinCode", @oninput = "OnlyIntvalue(this);", @Maxlength = "6", @required = "required" })
+                                                                                                            </div>
+                                                                                                            <div class="form-group col-md-3" style="display:none">
+                                                                                                                <span class="form-group col-md-4"><label>Country <span class="starvalid">*</span></label></span>
+                                                                                                                @Html.DropDownListFor(model => model.PA_Country, new SelectList(ViewBag.Pcountry, "ID", "name", ""), new { @class = "form-control", @id = "PCountry", @required = "required" })
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                                <span><label>State <span class="starvalid">*</span></label></span>
+                                                                                                                @Html.DropDownListFor(model => model.PA_State, new SelectList(ViewBag.PAState, "stateID", "statename"), "Select State..", new { @class = "form-control", @id = "PState", @required = "required" })
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <ul id="myTabedu1" class="tab-review-design">
+                                                                                                            <li class="active"><a href="#description"> Father /Husband Details </a></li>
+                                                                                                        </ul>
+                                                                                                        <div class="row">
+                                                                                                            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Title <span class="starvalid">*</span></label></span>
+                                                                                                                @Html.DropDownListFor(model => model.Ftitle, new SelectList(ViewBag.ftitle, "CommonId", "title"), "Select Title..", new { @class = "form-control", @id = "Ftitle", @required = "required" })
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Name <span class="starvalid">*</span></label></span>
+                                                                                                                @*<span><label>Name/(नाम <img src="~/Img/english.png" /> में) <span class="starvalid">*</span></label></span>*@
+                                                                                                                @Html.TextBoxFor(model => model.FatherName, "", new { @class = "form-control", @placeholder = "Father Name", @required = "required" })
+                                                                                                            </div>
+                                                                                                            @*<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                                    <span><label>Name/(नाम हिन्दी में) <span class="starvalid">*</span></label></span>
+                                                                                                                    @Html.TextBoxFor(model => model.FatherNameInHindi, "", new { @class = "form-control", @placeholder = "नाम हिन्दी में", @id = "FatherNameInHindi", @required = "required" })
+                                                                                                                </div>*@
+                                                                                                            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Mobile No</label></span>
+                                                                                                                @Html.TextBoxFor(model => model.FatherMobile, new { @class = "form-control", @oninput = "OnlyIntvalue(this);", @Maxlength = "10", @placeholder = "Father Mobile" })
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Email</label></span>
+                                                                                                                @Html.TextBoxFor(model => model.FatherEmail, "", new { @class = "form-control", @placeholder = "Father Email", @type = "email" })
+
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="row">
+
+                                                                                                            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Qualification</label></span>
+                                                                                                                @Html.TextBoxFor(model => model.FatherQualification, "", new { @class = "form-control", @placeholder = "Father Qualification" })
+
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Occupation</label></span>
+                                                                                                                @Html.TextBoxFor(model => model.FatherOccupation, "", new { @class = "form-control", @placeholder = "Father Occupation" })
+
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                        <ul id="myTabedu1" class="tab-review-design">
+                                                                                                            <li class="active"><a href="#description">Mother Details </a></li>
+                                                                                                        </ul>
+                                                                                                        <div class="row">
+                                                                                                            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Name <span class="starvalid">*</span></label></span>
+                                                                                                                @*<span><label>Name/(नाम <img src="~/Img/english.png" /> में) <span class="starvalid">*</span></label></span>*@
+                                                                                                                @Html.TextBoxFor(model => model.MotherName, "", new { @class = "form-control", @placeholder = "Mother Name", @required = "required" })
+
+                                                                                                            </div>
+                                                                                                            @*<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                                    <span><label>Name/(नाम हिन्दी में) <span class="starvalid">*</span></label></span>
+                                                                                                                    @Html.TextBoxFor(model => model.MotherNameInHindi, "", new { @class = "form-control", @placeholder = "Name/(नाम हिन्दी में)", @id = "MotherNameInHindi", @required = "required" })
+
+                                                                                                                </div>*@
+                                                                                                            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Mobile No</label></span>
+                                                                                                                @Html.TextBoxFor(model => model.MotherMobile, new { @class = "form-control", @oninput = "OnlyIntvalue(this);", @Maxlength = "10", @placeholder = "Mother Mobile" })
+
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Email</label></span>
+                                                                                                                @Html.TextBoxFor(model => model.MotherEmail, "", new { @class = "form-control", @placeholder = "Mother Email", @type = "email" })
+
+                                                                                                            </div>
+                                                                                                            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Qualification</label></span>
+
+                                                                                                                @Html.TextBoxFor(model => model.MotherQualification, "", new { @class = "form-control", @placeholder = "Mother Qualification" })
+
+                                                                                                            </div>
+
+                                                                                                        </div>
+                                                                                                        <div class="row">
+
+
+                                                                                                            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                                                                                <span><label>Occupation</label></span>
+                                                                                                                @Html.TextBoxFor(model => model.MotherOccupation, "", new { @class = "form-control", @placeholder = "Mother Occupation" })
+
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <ul id="myTabedu1" class="tab-review-design">
+                                                                                                            <li class="active"><a href="#description">Photo And Signature Details</a></li>
+                                                                                                        </ul>
+                                                                                                        <div class="row">
+
+                                                                                                            <div class="col-md-6">
+                                                                                                                <span><label>Upload Photo</label></span>
+                                                                                                                <div class="row">
+                                                                                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                                                        @if (Model != null)
+                                                                                                                        {
+                                                                                                                            if (Model.stphoto == null)
+                                                                                                                            {
+                                                                                                                                <img id="userImage" height="100px" width="100px" style="border:solid;width:100px !important;height:100px !important" src='~/images/noimage.png' />
+
+                                                                                                                            }
+                                                                                                                            else
+
+                                                                                                                            {
+                                                                                                                                <img id="userImage" height="100px" width="100px" style="border:solid;width:100px !important;height:100px !important" src='@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/College/@Model.stphoto' />
+
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                        else
+                                                                                                                        {
+                                                                                                                            <img id="userImage" height="100px" width="100px" style="border:solid;width:100px !important;height:100px !important" src='~/images/noimage.png' />
+                                                                                                                        }
+                                                                                                                        <div class="file-upload-inner file-upload-inner-right ts-forms">
+                                                                                                                            <div class="input append-big-btn">
+                                                                                                                                <div class="file-button">
+
+                                                                                                                                    Browse
+                                                                                                                                    <input type="file" id="photo" onchange="document.getElementById('append-big-btn').value = this.value; checkphoto();show(this);" name="photo">
+                                                                                                                                </div>
+                                                                                                                                @Html.TextBoxFor(model => model.stphoto, "", new { @class = "form-control", @id = "append-big-btn", @placeholder = "no file selected", @readonly = "readonly" })
+
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <div class="row">
+                                                                                                                    <div class="col-sm-12"><span class="starvalid starvalid1">* Allow File Extension (.jpg,.jpeg,.bmp,.jif,.png) File Size(50 KB Maximum)</span></div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                            <div class="col-md-6">
+                                                                                                                <span><label>Upload Signature</label></span>
+                                                                                                                <div class="row">
+                                                                                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                                                        @if (Model != null)
+                                                                                                                        {
+                                                                                                                            if (Model.stsign == null)
+                                                                                                                            {
+                                                                                                                                <img id="signImage" style="border:solid;width:100px !important;height:100px !important" src='~/images/noimage.png' />
+
+                                                                                                                            }
+                                                                                                                            else
+
+                                                                                                                            {
+                                                                                                                                <img id="signImage" style="border:solid;width:100px !important;height:100px !important" src='@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/College/@Model.stsign' />
+
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                        else
+                                                                                                                        {
+                                                                                                                            <img id="signImage" style="border:solid;width:100px !important;height:100px !important" src='~/images/noimage.png' />
+                                                                                                                        }
+                                                                                                                        <div class="file-upload-inner file-upload-inner-right ts-forms">
+                                                                                                                            <div class="input append-big-btn">
+                                                                                                                                <div class="file-button">
+                                                                                                                                    Browse
+                                                                                                                                    <input type="file" onchange="document.getElementById('append-big-btn2').value = this.value; checksigh(); show1(this)" id="sign" name="sign">
+                                                                                                                                </div>
+                                                                                                                                @*<input type="text" id="append-big-btn2" placeholder="no file selected" readonly="readonly">*@
+                                                                                                                                @Html.TextBoxFor(model => model.stsign, "", new { @class = "form-control", @id = "append-big-btn2", @placeholder = "no file selected", @readonly = "readonly" })
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <div class="row">
+                                                                                                                    <div class="col-sm-12"><span class="starvalid starvalid1">* Allow File Extension (.jpg,.jpeg,.bmp,.jif,.png) File Size(50 KB Maximum)</span></div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                        <div class="row">
+                                                                                                            <div class="col-lg-12">
+                                                                                                                <div class="payment-adress">
+                                                                                                                    <input type="submit" value="Submit" class="btn btn-primary waves-effect waves-light" />
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+
+
+                                                                                                    </div>
+
+
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <script src="~/Content/js/vendor/jquery-1.12.4.min.js"></script>
+
+                            <script>
+                               
+                                //
+                                $(function ()
+                                {
+                                    $("#Gender option").each(function ()
+                                    {
+                                        if ($(this).val() ==((@ViewBag.genderid)))
+                                        {
+                                            $(this).attr('selected', 'selected');
+                                        }
+                                    });
+                                });
+                                $(function ()
+                                {
+                                    $("#CastCategory option").each(function ()
+                                    {
+                                        if ($(this).val() ==((@ViewBag.castid)))
+                                        {
+                                            $(this).attr('selected', 'selected');
+                                        }
+                                    });
+                                });
+
+                                $(function ()
+                                {
+                                    $("#Blood_Group option").each(function ()
+                                    {
+                                        if ($(this).val() ==((@ViewBag.bloodgroupid)))
+                                        {
+                                            $(this).attr('selected', 'selected');
+                                        }
+                                    });
+                                });
+                                $(function ()
+                                {
+                                    $("#title option").each(function ()
+                                    {
+                                        if ($(this).val() ==((@ViewBag.titileid)))
+                                        {
+                                            $(this).attr('selected', 'selected');
+                                        }
+                                    });
+                                });
+                                $(function ()
+                                {
+                                    $("#Ftitle option").each(function ()
+                                    {
+                                        if ($(this).val() ==((@ViewBag.ftitileid)))
+                                        {
+                                            $(this).attr('selected', 'selected');
+                                        }
+                                    });
+                                });
+                                $(function ()
+                                {
+                                    $("#Nationality option").each(function ()
+                                    {
+                                        if ($(this).val() ==((@ViewBag.Nationalityid)))
+                                        {
+                                            $(this).attr('selected', 'selected');
+                                        }
+                                    });
+                                });
+                                $(function ()
+                                {
+                                    $("#Religion option").each(function ()
+                                    {
+                                        if ($(this).val() ==((@ViewBag.Religionid)))
+                                        {
+                                            $(this).attr('selected', 'selected');
+                                        }
+                                    });
+                                });
+                                $(function ()
+                                {
+                                    $("#MotherTongue option").each(function ()
+                                    {
+                                        if ($(this).val() ==((@ViewBag.MotherTongueid)))
+                                        {
+                                            $(this).attr('selected', 'selected');
+                                        }
+                                    });
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+           
+        </div>
+        
+
+
+    </div>
+</div>
+<script>
+    $("#myform").submit(function (e) {
+        showloader();
+    });
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var abc=@Convert.ToInt16(DataLayer.CommonSetting.Religion.OtherReligion);
+
+        if ($('#Religion').val() == abc) {
+            $('#ReligonOther').css('display', 'block');
+            $('#lblrgn').css('display', 'block');
+            $('#txtReligonOther').attr('required', 'required');
+        }
+
+        $('#Religion').change(function () {
+            //debugger;
+            if ($('#Religion').val() == abc) {
+                $('#ReligonOther').css('display', 'block');
+                $('#txtReligonOther').attr('required', 'required');
+                $('#lblrgn').css('display', 'block');
+
+            }
+            else {
+                $('#ReligonOther').css('display', 'none');
+                $('#txtReligonOther').removeAttr('required');
+                $('#lblrgn').css('display', 'none');
+                $('#txtReligonOther').val('');
+            }
+        });
+    });
+</script>
+
+
+

@@ -1,0 +1,361 @@
+﻿@model DataLayer.ExamForm
+@{
+    ViewBag.Title = "clcallot";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+<script>
+    var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+</script>
+        <div class="container-fluid">
+   
+    <div class="">
+        <div class="">
+
+            <div class=" spacedesign ">
+
+                @*<div class="panel panel-default">*@
+
+                @*<div class="panel-body">*@
+                @if (Model != null)
+                {
+
+                    <div class="row ">
+                        <div class="munger_headtitlemit">
+                            <h3>CLC Certificate Issue :- @Model.ApplicationNo </h3>
+                        </div>
+                    </div>
+
+
+                    <div class="spacedesign sparkline12-list">
+                        <div style="width:100%; margin:auto; padding:0; font-size:14px; color:#333; font-family:Arial, Helvetica, sans-serif;padding:20px" id="printreport">
+
+
+                            <div style="">
+
+
+                                <div style="width:100%; margin:auto; padding:0; font-size:14px; color:#333; font-family:Arial, Helvetica, sans-serif;padding:20px" id="printreport">
+
+
+                                    <div style="">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td align="left" valign="top">
+                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                        <tr>
+                                                            <td align="left" valign="top" width="80%" style="padding-right:10px;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td colspan="2" align="left" valign="top">
+                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                                <tr>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0;" width="127">Registration No.</td>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;" width="246">&nbsp;@Model.RegistrationNo</td>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0;" width="47">&nbsp;Year:</td>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0;  border-bottom:1px dotted #000;" width="218">&nbsp;@Model.Registrationyear</td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td colspan="2" align="left" valign="top">
+                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                                <tr>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0;" width="127">Course</td>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;" width="246">&nbsp;@Model.CourseCategory</td>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0;" width="47">&nbsp;Session:</td>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0;  border-bottom:1px dotted #000;" width="218">&nbsp;@Model.SessionName</td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td colspan="2" align="left" valign="top">
+                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                                <tr>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0;" width="127">Roll  No.</td>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;" width="246">&nbsp;@Model.RollNo</td>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0;" width="47">&nbsp;MobileNo:</td>
+                                                                                    <td align="left" valign="top" style="padding:15px 0 0;  border-bottom:1px dotted #000;" width="218">&nbsp;@Model.MobileNo</td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td width="31%" align="left" valign="top" style="padding:15px 0 0;">Name (Block letter)</td>
+                                                                        <td width="69%" align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">@Model.StudentName</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="left" valign="top" style="padding:15px 0 0;"> Date of birth</td>
+                                                                        <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">
+                                                                            &nbsp;@Model.DOB
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="left" valign="top" style="padding:15px 0 0;">@(Model.ftitle.ToString() == "20" ? " Father's " : (Model.ftitle.ToString() == "21" ? "  Husband's  " : " Father's "))  Name</td>
+                                                                        <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.FatherName.ToString()</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="left" valign="top" style="padding:15px 0 0;"> Mother's Name</td>
+                                                                        <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.MotherName.ToString()</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td width="31%" align="left" valign="top" style="padding:15px 0 0;">Name of the College </td>
+                                                                        <td width="69%" align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">@Model.CollegeName.ToString()</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td width="31%" align="left" valign="top" style="padding:15px 0 0;">Honours Subject</td>
+                                                                        <td width="69%" align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">@Model.HonoursSubject</td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td align="right" valign="top" width="20%">
+                                                                <div style="border:1px solid #333; width:110px; max-height:110px; padding:5px;margin:auto;"><img src="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Photoandsign/@Model.photo" width="110" height="110" style="max-height:100px"> </div>
+                                                                <div style="border:1px solid #333;width:110px;padding:5px;margin:5px auto;">
+                                                                    <img src="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Photoandsign/@Model.sign" style="max-width:100%;">
+                                                                </div>
+
+                                                            </td>
+
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" align="left" valign="top">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td align="left" valign="top" style="padding:15px 0 0;" width="93"> Nationality:</td>
+                                                                        <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;" width="130">&nbsp;@Model.Nationality</td>
+                                                                        <td align="left" valign="top" style="padding:15px 0 0;" width="66">&nbsp;Religion:</td>
+                                                                        <td align="left" valign="top" style="padding:15px 0 0;  border-bottom:1px dotted #000;" width="182">&nbsp;@Model.Religion</td>
+                                                                        <td align="left" valign="top" style="padding:15px 0 0;" width="76">&nbsp;Category:</td>
+                                                                        <td align="left" valign="top" style="padding:15px 0 0;  border-bottom:1px dotted #000;" width="190">&nbsp;@Model.castecategoryname</td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" align="left" valign="top" style="padding:15px 0 0;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td width="10%" rowspan="10" align="left" valign="top" style="padding:15px 0 0;"> Address:</td>
+                                                                        <td width="90%" align="left" valign="top">
+                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                                <tr>
+                                                                                    <td width="20%" align="left" valign="top" style="padding:15px 0 0;">(a) Permanent</td>
+                                                                                    <td width="80%" align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.permanentAddress</td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+
+
+
+                                                                    <tr>
+                                                                        <td align="left" valign="top">
+                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                                <tr>
+                                                                                    <td width="20%" align="left" valign="top" style="padding:15px 0 0;">(b) Correspondence </td>
+                                                                                    <td width="80%" align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.CurrentAddress</td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="top" style="padding:0px 0 10px; font-weight:bold;">&nbsp;</td>
+                                                            <td align="left" valign="top">&nbsp;</td>
+                                                        </tr>
+                                                        @if (Model.coursecategoryid == 1 || Model.coursecategoryid == 2 || Model.coursecategoryid == 3) { 
+                                                        <tr>
+                                                            <td colspan="2" align="left" valign="top">
+                                                                <table style="border-spacing:0;width:100%;">
+                                                                    <thead>
+                                                                    <th colspan="3" style="border:1px solid grey;border-bottom:none;padding:5px;background:#404040;color:#fff;font-size:16px;font-weight:500;">Subject Details</th>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border:1px solid #333;">
+                                                                                <tr>
+                                                                                    <th align="center" valign="middle" style="padding:5px; border-bottom:1px solid #333; border-right:1px solid #333;">Honours</th>
+                                                                                    <th align="center" valign="middle" style="padding:5px; border-bottom:1px solid #333; border-right:1px solid #333;">Subsidiary - I</th>
+                                                                                    <th align="center" valign="middle" style="padding:5px; border-bottom:1px solid #333; border-right:1px solid #333;">Subsidiary - II</th>
+                                                                                    <th align="center" valign="middle" style="padding:5px; border-bottom:1px solid #333;">Composition</th>
+                                                                                </tr>
+                                                                                
+
+                                                                                    <tr>
+                                                                                        <td align="center" valign="middle" style="padding:5px; border-right:1px solid #333; min-height:50px;">@Model.HonoursSubject</td>
+                                                                                        <td align="center" valign="middle" style="padding:5px; border-right:1px solid #333;">@Model.Subsidiary1Subject</td>
+                                                                                        <td align="center" valign="middle" style="padding:5px; border-right:1px solid #333;">@Model.Subsidiary2Subject</td>
+                                                                                        <td align="center" valign="middle">@Model.Compulsory1Subject<br />@Model.Compulsory2Subject</td>
+                                                                                    </tr>
+
+                                                                                
+
+                                                                            </table>
+
+                                                                        </tr>
+
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        }
+                                                        <tr>
+                                                            <td align="left" valign="top" style="padding:0px 0 10px; font-weight:bold;">&nbsp;</td>
+                                                            <td align="left" valign="top">&nbsp;</td>
+                                                        </tr>
+                                                        @if (Model.allotid > 0)
+                                                        {
+                                                            <tr>
+                                                                <td align="left" valign="top" style="padding:0px 0 10px; font-weight:bold;" colspan="2">
+                                                                    <table style="border-spacing:0;width:100%;">
+                                                                        <tr>
+                                                                            <td align="left" valign="top" style="padding:0px 0 10px; font-weight:bold;">Status : Already Alloted</td>
+                                                                            <td align="left" valign="top">Date :@Model.allotdate </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td align="left" valign="top" style="padding:0px 0 10px; font-weight:bold;">Allot/Serial No :@Model.allotno </td>
+                                                                            <td align="left" valign="top">Remarks  :@Model.remarks </td>
+                                                                        </tr>
+                                                                    </table>
+
+                                                                </td>
+
+                                                            </tr>
+                                                       
+                                                        }
+                                                        else
+                                                        {
+                                                            
+                                                            <tr>
+                                                                <td align="left" valign="top" style="padding:0px 0 10px; font-weight:bold;" colspan="2">
+                                                                    <table style="border-spacing:0;width:100%;">
+                                                                        <tr>
+                                                                            <td align="left" valign="top" style="padding:0px 0 10px; font-weight:bold;width:40%"> Allot / Serial No :  </td>
+                                                                            <td align="left" valign="top"><input type="text" class="form-control" id="SerialNo" /></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td align="left" valign="top" style="padding:0px 0 10px; font-weight:bold;">&nbsp;</td>
+                                                                            <td align="left" valign="top">&nbsp;</td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td align="left" valign="top" style="padding:0px 0 10px; font-weight:bold;width:40%">Remarks:  </td>
+                                                                            <td align="left" valign="top"><input type="text" class="form-control" id="Remarks" /></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td align="left" valign="top" style="padding:0px 0 10px; font-weight:bold;">&nbsp;</td>
+                                                                            <td align="left" valign="top">&nbsp;</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td align="left" valign="top" style="padding:0px 0 10px; font-weight:bold;">  </td>
+                                                                            <td align="left" valign="top"><input type="button" class="btn btn-primary" id="allotsave" value="Save" /></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                           
+                                                                </td>
+                                                            
+                                                            </tr>
+                                                            
+                                                        }
+                                                        <tr>
+                                                            <td align="left" valign="top">
+                                                                &nbsp;
+                                                            </td>
+                                                        </tr>
+
+
+
+
+
+
+
+
+
+
+                                                        <tr>
+                                                            <td colspan="2" align="left" valign="top">&nbsp;</td>
+                                                        </tr>
+
+                                                    </table>
+                                                </td>
+                                            </tr>
+
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+                      
+                    </div>
+                }
+              
+
+             
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+
+    $(function () {
+        $(function () {
+            $("#allotsave").click(function () {
+                var SerialNo = $('#SerialNo').val();
+                var Remarks = $('#Remarks').val();
+                if (SerialNo == "")
+                {
+                    alert('Please Enter SerialNo/Allot no !!!!');
+                    return;
+                }
+                if (Remarks == "") {
+                    alert('Please Enter Remarks !!!!');
+                    return;
+                }
+                Remarks
+                showloader();
+                $.ajax({
+                    url: "/College/Home/SaveCertificateclc/",
+                    data: { SerialNo: SerialNo, id: '@ViewBag.id', Remarks: Remarks },
+                    cache: false,
+                    type: "POST",
+                    dataType: "json",
+                    headers: { 'Authorization': 'Basic ' + btoa(username + ':' + password) },
+                    success: function (data) {
+                        console.log(data);
+
+                        if (data.Status) {
+                           /// hideloader();
+                            alert('Save Successfully !!!!');
+                            window.location.reload();
+                        }
+                        else {
+                            hideloader();
+                            alert(data.Msg);
+
+                        }
+                    },
+                    error: function (data) {
+
+                        hideloader();
+                        alert('error!!!!');
+
+                    }
+                });
+
+            });
+        });
+    });
+</script>
+        </div>

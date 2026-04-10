@@ -1,0 +1,231 @@
+﻿
+@{
+    ViewBag.Title = "VerifyLeave";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+
+<style>
+    .right {
+        text-align: right;
+    }
+
+    .left {
+        text-align: left;
+    }
+     .spaceDesign{
+        padding-bottom:20px;
+        padding-left:30px;
+        padding-right:30px;
+    }
+</style>
+<script>
+    var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+</script>
+
+<script src="~/scripts/Customjs/VerifyLeave.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<div class="container-fluid">
+    <div class="row ">
+        <div class="container-fluid">
+            @if (ViewBag.CollegeName != "")
+            {
+                <h3 class="text-center" style="padding-bottom:20px;">Employee Leave List of @ViewBag.CollegeName  </h3>
+            }
+
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="container-fluid">
+            <div ng-app="leavependinglistApp" ng-controller="leavependinglistCtrl" class="sparkline-list">
+
+
+                <div class="row spaceDesign" >
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <span><label>Select Month:</label></span>
+                        @Html.DropDownList("Month", new SelectList(ViewBag.Month, "Value", "Text", ViewBag.CuMonth), new { @class = "form-control", @name = "Month", @ng_Model = "Month" })
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <span><label>Select Year:</label></span>
+                        @Html.DropDownList("Year", new SelectList(ViewBag.Year, "Value", "Text", ViewBag.CuYear), new { @class = "form-control", @id = "Year", @ng_Model = "Year" })
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <span><label>Employee Name:</label></span>
+                        <input type="text" ng-model="Name" class="form-control" placeholder="Name " name="Name" />
+                    </div>
+                </div>
+                <div class="row spaceDesign">
+                    @*<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="form-group  page-size form-inline">
+                        </div>*@
+                        @*<div class="col-md-3">
+                            <label>Leave Status:</label>
+                        </div>*@
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <span><label>Leave Status:</label></span>
+                        <select id="LeaveStatus" class="form-control control-color"
+                                ng-model="LeaveStatus"
+                                name="LeaveStatus">
+                            <option value="3">--Select All--</option>
+                            <option value="1">Approved</option>
+                            <option value="0">Pending</option>
+                            <option value="2">Reject</option>
+                        </select>
+                    </div>
+
+                        @*</div>*@
+                        <div class="col-md-6 right">
+
+                            <button ng-click="GetFilterUsers(Name)" class="btn btn-primary waves-effect waves-light" type="button">Search</button>
+
+                        </div>
+
+                    </div>
+                <div class="row spaceDesign" >
+                    <div class="col-md-6 left ">
+                        &nbsp;
+                    </div>
+                        
+                    </div>
+                    <div class="row ">
+
+                        <div class="col-md-6 left ">
+                            <b>
+                                Total Record(s) : | &nbsp;&nbsp;<spam style="border: 1px solid #bfc5cb;  padding: 7px; border-radius: 50%;">{{totalCount}}</spam>&nbsp;&nbsp;
+                            </b>
+                            <span class="form-group  page-size form-inline">
+                                <select id="ddlPageSize" class="form-control control-color"
+                                        ng-model="pageSizeSelected"
+                                        ng-change="changePageSize()">
+                                    <option value="1">1</option>
+                                    <option value="10">10</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="200">200</option>
+                                    <option value="500">500</option>
+                                </select>
+
+                            </span>
+                            <a class="btn btn-primary waves-effect waves-light">Page: {{pageIndex}} / {{numPages}}</a>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel-body">
+                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer table-responsive">
+                            <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed dataTable ">
+                                <thead>
+                                    <tr role="row">
+                                        <th width="50px">S. No.</th>
+                                        <th ng-click="sortBy('employeeCode')">
+                                            Employee ID
+                                            <span class="sortorder" ng-show="propertyName === 'employeeCode'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('name')">
+                                            Name
+                                            <span class="sortorder" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('fromdate')">
+                                            From
+                                            <span class="sortorder" ng-show="propertyName === 'userName'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('todate')">
+                                            To
+                                            <span class="sortorder" ng-show="propertyName === 'todate'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+
+                                        <th ng-click="sortBy('day')">
+                                            Days
+                                            <span class="sortorder" ng-show="propertyName === 'day'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('halfdaytime')">
+                                            HalfDay Timing
+                                            <span class="sortorder" ng-show="propertyName === 'halfdaytime'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+
+                                        <th ng-click="sortBy('leaveName')">
+                                            Leave Type
+                                            <span class="sortorder" ng-show="propertyName === 'leaveName'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('subject')">
+                                            Subject
+                                            <span class="sortorder" ng-show="propertyName === 'subject'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('reason')">
+                                            Message
+                                            <span class="sortorder" ng-show="email === 'reason'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('leaveStatus')">
+                                            Status
+                                            <span class="sortorder" ng-show="propertyName === 'leaveStatus'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr ng-repeat="leave in qlist | filter:search  | orderBy:propertyName:reverse">
+                                        <td>{{ ((pageIndex-1)*pageSizeSelected)+$index+1 }}</td>
+                                        <td>{{leave.employeeCode}}</td>
+                                        <td>{{leave.name}}</td>
+                                        <td>{{leave.fromdate}}</td>
+                                        <td>{{leave.todate}}</td>
+                                        <td>{{leave.day}}</td>
+                                        <td>{{leave.halfdaytime}}</td>
+                                        <td>{{leave.leaveName}}</td>
+                                        <td>{{leave.subject}}</td>
+                                        <td>{{leave.reason}}</td>
+                                        <td ng-if="leave.leaveStatus==0">
+                                            <a class="btn btn-sm btn-primary myBtn login-submit-cs" href="/College/Home/PendingLeaveDetail/{{leave.encriptedID}}"  style="padding:1px 4px 1px 6px;color:white">Pending</a>
+                                        </td>
+                                        <td ng-if="leave.leaveStatus==1">
+                                            <div class="check-icon text-success">Approved</div>
+                                        </td>
+                                        <td ng-if="leave.leaveStatus==2">
+                                            <div class="check-icon text-danger">Rejected</div>
+                                        </td>
+
+                                    </tr>
+
+
+                                </tbody>
+                                <tfoot>
+                                    <tr ng-show="(qlist |filter:search).length == 0">
+                                        <td colspan="6" style="text-align:center">
+                                            <h4 style="color:red;"> </h4>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" colspan="14">
+
+                                            <div class="pull-left" ng-show="(qlist |filter:search).length > 0">
+                                                <div ng-show="numPages > 1">
+
+
+                                                    <pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected"
+                                                                direction-links="true" ng-model="pageIndex"
+                                                                max-size="maxSize" class="pagination" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+                                                </div>
+
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+        </div>
+    </div>
+
+
+</div>
+

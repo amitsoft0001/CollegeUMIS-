@@ -1,0 +1,174 @@
+﻿@model DataLayer.BL_DasbordAdminList
+@{
+    ViewBag.Title = "Admission Report";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+<style>
+    table tr th {
+        border-right: 1px solid #666;
+        border-bottom: 1px solid #666;
+        padding: 10px;
+        background-color: #eee;
+    }
+
+    table tr td {
+        border-right: 1px solid #666;
+        border-bottom: 1px solid #666;
+        padding: 5px;
+    }
+
+    .admission-subjects .table {
+        border: 1px solid #666 !important;
+    }
+
+    .admission-subjects .table2 {
+        border: 0 !important;
+    }
+
+        .admission-subjects .table th, .admission-subjects .table2 th {
+            border-top: 1px solid #666 !important;
+            font-size: 12px;
+            background-color: lightgreen;
+            color: #000;
+        }
+
+        .admission-subjects .table2 th {
+            border-top: 0 !important;
+        }
+
+        .admission-subjects .table td, .admission-subjects .table2 td {
+            font-size: 11px;
+            font-weight: normal;
+        }
+
+    .center {
+        text-align: center;
+    }
+</style>
+<script>
+    $("#Sessionid").submit(function (e) {
+        showloader();
+    });
+</script>
+<div class="container-fluid admission-subjects">
+    <div style="min-height:500px;">
+        <div class="col-lg-12 col-sm-12 col-xs-12 ">
+            <div class="sparkline8-list">
+                @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "myform", enctype = "multipart/form-data" }))
+                {
+                    <h2 class="text-center">
+                        <center>
+                            <table width="500">
+                                <tr style="border-bottom:0">
+                                    <td style="border-bottom:0;border-right:0"><span> Admission Status</span></td>
+                                    <td style="border-bottom:0;border-right:0">
+                                        <span>
+                                            @Html.DropDownList("Sessionid", new SelectList(ViewBag.sessionlist, "id", "year", @ViewBag.sessionid), "Select Session..", new { @class = "form-control", @id = "Sessionid", @width = "100", onchange = "document.forms[0].submit(); showloader();" })
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </center>
+                    </h2>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:0 15px; margin:auto;">
+                        @{ int CollegeID = Model.qlist.Select(x => x.collegeid).FirstOrDefault();}
+                        <tr>
+
+                            <td colspan="2" style="border:0;">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table">
+                                    <tr>
+                                        <th style="font-weight:bold" class="center">Stream</th>
+                                        <th style="" class="center">Total Admission</th>
+                                    </tr>                                                                  
+                                    @if (CollegeID == Convert.ToInt32(DataLayer.CommonSetting.CollegeID.LLBC))
+                                    {
+                                        <tr>
+                                            <td style="font-weight:bold" class="center">L.L.B</td>
+                                            <td style="" class="center">@Model.qlist.Where(x => x.coursecategoryid == 29).Sum(x => x.TotalAdmission)</td>
+                                        </tr>
+                                    }
+                                     else if (CollegeID == Convert.ToInt32(DataLayer.CommonSetting.CollegeID.BEdJ) || CollegeID == Convert.ToInt32(DataLayer.CommonSetting.CollegeID.BEdK) || CollegeID == Convert.ToInt32(DataLayer.CommonSetting.CollegeID.BEdM) || CollegeID == Convert.ToInt32(DataLayer.CommonSetting.CollegeID.BEdR) || CollegeID == Convert.ToInt32(DataLayer.CommonSetting.CollegeID.BEdS))
+                                    {
+                                        <tr>
+                                            <td style="font-weight:bold" class="center">B.Ed</td>
+                                            <td style="" class="center">@Model.qlist.Where(x => x.coursecategoryid == 28).Sum(x => x.TotalAdmission)</td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td style="font-weight:bold" class="center">Art(B.A.)</td>
+                                            <td style="" class="center">@Model.qlist.Where(x => x.coursecategoryid == 1).Sum(x => x.TotalAdmission)</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight:bold" class="center">Science(B.Sc.)</td>
+                                            <td style="" class="center">@Model.qlist.Where(x => x.coursecategoryid == 2).Sum(x => x.TotalAdmission)</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight:bold" class="center">Commerce(B.Comm)</td>
+                                            <td style="" class="center">@Model.qlist.Where(x => x.coursecategoryid == 3).Sum(x => x.TotalAdmission)</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight:bold" class="center">B.C.A</td>
+                                            <td style="" class="center">@Model.qlist.Where(x => x.coursecategoryid == 26).Sum(x => x.TotalAdmission)</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight:bold" class="center">B.B.A</td>
+                                            <td style="" class="center">@Model.qlist.Where(x => x.coursecategoryid == 27).Sum(x => x.TotalAdmission)</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight:bold" class="center">Bio. Technology</td>
+                                            <td style="" class="center">@Model.qlist.Where(x => x.coursecategoryid == 30).Sum(x => x.TotalAdmission)</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight:bold" class="center">Art(M.A.)</td>
+                                            <td style="" class="center">@Model.qlist.Where(x => x.coursecategoryid == 7).Sum(x => x.TotalAdmission)</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight:bold" class="center">Science(M.Sc.)</td>
+                                            <td style="" class="center">@Model.qlist.Where(x => x.coursecategoryid == 11).Sum(x => x.TotalAdmission)</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight:bold" class="center">Commerce(M.Comm)</td>
+                                            <td style="" class="center">@Model.qlist.Where(x => x.coursecategoryid == 9).Sum(x => x.TotalAdmission)</td>
+                                        </tr>
+                                    }
+
+                                    <tr style="">
+                                        <td style="font-weight:bold" class="center">Total</td>
+                                        <td style="font-weight:bold" class="center">
+                                            @(Model.qlist.Where(x => x.coursecategoryid == 1).Sum(x => x.TotalAdmission)
+                                                + Model.qlist.Where(x => x.coursecategoryid == 2).Sum(x => x.TotalAdmission) + Model.qlist.Where(x => x.coursecategoryid == 3).Sum(x => x.TotalAdmission)
+                                                + Model.qlist.Where(x => x.coursecategoryid == 26).Sum(x => x.TotalAdmission)
+                                                + +Model.qlist.Where(x => x.coursecategoryid == 27).Sum(x => x.TotalAdmission)
+                                                + Model.qlist.Where(x => x.coursecategoryid == 11).Sum(x => x.TotalAdmission)
+                                                + Model.qlist.Where(x => x.coursecategoryid == 9).Sum(x => x.TotalAdmission)
+                                                + Model.qlist.Where(x => x.coursecategoryid == 7).Sum(x => x.TotalAdmission)
+                                                + Model.qlist.Where(x => x.coursecategoryid == 29).Sum(x => x.TotalAdmission)
+                                                + Model.qlist.Where(x => x.coursecategoryid == 28).Sum(x => x.TotalAdmission)
+                                            )
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                    <br /><br /><br />
+                            }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function ()
+    {
+        $("#sessionid option").each(function ()
+        {
+            if ($(this).val() ==((@ViewBag.sessionid)))
+            {
+                $(this).attr('selected', 'selected');
+            }
+        });
+    });
+</script>

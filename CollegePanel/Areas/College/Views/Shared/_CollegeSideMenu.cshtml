@@ -1,0 +1,95 @@
+﻿@model IEnumerable<DataLayer.College_MenuMaster>
+@{var menuitem = Model; }
+<div class="left-custom-menu-adp-wrap comment-scrollbar">
+
+    <nav class="sidebar-nav left-sidebar-menu-pro">
+        <ul class="metismenu" id="menu1">
+            @foreach (var item in menuitem.Where(s => s.ParentID == 0 && s.MenuID != 0).OrderBy(obj => obj.orderposition).ToList())
+            {
+
+                var check11 = menuitem.Where(s => s.ParentID == item.MenuID).OrderBy(obj => obj.orderposition).ToList();
+
+                <li>
+                    @if (check11.Count == 0)
+                    {
+                        <a title="@item.MenuName" href="~/College/@item.controllername/@item.viewnamename">
+                            <i class="fa @item.class1" aria-hidden="true"><span class="mini-sub-pro">&nbsp;@item.MenuName</span></i>
+                        </a>
+                    }
+                    else
+                    {
+
+                    <a class="has-arrow" href="#">
+
+                        <i class="fa @item.class1" aria-hidden="true"></i>
+                        <span class="mini-click-non">@item.MenuName</span>
+                    </a>
+                    
+                    <ul class="submenu-angle" aria-expanded="true">
+                        @foreach (var firstItem in (menuitem.Where(s => s.ParentID == item.MenuID).OrderBy(obj => obj.orderposition).ToList()))
+                        {
+                            var check = menuitem.Where(s => s.ParentID == firstItem.MenuID).OrderBy(obj => obj.orderposition).ToList();
+                            if (check.Count == 0)
+                            {
+                                <li>
+                                    <a title="@firstItem.MenuName" href="~/College/@firstItem.controllername/@firstItem.viewnamename">
+                                    <i class="fa @firstItem.class1" aria-hidden="true"><span class="mini-sub-pro">&nbsp;@firstItem.MenuName</span></i>
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="inner-drop">
+                                    <a title="Analytics" href="#" class="has-arrow"><span class="mini-click-non"><i class="fa @firstItem.class1" aria-hidden="true">&nbsp;@firstItem.MenuName</i></span></a>
+
+                                    <ul class="inner-drop list-unstyled ">
+                                        @foreach (var secondItem in (menuitem.Where(s => s.ParentID == firstItem.MenuID).OrderBy(obj => obj.orderposition).ToList()))
+                                            {
+                                    <li><a title="@secondItem.MenuName" href="~/College/@secondItem.controllername/@secondItem.viewnamename"><i class="fa @secondItem.class1" aria-hidden="true"><span>&nbsp;@secondItem.MenuName</span></i></a></li>
+                                            }
+                                    </ul>
+
+                                </li>
+                            }
+                        }
+                    </ul>
+                    }
+                </li>
+
+            }
+            <li>
+                <a class="has-arrow" href="#">
+
+                    <i class="fa fa-inbox" aria-hidden="true"></i>
+                    <span class="mini-click-non">Leave</span>
+                </a>
+                <ul class="submenu-angle" aria-expanded="true">
+                    <li class="inner-drop">
+                        <a title="Apply Leave" href="~/College/Home/ApplyLeave" class="has-arrow"><span class="mini-click-non"><i class="fa fa-angle-double-right" aria-hidden="true">&nbsp;Apply Leave</i></span></a>
+                    </li>
+                    <li class="inner-drop">
+                        <a title="Leave Status" href="~/College/Home/CheckLeaveStatus" class="has-arrow"><span class="mini-click-non"><i class="fa fa-angle-double-right" aria-hidden="true">&nbsp;Leave Status</i></span></a>
+                    </li>
+                </ul>
+            </li>
+            @*<li>
+                    <a class="has-arrow" href="#">
+                        <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+                        <span class="mini-click-non">Student Attendance</span>
+                    </a>
+                    <ul class="submenu-angle" aria-expanded="true">
+                        <li>
+                            <a title="Add Student Attendance" href="~/College/Home/AddStudentAttendance"><i class="fa fa-angle-double-right" aria-hidden="true"><span class="mini-sub-pro">&nbsp;Add</span></i></a>
+                        </li>
+                        <li>
+                            <a title="Student Attendance Detail" href="~/College/Home/StudentAttendanceDetail"><i class="fa fa-angle-double-right" aria-hidden="true"><span class="mini-sub-pro">&nbsp;Detail</span></i></a>
+                        </li>
+                    </ul>
+                </li>*@
+
+        </ul>
+
+
+
+    </nav>
+</div>

@@ -1,0 +1,456 @@
+﻿@model DataLayer.StudentAttendanceAdd
+@{
+    ViewBag.Title = "StudentAttendancePercentageReport";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#Table1 > tbody > tr').each(function (index) {
+            if ($(this).children('td:nth-child(1)').text() == "P") {
+                $(this).children('td:nth-child(1)').css("background-color", "#33CC99");
+            } else {
+                $(this).children('td:nth-child(1)').css("background-color", "#FFCC99");
+            }
+        });
+    });
+</script>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-sm-12 col-xs-12">
+            @if (TempData["StMessage"] != null)
+            {
+                <div class="text-center" style="">
+                    <div class="alert-wrap1 shadow-inner wrap-alert-b">
+                        <div class="alert alert-success " role="alert" style="text-align:center !important">
+                            <div>@TempData["StMessage"]</div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (TempData["StError"] != null)
+            {
+                <div class="text-center" style="">
+                    <div class="alert-wrap1 shadow-inner wrap-alert-b">
+                        <div class="alert alert-warning " role="alert" style="text-align:center !important">
+                            <div class="text-danger">@TempData["StError"]</div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-sm-12 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading"> <i class="fa fa-search fa-fw"></i>Search</div>
+                <div class="panel-body">
+                    <div class="form-group-inner">
+                        @using (Html.BeginForm("StudentAttendancePercentageReport", "Home", FormMethod.Post, new { @class = "form-horizontal" }))
+                        {
+                            <div class="row">
+                                @Html.HiddenFor(model => model.SessionID)
+                                @Html.HiddenFor(model => model.CollegeID)
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                    <label class="fontnew "><strong>Admission Year<span class="starvalid">*</span></strong></label>
+                                    @Html.DropDownListFor(model => model.Year, new System.Web.Mvc.SelectList(ViewBag.Session, "ID", "Session"), "--Select Session--", new { @class = "form-control", @required = "required", @oninput = "OnlyIntvalue(this);" })
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                    <label class="fontnew "><strong>Education Type<span class="starvalid">*</span></strong></label>
+                                    @Html.DropDownListFor(model => model.EduTypeID, (List<SelectListItem>)ViewBag.EducationType, "--Select--", new { @class = "form-control", @id = "EduTypeID" })
+                                    @*  @Html.DropDownListFor(model => model.EduTypeID, new System.Web.Mvc.SelectList(Model.EduTypeList, "Value", "Text", @ViewBag.EduTypeID), new { @class = "form-control", @required = "required" })*@
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                    <label class="fontnew "><strong>Course Category Type<span class="starvalid">*</span></strong></label>
+                                    @Html.DropDownListFor(model => model.CourseCategoryID, new System.Web.Mvc.SelectList(Model.CourseCategoryList, "Value", "Text", @ViewBag.course), new { @class = "form-control", @required = "required" })
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                    <label class="fontnew "><strong>Course Year <span class="starvalid">*</span></strong></label>
+                                    @Html.DropDownListFor(model => model.StudentYear, new SelectList(ViewBag.CourseYear, "ID", "YearName"), new { @class = "form-control", @id = "CourseYearID" })
+
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                    <label class="fontnew "><strong>Subject <span class="starvalid">*</span></strong></label>
+                                    @Html.DropDownListFor(model => model.SubjectID, new System.Web.Mvc.SelectList(Model.SubjectList, "Value", "Text"), new { @class = "form-control", @required = "required" })
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                    <label class="fontnew "><strong>Less than Percentage</strong></label>
+                                    @Html.TextBoxFor(model => model.PercentageSearch, "100", new { @class = "form-control", @placeholder = "Less than Percentage", @oninput = "OnlyIntvalue(this);" })
+                                </div>
+                                <div class="clearfix"></div>
+
+
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                    <div class="login-btn-inner">
+                                        <div class="login-horizental cancel-wp pull-left form-bc-ele">
+                                            <br />
+                                            <input type="submit" id="submit" value="Submit" class="btn btn-sm btn-primary login-submit-cs" />
+                                            <button class="btn btn-primary" type="button" onclick="resetapplication()">Reset</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-sm-12 col-xs-12">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <i class="fa fa-list fa-fw"></i>
+                    Student Attendance Percentage Report
+                    <div style="display:inline-block; float:right">
+                        <span>
+                            <label style="background:#e91e1e;padding: 5px;"></label>
+                            <label style="padding: 10px;">Less than @ViewBag.AttendancePercentage % Attendance</label>
+                        </span>
+                    </div>
+                </div>
+                @if (Model.AttendanceReport.Count > 0)
+                {
+                    <div class="panel-body" id="hide">
+                        <div id="grid">
+                            <div class="grid">
+                                <table id="divtbl" width="100%" cellspacing="0" cellpadding="0" align="center" style="background:#f9f9f9;margin:0 auto;padding:0;font-family:Arial;font-size:12px;">
+                                    <tbody>
+                                        <tr style="border:0 none">
+                                            <td style="border:0 none">
+                                                <table style="width:100%;background:#fff" class="m_2359723360084852473tblclass m_2359723360084852473303headerdefault">
+                                                    <tbody>
+                                                        <tr style="border:0 none">
+                                                            <td style="border:0 none">
+                                                                <table align="center" style="background-color:#fff;width:100%;border-collapse:collapse;font-family:Arial;font-size:12px">
+                                                                    <tbody style="vertical-align:top">
+                                                                        <tr style="border:0 none">
+                                                                            <td style="width:90%;border:0 none">
+                                                                                <table align="center" style="width:90%;border-collapse:collapse">
+                                                                                    <tbody>
+                                                                                        <tr style="border:0 none">
+                                                                                            <td colspan="3" style="height:20px;border:0 none"></td>
+                                                                                        </tr>
+                                                                                        <tr style="border:0 none">
+
+
+                                                                                            <td style="width:100%;border:0 none; text-align: center;">
+                                                                                                <table style="width:100%;border-collapse:collapse;letter-spacing:0.5px">
+                                                                                                    <tbody>
+                                                                                                        <tr style="border:0 none">
+                                                                                                            <td style="color:#000;font-family:Arial;font-size:14px;text-align:center;border:0 none; font-weight:bold; padding-bottom:5px;" colspan="2"><h2 style="margin:0px; text-transform:uppercase;">@DataLayer.ClsLanguage.GetCookies("NBCollegeName")-(@ViewBag.SessionName)</h2> </td>
+                                                                                                        </tr>
+                                                                                                        <tr style="border:0 none">
+                                                                                                            <td style="color:#000;font-family:Arial;font-size:12px;text-align:center;border:0 none; font-weight:bold; padding-bottom:5px;" colspan="2"><h4 style="margin:0px; text-transform:uppercase;">Course  : @ViewBag.coursname</h4> </td>
+                                                                                                        </tr>
+                                                                                                        <tr style="border:0 none">
+                                                                                                            <td style="color:#000;font-family:Arial;font-size:12px;text-align:center;border:0 none; font-weight:bold; padding-bottom:5px;" colspan="2"><h4 style="margin:0px; text-transform:uppercase;">Subject : @ViewBag.streamCategory</h4> </td>
+                                                                                                        </tr>
+                                                                                                    </tbody>
+                                                                                                </table>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                                <table align="center" style="width:90%;border-collapse:collapse;font-size:11px;text-transform:uppercase;letter-spacing:0.5px; ">
+                                                                                    <tbody>
+                                                                                        <tr style="border:0 none">
+                                                                                            <td style="height:20px;border:0 none"></td>
+                                                                                        </tr>
+
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class='table table - responsive' style="width:100%; font-size: 13px;">
+                                    <tr style="background-color:#e8e8e8;color:#333; text-align:left;"> <th>S.No</th> <th>RollNo</th> <th>Name</th><th>Percentage</th></tr>
+                                    @{ int rowNo = 0; }
+                                    @foreach (var item in Model.AttendanceReport)
+                                    {
+                                        <tr style=" text-transform: uppercase; color:@( Convert.ToDecimal(item.Percentage) <  @ViewBag.AttendancePercentage ? "#fff":"#000"); background-color:@(Convert.ToDecimal(item.Percentage) <  @ViewBag.AttendancePercentage  ? "#e91e1e" : "#fff")">
+                                            <td>  @(rowNo += 1) </td>
+                                            <td>
+                                                @item.RollNo.ToString()
+                                            </td>
+                                            <td>
+                                                @item.Name
+                                            </td>
+                                            <td>
+                                                @item.Percentage
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </table>
+                            </div>
+                        </div>
+                        <input type='button' id='btnPrint' class="btn btn-sm btn-primary login-submit-cs" value='Print'>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function resetapplication() {
+        $("#EduTypeID").val("");
+        $("#CourseCategoryID").val("");
+        $("#Month").val("");
+        $("#Year").val("");
+        $("#SubjectID").val("");
+        $("#PercentageSearch").val("");
+        $("#hide").hide("fast");
+    }
+    $(function () {
+        $("#btnPrint").click(function () {
+            var contents = $("#grid").html();
+            console.log(contents);
+            var frame1 = $('<iframe />');
+            frame1[0].name = "frame1";
+            frame1.css({ "position": "absolute", "top": "-1000000px" });
+            $("body").append(frame1);
+            var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+            frameDoc.document.open();
+            //Create a new HTML document.
+            frameDoc.document.write('<html><head><title>.</title>');
+            frameDoc.document.write('</head><body>');
+            //Append the external CSS file.
+            frameDoc.document.write('<link href="style.css" rel="stylesheet" type="text/css" />');
+            //Append the DIV contents.
+            frameDoc.document.write(contents);
+            frameDoc.document.write('</body></html>');
+            frameDoc.document.close();
+            setTimeout(function () {
+                window.frames["frame1"].focus();
+                window.frames["frame1"].print();
+                frame1.remove();
+            }, 500);
+        });
+    });
+</script>
+
+
+<script>
+
+
+
+    function TableRow() {
+        $("#Table1 tbody tr td").each(function (i, row) {
+            debugger;
+            var $actualRow = $(row);
+            if ($actualRow.find('input[name=holiday]').val() == 'N/A') {
+                $actualRow.css('background-color', '#00FF00');
+            }
+            if ($actualRow.find('input[name=day]').val() == 'Sunday') {
+                $actualRow.css('background-color', '#FFFF00');
+            }
+        });
+    }
+    $(document).ready(function () {
+        TableRow();
+    });
+</script>
+<script>
+    $(document).on('click', '#submit', function () {
+        if ($("#EduTypeID").val() == '')
+        {
+            alert('Education Type is requried');
+            return;
+        }
+        if ($("#CourseCategoryID").val() == '') {
+            alert('Course is requried');
+            return;
+        }
+        if ($("#SubjectID").val() == '') {
+            alert('Subject is requried');
+            return;
+        }
+        if ($("#Year").val() == '') {
+            alert('Year is requried');
+            return;
+        }
+        if ($("#Month").val() == '') {
+            alert('Month is requried');
+            return;
+        }
+        showloader();
+        $("#hide").show("fast");
+    });
+
+    $(document).on('click', '#btnSubmit', function () {
+        var month = $("#Month").val();
+        var year = $("#Year").val();
+        var subid = $("#SubjectID").val();
+        var stuid = $("#StudentID").val();
+        var EmpId = $("#EmployeeID").val();
+        var StudentYear = $("#StudentYear").val();
+        var subid = $("#SubjectID").val();
+    });
+    $("#Month").change(function () {
+        var month = $("#Month").val();
+        var year = $("#Year").val();
+        var subid = $("#SubjectID").val();
+        var stuid = $("#StudentID").val();
+        var EmpId = $("#EmployeeID").val();
+        var StudentYear = $("#StudentYear").val();
+    
+    });
+    $("#StudentID").change(function () {
+        var month = $("#Month").val();
+        var year = $("#Year").val();
+        var subid = $("#SubjectID").val();
+        var stuid = $("#StudentID").val();
+        var EmpId = $("#EmployeeID").val();
+        var StudentYear = $("#StudentYear").val();
+      
+    });
+    $("#EmployeeID").change(function () {
+        var month = $("#Month").val();
+        var year = $("#Year").val();
+        var subid = $("#SubjectID").val();
+        var stuid = $("#StudentID").val();
+        var EmpId = $("#EmployeeID").val();
+        var StudentYear = $("#StudentYear").val();
+       
+
+    });
+    function RecallGrid(month, year, SubId, StuId, EmpId, StudentYear, subid) {
+        $('#AjaxLoader').show();
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("StudentAttendanceReport", "Home")',
+            contentType: "application/json; charset=utf-8",
+
+            data: { Year: year, SubjectID: SubId, StudentID: StuId, StudentYear: StudentYear},
+            success: function (data) {
+                debugger;
+                $('#grid').html($(data).find("#grid"));
+                TableRow();
+                $('#AjaxLoader').hide();
+            },
+            error: function () {
+                $('#AjaxLoader').hide();
+                toastr.error('Ooops! Something Went Wrong! Try Again');
+            }
+        });
+        return false;
+    };
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#EduTypeID").change(function () {
+            $('#AjaxLoader').show();
+            $("#CourseCategoryID").empty();
+            $("#SubjectID").empty();
+            $("#SubjectID").append('<option value="' + "" + '">' + "-- Select --" + '</option>');
+            $("#StudentID").empty();
+            $("#StudentID").append('<option value="' + "" + '">' + "-- Select --" + '</option>');
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("PopulateCourseCategoryDropdown", "Home")',
+                dataType: 'json',
+                data: { EduTypeID: $("#EduTypeID").val(), CollegeID: $("#CollegeID").val(), EmployeeID: $("#EmployeeID").val() },
+                success: function (states) {
+                    $.each(states, function (i, state) {
+                        $("#CourseCategoryID").append('<option value="' + state.Value + '">' +
+                            state.Text + '</option>');
+                    });
+                    $('#AjaxLoader').hide();
+                }, error: function (ex) { $("#CourseCategoryID").append('<option value="' + "" + '">' + "-- Select --" + '</option>'); }
+            });
+            $('#AjaxLoader').hide();
+            return false;
+        });
+        $("#CourseCategoryID").change(function () {
+            $('#AjaxLoader').show();
+            $("#SubjectID").empty();
+            $("#StudentID").empty();
+            $("#StudentID").append('<option value="' + "" + '">' + "-- Select --" + '</option>');
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("PopulateSubjectDetailPageDropdown", "Home")',
+                dataType: 'json',
+                data: { CourseCategoryID: $("#CourseCategoryID").val(), CollegeID: $("#CollegeID").val(), EmployeeID: $("#EmployeeID").val() },
+                success: function (states) {
+                    $.each(states, function (i, state) {
+                        $("#SubjectID").append('<option value="' + state.Value + '">' +
+                            state.Text + '</option>');
+                    });
+                }, error: function (ex) { $("#SubjectID").append('<option value="' + "" + '">' + "-- Select --" + '</option>'); }
+            });
+            $('#AjaxLoader').hide();
+            return false;
+        });
+        $("#SubjectID").change(function () {
+            $('#AjaxLoader').show();
+            $("#StudentID").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("PopulateStudentDropdown", "Home")',
+                dataType: 'json',
+                data: { CollegeID: $("#CollegeID").val(), SessionID: $("#SessionID").val(), CourseCategoryID: $("#CourseCategoryID").val(), SubjectID: $("#SubjectID").val() },
+                success: function (states) {
+                    $.each(states, function (i, state) {
+                        $("#StudentID").append('<option value="' + state.Value + '">' +
+                            state.Text + '</option>');
+                    });
+                }, error: function (ex) { $("#StudentID").append('<option value="' + "" + '">' + "-- Select --" + '</option>'); }
+            });
+            var usertype = @Model.UserType;
+            if(usertype == 1)
+            {
+                $("#EmployeeID").empty();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("PopulateEmployeeDropdown", "Home")',
+                    dataType: 'json',
+                    data: { CollegeID: $("#CollegeID").val(), SubjectID: $("#SubjectID").val() },
+                    success: function (states) {
+                        $.each(states, function (i, state) {
+                            $("#EmployeeID").append('<option value="' + state.Value + '">' +
+                                state.Text + '</option>');
+                        });
+                    }, error: function (ex) { $("#EmployeeID").append('<option value="' + "" + '">' + "-- Select --" + '</option>'); }
+                });
+            }
+            $('#AjaxLoader').hide();
+            return false;
+        });
+    });
+
+
+    $("#CourseCategoryID").change(function (event) {
+        $("#CourseYearID").val('');
+        if ($('#CourseCategoryID').val() == "") {
+            alert('Please Select Course  !!');
+            return;
+        }
+
+        var res = $('#CourseCategoryID').val();
+        $.ajax({
+            url: "/College/Exam/CourseYear/",
+            data: { id: res },
+            cache: false,
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                $('#CourseYearID').find("option").remove();
+                $("#CourseYearID").append($("<option></option>").val("").html("--Select Course Year--"));
+                $.each(data.data, function (key, value) {
+                    $("#CourseYearID").append($("<option></option>").val(value.ID).html(value.YearName));
+                });
+            }
+        });
+    });
+</script>
+<script src="~/scripts/jquery-1.10.2.js"></script>
+<script src="~/scripts/jquery.validate.js"></script>
+<script src="~/scripts/jquery.validate.unobtrusive.js"></script>

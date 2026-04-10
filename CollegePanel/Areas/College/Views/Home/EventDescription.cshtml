@@ -1,0 +1,31 @@
+﻿@model DataLayer.EventManagment
+@{
+    ViewBag.Title = "EventDescription";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+
+<!DOCTYPE html>
+<style>
+    .textcenter
+    {
+        text-align:center;
+        margin-top:50px;
+    }
+    .minheight{
+        min-height:450px;
+    }
+</style>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>EventDescription</title>
+</head>
+<body>
+    <div class="container-fluid minheight">
+        <div class="textcenter">
+            <h4>Description Of @Model.EventName</h4>
+            <div>@Model.Description</div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,648 @@
+﻿@model DataLayer.StudentAttendanceAdd
+@{
+    ViewBag.Title = "Student Attendance Detail";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+@{
+    var grid = new WebGrid(Model.AttendanceList, canPage: true, canSort: true, rowsPerPage: 50, selectionFieldName: "SelectedRow", ajaxUpdateContainerId: "grid");
+}
+
+<!-- Premium Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    :root {
+        --brand-primary: #4361ee;
+        --brand-secondary: #3f37c9;
+        --brand-accent: #7209b7;
+        --brand-gradient: linear-gradient(145deg, #4361ee 0%, #7209b7 100%);
+        --brand-gradient-soft: linear-gradient(145deg, rgba(67,97,238,0.08) 0%, rgba(114,9,183,0.08) 100%);
+        --brand-success: #10b981;
+        --brand-warning: #f59e0b;
+        --brand-danger: #ef4444;
+        --brand-info: #3b82f6;
+        --surface-white: #ffffff;
+        --surface-gray: #f8fafc;
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --text-muted: #64748b;
+        --border-light: rgba(203,213,225,0.4);
+        --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
+        --shadow-md: 0 10px 30px -12px rgba(0,0,0,0.1);
+        --shadow-lg: 0 20px 40px -15px rgba(67,97,238,0.15);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%); min-height: 100vh; }
+
+    /* Hero Section */
+    .hero-section {
+        background: var(--brand-gradient);
+        border-radius: 0 0 48px 48px;
+        padding: 35px 40px;
+        margin-bottom: 40px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+    }
+    .hero-section::before { content: ''; position: absolute; top: -40%; right: -15%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%); border-radius: 50%; }
+    .hero-section::after { content: ''; position: absolute; bottom: -30%; left: -10%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%); border-radius: 50%; }
+
+    .main-container { max-width: 1600px; margin: 0 auto; padding: 0 32px; }
+
+    /* Filter Card */
+    .filter-card {
+        background: var(--surface-white);
+        border-radius: 28px;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-light);
+        overflow: hidden;
+        margin-bottom: 32px;
+        transition: all 0.3s;
+    }
+    .filter-header {
+        background: var(--brand-gradient-soft);
+        padding: 20px 28px;
+        border-bottom: 2px dashed rgba(67,97,238,0.2);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .filter-header i { font-size: 24px; color: var(--brand-primary); }
+    .filter-header h4 { font-size: 18px; font-weight: 700; color: var(--text-primary); margin: 0; }
+    .filter-body { padding: 28px; }
+
+    /* Form Controls */
+    .form-label-modern {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .form-label-modern i { color: var(--brand-primary); font-size: 14px; }
+    .required-star { color: var(--brand-danger); font-size: 12px; }
+    .form-control-modern {
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        border: 2px solid #e2e8f0;
+        border-radius: 16px;
+        background: white;
+        transition: all 0.25s;
+        font-family: 'Inter', sans-serif;
+    }
+    .form-control-modern:focus {
+        border-color: var(--brand-primary);
+        box-shadow: 0 0 0 4px rgba(67,97,238,0.12);
+        outline: none;
+    }
+    select.form-control-modern {
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234361ee' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 16px center;
+    }
+
+    /* Button */
+    .btn-search {
+        background: var(--brand-gradient);
+        border: none;
+        padding: 12px 32px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 14px;
+        color: white;
+        transition: all 0.3s;
+        box-shadow: 0 4px 12px rgba(67,97,238,0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 28px;
+        width: 100%;
+        justify-content: center;
+    }
+    .btn-search:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(67,97,238,0.4); color: white; }
+
+    .btn-print {
+        background: linear-gradient(145deg, #6b7280, #4b5563);
+        border: none;
+        padding: 10px 24px;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 13px;
+        color: white;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 20px;
+    }
+    .btn-print:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(107,114,128,0.3); color: white; }
+
+    /* Table Card */
+    .table-card {
+        background: var(--surface-white);
+        border-radius: 28px;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-light);
+        overflow: hidden;
+    }
+    .table-header {
+        background: var(--brand-gradient-soft);
+        padding: 20px 28px;
+        border-bottom: 2px dashed rgba(67,97,238,0.2);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    .table-title { font-size: 18px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 10px; }
+    .table-title i { color: var(--brand-primary); }
+    .legend-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: 20px;
+    }
+    .legend-sunday { background: #cd64de; width: 20px; height: 20px; border-radius: 4px; }
+    .legend-holiday { background: #828282; width: 20px; height: 20px; border-radius: 4px; }
+
+    /* Premium Table */
+    .premium-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    .premium-table th {
+        padding: 16px 16px;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text-secondary);
+        background: #f8fafc;
+        border-bottom: 2px solid #e2e8f0;
+        text-align: left;
+    }
+    .premium-table td {
+        padding: 14px 16px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-primary);
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: middle;
+    }
+    .premium-table tr:hover td { background: var(--brand-gradient-soft); }
+
+    /* Attendance Status */
+    .attendance-present { color: var(--brand-success); font-weight: 700; }
+    .attendance-absent { color: var(--brand-danger); font-weight: 700; }
+    .attendance-sunday { background: #cd64de; color: white; padding: 4px 12px; border-radius: 30px; font-size: 11px; font-weight: 600; display: inline-block; }
+    .attendance-holiday { background: #828282; color: white; padding: 4px 12px; border-radius: 30px; font-size: 11px; font-weight: 600; display: inline-block; }
+
+    /* Sunday/Holiday Row Styling */
+    .sunday-row { background: #cd64de !important; color: white !important; }
+    .sunday-row td { background: #cd64de !important; color: white !important; }
+    .holiday-row { background: #828282 !important; color: white !important; }
+    .holiday-row td { background: #828282 !important; color: white !important; }
+
+    .empty-state { text-align: center; padding: 60px 20px; }
+    .empty-state i { font-size: 64px; color: #cbd5e1; margin-bottom: 20px; }
+    .empty-state h5 { font-size: 18px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+
+    @@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .animate { animation: fadeInUp 0.5s ease-out; }
+
+    @@media (max-width: 768px) {
+        .main-container { padding: 0 20px; }
+        .hero-section { padding: 25px 24px; }
+        .premium-table th, .premium-table td { padding: 10px 12px; font-size: 12px; }
+    }
+</style>
+
+<div class="hero-section">
+    <div class="main-container">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <div class="rounded-circle bg-white bg-opacity-20 p-3">
+                        <i class="fas fa-calendar-check fs-3 text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-white mb-1 fw-bold" style="font-size: 32px; letter-spacing: -0.5px;">Student Attendance</h1>
+                        <p class="text-white-50 mb-0"><i class="fas fa-user-graduate me-2"></i>Subject-wise attendance tracking</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white bg-opacity-20 rounded-pill px-4 py-2">
+                <i class="fas fa-chart-line me-2"></i>Attendance Report
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="main-container animate">
+    <!-- Filter Section -->
+    <div class="filter-card">
+        <div class="filter-header">
+            <i class="fas fa-sliders-h"></i>
+            <h4>Filter Attendance Records</h4>
+        </div>
+        <div class="filter-body">
+            @Html.HiddenFor(model => model.SessionID)
+            @Html.HiddenFor(model => model.CollegeID)
+
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="form-label-modern">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Session</span>
+                        <span class="required-star">*</span>
+                    </div>
+                    @Html.DropDownList("StudentSession", new SelectList(ViewBag.Session, "ID", "Session", @ViewBag.CurrentSession), "-- Select Session --", new { @class = "form-control-modern", @id = "StudentSession", @name = "StudentSession" })
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="form-label-modern">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Education Type</span>
+                        <span class="required-star">*</span>
+                    </div>
+                    @Html.DropDownListFor(model => model.EduTypeID, (List<SelectListItem>)ViewBag.EducationType, "-- Select --", new { @class = "form-control-modern", @id = "EduTypeID" })
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="form-label-modern">
+                        <i class="fas fa-book"></i>
+                        <span>Course Category</span>
+                        <span class="required-star">*</span>
+                    </div>
+                    @Html.DropDownListFor(model => model.CourseCategoryID, new System.Web.Mvc.SelectList(Model.CourseCategoryList, "Value", "Text"), new { @class = "form-control-modern" })
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="form-label-modern">
+                        <i class="fas fa-layer-group"></i>
+                        <span>Course Year</span>
+                        <span class="required-star">*</span>
+                    </div>
+                    @Html.DropDownListFor(model => model.StudentYear, new SelectList(ViewBag.CourseYear, "ID", "Name"), new { @class = "form-control-modern", @id = "CourseYearID" })
+                    @Html.ValidationMessageFor(model => model.StudentYear, "", new { @class = "validation" })
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="form-label-modern">
+                        <i class="fas fa-chalkboard"></i>
+                        <span>Subject</span>
+                        <span class="required-star">*</span>
+                    </div>
+                    @Html.DropDownListFor(model => model.SubjectID, new System.Web.Mvc.SelectList(Model.SubjectList, "Value", "Text"), new { @class = "form-control-modern" })
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="form-label-modern">
+                        <i class="fas fa-user"></i>
+                        <span>Student</span>
+                    </div>
+                    @Html.DropDownListFor(model => model.StudentID, new System.Web.Mvc.SelectList(Model.StudentList, "Value", "Text"), new { @class = "form-control-modern" })
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="form-label-modern">
+                        <i class="fas fa-user-tie"></i>
+                        <span>Employee</span>
+                    </div>
+                    @if (Model.UserType == 2)
+                    {
+                        @Html.DropDownListFor(model => model.EmployeeID, new System.Web.Mvc.SelectList(Model.EmployeeList, "Value", "Text"), new { @class = "form-control-modern", @disabled = "disabled" })
+                        @Html.HiddenFor(model => model.EmployeeID)
+                    }
+                    else if (Model.UserType == 1)
+                    {
+                        @Html.DropDownListFor(model => model.EmployeeID, new System.Web.Mvc.SelectList(Model.EmployeeList, "Value", "Text"), new { @class = "form-control-modern" })
+                        @Html.ValidationMessageFor(model => model.EmployeeID, "", new { @class = "validation" })
+                    }
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="form-label-modern">
+                        <i class="fas fa-calendar-month"></i>
+                        <span>Month</span>
+                    </div>
+                    @Html.DropDownListFor(model => model.Month, new System.Web.Mvc.SelectList(Model.MonthList, "Value", "Text"), new { @class = "form-control-modern" })
+                </div>
+                <div class="col-lg-12">
+                    <button id="btnSubmit" class="btn-search" type="button">
+                        <i class="fas fa-search"></i> Search Attendance
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="table-card">
+        <div class="table-header">
+            <div class="table-title">
+                <i class="fas fa-list-check"></i>
+                Student Attendance Details
+            </div>
+            <div class="d-flex gap-3">
+                <div class="legend-badge">
+                    <div class="legend-sunday"></div>
+                    <span style="font-size: 12px;">Sunday</span>
+                </div>
+                <div class="legend-badge">
+                    <div class="legend-holiday"></div>
+                    <span style="font-size: 12px;">Holiday</span>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div id="grid" style="width:100%">
+                @if (Model.AttendanceList.Count > 0)
+                {
+                    <div class="table-responsive">
+                        @MvcHtmlString.Create(grid.GetHtml(
+                            htmlAttributes: new { id = "Table1", @class = "premium-table" },
+                            tableStyle: "premium-table",
+                            mode: WebGridPagerModes.All,
+                            selectedRowStyle: "select",
+                            columns: grid.Columns(
+                                grid.Column("Session", "Session", style: "width:12%"),
+                                grid.Column("Date", "Date", style: "width:12%", format: @<text>@string.Format("{0:dd-MMM-yyyy}", Convert.ToDateTime(item.Attendance_Date))</text>),
+grid.Column("Day", "Day", style: "width:12%", format: @<text>
+                                @if (item.Day.ToLower() == "sunday")
+                                {
+                                    <span class="attendance-sunday"><i class="fas fa-sun"></i> @item.Day</span>
+                                    <input name="day" disabled value="@item.Day" type="hidden" />
+                                }
+                                else
+                                {
+                                    <span>@item.Day</span>
+                                    <input name="holiday" disabled value="@item.Holiday" type="hidden" />
+                                }
+</text>),
+grid.Column("Subject", "Subject", style: "width:16%"),
+grid.Column("Name", "Faculty", style: "width:16%"),
+grid.Column("Attendance", "Status", style: "width:12%", format: @<text>
+    @if (item.Holiday.ToLower() == "h")
+    {
+        <span class="attendance-holiday"><i class="fas fa-umbrella-beach"></i> Holiday</span>
+    }
+    else if (item.Day.ToLower() == "sunday")
+    {
+        <span class="attendance-sunday"><i class="fas fa-sun"></i> Sunday</span>
+    }
+    else if (item.AttendanceType.ToLower() == "p")
+    {
+        <span class="attendance-present"><i class="fas fa-check-circle"></i> Present</span>
+    }
+    else if (item.AttendanceType.ToLower() == "a")
+    {
+        <span class="attendance-absent"><i class="fas fa-times-circle"></i> Absent</span>
+    }
+    else if (item.AttendanceType.ToLower() == "s")
+    {
+        <span class="attendance-sunday"><i class="fas fa-sun"></i> Sunday</span>
+    }
+    else if (item.AttendanceType.ToLower() == "h")
+    {
+        <span class="attendance-holiday"><i class="fas fa-umbrella-beach"></i> Holiday</span>
+    }
+    else
+    {
+        <span>@item.AttendanceType</span>
+    }
+</text>)
+)).ToString())
+                    </div>
+                    <div class="text-center">
+                        <button type="button" id="btnPrint" class="btn-print">
+                            <i class="fas fa-print"></i> Print Report
+                        </button>
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-times"></i>
+                        <h5>No Attendance Records Found</h5>
+                        <p>Select filters and click search to view attendance</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/scripts/jquery-1.10.2.js"></script>
+<script src="~/scripts/jquery.validate.js"></script>
+<script src="~/scripts/jquery.validate.unobtrusive.js"></script>
+
+<script>
+    $(function () {
+        $("#btnPrint").click(function () {
+            var contents = $("#grid").html();
+            var frame1 = $('<iframe />');
+            frame1[0].name = "frame1";
+            frame1.css({ "position": "absolute", "top": "-1000000px" });
+            $("body").append(frame1);
+            var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+            frameDoc.document.open();
+            frameDoc.document.write('<html><head><title>Attendance Report</title>');
+            frameDoc.document.write('<style>body { font-family: Arial, sans-serif; } table { border-collapse: collapse; width: 100%; } th, td { border: 1px solid #ddd; padding: 8px; text-align: left; } th { background-color: #4361ee; color: white; }</style>');
+            frameDoc.document.write('</head><body>');
+            frameDoc.document.write(contents);
+            frameDoc.document.write('</body></html>');
+            frameDoc.document.close();
+            setTimeout(function () {
+                window.frames["frame1"].focus();
+                window.frames["frame1"].print();
+                frame1.remove();
+            }, 500);
+        });
+    });
+
+    function TableRow() {
+        $("#Table1 tbody tr").each(function (i, row) {
+            var $actualRow = $(row);
+            if ($actualRow.find('input[name=holiday]').val() == 'H') {
+                $actualRow.addClass('holiday-row');
+            }
+            if ($actualRow.find('input[name=day]').val() == 'Sunday') {
+                $actualRow.addClass('sunday-row');
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        TableRow();
+    });
+
+    $(document).on('click', '#btnSubmit', function () {
+        var month = $("#Month").val();
+        var year = $("#Year").val();
+        var subid = $("#SubjectID").val();
+        var stuid = $("#StudentID").val();
+        var EmpId = $("#EmployeeID").val();
+        var Session = $("#StudentSession").val();
+        var EduTypeID = $("#EduTypeID").val();
+        var CourseCategoryID = $("#CourseCategoryID").val();
+        var StudentYear = $("#StudentYear").val();
+
+        if (Session == "") {
+            alert('Please Select Session !!');
+            return;
+        }
+        if (EduTypeID == "") {
+            alert('Please Select Education Type !!');
+            return;
+        }
+        if (CourseCategoryID == "") {
+            alert('Please Select Course Category !!');
+            return;
+        }
+        if (StudentYear == "") {
+            alert('Please Select Course Year !!');
+            return;
+        }
+        if (subid == "") {
+            alert('Please Select Subject !!');
+            return;
+        }
+
+        RecallGrid(month, year, subid, stuid, EmpId, Session, EduTypeID, CourseCategoryID, StudentYear);
+    });
+
+    function RecallGrid(month, year, subid, stuid, EmpId, Session, EduTypeID, CourseCategoryID, StudentYear) {
+        $('#AjaxLoader').show();
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("StudentAttendanceDetail", "Home")',
+            contentType: "application/json; charset=utf-8",
+            data: {
+                Month: month,
+                Year: year,
+                SubjectID: subid,
+                StudentID: stuid,
+                EmpID: EmpId,
+                Session: Session,
+                EduTypeID: EduTypeID,
+                CourseCategoryID: CourseCategoryID,
+                StudentYear: StudentYear
+            },
+            success: function (data) {
+                $('#grid').html($(data).find("#grid"));
+                TableRow();
+                $('#AjaxLoader').hide();
+            },
+            error: function () {
+                $('#AjaxLoader').hide();
+                toastr.error('Oops! Something Went Wrong! Try Again');
+            }
+        });
+        return false;
+    }
+
+    $(document).ready(function () {
+        $("#EduTypeID").change(function () {
+            $('#AjaxLoader').show();
+            $("#CourseCategoryID").empty();
+            $("#SubjectID").empty();
+            $("#SubjectID").append('<option value="">-- Select --</option>');
+            $("#StudentID").empty();
+            $("#StudentID").append('<option value="">-- Select --</option>');
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("PopulateCourseCategoryDropdown", "Home")',
+                dataType: 'json',
+                data: { EduTypeID: $("#EduTypeID").val(), CollegeID: $("#CollegeID").val(), EmployeeID: $("#EmployeeID").val() },
+                success: function (states) {
+                    $.each(states, function (i, state) {
+                        $("#CourseCategoryID").append('<option value="' + state.Value + '">' + state.Text + '</option>');
+                    });
+                    $('#AjaxLoader').hide();
+                }, error: function (ex) { $("#CourseCategoryID").append('<option value="">-- Select --</option>'); }
+            });
+            return false;
+        });
+
+        $("#CourseCategoryID").change(function () {
+            $('#AjaxLoader').show();
+            $("#SubjectID").empty();
+            $("#StudentID").empty();
+            $("#StudentID").append('<option value="">-- Select --</option>');
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("PopulateSubjectDetailPageDropdown", "Home")',
+                dataType: 'json',
+                data: { CourseCategoryID: $("#CourseCategoryID").val(), CollegeID: $("#CollegeID").val(), EmployeeID: $("#EmployeeID").val() },
+                success: function (states) {
+                    $.each(states, function (i, state) {
+                        $("#SubjectID").append('<option value="' + state.Value + '">' + state.Text + '</option>');
+                    });
+                }, error: function (ex) { $("#SubjectID").append('<option value="">-- Select --</option>'); }
+            });
+            $('#AjaxLoader').hide();
+            return false;
+        });
+
+        $("#SubjectID").change(function () {
+            $('#AjaxLoader').show();
+            $("#StudentID").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("PopulateStudentDropdown", "Home")',
+                dataType: 'json',
+                data: { CollegeID: $("#CollegeID").val(), SessionID: $("#StudentSession").val(), CourseCategoryID: $("#CourseCategoryID").val(), SubjectID: $("#SubjectID").val() },
+                success: function (states) {
+                    $.each(states, function (i, state) {
+                        $("#StudentID").append('<option value="' + state.Value + '">' + state.Text + '</option>');
+                    });
+                }, error: function (ex) { $("#StudentID").append('<option value="">-- Select --</option>'); }
+            });
+            var usertype = @Model.UserType;
+            if(usertype == 1) {
+                $("#EmployeeID").empty();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("PopulateEmployeeDropdown", "Home")',
+                    dataType: 'json',
+                    data: { CollegeID: $("#CollegeID").val(), SubjectID: $("#SubjectID").val() },
+                    success: function (states) {
+                        $.each(states, function (i, state) {
+                            $("#EmployeeID").append('<option value="' + state.Value + '">' + state.Text + '</option>');
+                        });
+                    }, error: function (ex) { $("#EmployeeID").append('<option value="">-- Select --</option>'); }
+                });
+            }
+            $('#AjaxLoader').hide();
+            return false;
+        });
+    });
+
+    $("#CourseCategoryID").change(function (event) {
+        $("#CourseYearID").val('');
+        if ($('#CourseCategoryID').val() == "") {
+            alert('Please Select Course !!');
+            return;
+        }
+        var res = $('#CourseCategoryID').val();
+        $.ajax({
+            url: "/College/Exam/CourseYear/",
+            data: { id: res },
+            cache: false,
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                $('#CourseYearID').find("option").remove();
+                $("#CourseYearID").append($("<option></option>").val("").html("-- Select Course Year --"));
+                $.each(data.data, function (key, value) {
+                    $("#CourseYearID").append($("<option></option>").val(value.ID).html(value.YearName));
+                });
+            }
+        });
+    });
+</script>

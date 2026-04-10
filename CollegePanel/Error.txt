@@ -1,0 +1,18 @@
+-----------------------------------------------------------------------------
+Date : 5/1/2019 4:10:24 PM
+
+-----------------------------------------------------------------------------
+URl : 
+
+-----------------------------------------------------------------------------
+Action : 
+
+-----------------------------------------------------------------------------
+ID : 
+
+-----------------------------------------------------------------------------
+
+System.Net.Mail.SmtpException
+Message : The operation has timed out.
+StackTrace :    at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at DataLayer.CommonSetting.SendMail(String TO, String Sub, String msg, String[] CC) in D:\bharti\MungerCollegePanel\CollegeDataLayer\CommonSetting.cs:line 136

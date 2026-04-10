@@ -1,0 +1,294 @@
+﻿
+@{
+    ViewBag.Title = "Collegewise_CenterList";
+    Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
+}
+<style>
+    .right {
+        text-align: right;
+    }
+
+    .left {
+        text-align: left;
+    }
+
+    .spacebottom {
+        padding-bottom: 20px;
+    }
+
+    .spacedesign {
+        padding-bottom: 20px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+</style>
+<script type="text/javascript">
+    var now = new Date();
+        var startdate = new Date(now.getFullYear() - 5, now.getMonth(), now.getDay());
+        var enddate = new Date(now.getFullYear() + 5, now.getMonth(), now.getDay());
+</script>
+<script>
+    var username = '@DataLayer.ClsLanguage.GetCookies("ENNBUserID")';
+    var password = '@DataLayer.ClsLanguage.GetCookies("ENNBPassword")';
+    // var CuSession = '@ViewBag.CuSession';
+</script>
+<script src="~/scripts/Customjs/Collegewise_CenterList.js?id=@System.Configuration.ConfigurationManager.AppSettings["Commonjs"]"></script>
+<script>
+    $(document).ready(function () {
+    $("#EducationTypeID").change(function (event) {
+        debugger;
+        $("#CourseYearID").val('');
+        $("#CourseCategoryID").val('');
+        $('#CourseCategoryID').find("option").remove();
+        $("#CourseCategoryID").append($("<option></option>").val("").html("--Select Course--"));
+        var res = $(this).val();
+        if (res == "")
+            return;
+        if (res == "")
+            res = 0;
+        //debugger;
+        $.ajax({
+            url: "/College/Exam/getcousre/",
+            data: { id: res },
+            cache: false,
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                $('#CourseCategoryID').find("option").remove();
+                $("#CourseCategoryID").append($("<option></option>").val("").html("--Select Course--"));
+                $.each(data.data, function (key, value) {
+                    $("#CourseCategoryID").append($("<option></option>").val(value.CourseCategoryID).html(value.CourseCategory));
+                });
+            }
+        });
+    });
+    $("#CourseCategoryID").change(function (event) {
+        $("#CourseYearID").val('');
+        $('#grid').html('');
+        if ($('#CourseCategoryID').val() == "") {
+            alert('Please Select Course  !!');
+            return;
+        }
+        $('#grid').html('');
+        var res = $('#CourseCategoryID').val();
+        $.ajax({
+            url: "/College/Exam/CourseYear/",
+            data: { id: res },
+            cache: false,
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                $('#CourseYearID').find("option").remove();
+                $("#CourseYearID").append($("<option></option>").val("").html("--Select Course Year--"));
+                $.each(data.data, function (key, value) {
+                    $("#CourseYearID").append($("<option></option>").val(value.ID).html(value.YearName));
+                });
+            }
+        });
+        $.ajax({
+
+            url: "/College/Exam/getsubjtectbycousrescollege/",
+            data: { id: res },
+
+            cache: false,
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                $('#Subject').find("option").remove();
+                $("#Subject").append($("<option></option>").val("").html("--Select Subject--"));
+                $.each(data.data, function (key, value) {
+                    $("#Subject").append($("<option></option>").val(value.StreamCategoryID).html(value.streamCategory));
+                });
+            }
+        });
+    });
+    });
+</script>
+<div class="container-fluid">
+    <div class="row ">
+        <div class="container-fluid">
+            
+                <h3 class="text-center spacebottom">Collegewise and Studentwise Examcenter List</h3>
+            
+        </div>
+    </div>
+    <div class="row">
+        <div class="container-fluid">
+            <div ng-app="examfeelistApp" ng-controller="examfeelistCtrl" class="sparkline-list">
+                @using (Html.BeginForm())
+                {
+                    <div class="row spacedesign">
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <span><label>Year: </label></span>
+                            @Html.DropDownList("session", new SelectList(ViewBag.Session, "ID", "Session", ""), "--Select Session--", new { @class = "form-control custom-select-value", @id = "session", @name = "session", @ng_model = "session" })
+                        </div>
+                       
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <span><label>Programme:</label></span>
+                            @Html.DropDownList("program", (List<SelectListItem>)ViewBag.EducationType, "--Select--", new { @class = "form-control", @id = "EducationTypeID", @name = "EducationTypeID", @ng_model = "EducationTypeID" })
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
+                            <span><label>Course: </label></span>
+                            @Html.DropDownList("Course", new SelectList(ViewBag.Course, "ID", "FirstName", ""), "--Select Course--", new { @class = "form-control", @id = "CourseCategoryID", @name = "CourseCategoryID", @ng_model = "CourseCategoryID" })
+                        </div>
+                    </div>
+                    <div class="row spacedesign">
+                       
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <span><label>Subject: </label></span>
+                            @Html.DropDownList("Subject", new SelectList(ViewBag.Course, "ID", "FirstName", ""), "--Select Subject--", new { @class = "form-control", @id = "Subject", @name = "Subject", @ng_model = "Subject" })
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <span><label>Course Year: </label></span>
+                            @Html.DropDownList("CourseYearID", new SelectList(ViewBag.Course, "ID", "FirstName", ""), "--Select CourseYear--", new { @class = "form-control", @id = "CourseYearID", @name = "CourseYearID", @ng_model = "CourseYearID" })
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <span><label>Application No /Registration no: </label></span>
+                            <input type="text" ng-model="Application" class="form-control" placeholder="Application/Registration No" name="application" />
+                        </div>
+                    </div>
+                    <div class="row spacedesign">
+                        
+                    
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <span><label>Select Exam: </label></span>
+                            <span class="form-group">
+                                <select id="BackStatus" class="form-control control-color"
+                                        ng-model="BackStatus"
+                                        name="BackStatus">
+                                    <option value="0" selected="selected">Main Exam Fee</option>
+                                    <option value="1">Back  Exam Fee</option>
+                                </select>
+                            </span>
+                        </div>
+                    
+                    
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            &nbsp;
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 right btndesign">
+                            <button ng-click="GetFilterUsers(ClubData)" class="btn btn-primary waves-effect waves-light" type="button">Search</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 left">
+                            <div ng-show="(qlist |filter:search).length>0">
+                                <button type="submit" value="excel" id="btnexport" name="Excel" class="btn btn-primary waves-effect waves-light">Export to Excel</button>
+                            </div>
+                        </div>
+                        <div class="col-md-6 right">
+                            <b>
+                                Total Record(s) : | &nbsp;&nbsp;<spam style="border: 1px solid #bfc5cb;  padding: 7px; border-radius: 50%;">{{totalCount}}</spam>&nbsp;&nbsp;
+                            </b>
+                            <span class="form-group  page-size form-inline">
+                                <select id="ddlPageSize" class="form-control control-color"
+                                        ng-model="pageSizeSelected"
+                                        ng-change="changePageSize()">
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="200">200</option>
+                                    <option value="500">500</option>
+                                    <option value="1000">1000</option>
+                                    <option value="2000">2000</option>
+                                    <option value="5000">5000</option>
+                                </select>
+
+                            </span>
+                            <a class="btn btn-primary waves-effect waves-light">Page: {{pageIndex}} / {{numPages}}</a>
+                        </div>
+                    </div>
+                }
+                <div class="panel-body">
+                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer table-responsive">
+                        <table ui-jq="dataTable" ui-options="dataTableOpt" class="table table-bordered table-condensed  ">
+                            <thead>
+                                <tr role="row">
+                                    <th width="50px">S.No.</th>
+
+                                    <th ng-click="sortBy('collegeName')">
+                                        College Name
+                                        <span class="sortorder" ng-show="propertyName === 'collegeName'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    <th ng-click="sortBy('applicationNo')">
+                                        Application No
+                                        <span class="sortorder" ng-show="propertyName === 'applicationNo'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    <th ng-click="sortBy('enrollmentNo')">
+                                        Registration No
+                                        <span class="sortorder" ng-show="propertyName === 'enrollmentNo'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    <th ng-click="sortBy('RollNo')">
+                                        RollNo
+                                        <span class="sortorder" ng-show="propertyName === 'RollNo'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    <th ng-click="sortBy('studentName')">
+                                        Student Name
+                                        <span class="sortorder" ng-show="propertyName === 'studentName'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    
+                                    <th ng-click="sortBy('coursecategotyName')">
+                                        Course
+                                        <span class="sortorder" ng-show="propertyName === 'coursecategotyName'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                   
+                                    <th ng-click="sortBy('session')">
+                                        Session
+                                        <span class="sortorder" ng-show="propertyName === 'session'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    <th ng-click="sortBy('honscenter')">
+                                        Honours Exam center
+                                        <span class="sortorder" ng-show="propertyName === 'honscenter'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    <th ng-click="sortBy('subsidiarycenter')">
+                                        Subsidiary Exam Center
+                                        <span class="sortorder" ng-show="propertyName === 'subsidiarycenter'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                    <th ng-click="sortBy('ExamStatus')">
+                                        Exam Type
+                                        <span class="sortorder" ng-show="ExamStatus === 'ExamStatus'" ng-class="{reverse: reverse}"></span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="recu in qlist | filter:search  | orderBy:propertyName:reverse">
+                                    <td>{{ ((pageIndex-1)*pageSizeSelected)+$index+1 }}</td>
+                                    <td>{{recu.collegeName}}</td>
+                                    <td>{{recu.applicationNo}}</td>
+                                    <td>{{recu.enrollmentNo}}</td>
+                                    <td>{{recu.rollNo}}</td>
+                                    <td>{{recu.studentName}}</td>
+                                    <td>{{recu.coursecategotyName}}</td>
+                                    <td>{{recu.session}}</td>
+                                    <td>{{recu.honscenter}}</td>
+                                    <td>{{recu.subsidiarycenter}}</td>
+                                    <td>{{recu.examStatus}}</td>
+
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr ng-show="(qlist |filter:search).length == 0">
+                                    <td colspan="6" style="text-align:center">
+                                        <h4 style="color:red;"> </h4>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" colspan="18">
+                                        <div class="pull-left" ng-show="(qlist |filter:search).length > 0">
+                                            <div ng-show="numPages > 1">
+                                                <pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected"
+                                                            direction-links="true" ng-model="pageIndex"
+                                                            max-size="maxSize" class="pagination" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
