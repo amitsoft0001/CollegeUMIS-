@@ -25,3 +25,6 @@
 /.vs/CollegePanelWeb/v17/DocumentLayout.json
 /.vs/CollegePanelWeb/CopilotIndices/17.14.1641.39856/CodeChunks.db
 /.vs/CollegePanelWeb/CopilotIndices/17.14.1641.39856/CodeChunks.db-wal
+/.vs/CollegePanelWeb/config/applicationhost.config
+/CollegeDataLayer/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/CollegePanel/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
