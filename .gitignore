@@ -28,3 +28,10 @@
 /.vs/CollegePanelWeb/config/applicationhost.config
 /CollegeDataLayer/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
 /CollegePanel/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/.vs/CollegePanelWeb/CopilotIndices/17.14.1641.39856/CodeChunks.db-shm
+/.vs/CollegePanelWeb/CopilotIndices/17.14.1641.39856/SemanticSymbols.db
+/.vs/CollegePanelWeb/CopilotIndices/17.14.1641.39856/SemanticSymbols.db-shm
+/.vs/CollegePanelWeb/CopilotIndices/17.14.1641.39856/SemanticSymbols.db-wal
+/.vs/CollegePanelWeb/v17/fileList.bin
+/.vs/CollegePanelWeb/v17/HierarchyCache.v1.txt
+*.json

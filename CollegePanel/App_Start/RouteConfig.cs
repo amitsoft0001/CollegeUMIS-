@@ -18,6 +18,7 @@ namespace Website
             routes.MapRoute("printpdf1", "PDF1", new { controller = "Home", action = "printpdfwaitinglist" }, new String[] { "Website.Areas.Administrator.Controllers" }).DataTokens = new RouteValueDictionary(new { area = "Administrator" }); ;
 
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            routes.RouteExistingFiles = false;
            // routes.MapRoute(
            //    name: "Default",
            //    url: "{controller}/{action}/{Id}",
