@@ -28,17 +28,17 @@ namespace Website.Controllers
             return View();
 
         }
-        //public ActionResult DEvlogin()
-        //{
-        //    ReCaptcha_Key = "6Lek4JwUAAAAABWxgpAF18nsiR1nuikeWHzSmi3v";
-        //    ReCaptcha_Secret = "6Lek4JwUAAAAAEbvGDeQOTni9dHBJj6TMIsG61-a";
-        //    if (HttpContext.Request.Cookies["ENNBCollegeCode"] != null && HttpContext.Request.Cookies["ENNBUID"] != null)
-        //    {
-        //        return RedirectToAction("Index", "Home", new { area = "College" });
-        //    }
-        //    return View();
+        public ActionResult secureEntry_7KLpaF7kLp92XyQ()
+        {
+            ReCaptcha_Key = "6Lek4JwUAAAAABWxgpAF18nsiR1nuikeWHzSmi3v";
+            ReCaptcha_Secret = "6Lek4JwUAAAAAEbvGDeQOTni9dHBJj6TMIsG61-a";
+            if (HttpContext.Request.Cookies["ENNBCollegeCode"] != null && HttpContext.Request.Cookies["ENNBUID"] != null)
+            {
+                return RedirectToAction("Index", "Home", new { area = "College" });
+            }
+            return View();
 
-        //}
+        }
 
         public ActionResult SendOtp(string email)
         {

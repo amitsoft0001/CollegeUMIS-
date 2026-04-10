@@ -1803,7 +1803,7 @@
     <Content Include="scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Login\captchaa.cshtml" />
     <Content Include="Views\Login\Error.cshtml" />
-    <Content Include="Views\Login\DEvlogin.cshtml" />
+    <Content Include="Views\Login\secureEntry_7KLpaF7kLp92XyQ.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

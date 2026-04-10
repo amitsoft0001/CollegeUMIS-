@@ -34,6 +34,18 @@ namespace DataLayer
         public bool isclosedate { get; set; }
         public string opendate { get; set; }
         public string closedate { get; set; }
+
+        public List<string> GetAllowedRoutes(string module, string env)
+        {
+            using (IDbConnection conn = new SqlConnection(CommonSetting.constr))
+            {
+                return conn.Query<string>(
+                    "sp_GetAllowedRoutes",
+                    new { @Module = module, @Environment = env },
+                    commandType: CommandType.StoredProcedure
+                ).ToList();
+            }
+        }
         public bool Backcheck_ExamFeeSubmit_open(int seessionid = 0, int educationtype = 0)
         {
             using (IDbConnection conn = new SqlConnection(CommonSetting.constr))
