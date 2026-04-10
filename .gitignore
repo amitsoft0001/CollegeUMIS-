@@ -3,3 +3,20 @@
 ################################################################################
 
 /.vs/CollegePanelWeb/FileContentIndex
+/.vs/CollegePanelWeb/v18
+/CollegeDataLayer/bin/Debug/DataLayer.dll
+/CollegeDataLayer/bin/Debug/DataLayer.pdb
+/CollegeDataLayer/obj/Debug/College_DataLayer.csproj.AssemblyReference.cache
+/CollegeDataLayer/obj/Debug/College_DataLayer.csproj.CoreCompileInputs.cache
+/CollegeDataLayer/obj/Debug/College_DataLayer.csproj.FileListAbsolute.txt
+/CollegeDataLayer/obj/Debug/DataLayer.dll
+/CollegeDataLayer/obj/Debug/DataLayer.pdb
+/CollegePanel/bin/DataLayer.dll
+/CollegePanel/bin/DataLayer.pdb
+/CollegePanel/bin/Website.dll
+/CollegePanel/bin/Website.pdb
+/CollegePanel/obj/Debug/CollegePanelWeb.csproj.AssemblyReference.cache
+/CollegePanel/obj/Debug/CollegePanelWeb.csproj.CoreCompileInputs.cache
+/CollegePanel/obj/Debug/CollegePanelWeb.csproj.FileListAbsolute.txt
+/CollegePanel/obj/Debug/Website.dll
+/CollegePanel/obj/Debug/Website.pdb
