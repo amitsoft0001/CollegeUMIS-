@@ -53,6 +53,7 @@ app1.controller('examfeelistCtrl', function ($scope, $http, cfpLoadingBar) {
             BackStatus = 0;
         }
         showloader();
+        $scope.qlist = [];
         $http.get(Url + "api/examfeestudentList", {
             params: {
                 pageIndex: $scope.pageIndex, pageSize: $scope.pageSizeSelected, session: session, EducationType: EducationType, CourseCategoryID: CourseCategoryID, Subject: Subject, CourseYearID: CourseYearID, Application: Application, ApplicationStatus: ApplicationStatus, paymentStatus: paymentStatus, BackStatus: BackStatus

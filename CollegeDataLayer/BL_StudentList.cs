@@ -175,7 +175,19 @@ namespace DataLayer
         public string IsStaff { get; set; }
         public string studentcaste { get; set; }
     }
+    public class OtherSubjectModel
+    {
+        public int SubjectID { get; set; }
+        public string SubjectName { get; set; }
+        public string HeadingName { get; set; }
+        public string SubjectTypeID { get; set; }
+    }
 
+    public class StudentSubjectVM
+    {
+        public int SubjectID { get; set; }
+        public int SubjectTypeID { get; set; }
+    }
     public class BL_student_formcomplete
     {
         public bool isdoccomplete { get; set; }
@@ -189,6 +201,33 @@ namespace DataLayer
         public string IsAppliedDate { get; set; }
         public string IsDocVerifyDate { get; set; }
         public string IsfeesubmitDate { get; set; }
+        public List<OtherSubjectModel> GetOtherSubjects(int courseId, int semesterId)
+        {
+            using (IDbConnection conn = new SqlConnection(CommonSetting.constr))
+            {
+                var obj = conn.Query<OtherSubjectModel>(
+                    "GetOtherSubjects",
+                    new { @CourseID = courseId, @SemesterID = semesterId },
+                    commandType: CommandType.StoredProcedure
+                ).ToList();
+
+                return obj;
+            }
+        }
+
+        public List<OtherSubjectModel> GetSavedSubjects(int studentId, int semesterId)
+        {
+            using (IDbConnection conn = new SqlConnection(CommonSetting.constr))
+            {
+                var obj = conn.Query<OtherSubjectModel>(
+                    "sp_GetSavedSubjects",
+                    new { @studentId = studentId, @SemesterID = semesterId },
+                    commandType: CommandType.StoredProcedure
+                ).ToList();
+
+                return obj;
+            }
+        }
         public BL_student_formcomplete sp_st_check_details(string ApplicationNo = "", string session = "")
         {
             using (IDbConnection conn = new SqlConnection(CommonSetting.constr))

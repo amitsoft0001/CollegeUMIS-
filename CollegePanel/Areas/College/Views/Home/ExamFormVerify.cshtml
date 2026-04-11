@@ -1,606 +1,564 @@
-﻿
-@using DataLayer
+﻿@using DataLayer
 @model Tuple<DataLayer.PrintExamForm, DataLayer.QualifiationMasterList, List<DataLayer.EaxmFeesSubmit>, List<DataLayer.EaxmFeesSubmit>>
 @{
     ViewBag.Title = "ExamFormVerify";
     Layout = "~/Areas/College/Views/Shared/_CollegeAdministrator.cshtml";
 }
+
 <style>
-      .btndesign {
-        margin-top: 20px;
+    /* ========== MODERN BLUE THEME ========== */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
-       .right {
+
+    .exam-verify-container {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    /* Modern Card */
+    .modern-card {
+        background: #ffffff;
+        border-radius: 24px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        margin-bottom: 25px;
+    }
+
+    /* Header */
+    .card-header-blue {
+        background: linear-gradient(135deg, #1DA1F2, #0d8bd9);
+        padding: 20px 25px;
+        color: white;
+    }
+
+    .card-header-blue h3 {
+        margin: 0;
+        font-size: 1.4rem;
+        font-weight: 600;
+    }
+
+    .card-header-blue p {
+        margin: 5px 0 0;
+        opacity: 0.9;
+        font-size: 0.85rem;
+    }
+
+    /* Info Grid */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 10px;
+        padding: 20px 25px;
+        background: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .info-row {
+        display: flex;
+        padding: 8px 0;
+        border-bottom: 1px dashed #dee2e6;
+    }
+
+    .info-label {
+        width: 140px;
+        font-weight: 600;
+        color: #1DA1F2;
+        font-size: 0.85rem;
+    }
+
+    .info-value {
+        flex: 1;
+        color: #333;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    /* Photo Section */
+    .photo-section {
+        display: flex;
+        gap: 25px;
+        padding: 20px 25px;
+        background: white;
+        border-bottom: 1px solid #e9ecef;
+        flex-wrap: wrap;
+    }
+
+    .photo-card {
+        text-align: center;
+        background: #f8f9fa;
+        padding: 12px 20px;
+        border-radius: 16px;
+        border: 1px solid #e9ecef;
+    }
+
+    .photo-card img {
+        width: 100px;
+        border-radius: 10px;
+        border: 2px solid #dee2e6;
+    }
+
+    /* Subjects Section */
+    .subjects-section {
+        padding: 20px 25px;
+        background: white;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .section-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #1DA1F2;
+        margin-bottom: 15px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #1DA1F2;
+        display: inline-block;
+    }
+
+    .subject-badge {
+        display: inline-block;
+        background: #e8f4fd;
+        color: #1DA1F2;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        margin: 5px;
+        font-weight: 500;
+    }
+
+    /* Table Styles */
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    .custom-table th {
+        background: #e8f4fd;
+        color: #1DA1F2;
+        padding: 10px 12px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 0.85rem;
+        border: 1px solid #dee2e6;
+    }
+
+    .custom-table td {
+        padding: 8px 12px;
+        border: 1px solid #dee2e6;
+        font-size: 0.85rem;
+    }
+
+    /* Fee Table */
+    .fee-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 10px 0;
+    }
+
+    .fee-table th {
+        background: #1DA1F2;
+        color: white;
+        padding: 10px;
+        text-align: left;
+    }
+
+    .fee-table td {
+        padding: 8px 12px;
+        border: 1px solid #dee2e6;
+    }
+
+    /* Status Badges */
+    .status-approved {
+        background: #d4edda;
+        color: #155724;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.75rem;
+        display: inline-block;
+    }
+
+    .status-pending {
+        background: #fff3cd;
+        color: #856404;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.75rem;
+        display: inline-block;
+    }
+
+    .status-rejected {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.75rem;
+        display: inline-block;
+    }
+
+    /* Buttons */
+    .btn-modern {
+        background: linear-gradient(135deg, #1DA1F2, #0d8bd9);
+        border: none;
+        padding: 10px 24px;
+        border-radius: 30px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 0.85rem;
+    }
+
+    .btn-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(29,161,242,0.3);
+    }
+
+    .btn-outline {
+        background: white;
+        border: 2px solid #1DA1F2;
+        color: #1DA1F2;
+        padding: 8px 20px;
+        border-radius: 30px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .btn-outline:hover {
+        background: #1DA1F2;
+        color: white;
+    }
+
+    .btndesign {
+        margin-top: 15px;
+    }
+
+    .right {
         text-align: right;
     }
 
     .left {
         text-align: left;
     }
+
+    .center {
+        text-align: center;
+    }
+
+    /* Alert */
+    .alert-modern {
+        background: #d4edda;
+        border-left: 4px solid #28a745;
+        padding: 12px 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+    }
+
+    /* Dropdown */
+    .form-control-modern {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        font-size: 0.85rem;
+    }
+
+    @media (max-width: 768px) {
+        .info-row {
+            flex-wrap: wrap;
+        }
+        .info-label {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        .photo-section {
+            justify-content: center;
+        }
+    }
 </style>
-<div class="container-fluid">
+
+<div class="exam-verify-container">
     @{
-
-        if (TempData["msgfees"] == null) { }
-        else
+        var saved = ViewBag.SavedSubjects as List<DataLayer.OtherSubjectModel>;
+        if (TempData["msgfees"] != null)
         {
-            <div class="alert-wrap1 shadow-inner wrap-alert-b">
-
-                <div class="alert alert-success " role="alert" style="text-align:center !important">
-                    <div>@TempData["msgfees"]</div>
-
-                </div>
+            <div class="alert-modern">
+                <i class="fa fa-check-circle" style="margin-right: 10px;"></i> @TempData["msgfees"]
             </div>
         }
     }
-    <div class="sparkline12-list">
-        <div class="row">
-            <div class="col-sm-12 col-xs-12 ">
-             
-                    @if (Model != null)
+
+    @if (Model != null)
+    {
+        <div class="modern-card">
+            @using (Html.BeginForm("", "", FormMethod.Post, new { @class = "dropzone dropzone-custom needsclick add-professors", enctype = "multipart/form-data", id = "myform" }))
+            {
+                <input type="hidden" id="sid" value="@Model.Item1.objExamFrom.sid" />
+                <input type="hidden" id="courseyearid" value="@Model.Item1.objExamFrom.courseyearid" />
+                <input type="hidden" id="coursecategoryid" value="@Model.Item1.objExamFrom.coursecategoryid" />
+                @Html.HiddenFor(model => model.Item1.objExamFrom.collegeid, new { @id = "collegeid" })
+                @Html.HiddenFor(model => model.Item1.objExamFrom.StreamCategoryID, new { @id = "StreamCategoryID" })
+
+                <!-- Header -->
+                <div class="card-header-blue">
+                    <h3><i class="fa fa-file-alt" style="margin-right: 10px;"></i> Exam Form Verification</h3>
+                    <p>@Model.Item1.objExamFrom.CourseCategory Course @Model.Item1.objExamFrom.YearName | SESSION: @Model.Item1.objExamFrom.SessionName | @Model.Item1.objExamFrom.currentyear</p>
+                </div>
+
+                @if (TempData["Msg"] != null)
+                {
+                    <div class="alert-modern" style="background:#f8d7da; border-left-color:#dc3545; margin: 15px 25px;">
+                        <i class="fa fa-exclamation-triangle"></i> @TempData["Msg"]
+                    </div>
+                }
+
+                <!-- Student Info Grid -->
+                <div class="info-grid">
+                    <div class="info-row"><span class="info-label">Registration No:</span><span class="info-value">@Model.Item1.objExamFrom.RegistrationNo</span></div>
+                    <div class="info-row"><span class="info-label">Year of Registration:</span><span class="info-value">@Model.Item1.objExamFrom.Registrationyear</span></div>
+                    <div class="info-row"><span class="info-label">Roll No:</span><span class="info-value">@Model.Item1.objExamFrom.RollNo</span></div>
+                    <div class="info-row"><span class="info-label">Student Name:</span><span class="info-value">@Model.Item1.objExamFrom.StudentName</span></div>
+                    <div class="info-row"><span class="info-label">Name (Devnagari):</span><span class="info-value">@Model.Item1.objExamFrom.StudentNameHindi</span></div>
+                    <div class="info-row"><span class="info-label">Examination:</span><span class="info-value">@Model.Item1.objExamFrom.CourseCategory @Model.Item1.objExamFrom.YearName</span></div>
+                    <div class="info-row"><span class="info-label">Date of Birth:</span><span class="info-value">@Model.Item1.objExamFrom.DOB</span></div>
+                    <div class="info-row"><span class="info-label">Contact No:</span><span class="info-value">@Model.Item1.objExamFrom.MobileNo</span></div>
+                    <div class="info-row"><span class="info-label">@(Model.Item1.objExamFrom.ftitle == 20 ? "Father's Name" : (Model.Item1.objExamFrom.ftitle == 21 ? "Husband's Name" : "Father's Name")):</span><span class="info-value">@Model.Item1.objExamFrom.FatherName</span></div>
+                    <div class="info-row"><span class="info-label">Mother's Name:</span><span class="info-value">@Model.Item1.objExamFrom.MotherName</span></div>
+                    <div class="info-row"><span class="info-label">Nationality:</span><span class="info-value">@Model.Item1.objExamFrom.Nationality</span></div>
+                    <div class="info-row"><span class="info-label">Religion:</span><span class="info-value">@Model.Item1.objExamFrom.Religion</span></div>
+                    <div class="info-row"><span class="info-label">Category:</span><span class="info-value">@Model.Item1.objExamFrom.castecategoryname</span></div>
+                    <div class="info-row"><span class="info-label">Permanent Address:</span><span class="info-value">@Model.Item1.objExamFrom.permanentAddress</span></div>
+                    <div class="info-row"><span class="info-label">Correspondence:</span><span class="info-value">@Model.Item1.objExamFrom.CurrentAddress</span></div>
+                    <div class="info-row"><span class="info-label">College Name:</span><span class="info-value">@Model.Item1.objExamFrom.CollegeName</span></div>
+                    <div class="info-row"><span class="info-label">Honours Subject:</span><span class="info-value"><strong>@Model.Item1.objExamFrom.HonoursSubject</strong></span></div>
+                </div>
+
+                <!-- Photo & Signature -->
+                <div class="photo-section">
+                    <div class="photo-card">
+                        <div style="font-weight: 600; margin-bottom: 8px;"><i class="fa fa-camera"></i> Photograph</div>
+                        <img src="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Photoandsign/@Model.Item1.objExamFrom.photo" alt="Photo" />
+                    </div>
+                    <div class="photo-card">
+                        <div style="font-weight: 600; margin-bottom: 8px;"><i class="fa fa-pencil"></i> Signature</div>
+                        <img src="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Photoandsign/@Model.Item1.objExamFrom.sign" alt="Signature" />
+                    </div>
+                </div>
+
+                <!-- Subjects Section -->
+                <div class="subjects-section">
+                    <div class="section-title"><i class="fa fa-book"></i> Subjects of Examination</div>
+
+                    @if (saved != null && saved.Count > 0)
                     {
-                        <div >
-                            @using (Html.BeginForm("", "", FormMethod.Post, new { @class = "dropzone dropzone-custom needsclick add-professors", enctype = "multipart/form-data", id = "myform" }))
-                            {
-                                <div style="width:100%; margin:auto; padding:0; font-size:14px; color:#333; font-family:Arial, Helvetica, sans-serif; border:0px solid #333;">
-                                    <div style="width:800px; margin:auto; font-family:Arial, Helvetica, sans-serif; font-size:14px;">
-                                        <input type="hidden" id="sid" value="@Model.Item1.objExamFrom.sid" />
-                                        <input type="hidden" id="courseyearid" value="@Model.Item1.objExamFrom.courseyearid" />
-                                        <input type="hidden" id="coursecategoryid" value="@Model.Item1.objExamFrom.coursecategoryid" />
-                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                            <tr>
-                                                <td align="left" valign="top">&nbsp;</td>
-                                            </tr>
-                                            <tr>
-                                                <td align="center" valign="top" style="font-size:18px; padding:5px 0;"><div class="sparkline8-hd">
-                                            <div class="">
-                                                <center>
-                                                    <h3 id="pageheading">
-
-                                                        Exam - Form
-
-                                                    </h3>
-                                                    <div>
-                                                        @Model.Item1.objExamFrom.CourseCategory  Course @Model.Item1.objExamFrom.YearName
-                                                        , SESSION-(@Model.Item1.objExamFrom.SessionName) EXAMINATION - @Model.Item1.objExamFrom.currentyear
-                                                    </div>
-                                                </center>
-
-                                            </div>
-                                            <div class="text-danger text-center">
-                                                @if (TempData["Msg"] != null)
-                                                {
-                                                    @TempData["Msg"];
-                                                }
-
-                                            </div>
-
-                                        </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="left" valign="top">&nbsp;</td>
-                                            </tr>
-                                            <tr>
-                                                <td align="left" valign="top">
-                                               
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="left" valign="top">&nbsp;</td>
-                                            </tr>
-                                            <tr>
-                                                <td align="left" valign="top">&nbsp;</td>
-                                            </tr>
-                                            <tr>
-                                                <td align="left" valign="top" style="font-size:18px; padding:5px 0;"><strong>PARTICULARS :</strong></td>
-                                            </tr>
-                                            <tr>
-                                                <td align="left" valign="top">&nbsp;</td>
-                                            </tr>
-                                            <tr>
-                                                <td align="left" valign="top">
-                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                        <tr>
-                                                            <td width="28%" align="left" valign="top" style="padding:15px 0 0;">1. Registration No </td>
-                                                            <td width="72%" align="left" valign="top" style="padding:0px 0 0; ">
-                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                    <tr>
-
-                                                                        <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;" width="180">&nbsp;@Model.Item1.objExamFrom.RegistrationNo</td>
-                                                                        <td align="left" valign="top" style="padding:15px 0 0;" width="200">&nbsp;Year of Registration:</td>
-                                                                        <td align="left" valign="top" style="padding:15px 0 0;  border-bottom:1px dotted #000;" width="218">&nbsp;@Model.Item1.objExamFrom.Registrationyear</td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="2" align="left" valign="top" style="padding:15px 0 0;">
-                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                    <tr>
-                                                                        <td width="80%" valign="top">
-                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                                <tr>
-                                                                                    <td align="left" width="40%" valign="top" style="padding:15px 0 0;">2. Roll No </td>
-                                                                                    <td align="left" width="60%" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.Item1.objExamFrom.RollNo</td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td align="left" width="40%" valign="top" style="padding:15px 0 0;">3. Name in block Letter in English</td>
-                                                                                    <td align="left" width="60%" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.Item1.objExamFrom.StudentName</td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td align="left" valign="top" style="padding:15px 0 0;">4. Name in Devnagari</td>
-                                                                                    <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.Item1.objExamFrom.StudentNameHindi</td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td align="left" valign="top" style="padding:15px 0 0;">5. Name of Examination</td>
-                                                                                    <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.Item1.objExamFrom.CourseCategory  @Html.DisplayFor(model => model.Item1.objExamFrom.YearName)</td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td align="left" valign="top" style="padding:15px 0 0;">6. Date of birth</td>
-                                                                                    <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.Item1.objExamFrom.DOB</td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td align="left" valign="top" style="padding:15px 0 0;">7. Contact No</td>
-                                                                                    <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.Item1.objExamFrom.MobileNo</td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td align="left" valign="top" style="padding:15px 0 0;">8. @(Model.Item1.objExamFrom.ftitle == 20 ? " Father's  Name" : (Model.Item1.objExamFrom.ftitle == 21 ? "  Husband's  Name" : " Father's  Name") )</td>
-                                                                                    <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.Item1.objExamFrom.FatherName</td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td align="left" valign="top" style="padding:15px 0 0;">9. Mother’s Name</td>
-                                                                                    <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.Item1.objExamFrom.MotherName</td>
-                                                                                </tr>
-                                                                            </table>
-                                                                        </td>
-                                                                        <td width="20%" valign="top">
-                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                                <tr>
-                                                                                    <td align="center" valign="middle">
-                                                                                        &nbsp;<div style="width:125px; height:125px; padding:5px;">
-                                                                                            <img src="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Photoandsign/@Model.Item1.objExamFrom.photo" width="100%" style="border:1px solid #333; " alt=" />
-                                                                                        </div>
-                                                                                    </td>
-                                                                                </tr>
-
-                                                                                <tr>
-                                                                                    <td align="center" valign="middle">&nbsp;<br /></td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td align="center" valign="middle">&nbsp;<br /></td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td align="center" valign="middle">
-                                                                                        <div style="width:125px; height:80px; padding:5px;">
-                                                                                            <br /><br />
-                                                                                            <img src="@System.Configuration.ConfigurationManager.AppSettings["AmozonbucketPath"]/Student/Photoandsign/@Model.Item1.objExamFrom.sign" width="100%" style="border:1px solid #333; " alt=" />
-                                                                                        </div>
-                                                                                    </td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td align="center" valign="middle">&nbsp;</td>
-                                                                                </tr>
-
-                                                                            </table>
-                                                                        </td>
-
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="2" align="left" valign="top">
-                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                    <tr>
-                                                                        <td align="left" valign="top" style="padding:15px 0 0;" width="93">10. Nationality:</td>
-                                                                        <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;" width="130">&nbsp;@Model.Item1.objExamFrom.Nationality</td>
-                                                                        <td align="left" valign="top" style="padding:15px 0 0;" width="66">&nbsp;Religion:</td>
-                                                                        <td align="left" valign="top" style="padding:15px 0 0;  border-bottom:1px dotted #000;" width="182">&nbsp;@Model.Item1.objExamFrom.Religion</td>
-                                                                        <td align="left" valign="top" style="padding:15px 0 0;" width="76">&nbsp;Category:</td>
-                                                                        <td align="left" valign="top" style="padding:15px 0 0;  border-bottom:1px dotted #000;" width="190">&nbsp;@Model.Item1.objExamFrom.castecategoryname</td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="2" align="left" valign="top" style="padding:15px 0 0;">
-                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                    <tr>
-                                                                        <td width="10%" rowspan="10" align="left" valign="top" style="padding:15px 0 0;">11. Address:</td>
-                                                                        <td width="90%" align="left" valign="top">
-                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                                <tr>
-                                                                                    <td width="20%" align="left" valign="top" style="padding:15px 0 0;">(a) Permanent</td>
-                                                                                    <td width="80%" align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.Item1.objExamFrom.permanentAddress</td>
-                                                                                </tr>
-                                                                            </table>
-                                                                        </td>
-                                                                    </tr>
-
-
-
-                                                                    <tr>
-                                                                        <td align="left" valign="top">
-                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                                <tr>
-                                                                                    <td width="20%" align="left" valign="top" style="padding:15px 0 0;">(b) Correspondence </td>
-                                                                                    <td width="80%" align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.Item1.objExamFrom.CurrentAddress</td>
-                                                                                </tr>
-                                                                            </table>
-                                                                        </td>
-                                                                    </tr>
-
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td width="28%" align="left" valign="top" style="padding:15px 0 0;">12. College Name</td>
-                                                            <td width="72%" align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;@Model.Item1.objExamFrom.CollegeName</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td align="left" valign="top" style="padding:15px 0 0;"> 13. <strong>Subjects of Examination </strong> </td>
-                                                            <td align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;"><strong> &nbsp;@Model.Item1.objExamFrom.HonoursSubject</strong> </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="2" align="left" valign="top">
-                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                    <tr>
-                                                                        <td width="30%" align="left" valign="top" style="padding:15px 0 0;">14.@Html.DisplayFor(model => model.Item1.objExamFrom.CourseCategory) @Html.DisplayFor(model => model.Item1.objExamFrom.YearName) Subject :</td>
-                                                                        <td width="70%" align="left" valign="top" style="padding:15px 0 0; ">
-
-                                                                            <table width="100%" class="table table-bordered ">
-                                                                                <tr>
-                                                                                    <th>Paper</th>
-                                                                                    <th>Name of Subject</th>
-                                                                                </tr>
-                                                                                @if (Model.Item4.Count > 0)
-                                                                                {
-                                                                                    foreach (var item in Model.Item4)
-                                                                                    {
-                                                                                        <tr>
-                                                                                            <td>Core Course</td>
-                                                                                            <td>@item.SubjectCode - @item.SubjectName</td>
-                                                                                        </tr>
-
-                                                                                    }
-                                                                                    if (@Model.Item1.objExamFrom.EducationType == Convert.ToInt16(CommonSetting.Commonid.EducationtypePG) )
-                                                                                    {
-                                                                                        <tr>
-
-                                                                                            <td><b>Elective Subject</b></td>
-                                                                                            <td> @Model.Item1.objExamFrom.electivesubjectname</td>
-
-                                                                                        </tr>
-                                                                                        <tr>
-                                                                                            <td>
-                                                                                                <b>Change Elective Subject</b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                @Html.DropDownList("Substreamcategoryid", new SelectList(ViewBag.Electivesubjectlist, "Substreamcategoryid", "SubjectName"), "Select Optional Subject", new { @class = "form-control", @id = "Substreamcategoryid" })
-                                                                                            </td>
-                                                                                            <td> <button id="btn_elective4" class="btn btn-primary">Change Elective Subject</button></td>
-                                                                                        </tr>
-
-                                                                                    }
-                                                                                    if (@Model.Item1.objExamFrom.EducationType == Convert.ToInt16(CommonSetting.Commonid.EducationtypeBED))
-                                                                                    {
-                                                                                        if (@Model.Item1.objExamFrom.courseyearid == 29) // only for part-2
-                                                                                        {
-
-                                                                                        <tr>
-
-                                                                                            <td><b>Elective Subject (C-7(b))</b></td>
-                                                                                            <td> @Model.Item1.objExamFrom.electivesubjectname_2
-                                                                                             
-                                                                                            </td>
-
-                                                                                        </tr>
-                                                                                        <tr>
-
-                                                                                            <td><b>Elective Subject (C-11)</b></td>
-                                                                                            <td> @Model.Item1.objExamFrom.electivesubjectname
-                                                                                             
-                                                                                            </td>
-
-                                                                                        </tr>
-                                                                                        <tr>
-                                                                                            <td>
-                                                                                                <b>Change Subject (C-7(b))</b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                @Html.DropDownList("Substreamcategoryid2", new SelectList(ViewBag.Electivesubjectlist_c7b, "Substreamcategoryid", "SubjectName"), "Select C-7(b) Subject", new { @class = "form-control", @id = "Substreamcategoryid2" })
-                                                                                            </td>
-                                                                                            <td> <button id="btn_elective2" class="btn btn-primary">Change C-7(b)</button></td>
-                                                                                        </tr>
-                                                                                        <tr>
-                                                                                            <td>
-                                                                                                <b>Change Subject (C-11)</b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                @Html.DropDownList("Substreamcategoryid", new SelectList(ViewBag.Electivesubjectlist, "Substreamcategoryid", "SubjectName"), "Select Optional Subject", new { @class = "form-control", @id = "Substreamcategoryid"})
-                                                                                            </td>
-                                                                                            <td> <button id="btn_elective" class="btn btn-primary">Change C-11</button></td>
-                                                                                        </tr>
-                                                                                        }
-                                                                                        if (@Model.Item1.objExamFrom.courseyearid == 28) // only for part-1
-                                                                                        {
-
-                                                                                           
-                                                                                            <tr>
-
-                                                                                                <td><b>Elective Subject (C-7(a))</b></td>
-                                                                                                <td>
-                                                                                                    @Model.Item1.objExamFrom.electivesubjectname
-
-                                                                                                </td>
-
-                                                                                            </tr>
-                                                                                           
-                                                                                            <tr>
-                                                                                                <td>
-                                                                                                    <b>Change Subject(C-7(a))</b>
-                                                                                                </td>
-                                                                                                <td>
-                                                                                                    @Html.DropDownList("Substreamcategoryid", new SelectList(ViewBag.Electivesubjectlist, "Substreamcategoryid", "SubjectName"), "Select Optional Subject", new { @class = "form-control", @id = "Substreamcategoryid" })
-                                                                                                </td>
-                                                                                                <td> <button id="btn_elective3" class="btn btn-primary">Change C-7(a)</button></td>
-                                                                                            </tr>
-                                                                                        }
-                                                                                    }
-                                                                                }
-
-                                                                            </table>
-
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-
-
-                                                        <tr>
-                                                            <td colspan="2" align="left" valign="top">
-                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                    <tr>
-                                                                        <td width="22%" rowspan="7" align="left" valign="top" style="padding:15px 0 0;">Details about Exam :</td>
-                                                                        <td width="78%" align="left" valign="top">
-                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                                <tr>
-                                                                                    <td width="22%" align="left" valign="top" style="padding:15px 0 0;">(a) Passed earlier </td>
-                                                                                    <td width="78%" align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">&nbsp;</td>
-                                                                                </tr>
-                                                                            </table>
-                                                                        </td>
-                                                                    </tr>
-
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        @if (Model.Item1.objExamFrom.coursecategoryid == 29)
-                                                        {
-                                                        <tr>
-                                                            <td colspan="2" align="left" valign="top">
-                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                    <tr>
-                                                                        <td width="30%" align="left" valign="top" style="padding:15px 0 0;"> If appeared earlier / Failed:</td>
-                                                                        <td width="70%" align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">
-                                                                            @if (Model.Item1.objExamFrom.IsApplied == false)
-                                                                            {
-                                                                                <select style="width:100%; border:0; border-bottom:1px dotted #000;" id="isappeared" name="isappeared" class="form-control">
-                                                                                    <option value="">Select</option>
-                                                                                    <option value="1"> Yes</option>
-                                                                                    <option value="0">No</option>
-                                                                                </select>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <div>@(Model.Item1.objExamFrom.isappearedearlierfail == true ? "Yes" : "No" )</div>
-                                                                            }
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        }
-
-                                                        @if (Model.Item1.objExamFrom.IsApplied == true)
-                                                                                {
-                                                            <tr>
-                                                                <td colspan="2" align="left" valign="top">
-                                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                        <tr>
-                                                                            <td width="30%" align="left" valign="top" style="padding:15px 0 0;"> Present Status of Candidate: </td>
-                                                                            <td width="70%" align="left" valign="top" style="padding:15px 0 0; border-bottom:1px dotted #000;">
-                                                                                <span style="border:0; border-bottom:1px dotted #000; width:100%;" /><div>
-                                                                                    <strong>@(Model.Item1.objExamFrom.IsDocVerify == 1 ? "Approved" : (Model.Item1.objExamFrom.IsDocVerify == 2 ? " Rejected ,Due to :- " + Model.Item1.objExamFrom.rejectreason + "" : "Pending.") )</strong>
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
-                                                        }
-                                                        <tr>
-                                                            <td colspan="2" align="left" valign="top">
-                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                    <tr>
-                                                                        <td width="100%" colspan="2" calign="left" valign="top" style="padding:15px 0 0;">
-                                                                            <label>
-
-                                                                                <span style="vertical-align:middle; display:inline-block;"><strong>Applicationno : </strong>  @Model.Item1.objExamFrom.ApplicationNo</span>
-
-                                                                            </label>
-                                                                        </td>
-
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="2" align="left" valign="top">
-                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                    <tr>
-                                                                        <td width="100%" colspan="2" calign="left" valign="top" style="padding:15px 0 0;">
-                                                                            <label>
-
-                                                                                <span style="vertical-align:middle; display:inline-block;"><strong>form apply by Student : </strong>  @(Model.Item1.objExamFrom.IsApplied == true ? "Form Applied " : "Not Applied till.") </span>
-
-                                                                            </label>
-                                                                        </td>
-
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="2" align="left" valign="top">
-                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                    <tr>
-                                                                        <td width="100%" colspan="2" calign="left" valign="top" style="padding:15px 0 0;">
-                                                                            <div class="sparkline12-graph fee-submit">
-                                                                                <div class="static-table-list">
-
-
-                                                                                    @if (Model != null)
-                                                                                {
-                                                                                    if (Model.Item1.objExamFrom != null)
-                                                                                    {
-
-                                                                                        if (Model.Item1.objExamFrom.IsExamfeesubmit == 0)
-                                                                                        {
-                                                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                                                    <tr>
-                                                                                                        <td colspan="3">
-                                                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border:1px solid #ccc;">
-                                                                                                                <tr>
-                                                                                                                    <th colspan="3" align="left" valign="middle" style="border-bottom:1px solid #ccc;   color:#FFF;  padding:5px 10px;" class="blue-bg"> Exam Fees Structure</th>
-                                                                                                                </tr>
-                                                                                                                @{int i = 0; decimal amt = 0;}
-                                                                                                                @foreach (var item in Model.Item3)
-                                                                                {
-                                                                                    i = i + 1;
-
-                                                                                                                    <tr>
-                                                                                                                        <td align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; padding:5px 10px;;font-weight:bold">@i</td>
-                                                                                                                        <td align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; padding:5px 10px;;font-weight:bold">@item.headname + LateFee</td>
-                                                                                                                        <td align="left" valign="middle" style="padding:5px 10px;; border-bottom:1px solid #ccc;"><span id="">@item.amount +@item.late_fee </span></td>
-                                                                                                                    </tr>
-                                                                                                                    amt = amt + item.amount + item.late_fee;
-
-                                                                                }
-                                                                                                                <tr>
-                                                                                                                    <td align="left" valign="middle" style="border-bottom:1px solid #ccc; border-right:1px solid #ccc; padding:5px 10px;font-weight:bold" colspan="2">Total Fees</td>
-                                                                                                                    <td align="left" valign="middle" style="padding:5px 10px; border-bottom:1px solid #ccc;;font-weight:bold"><span id="">@amt</span></td>
-                                                                                                                </tr>
-
-
-                                                                                                            </table>
-                                                                                                        </td>
-                                                                                                    </tr>
-                                                                                                </table>
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                    <div class="modal-area-button text-center">
-                                                                                        <div class="document-btn">
-                                                                                            <input type="hidden" name="GridHtml" />
-                                                                                            @if (Model != null)
-                                                                                {
-                                                                                    if (Model.Item1.objExamFrom != null)
-                                                                                    {
-
-                                                                                        if (Model.Item1.objExamFrom.IsExamfeesubmit == 0)
-                                                                                        {
-
-                                                                                                        @*<div>  UG कोर्स  (UG Part - II) Examination Fees जल्द ही खुलने वाला है  (coming soon) </div>*@
-
-                                                                                            if (Model.Item1.objExamFrom.IsDocVerify == 0)
-                                                                                            {
-                                                                                                <div class="row  btndesign">
-                                                                                                    <div class="col-lg-12 center">
-                                                                                                        @if (ViewBag.isdateopen == 1)
-                                                                                                        {
-
-                                                                                                            if (Model.Item1.objExamFrom.IsApplied == true)
-                                                                                                            {
-                                                                                                            }
-                                                                                                                    <div class="row  btndesign">
-                                                                                                                        <div class="col-lg-6 right">
-                                                                                                                            <button type="submit" class="btn btn-primary waves-effect waves-light" id="submitapp"> Document Verify</button>
-                                                                                                                        </div>
-                                                                                                                        @*<div class="col-lg-6 left">
-                                                                                                                            <button type="submit" class="btn btn-primary waves-effect waves-light" id="submitappreject"> Document Reject</button>
-                                                                                                                        </div>*@
-                                                                                                                    </div>
-
-                                                                                                            @*}
-                                                                                                            else
-                                                                                                            {<div> Student not apply from till.</div> }*@
-                                                                                                        }
-                                                                                                        else
-                                                                                                        {
-                                                                                                            <div> Date is Closed.</div>
-                                                                                                        }
-                                                                                                    </div>
-                                                                                                </div>
-
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                <div style="font-weight:bolder;color:darkgreen"> Student Verified </div>
-
-
-                                                                                                }
-
-
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                <div style="font-weight:bolder;color:darkgreen"> Student fees submited </div>
-
-                                                                                                    }
-
-                                                                                                }
-                                                                                            }
-                                                                                            @Html.HiddenFor(model => model.Item1.objExamFrom.collegeid, new { @id = "collegeid" })
-                                                                                            @Html.HiddenFor(model => model.Item1.objExamFrom.StreamCategoryID, new { @id = "StreamCategoryID" })
-
-
-                                                                                        </div>
-                                                                                    </div>
-
-
-                                                                                </div>
-                                                                            </div>
-                                                                        </td>
-
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td colspan="2" align="left" valign="middle"></td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td align="left" valign="top">&nbsp;</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-
-                            }
-
-                            @*</div>*@
+                        <div style="margin-bottom: 15px;">
+                            <label style="font-weight: 600;">Selected Subjects:</label>
+                            <div style="margin-top: 8px;">
+                                @foreach (var item in saved)
+                                {
+                                    <span class="subject-badge">@item.HeadingName : @item.SubjectName</span>
+                                }
+                            </div>
                         </div>
                     }
-            </div>
+
+                    <table class="custom-table">
+                        <thead>
+                            <tr><th>Paper</th><th>Name of Subject</th></tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Item4.Count > 0)
+                            {
+                                foreach (var item in Model.Item4)
+                                {
+                                    <tr><td>Core Course</td><td>@item.SubjectCode - @item.SubjectName</td></tr>
+                                }
+
+                                @* Elective Subject for PG *@
+                                if (@Model.Item1.objExamFrom.EducationType == Convert.ToInt16(CommonSetting.Commonid.EducationtypePG))
+                                {
+                                    <tr>
+                                        <td><b>Elective Subject</b></td>
+                                        <td>@Model.Item1.objExamFrom.electivesubjectname</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Change Elective Subject</b></td>
+                                        <td colspan="2">
+                                            @Html.DropDownList("Substreamcategoryid", new SelectList(ViewBag.Electivesubjectlist, "Substreamcategoryid", "SubjectName"), "Select Optional Subject", new { @class = "form-control-modern", @id = "Substreamcategoryid" })
+                                            <button id="btn_elective4" class="btn-modern" style="margin-top: 10px;">Change Elective Subject</button>
+                                        </td>
+                                    </tr>
+                                }
+
+                                @* BED Subjects *@
+                                if (@Model.Item1.objExamFrom.EducationType == Convert.ToInt16(CommonSetting.Commonid.EducationtypeBED))
+                                {
+                                    if (@Model.Item1.objExamFrom.courseyearid == 29)
+                                    {
+                                        <tr><td><b>Elective Subject (C-7(b))</b></td><td>@Model.Item1.objExamFrom.electivesubjectname_2</td></tr>
+                                        <tr><td><b>Elective Subject (C-11)</b></td><td>@Model.Item1.objExamFrom.electivesubjectname</td></tr>
+                                        <tr>
+                                            <td><b>Change Subject (C-7(b))</b></td>
+                                            <td colspan="2">
+                                                @Html.DropDownList("Substreamcategoryid2", new SelectList(ViewBag.Electivesubjectlist_c7b, "Substreamcategoryid", "SubjectName"), "Select C-7(b) Subject", new { @class = "form-control-modern", @id = "Substreamcategoryid2" })
+                                                <button id="btn_elective2" class="btn-modern" style="margin-top: 10px;">Change C-7(b)</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Change Subject (C-11)</b></td>
+                                            <td colspan="2">
+                                                @Html.DropDownList("Substreamcategoryid", new SelectList(ViewBag.Electivesubjectlist, "Substreamcategoryid", "SubjectName"), "Select Optional Subject", new { @class = "form-control-modern", @id = "Substreamcategoryid" })
+                                                <button id="btn_elective" class="btn-modern" style="margin-top: 10px;">Change C-11</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                    if (@Model.Item1.objExamFrom.courseyearid == 28)
+                                    {
+                                    <td>
+                                    <td><b>Elective Subject (C-7(a))</b></td>
+                                    <td>@Model.Item1.objExamFrom.electivesubjectname</td></tr>
+                                    <tr>
+                                        <td><b>Change Subject(C-7(a))</b></td>
+                                        <td colspan="2">
+                                            @Html.DropDownList("Substreamcategoryid", new SelectList(ViewBag.Electivesubjectlist, "Substreamcategoryid", "SubjectName"), "Select Optional Subject", new { @class = "form-control-modern", @id = "Substreamcategoryid" })
+                                            <button id="btn_elective3" class="btn-modern" style="margin-top: 10px;">Change C-7(a)</button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Exam Details & Status -->
+                    <div class="subjects-section">
+                        <div class="section-title"><i class="fa fa-info-circle"></i> Exam Details</div>
+
+                        @if (Model.Item1.objExamFrom.coursecategoryid == 29)
+                        {
+                            <div class="info-row" style="padding: 10px 0;">
+                                <span class="info-label">If appeared earlier / Failed:</span>
+                                <span class="info-value">
+                                    @if (Model.Item1.objExamFrom.IsApplied == false)
+                                    {
+                                        <select id="isappeared" name="isappeared" class="form-control-modern" style="width: 200px;">
+                                            <option value="">Select</option>
+                                            <option value="1">Yes</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                    }
+                                    else
+                                    {
+                                        <span>@(Model.Item1.objExamFrom.isappearedearlierfail == true ? "Yes" : "No")</span>
+                                    }
+                                </span>
+                            </div>
+                        }
+
+                        <div class="info-row" style="padding: 10px 0;">
+                            <span class="info-label">Application No:</span>
+                            <span class="info-value"><strong>@Model.Item1.objExamFrom.ApplicationNo</strong></span>
+                        </div>
+
+                        <div class="info-row" style="padding: 10px 0;">
+                            <span class="info-label">Form Status:</span>
+                            <span class="info-value">@(Model.Item1.objExamFrom.IsApplied == true ? "Form Applied" : "Not Applied yet")</span>
+                        </div>
+
+                        @if (Model.Item1.objExamFrom.IsApplied == true)
+                        {
+                            <div class="info-row" style="padding: 10px 0;">
+                                <span class="info-label">Present Status:</span>
+                                <span class="info-value">
+                                    @if (Model.Item1.objExamFrom.IsDocVerify == 1)
+                                    {
+                                        <span class="status-approved"><i class="fa fa-check-circle"></i> Approved</span>
+                                    }
+                                    else if (Model.Item1.objExamFrom.IsDocVerify == 2)
+                                    {
+                                        <span class="status-rejected"><i class="fa fa-times-circle"></i> Rejected - @Model.Item1.objExamFrom.rejectreason</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="status-pending"><i class="fa fa-clock"></i> Pending Verification</span>
+                                    }
+                                </span>
+                            </div>
+                        }
+
+                        <!-- Fee Structure -->
+                        @if (Model.Item1.objExamFrom.IsExamfeesubmit == 0 && Model.Item1.objExamFrom != null)
+                        {
+                            <div style="margin-top: 20px;">
+                                <table class="fee-table">
+                                    <thead><tr><th colspan="3">Exam Fees Structure</th></tr></thead>
+                                    <tbody>
+                                        @{int i = 0; decimal amt = 0;}
+                                        @foreach (var item in Model.Item3)
+                                        {
+                                            i++;
+                                            amt = amt + item.amount + item.late_fee;
+                                            <tr>
+                                                <td style="width: 50px;">@i</td>
+                                                <td>@item.headname + LateFee</td>
+                                                <td>@item.amount + @item.late_fee</td>
+                                            </tr>
+                                        }
+                                        <tr style="font-weight: bold; background: #e8f4fd;">
+                                            <td colspan="2">Total Fees</td>
+                                            <td>@amt</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div style="padding: 20px 25px; background: #f8f9fa; border-top: 1px solid #e9ecef;">
+                        <input type="hidden" name="GridHtml" />
+
+                        @if (Model.Item1.objExamFrom.IsExamfeesubmit == 0)
+                        {
+                            if (Model.Item1.objExamFrom.IsDocVerify == 0)
+                            {
+                                if (ViewBag.isdateopen == 1)
+                                {
+                                    <div class="btndesign center">
+                                        <button type="submit" class="btn-modern" id="submitapp">
+                                            <i class="fa fa-check-circle"></i> Document Verify
+                                        </button>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="alert-modern" style="background:#fff3cd; border-left-color:#ffc107;">Date is Closed.</div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="status-approved" style="display: inline-block; padding: 10px 20px;">
+                                    <i class="fa fa-check-circle"></i> Student Verified
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="status-approved" style="display: inline-block; padding: 10px 20px;">
+                                <i class="fa fa-check-circle"></i> Student fees submitted
+                            </div>
+                        }
+                    </div>
+                }
         </div>
-    </div>
+    }
 </div>
 
 <script>
@@ -608,15 +566,13 @@
         debugger;
         var sid = $("#sid").val();
         var courseyearid = $("#courseyearid").val();
-        
-        ///alert(res);
-        if (sid == "")
-        {
+
+        if (sid == "") {
             return;
         }
         var collegeid = $("#collegeid").val();
         var StreamCategoryID = $("#StreamCategoryID").val();
-           
+
         showloader();
         $.ajax({
             url: "/College/Home/ExamFormVerifyForStudent/",
@@ -633,145 +589,64 @@
                 else {
                     alert(data.Msg);
                 }
-                // console.log(data);
-
             },
             error: function (err) {
                 hideloader();
                 alert('error');
-
                 return false;
             }
         });
     });
-    $("#submitappreject").click(function (event) {
-        // debugger;
-        var sid = $("#sid").val();
-        var courseyearid = $("#courseyearid").val();
-        ///alert(res);
-        if (sid == "") {
-            return;
-        }
-        var a = confirm('Are you sure to Reject this Examination form !!');
-        var txt;
-        if (a) {
-            var person = prompt("Please Enter Reason:", "");
-            if (person == null || person == "") {
-                return false;
-            }
-            else {
-                showloader();
-                $.ajax({
-                    url: "/College/Home/ExamFormForStudentrejects/",
-                    data: { sid: sid, courseyearid: courseyearid, reason: person },
-                    cache: false,
-                    type: "POST",
-                    dataType: "json",
-                    success: function (data) {
-                        hideloader();
-                        if (data.Status) {
-                            alert(data.Msg);
-                            location.replace('/College/Home/ExamFormList');
-                        }
-                        else {
-                            alert(data.Msg);
-                        }
-                        // console.log(data);
 
-                    },
-                    error: function (err) {
-                        hideloader();
-                        alert('error');
-
-                        return false;
-                    }
-                });
-
-            }
-        }
-        else {
-            return false;
-        }
-
-
-    });
     $("#btn_elective").click(function (event) {
-        // debugger;
         var sid = $("#sid").val();
         var courseyearid = $("#courseyearid").val();
         var coursecategoryid = $("#coursecategoryid").val();
-        ///alert(res);
-        if (sid == "")
-        {
-            return false;
-        }
+        if (sid == "") { return false; }
         var a = confirm('Are you sure to Change C-11 Subject !!');
-        var txt;
-        if (a)
-        {
+        if (a) {
             var Substreamcategoryid = $("#Substreamcategoryid").val();
-            ///alert(res);
-            if (Substreamcategoryid == "") 
-            {
+            if (Substreamcategoryid == "") {
                 alert('Please select C-11 Subject');
                 return false;
             }
-            
-            
-                showloader();
-                $.ajax({
-                    url: "/College/Home/ExamFormFor_updateelective1subject/",
-                    data: { sid: sid, courseyearid: courseyearid, Substreamcategoryid: Substreamcategoryid, coursecategoryid: coursecategoryid },
-                    cache: false,
-                    type: "POST",
-                    dataType: "json",
-                    success: function (data) {
-                        hideloader();
-                        if (data.Status) {
-                            alert(data.Msg);
-                            location.reload();
-                        }
-                        else {
-                            alert(data.Msg);
-                        }
-                        // console.log(data);
-
-                    },
-                    error: function (err) {
-                        hideloader();
-                        alert('error');
-
-                        return false;
+            showloader();
+            $.ajax({
+                url: "/College/Home/ExamFormFor_updateelective1subject/",
+                data: { sid: sid, courseyearid: courseyearid, Substreamcategoryid: Substreamcategoryid, coursecategoryid: coursecategoryid },
+                cache: false,
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    hideloader();
+                    if (data.Status) {
+                        alert(data.Msg);
+                        location.reload();
                     }
-                });
-
-            
+                    else { alert(data.Msg); }
+                },
+                error: function (err) {
+                    hideloader();
+                    alert('error');
+                    return false;
+                }
+            });
         }
-        else {
-            return false;
-        }
-
-
+        return false;
     });
+
     $("#btn_elective2").click(function (event) {
-         debugger;
         var sid = $("#sid").val();
         var courseyearid = $("#courseyearid").val();
         var coursecategoryid = $("#coursecategoryid").val();
-        if (sid == "") {
-            return false;
-        }
+        if (sid == "") { return false; }
         var a = confirm('Are you sure to Change C-7(b) Subject !!');
-        var txt;
         if (a) {
             var Substreamcategoryid2 = $("#Substreamcategoryid2").val();
-            ///alert(res);
             if (Substreamcategoryid2 == "") {
                 alert('Please select C-7(b) Subject');
                 return false;
             }
-
-
             showloader();
             $.ajax({
                 url: "/College/Home/ExamFormFor_updateelective1subject_2/",
@@ -785,47 +660,30 @@
                         alert(data.Msg);
                         location.reload();
                     }
-                    else {
-                        alert(data.Msg);
-                    }
-                    // console.log(data);
-
+                    else { alert(data.Msg); }
                 },
                 error: function (err) {
                     hideloader();
                     alert('error');
-
                     return false;
                 }
             });
-
-
         }
-        else {
-            return false;
-        }
-
-
+        return false;
     });
+
     $("#btn_elective3").click(function (event) {
-        debugger;
         var sid = $("#sid").val();
         var courseyearid = $("#courseyearid").val();
         var coursecategoryid = $("#coursecategoryid").val();
-        if (sid == "") {
-            return false;
-        }
+        if (sid == "") { return false; }
         var a = confirm('Are you sure to Change C-7(a) Subject !!');
-        var txt;
         if (a) {
             var Substreamcategoryid2 = $("#Substreamcategoryid").val();
-            ///alert(res);
             if (Substreamcategoryid2 == "") {
                 alert('Please select C-7(b) Subject');
                 return false;
             }
-
-
             showloader();
             $.ajax({
                 url: "/College/Home/ExamFormFor_updateelective1subject/",
@@ -839,47 +697,30 @@
                         alert(data.Msg);
                         location.reload();
                     }
-                    else {
-                        alert(data.Msg);
-                    }
-                    // console.log(data);
-
+                    else { alert(data.Msg); }
                 },
                 error: function (err) {
                     hideloader();
                     alert('error');
-
                     return false;
                 }
             });
-
-
         }
-        else {
-            return false;
-        }
-
-
+        return false;
     });
+
     $("#btn_elective4").click(function (event) {
-        debugger;
         var sid = $("#sid").val();
         var courseyearid = $("#courseyearid").val();
         var coursecategoryid = $("#coursecategoryid").val();
-        if (sid == "") {
-            return false;
-        }
+        if (sid == "") { return false; }
         var a = confirm('Are you sure to Change Elective Subject !!');
-        var txt;
         if (a) {
             var Substreamcategoryid2 = $("#Substreamcategoryid").val();
-            ///alert(res);
             if (Substreamcategoryid2 == "") {
                 alert('Please select Elective Subject');
                 return false;
             }
-
-
             showloader();
             $.ajax({
                 url: "/College/Home/ExamFormFor_updateelective1subject/",
@@ -893,31 +734,15 @@
                         alert(data.Msg);
                         location.reload();
                     }
-                    else {
-                        alert(data.Msg);
-                    }
-                    // console.log(data);
-
+                    else { alert(data.Msg); }
                 },
                 error: function (err) {
                     hideloader();
                     alert('error');
-
                     return false;
                 }
             });
-
-
         }
-        else {
-            return false;
-        }
-
-
+        return false;
     });
 </script>
-
-
-
-
-

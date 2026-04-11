@@ -11753,7 +11753,13 @@ namespace Website.Areas.college.Controllers
                 }
 
 
-                    var tuple = new Tuple<PrintExamForm, QualifiationMasterList, List<EaxmFeesSubmit>, List<EaxmFeesSubmit>>(obj1, sub, feestruckture, subjectList);
+                BL_student_formcomplete bl = new BL_student_formcomplete();
+
+                var savedSubjects = bl.GetSavedSubjects(sid, obj1.objExamFrom.courseyearid);
+                ViewBag.SavedSubjects = savedSubjects;
+
+
+                var tuple = new Tuple<PrintExamForm, QualifiationMasterList, List<EaxmFeesSubmit>, List<EaxmFeesSubmit>>(obj1, sub, feestruckture, subjectList);
                 return View(tuple);
 
 
