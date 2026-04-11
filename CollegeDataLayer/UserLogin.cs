@@ -132,8 +132,6 @@ namespace DataLayer
                     objLogin.status = false;
                 }
 
-
-
                 return objLogin;
             }
         }
