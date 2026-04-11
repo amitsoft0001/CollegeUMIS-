@@ -1,7 +1,5 @@
 ﻿$(document).ready(function () {
-
     $("#EducationTypeID").change(function (event) {
-        alert('test');
         $('#CourseCategoryID').find("option").remove();
         $("#CourseCategoryID").append($("<option></option>").val("").html("--Select Course--"));
         var res = $(this).val();

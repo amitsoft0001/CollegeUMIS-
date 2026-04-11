@@ -665,12 +665,6 @@
     <Content Include="fonts\ionicons\css\ionicons.min.css" />
     <Content Include="Global.asax" />
     <Content Include="HtmlPage1.html" />
-    <Content Include="images\admin.png" />
-    <Content Include="images\admitcard_LLBControllerofExamination.png" />
-    <Content Include="images\admitcard_LLB_Assitant.png" />
-    <Content Include="images\amar_examinationcontroller.jpg" />
-    <Content Include="images\amar_examinationcontroller.png" />
-    <Content Include="images\ASHUTOSH KUMAR.jpg" />
     <Content Include="images\logo.png" />
     <Content Include="images\menu-icon\account.png" />
     <Content Include="images\menu-icon\commission.png" />

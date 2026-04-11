@@ -19,6 +19,7 @@ app1.controller('examfeelistCtrl', function ($scope, $http, cfpLoadingBar) {
     $scope.CourseYearID = "";
     $scope.EducationTypeID = "";
     $scope.BackStatus = "0";
+
     $scope.studentListafterfeeSubmit = function () {
         cfpLoadingBar.start();
         //debugger;

@@ -1,516 +1,447 @@
 ﻿@model DataLayer.BL_CollegeLogin
 @{
-    // ViewBag.Title = "Index";
     Layout = null;
 }
-<!doctype html>
-<html class="no-js" lang="en">
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>College Dev Login</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- favicon
-        ============================================ -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Access Portal | Secure Login</title>
 
-    <link rel="shortcut icon" type="image/x-icon" href="~/Content/img/favicon.png">
-    <!-- Google Fonts
-        ============================================ -->
-    <link href="https://fonts.googleapis.com/css?family=Play:400,700" rel="stylesheet">
-    <!-- Bootstrap CSS
-        ============================================ -->
-    <link rel="stylesheet" href="~/Content/css/bootstrap.min.css">
-    <!-- Bootstrap CSS
-        ============================================ -->
-    <link rel="stylesheet" href="~/Content/css/font-awesome.min.css">
-    <!-- owl.carousel CSS
-        ============================================ -->
-    <link rel="stylesheet" href="~/Content/css/owl.carousel.css">
-    <link rel="stylesheet" href="~/Content/css/owl.theme.css">
-    <link rel="stylesheet" href="~/Content/css/owl.transitions.css">
-    <!-- animate CSS
-        ============================================ -->
-    <link rel="stylesheet" href="~/Content/css/animate.css">
-    <!-- normalize CSS
-        ============================================ -->
-    <link rel="stylesheet" href="~/Content/css/normalize.css">
-    <!-- main CSS
-        ============================================ -->
-    <link rel="stylesheet" href="~/Content/css/main.css">
-    <!-- morrisjs CSS
-        ============================================ -->
-    <link rel="stylesheet" href="~/Content/css/morrisjs/morris.css">
-    <!-- mCustomScrollbar CSS
-        ============================================ -->
-    <link rel="stylesheet" href="~/Content/css/scrollbar/jquery.mCustomScrollbar.min.css">
-    <!-- metisMenu CSS
-        ============================================ -->
-    <link rel="stylesheet" href="~/Content/css/metisMenu/metisMenu.min.css">
-    <link rel="stylesheet" href="~/Content/css/metisMenu/metisMenu-vertical.css">
-    <!-- calendar CSS
-        ============================================ -->
-    <link rel="stylesheet" href="~/Content/css/calendar/fullcalendar.min.css">
-    <link rel="stylesheet" href="~/Content/css/calendar/fullcalendar.print.min.css">
-    <!-- forms CSS
-        ============================================ -->
-    <link rel="stylesheet" href="~/Content/css/form/all-type-forms.css">
-    <!-- style CSS
-        ============================================ -->
-    <link rel="stylesheet" href="~/Content/style.css">
-    <!-- responsive CSS
-        ============================================ -->
-    <link rel="stylesheet" href="~/Content/css/responsive.css">
-    <!-- modernizr JS
-        ============================================ -->
-    <script src="~/Content/js/vendor/modernizr-2.8.3.min.js"></script>
-    <script src="~/Content/js/vendor/jquery-1.12.4.min.js"></script>
+    <!-- Modern Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
-        .error-msg {
-            color: #ff0000;
-            font-weight: bold;
-        }
-    </style>
-    <style>
-        .right {
-            text-align: right !important;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .left {
-            text-align: left !important;
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        .starvalid {
-            color: red;
+        /* Animated Background Shapes */
+        .bg-shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            animation: float 20s infinite;
         }
-    </style>
-    <link href="~/Content/css/preloader/preloader-style.css" rel="stylesheet" />
-    <style>
-        /*!
-        // 3. Loader
-        // --------------------------------------------------*/
-        .loader {
-            top: 0;
-            left: 0;
-            position: fixed;
-            opacity: 0.8;
-            z-index: 10000000;
-            background: Black;
-            height: 100%;
+
+        @@keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        /* Main Container */
+        .login-container {
             width: 100%;
-            margin: auto;
+            max-width: 480px;
+            margin: 20px;
+            z-index: 10;
         }
 
-        @@-webkit-keyframes stripMove {
-            0% {
-                transform: translate3d(0px, 0px, 0px);
-                -webkit-transform: translate3d(0px, 0px, 0px);
-                -moz-transform: translate3d(0px, 0px, 0px);
-            }
-
-            50% {
-                transform: translate3d(0px, 0px, 0px);
-                -webkit-transform: translate3d(0px, 0px, 0px);
-                -moz-transform: translate3d(0px, 0px, 0px);
-                transform: scale(4, 1);
-                -webkit-transform: scale(4, 1);
-                -moz-transform: scale(4, 1);
-            }
-
-            100% {
-                transform: translate3d(-50px, 0px, 0px);
-                -webkit-transform: translate3d(-50px, 0px, 0px);
-                -moz-transform: translate3d(-50px, 0px, 0px);
-            }
+        /* Brand Card */
+        .brand-card {
+            text-align: center;
+            margin-bottom: 30px;
         }
 
-        @@-moz-keyframes stripMove {
-            0% {
-                transform: translate3d(-50px, 0px, 0px);
-                -webkit-transform: translate3d(-50px, 0px, 0px);
-                -moz-transform: translate3d(-50px, 0px, 0px);
-            }
-
-            50% {
-                transform: translate3d(0px, 0px, 0px);
-                -webkit-transform: translate3d(0px, 0px, 0px);
-                -moz-transform: translate3d(0px, 0px, 0px);
-                transform: scale(4, 1);
-                -webkit-transform: scale(4, 1);
-                -moz-transform: scale(4, 1);
-            }
-
-            100% {
-                transform: translate3d(50px, 0px, 0px);
-                -webkit-transform: translate3d(50px, 0px, 0px);
-                -moz-transform: translate3d(50px, 0px, 0px);
-            }
+        .logo-wrapper {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
         }
 
-        @@keyframes stripMove {
-            0% {
-                transform: translate3d(-50px, 0px, 0px);
-                -webkit-transform: translate3d(-50px, 0px, 0px);
-                -moz-transform: translate3d(-50px, 0px, 0px);
-            }
-
-            50% {
-                transform: translate3d(0px, 0px, 0px);
-                -webkit-transform: translate3d(0px, 0px, 0px);
-                -moz-transform: translate3d(0px, 0px, 0px);
-                transform: scale(4, 1);
-                -webkit-transform: scale(4, 1);
-                -moz-transform: scale(4, 1);
-            }
-
-            100% {
-                transform: translate3d(50px, 0px, 0px);
-                -webkit-transform: translate3d(50px, 0px, 0px);
-                -moz-transform: translate3d(50px, 0px, 0px);
-            }
+        .logo-wrapper i {
+            font-size: 48px;
+            color: #667eea;
         }
-    </style>
-    <style>
-        .preloader-single {
-            height: 100% !important;
+
+        .brand-card h1 {
+            color: white;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
         }
-    </style>
-    <style>
-        .atag {
-            color: #337ab7 !important;
+
+        .brand-card p {
+            color: rgba(255,255,255,0.9);
             font-size: 14px;
         }
 
-        .starvalid {
-            color: red;
+        /* Login Box */
+        .login-box {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
         }
 
-        img {
-            max-width: 85% !important;
-            height: auto;
+        /* Form Elements */
+        .input-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a0aec0;
+            font-size: 18px;
+            pointer-events: none;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Remember Me */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+            color: #4a5568;
+        }
+
+        .checkbox-label input {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .forgot-link {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .forgot-link:hover {
+            color: #764ba2;
+        }
+
+        /* Login Button */
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        /* OTP Section */
+        .otp-section {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* Error Message */
+        .error-msg {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 24px;
+            color: rgba(255,255,255,0.7);
+            font-size: 12px;
+        }
+
+        /* Loader Overlay */
+        .loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @@keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @@media (max-width: 480px) {
+            .login-box {
+                padding: 30px 24px;
+            }
+            .brand-card h1 {
+                font-size: 24px;
+            }
         }
     </style>
-    <div class="loader" id="AjaxLoader" style="display:none;">
-        <div class="preloader-single shadow-inner">
-            <div class="ts_preloading_box">
-                <div id="ts-preloader-absolute22">
-                    <div class="tsperloader22" id="first_tsperloader22"></div>
-                    <div class="tsperloader22" id="second_tsperloader22"></div>
-                    <div class="tsperloader22" id="third_tsperloader22"></div>
-                </div>
-            </div>
-        </div>
-        <div class="strip-holder">
-            <div class="strip-1"></div>
-            <div class="strip-2"></div>
-            <div class="strip-3"></div>
-        </div>
-    </div>
-    <script>
-        $(document)
-            .ajaxStart(function () {
-                // $('#AjaxLoader').show();
-            })
-            .ajaxStop(function () {
-                //  $('#AjaxLoader').hide();
-            });
-        function showloader() {
-            $('#AjaxLoader').show();
-        }
-        function hideloader() {
-            $('#AjaxLoader').hide();
-        }
-    </script>
 </head>
-
 <body>
 
-    <div class="error-pagewrap">
-        <div class="error-page-int">
-            <div class="text-center m-b-md custom-login">
-                <p>
-                    @*<a href="/"><img src="~/images/logo.png" /></a>*@
-                    <a href="/"><img src="~/images/mu-logo-white.png" /></a>
-                </p>
+    <!-- Animated Background Shapes -->
+    <div class="bg-shape" style="width: 300px; height: 300px; top: -100px; right: -100px;"></div>
+    <div class="bg-shape" style="width: 200px; height: 200px; bottom: 50px; left: -80px; animation-duration: 15s;"></div>
+    <div class="bg-shape" style="width: 150px; height: 150px; top: 40%; right: 10%; animation-duration: 25s;"></div>
 
-                <p>College Login</p>
+    <!-- Loader -->
+    <div id="loaderOverlay" class="loader-overlay">
+        <div class="spinner"></div>
+    </div>
 
+    <div class="login-container">
+        <!-- Brand Section -->
+        <div class="brand-card">
+            <div class="logo-wrapper">
+                <i class="fas fa-graduation-cap"></i>
             </div>
-            <div class="content-error">
-                <div class="hpanel">
-                    <div class="panel-body">
-                        <div class="content-error error-msg"> @TempData["errorMsg"] </div>
-                        <form class="form-horizontal" id="loginid">
+            <h1>Access Portal</h1>
+            <p>Secure login for authorized personnel</p>
+        </div>
 
-                            <div class="form-group">
-                                <label class="control-label" for="username">Username</label>
-                                @*<input type="text" placeholder="Username" title="Please enter you username" required="" value="" name="username" id="username" class="form-control">*@
-                                @Html.TextBoxFor(Model => Model.Email, new { @class = "form-control", placeholder = "Username", @title = "Please Enter Username", @required = true, @id = "username" })
+        <!-- Login Box -->
+        <div class="login-box">
+            <div id="errorDisplay" class="error-msg" style="display: none;"></div>
 
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label" for="password">Password</label>
-                                @*<input type="password" title="Please enter your password" placeholder="******" required="" value="" name="password" id="password" class="form-control">*@
-                                @Html.PasswordFor(Model => Model.Password, new { @class = "form-control", placeholder = "Password", @title = "Please Enter Password", @required = true, @id = "password" })
-                            </div>
-                            <div class="checkbox login-checkbox">
-                                <label>
-                                    @*<input type="checkbox" class="i-checks"> Remember me*@
-                                    @Html.CheckBoxFor(model => model.rememberMe) Remember me
-                                </label>
-
-                            </div>
-                            <p></p>
-                            @*<div class="form-group">
-                                    <div id="dvCaptcha">
-                                    </div>
-                                    @Html.TextBoxFor(Model => Model.txtCaptcha, new { @class = "form-control", @title = "Captcha validation is required.", @name = "Captcha", @required = true, @id = "txtCaptcha", @Style = "display:none" })
-                                </div>*@
-
-                            @*<asp:TextBox ID="txtCaptcha" runat="server" Style="display: none" />*@
-                            @*<asp:RequiredFieldValidator ID="rfvCaptcha" ErrorMessage="Captcha validation is required." ControlToValidate="txtCaptcha"
-                                runat="server" ForeColor="Red" Display="Dynamic" />*@
-                            <button type="button" class="btn btn-success btn-block loginbtn" id="dosubmit">Login</button>
-                        </form>
-                        <form class="form-horizontal" id="optdiv" style="display:none">
-
-                            <div class="form-group">
-                                <label class="control-label" for="OTP">OTP</label>
-                                @Html.TextBoxFor(Model => Model.OTP, new { @class = "form-control", placeholder = "OTP", @title = "Please Enter OTP", @required = true, @id = "OTP", @maxlength = "10" })
-
-                            </div>
-
-
-                            <p></p>
-
-                            <button type="button" class="btn btn-success btn-block loginbtn" id="verifyotp">Verify OTP</button>
-                        </form>
-                        @*}*@
-                    </div>
+            <!-- Login Form -->
+            <form id="loginForm">
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    @Html.TextBoxFor(Model => Model.Email, new
+                    {
+                        @class = "form-control",
+                        placeholder = "College Code / Email",
+                        @id = "username",
+                        autocomplete = "off"
+                    })
                 </div>
-            </div>
-            <div class="col-md-12 col-lg-12-col-sm-12">
-                <a href="~/Login/ResetPassword">
-                    <i class="fa fa-key"></i>&nbsp;&nbsp; Forgot Password&nbsp;&nbsp;
-                </a>
-                <p></p>
-            </div>
-            <div class="text-center login-footer">
-                <p>Copyright ©  @DateTime.Now.Year.ToString()  <span>@DataLayer.CommonSetting.ProjectName</span>. All rights reserved. </p>
+
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    @Html.PasswordFor(Model => Model.Password, new
+                    {
+                        @class = "form-control",
+                        placeholder = "Password",
+                        @id = "password"
+                    })
+                </div>
+
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        @Html.CheckBoxFor(model => model.rememberMe)
+                        <span>Stay signed in</span>
+                    </label>
+                    <a href="~/Login/ResetPassword" class="forgot-link">Forgot password?</a>
+                </div>
+
+                <button type="button" class="login-btn" id="loginBtn">
+                    <i class="fas fa-arrow-right" style="margin-right: 8px;"></i>
+                    Sign In
+                </button>
+            </form>
+
+            <!-- OTP Section (Hidden initially) -->
+            <div id="otpSection" class="otp-section" style="display: none;">
+                <div class="input-group">
+                    <i class="fas fa-key"></i>
+                    @Html.TextBoxFor(Model => Model.OTP, new
+                    {
+                        @class = "form-control",
+                        placeholder = "Enter OTP",
+                        @id = "OTP",
+                        @maxlength = "10",
+                        autocomplete = "off"
+                    })
+                </div>
+                <button type="button" class="login-btn" id="verifyOtpBtn" style="margin-top: 16px;">
+                    <i class="fas fa-check-circle" style="margin-right: 8px;"></i>
+                    Verify & Continue
+                </button>
             </div>
         </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>&copy; @DateTime.Now.Year.ToString() NexGen EduTech. All rights reserved.</p>
+        </div>
     </div>
-    <!-- jquery
-        ============================================ -->
-    <script src="~/Content/js/vendor/jquery-1.12.4.min.js"></script>
-    <!-- bootstrap JS
-        ============================================ -->
-    <script src="~/Content/js/bootstrap.min.js"></script>
-    <!-- wow JS
-        ============================================ -->
-    <script src="~/Content/js/wow.min.js"></script>
-    <!-- price-slider JS
-        ============================================ -->
-    <script src="~/Content/js/jquery-price-slider.js"></script>
-    <!-- meanmenu JS
-        ============================================ -->
-    <script src="~/Content/js/jquery.meanmenu.js"></script>
-    <!-- owl.carousel JS
-        ============================================ -->
-    <script src="~/Content/js/owl.carousel.min.js"></script>
-    <!-- sticky JS
-        ============================================ -->
-    <script src="~/Content/js/jquery.sticky.js"></script>
-    <!-- scrollUp JS
-        ============================================ -->
-    <script src="~/Content/js/jquery.scrollUp.min.js"></script>
-    <!-- mCustomScrollbar JS
-        ============================================ -->
-    <script src="~/Content/js/scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
-    <script src="~/Content/js/scrollbar/mCustomScrollbar-active.js"></script>
-    <!-- metisMenu JS
-        ============================================ -->
-    <script src="~/Content/js/metisMenu/metisMenu.min.js"></script>
-    <script src="~/Content/js/metisMenu/metisMenu-active.js"></script>
-    <!-- tab JS
-        ============================================ -->
-    <script src="~/Content/js/tab.js"></script>
-    <!-- icheck JS
-        ============================================ -->
-    <script src="~/Content/js/icheck/icheck.min.js"></script>
-    <script src="~/Content/js/icheck/icheck-active.js"></script>
-    <!-- plugins JS
-        ============================================ -->
-    <script src="~/Content/js/plugins.js"></script>
-    <!-- main JS
-        ============================================ -->
-    <script src="~/Content/js/main.js"></script>
-    <!-- tawk chat JS
-        ============================================ -->
-    @*<script src="~/Content/js/tawk-chat.js"></script>*@
-</body>
-</html>
-<script>
-    $(function () {
-        //debugger;
-        $("[id*=dosubmit]").bind("click", function () {
 
-           // debugger;
-            if ($("[id*=username]").val() == "") {
-                alert("Please Enter user name !!"); return false;
-            }
-            if ($("[id*=password]").val() == "") {
-                alert("Please Enter Password !!"); return false;
-            }
-            //if ($("[id*=txtCaptcha]").val() == "")
-            //{
-            //   alert("Invalid Captcha !!"); return false;
-            //}
-            var objlogin = {
-                CollegeCode: $("[id*=username]").val(),
-                Password: $("[id*=password]").val()
-            };
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Show/Hide Loader
+        function showLoader() {
+            $('#loaderOverlay').fadeIn(300);
+        }
 
-            //debugger;
-            showloader();
-            $.ajax({
-                type: "POST",
-                url: '/Login/devIndexNew',
-                data: '{objlogin: ' + JSON.stringify(objlogin) + '}',
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
+        function hideLoader() {
+            $('#loaderOverlay').fadeOut(300);
+        }
 
+        function showError(message) {
+            $('#errorDisplay').text(message).fadeIn(300);
+            setTimeout(function () {
+                $('#errorDisplay').fadeOut(300);
+            }, 3000);
+        }
 
-                success: function (response) {
-                    hideloader();
-                    //alert(response.Message);
-                    //if (response.Status) {
+        $(function () {
+            // Login Button Click
+            $("#loginBtn").click(function () {
+                var username = $("#username").val().trim();
+                var password = $("#password").val();
 
-                    //    $("#loginid").css("display", "none");
-                    //    $("#optdiv").css("display", "block");
-                    //    // window.location.href = "/College/Home/Index";
-                    //}
-                    //else
-                    //{
-                    //    hideloader();
-                    //    grecaptcha.reset();
-                    //    //$("[id*=rfvCaptcha]").show();
-                    //    alert(response.Message);
-                    //}
-                    if (response.Status) {
-                        window.location.href = "/College/Home/Index";
-                    }
-                    else {
-                        hideloader();
-                        alert(response.Message);
-                    }
-                    
-                },
-                Error: function (response) {
-                    hideloader();
-
+                if (username === "") {
+                    showError("Please enter your college code or email");
+                    return false;
                 }
-            });
-
-        });
-    });
-    $(function () {
-        //debugger;
-        $("[id*=verifyotp]").bind("click", function () {
-
-            // debugger;
-            //if ($("[id*=username]").val() == "") {
-            //    alert("Please Enter user name !!"); return false;
-            //}
-            //if ($("[id*=password]").val() == "") {
-            //    alert("Please Enter Password !!"); return false;
-            //}
-            if ($("[id*=OTP]").val() == "")
-            {
-                alert("Enter OTP !!");
-                return false;
-            }
-            var objlogin = {
-                CollegeCode: $("[id*=username]").val(),
-                Password: $("[id*=password]").val(),
-                OTP: $("[id*=OTP]").val()
-            };
-
-            //debugger;
-            showloader();
-            $.ajax({
-                type: "POST",
-                url: '/Login/VerifyOTP',
-                data: '{objlogin: ' + JSON.stringify(objlogin) + '}',
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-
-
-                success: function (response) {
-                    hideloader();
-
-                    if (response.Status) {
-                        showloader();
-                        window.location.href = "/College/Home/Index";
-                    }
-                    else {
-                        hideloader();
-                        alert(response.Message);
-                    }
-
-                },
-                Error: function (response) {
-                    hideloader();
-
+                if (password === "") {
+                    showError("Please enter your password");
+                    return false;
                 }
-            });
 
-        });
-    });
-</script>
+                var loginData = {
+                    CollegeCode: username,
+                    Password: password
+                };
 
-
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
-
-<script type="text/javascript">
-    var onloadCallback = function () {
-        //debugger;
-        grecaptcha.render('dvCaptcha', {
-
-            'sitekey': '6Lek4JwUAAAAABWxgpAF18nsiR1nuikeWHzSmi3v',
-            'callback': function (response) {
-               // debugger;
+                showLoader();
                 $.ajax({
-
                     type: "POST",
-                    url: "Login/VerifyCaptcha",
-
-                    data: "{response: '" + response + "'}",
-
-                    contentType: "application/json; charset=utf-8",
+                    url: '/Login/devIndexNew',
+                    data: '{objlogin: ' + JSON.stringify(loginData) + '}',
                     dataType: "json",
-                    success: function (r) {
-                       // debugger;
-                        var captchaResponse = r; //jQuery.parseJSON(r);
-                        //var captchaResponse = jQuery.parseJSON(r.d);
-                        if (captchaResponse.success)
-                        {
-                            $("[id*=txtCaptcha]").val(captchaResponse.success);
-                            $("[id*=rfvCaptcha]").hide();
-                            $("[id*=dosubmit]").enable = true;
-
+                    contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+                        hideLoader();
+                        if (response.Status) {
+                            window.location.href = "/College/Home/Index";
+                        } else {
+                            showError(response.Message || "Invalid credentials. Please try again.");
                         }
-                        else {
-                            $("[id*=txtCaptcha]").val("");
-                            $("[id*=rfvCaptcha]").show();
-                            var error = captchaResponse["error-codes"][0];
-                            $("[id*=rfvCaptcha]").html("RECaptcha error. " + error);
-                        }
+                    },
+                    error: function () {
+                        hideLoader();
+                        showError("Network error. Please check your connection.");
                     }
                 });
-            }
+            });
+
+            // Verify OTP Button Click
+            $("#verifyOtpBtn").click(function () {
+                var otp = $("#OTP").val().trim();
+
+                if (otp === "") {
+                    showError("Please enter the verification code");
+                    return false;
+                }
+
+                var loginData = {
+                    CollegeCode: $("#username").val(),
+                    Password: $("#password").val(),
+                    OTP: otp
+                };
+
+                showLoader();
+                $.ajax({
+                    type: "POST",
+                    url: '/Login/VerifyOTP',
+                    data: '{objlogin: ' + JSON.stringify(loginData) + '}',
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+                        hideLoader();
+                        if (response.Status) {
+                            window.location.href = "/College/Home/Index";
+                        } else {
+                            showError(response.Message || "Invalid OTP. Please try again.");
+                        }
+                    },
+                    error: function () {
+                        hideLoader();
+                        showError("Verification failed. Please try again.");
+                    }
+                });
+            });
+
+            // Enter key press
+            $(document).keypress(function (e) {
+                if (e.which == 13) {
+                    $("#loginBtn").click();
+                }
+            });
         });
-    };
-</script>
+    </script>
+</body>
+</html>
